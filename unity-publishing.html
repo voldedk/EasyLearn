@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Publishing - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Publishing</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Publishing</h3>
+                        <p>Publishing your Unity game involves preparing your project for distribution, building it for target platforms, and distributing it through various channels. This process requires careful planning and consideration of platform-specific requirements.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Pre-publishing preparations and best practices</li>
+                            <li>Building for PC, Mac, and Linux</li>
+                            <li>Mobile publishing for iOS and Android</li>
+                            <li>Console publishing considerations</li>
+                            <li>Web publishing with WebGL</li>
+                            <li>Distribution platforms and stores</li>
+                            <li>Post-launch support and updates</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Pre-Publishing Preparations</h3>
+                        <p>Before building your game for any platform, you should complete several important preparation steps to ensure a smooth publishing process.</p>
+                        
+                        <div class="example-box">
+                            <h4>Pre-Publishing Checklist:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Version Check and Update:</strong>
+                                    <ul>
+                                        <li>Ensure you're using a stable Unity version</li>
+                                        <li>Update packages to compatible versions</li>
+                                        <li>Document your Unity version for future reference</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Quality Assurance:</strong>
+                                    <ul>
+                                        <li>Run thorough playtesting on all target platforms</li>
+                                        <li>Fix critical bugs and crashes</li>
+                                        <li>Test edge cases (low memory, network interruptions, etc.)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Performance Optimization:</strong>
+                                    <ul>
+                                        <li>Profile your game on target devices</li>
+                                        <li>Implement quality settings for different hardware</li>
+                                        <li>Remove debug code and logging</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Asset Finalization:</strong>
+                                    <ul>
+                                        <li>Remove unused assets and packages</li>
+                                        <li>Optimize asset sizes (compress textures, audio, etc.)</li>
+                                        <li>Organize project files into logical folders</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Create Required Graphics:</strong>
+                                    <ul>
+                                        <li>App icons in various resolutions</li>
+                                        <li>Splash screens and launch images</li>
+                                        <li>Store assets (screenshots, promotional art, videos)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Legal and Compliance:</strong>
+                                    <ul>
+                                        <li>Verify third-party asset licenses</li>
+                                        <li>Prepare privacy policy if collecting user data</li>
+                                        <li>Check platform-specific requirements (ratings, etc.)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build Configuration:</strong>
+                                    <ul>
+                                        <li>Set up correct player settings for each platform</li>
+                                        <li>Configure appropriate quality settings</li>
+                                        <li>Set version numbers and bundle identifiers</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Version Management Script:</h4>
+                            <pre><code>using UnityEngine;
+
+public class VersionManager : MonoBehaviour
+{
+    // Version information (set these in the Inspector)
+    [Header("Version Settings")]
+    public int majorVersion = 1;
+    public int minorVersion = 0;
+    public int patchVersion = 0;
+    
+    [Tooltip("Optional build identifier (e.g., 'alpha', 'beta', 'rc1')")]
+    public string buildIdentifier = "";
+    
+    [Tooltip("Build number, incremented automatically")]
+    public int buildNumber = 0;
+    
+    // Version display text
+    [Header("Display")]
+    public TMPro.TextMeshProUGUI versionText;
+    
+    private void Awake()
+    {
+        // Set Application version at runtime
+        string version = FormatVersion();
+        Application.version = version;
+        
+        // Update UI display if assigned
+        if (versionText != null)
+        {
+            versionText.text = "v" + version;
+        }
+        
+        Debug.Log("Application Version: " + version);
+    }
+    
+    // Format the version string
+    public string FormatVersion()
+    {
+        string version = $"{majorVersion}.{minorVersion}.{patchVersion}";
+        
+        // Add build identifier if present
+        if (!string.IsNullOrEmpty(buildIdentifier))
+        {
+            version += "-" + buildIdentifier;
+        }
+        
+        // Add build number
+        version += "+" + buildNumber.ToString("D3");
+        
+        return version;
+    }
+    
+    // Call this method before building
+    public void IncrementBuildNumber()
+    {
+        buildNumber++;
+        
+        // You would save this value to PlayerPrefs or a ScriptableObject
+        // so it persists between editor sessions
+    }
+    
+#if UNITY_EDITOR
+    // Editor-only method to increment the build number
+    [UnityEditor.MenuItem("Build/Increment Build Number")]
+    static void IncrementBuild()
+    {
+        // Find the VersionManager in the scene
+        VersionManager vm = GameObject.FindObjectOfType<VersionManager>();
+        if (vm != null)
+        {
+            vm.IncrementBuildNumber();
+            UnityEditor.EditorUtility.SetDirty(vm);
+            UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
+            Debug.Log("Build number incremented to: " + vm.buildNumber);
+        }
+        else
+        {
+            Debug.LogError("VersionManager not found in scene!");
+        }
+    }
+#endif
+}</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of proper version management:</p>
+                                <ul>
+                                    <li>Helps track and identify builds during testing</li>
+                                    <li>Simplifies update management on distribution platforms</li>
+                                    <li>Makes user support easier when troubleshooting version-specific issues</li>
+                                    <li>Follows semantic versioning standards for clear version progression</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Building for PC, Mac, and Linux</h3>
+                        <p>Desktop platforms remain popular targets for game distribution, offering substantial hardware capabilities and multiple distribution channels.</p>
+                        
+                        <div class="example-box">
+                            <h4>Desktop Build Process:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Configure Player Settings (Edit → Project Settings → Player):</strong>
+                                    <ul>
+                                        <li>Set company name, product name, and version</li>
+                                        <li>Configure default screen size and resolution options</li>
+                                        <li>Set icons for each platform</li>
+                                        <li>Choose appropriate graphics APIs</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Set Up Build Settings (File → Build Settings):</strong>
+                                    <ul>
+                                        <li>Add all scenes to the build</li>
+                                        <li>Arrange scenes in correct order</li>
+                                        <li>Select target platform (Windows, macOS, or Linux)</li>
+                                        <li>Choose architecture (x86, x64, Universal, etc.)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Configure Platform-Specific Options:</strong>
+                                    <ul>
+                                        <li><strong>Windows</strong>: Choose between Standalone or Windows Store</li>
+                                        <li><strong>macOS</strong>: Set bundle identifier (com.company.game)</li>
+                                        <li><strong>Linux</strong>: Select file format (.x86, .x86_64)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build the Game:</strong>
+                                    <ul>
+                                        <li>Click "Build" or "Build And Run"</li>
+                                        <li>Choose output folder</li>
+                                        <li>Wait for the build process to complete</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Automating Builds with Script:</h4>
+                            <pre><code>using UnityEditor;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
+using System;
+using System.IO;
+
+public class BuildScript
+{
+    // Menu item to trigger the build process
+    [MenuItem("Build/Build All Platforms")]
+    public static void BuildAllPlatforms()
+    {
+        // Get version from some source (PlayerPrefs, ScriptableObject, etc.)
+        string version = PlayerPrefs.GetString("GameVersion", "1.0.0");
+        
+        // Set up common build settings
+        string[] scenes = GetEnabledScenes();
+        
+        // Build for each platform
+        BuildWindows(scenes, version);
+        BuildMac(scenes, version);
+        BuildLinux(scenes, version);
+        
+        Debug.Log("All builds completed!");
+    }
+    
+    private static string[] GetEnabledScenes()
+    {
+        // Get all scenes set in the build settings
+        EditorBuildSettingsScene[] editorScenes = EditorBuildSettings.scenes;
+        string[] scenePaths = new string[editorScenes.Length];
+        
+        for (int i = 0; i < editorScenes.Length; i++)
+        {
+            if (editorScenes[i].enabled)
+            {
+                scenePaths[i] = editorScenes[i].path;
+            }
+        }
+        
+        return scenePaths;
+    }
+    
+    private static void BuildWindows(string[] scenes, string version)
+    {
+        // Create directory if it doesn't exist
+        string buildPath = Path.Combine("Builds", "Windows", version);
+        Directory.CreateDirectory(buildPath);
+        
+        // Configure player settings for Windows
+        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        
+        // Build options
+        BuildPlayerOptions buildOptions = new BuildPlayerOptions
+        {
+            scenes = scenes,
+            locationPathName = Path.Combine(buildPath, "MyGame.exe"),
+            target = BuildTarget.StandaloneWindows64,
+            options = BuildOptions.None
+        };
+        
+        // Start the build
+        BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
+        BuildSummary summary = report.summary;
+        
+        // Check the result
+        if (summary.result == BuildResult.Succeeded)
+        {
+            Debug.Log("Windows build succeeded: " + summary.totalSize + " bytes");
+        }
+        else
+        {
+            Debug.LogError("Windows build failed: " + summary.result);
+        }
+    }
+    
+    private static void BuildMac(string[] scenes, string version)
+    {
+        // Create directory if it doesn't exist
+        string buildPath = Path.Combine("Builds", "Mac", version);
+        Directory.CreateDirectory(buildPath);
+        
+        // Configure player settings for Mac
+        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        
+        // Build options
+        BuildPlayerOptions buildOptions = new BuildPlayerOptions
+        {
+            scenes = scenes,
+            locationPathName = Path.Combine(buildPath, "MyGame.app"),
+            target = BuildTarget.StandaloneOSX,
+            options = BuildOptions.None
+        };
+        
+        // Start the build
+        BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
+        BuildSummary summary = report.summary;
+        
+        // Check the result
+        if (summary.result == BuildResult.Succeeded)
+        {
+            Debug.Log("Mac build succeeded: " + summary.totalSize + " bytes");
+        }
+        else
+        {
+            Debug.LogError("Mac build failed: " + summary.result);
+        }
+    }
+    
+    private static void BuildLinux(string[] scenes, string version)
+    {
+        // Create directory if it doesn't exist
+        string buildPath = Path.Combine("Builds", "Linux", version);
+        Directory.CreateDirectory(buildPath);
+        
+        // Configure player settings for Linux
+        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        
+        // Build options
+        BuildPlayerOptions buildOptions = new BuildPlayerOptions
+        {
+            scenes = scenes,
+            locationPathName = Path.Combine(buildPath, "MyGame.x86_64"),
+            target = BuildTarget.StandaloneLinux64,
+            options = BuildOptions.None
+        };
+        
+        // Start the build
+        BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
+        BuildSummary summary = report.summary;
+        
+        // Check the result
+        if (summary.result == BuildResult.Succeeded)
+        {
+            Debug.Log("Linux build succeeded: " + summary.totalSize + " bytes");
+        }
+        else
+        {
+            Debug.LogError("Linux build failed: " + summary.result);
+        }
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Note: This script must be placed in an Editor folder within your project to work. To run automated builds from command line:</p>
+                                <pre><code>Unity.exe -batchmode -nographics -quit -executeMethod BuildScript.BuildAllPlatforms -logFile build_log.txt</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Desktop Platform Considerations</h4>
+                            <ul>
+                                <li><strong>Windows</strong>: Most games include both 32-bit and 64-bit executables for maximum compatibility</li>
+                                <li><strong>macOS</strong>: Requires code signing and notarization for distribution outside the App Store</li>
+                                <li><strong>Linux</strong>: Target the most common distributions (Ubuntu-based) for best compatibility</li>
+                                <li><strong>File Size</strong>: Consider splitting large games into base install and downloadable content</li>
+                                <li><strong>DRM</strong>: Implement appropriate copy protection if needed (Steam DRM, etc.)</li>
+                                <li><strong>Installers</strong>: Consider using installer creators (InnoSetup, InstallShield) for professional presentation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Mobile Publishing (iOS and Android)</h3>
+                        <p>Mobile platforms represent the largest gaming market by user count, but have specific requirements and limitations.</p>
+                        
+                        <div class="example-box">
+                            <h4>Android Publishing Process:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Setup Requirements:</strong>
+                                    <ul>
+                                        <li>Install Android SDK and NDK (through Unity Hub)</li>
+                                        <li>Create a keystore for signing your app</li>
+                                        <li>Set up a Google Play Developer account ($25 one-time fee)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Configure Player Settings:</strong>
+                                    <ul>
+                                        <li>Set unique Package Name (com.yourcompany.yourgame)</li>
+                                        <li>Configure minimum API level (21+ recommended)</li>
+                                        <li>Set icons and splash screens</li>
+                                        <li>Configure required device features and permissions</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Publishing Settings:</strong>
+                                    <ul>
+                                        <li>Select keystore and create/enter key alias</li>
+                                        <li>Choose between APK and Android App Bundle (AAB) format</li>
+                                        <li>Set up split APKs for different device configurations if needed</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build and Test:</strong>
+                                    <ul>
+                                        <li>Make test builds for different device types</li>
+                                        <li>Test on actual devices before submission</li>
+                                        <li>Use Unity's Internal or Firebase Test Lab for broader testing</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Google Play Submission:</strong>
+                                    <ul>
+                                        <li>Create store listing with screenshots, descriptions, etc.</li>
+                                        <li>Upload APK/AAB file</li>
+                                        <li>Set pricing and countries</li>
+                                        <li>Complete content rating questionnaire</li>
+                                        <li>Submit for review</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>iOS Publishing Process:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Setup Requirements:</strong>
+                                    <ul>
+                                        <li>Mac computer with Xcode installed</li>
+                                        <li>Apple Developer Program membership ($99/year)</li>
+                                        <li>Create App ID and provisioning profiles</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Configure Player Settings:</strong>
+                                    <ul>
+                                        <li>Set Bundle Identifier (com.yourcompany.yourgame)</li>
+                                        <li>Configure minimum iOS version (13.0+ recommended)</li>
+                                        <li>Set appropriate camera, microphone, location usage descriptions</li>
+                                        <li>Configure icons and splash screens</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build Process:</strong>
+                                    <ul>
+                                        <li>Build Unity project to generate Xcode project</li>
+                                        <li>Open project in Xcode</li>
+                                        <li>Configure signing and capabilities</li>
+                                        <li>Update Info.plist if needed</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Test Builds:</strong>
+                                    <ul>
+                                        <li>Test on actual iOS devices</li>
+                                        <li>Use TestFlight for wider testing</li>
+                                        <li>Fix platform-specific issues</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>App Store Submission:</strong>
+                                    <ul>
+                                        <li>Create app record in App Store Connect</li>
+                                        <li>Fill in metadata, screenshots, keywords</li>
+                                        <li>Upload build through Xcode or Application Loader</li>
+                                        <li>Submit for review (can take 1-3 days typically)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Mobile Platform Detection Script:</h4>
+                            <pre><code>using UnityEngine;
+
+public class PlatformManager : MonoBehaviour
+{
+    // Settings for different platforms
+    [System.Serializable]
+    public class PlatformSettings
+    {
+        public bool enablePostProcessing = true;
+        public int targetFrameRate = 60;
+        public int qualityLevel = 3;
+        public bool enableVibration = true;
+        public bool enableNotifications = true;
+    }
+    
+    // Platform-specific settings
+    public PlatformSettings iOSSettings;
+    public PlatformSettings androidSettings;
+    public PlatformSettings highEndSettings;
+    public PlatformSettings lowEndSettings;
+    
+    // Device tiers detection thresholds
+    public int systemMemoryThreshold = 3000; // MB
+    public int processorCountThreshold = 4;
+    
+    private void Awake()
+    {
+        // Apply settings based on platform and device capabilities
+        ApplyOptimalSettings();
+    }
+    
+    void ApplyOptimalSettings()
+    {
+        PlatformSettings settings = null;
+        
+        // First check device type
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            settings = iOSSettings;
+            Debug.Log("Applying iOS settings");
+        }
+        else if (Application.platform == RuntimePlatform.Android)
+        {
+            settings = androidSettings;
+            Debug.Log("Applying Android settings");
+        }
+        else
+        {
+            // For desktop platforms, use high-end settings
+            settings = highEndSettings;
+            Debug.Log("Applying high-end settings for desktop platform");
+            
+            // Apply settings and return early - no need for further device tier checks
+            ApplySettings(settings);
+            return;
+        }
+        
+        // Then check device tier (for mobile)
+        bool isLowEndDevice = IsLowEndDevice();
+        
+        if (isLowEndDevice)
+        {
+            Debug.Log("Low-end device detected, overriding with low-end settings");
+            settings = lowEndSettings;
+        }
+        
+        // Apply the selected settings
+        ApplySettings(settings);
+    }
+    
+    bool IsLowEndDevice()
+    {
+        // Get system memory size (MB)
+        int systemMemory = SystemInfo.systemMemorySize;
+        
+        // Get processor count
+        int processorCount = SystemInfo.processorCount;
+        
+        // Check if device is below thresholds
+        bool lowMemory = systemMemory < systemMemoryThreshold;
+        bool lowCPU = processorCount < processorCountThreshold;
+        
+        // Log the detected specs
+        Debug.Log($"Device specs - Memory: {systemMemory}MB, CPU cores: {processorCount}");
+        
+        // Consider it low-end if either memory or CPU is below threshold
+        return lowMemory || lowCPU;
+    }
+    
+    void ApplySettings(PlatformSettings settings)
+    {
+        if (settings == null) return;
+        
+        // Apply frame rate cap
+        Application.targetFrameRate = settings.targetFrameRate;
+        
+        // Apply quality settings
+        QualitySettings.SetQualityLevel(settings.qualityLevel);
+        
+        // Apply post-processing
+        TogglePostProcessing(settings.enablePostProcessing);
+        
+        // Apply other platform-specific settings
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // Android-specific optimizations
+            if (!settings.enableVibration)
+            {
+                // Disable vibration
+                // Handheld.Vibrate() calls would be skipped
+            }
+        }
+        
+        // Log applied settings
+        Debug.Log($"Applied settings - FPS: {settings.targetFrameRate}, " +
+                 $"Quality: {settings.qualityLevel}, " +
+                 $"Post-processing: {settings.enablePostProcessing}");
+    }
+    
+    void TogglePostProcessing(bool enabled)
+    {
+        // Find post-processing volume or component
+        // This depends on which post-processing system you're using (URP, HDRP, PPv2, etc.)
+        
+        // Example for Post Processing V2:
+        var postProcessing = FindObjectOfType<UnityEngine.Rendering.PostProcessing.PostProcessVolume>();
+        
+        if (postProcessing != null)
+        {
+            postProcessing.enabled = enabled;
+        }
+        else
+        {
+            Debug.LogWarning("Post-processing volume not found");
+        }
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Mobile optimization considerations:</p>
+                                <ul>
+                                    <li>Lower frame rate targets can greatly extend battery life</li>
+                                    <li>Detect device capabilities at runtime for optimal settings</li>
+                                    <li>Disable expensive visual effects on low-end devices</li>
+                                    <li>Consider different control schemes for different screen sizes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Console Publishing</h3>
+                        <p>Publishing to consoles requires developer approval, special SDKs, and adherence to platform-specific requirements.</p>
+                        
+                        <div class="example-box">
+                            <h4>Console Publishing Overview:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Platform Registration:</strong>
+                                    <ul>
+                                        <li>Apply for developer programs (PS, Xbox, Nintendo)</li>
+                                        <li>Sign NDAs and platform agreements</li>
+                                        <li>Purchase or rent development kits</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Development Setup:</strong>
+                                    <ul>
+                                        <li>Install platform-specific SDKs</li>
+                                        <li>Configure Unity for console development</li>
+                                        <li>Set up development hardware</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Console-Specific Requirements:</strong>
+                                    <ul>
+                                        <li>Implement platform-specific features (achievements, etc.)</li>
+                                        <li>Follow UI/UX guidelines for each platform</li>
+                                        <li>Ensure compliance with platform technical requirements</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Certification Process:</strong>
+                                    <ul>
+                                        <li>Submit builds to platform holder for testing</li>
+                                        <li>Address feedback and compliance issues</li>
+                                        <li>Resubmit until approved</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Release and Updates:</strong>
+                                    <ul>
+                                        <li>Coordinate release date with platform</li>
+                                        <li>Create store assets and marketing materials</li>
+                                        <li>Plan post-launch support and update schedule</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Console Publishing Notes</h4>
+                            <ul>
+                                <li>Console certification processes are typically more rigorous than PC or mobile</li>
+                                <li>Technical requirements focus on stability, adherence to platform norms, and user experience</li>
+                                <li>Plan extra time for platform approval, testing, and certification</li>
+                                <li>Updates go through similar certification processes, though often expedited</li>
+                                <li>Many console platforms have specific testing scenarios that must pass (suspend/resume, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>WebGL Publishing</h3>
+                        <p>WebGL allows your game to run directly in web browsers, offering wide accessibility without requiring installation.</p>
+                        
+                        <div class="example-box">
+                            <h4>WebGL Build Process:</h4>
+                            <ol>
+                                <li>
+                                    <strong>Configure WebGL Player Settings:</strong>
+                                    <ul>
+                                        <li>Set appropriate template (Default, Minimal, etc.)</li>
+                                        <li>Configure memory allocation (higher for complex games)</li>
+                                        <li>Set compression method (Brotli, Gzip, or Disabled)</li>
+                                        <li>Configure publishing settings (code optimization level)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build Considerations:</strong>
+                                    <ul>
+                                        <li>Reduce texture sizes and asset quality for faster loading</li>
+                                        <li>Avoid dependencies on native plugins</li>
+                                        <li>Optimize memory usage to prevent crashes</li>
+                                        <li>Implement asynchronous loading for large assets</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Build the Game:</strong>
+                                    <ul>
+                                        <li>Switch platform to WebGL in Build Settings</li>
+                                        <li>Build the project to a directory</li>
+                                        <li>Test locally using a web server (not by opening HTML directly)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Hosting and Distribution:</strong>
+                                    <ul>
+                                        <li>Upload build files to a web server</li>
+                                        <li>Configure proper MIME types on your server</li>
+                                        <li>Consider using game portals (itch.io, Kongregate, etc.)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>WebGL Loading Progress Script:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+public class WebGLLoader : MonoBehaviour
+{
+    // UI elements for showing loading progress
+    public Slider progressBar;
+    public Text progressText;
+    public Text loadingInfoText;
+    public GameObject loadingScreen;
+    public GameObject startButton;
+    
+    // Loading configuration
+    public string mainSceneName = "MainMenu";
+    public float minDisplayTime = 3f; // Minimum time to show loading screen
+    
+    // Audio to play when loading completes
+    public AudioSource loadingCompleteSound;
+    
+    // State tracking
+    private bool isLoading = false;
+    private float loadStartTime;
+    
+    void Start()
+    {
+        // Initialize UI
+        if (progressBar != null) progressBar.value = 0;
+        if (progressText != null) progressText.text = "0%";
+        if (loadingInfoText != null) loadingInfoText.text = "Preparing...";
+        if (startButton != null) startButton.SetActive(false);
+        
+        // Start loading the main scene in the background
+        StartCoroutine(LoadMainScene());
+    }
+    
+    IEnumerator LoadMainScene()
+    {
+        isLoading = true;
+        loadStartTime = Time.time;
+        
+        // Start async loading operation
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(mainSceneName);
+        
+        // Don't let the scene activate yet
+        asyncOperation.allowSceneActivation = false;
+        
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            // WebGL specific loading messages
+            yield return StartCoroutine(UpdateLoadingInfo());
+        #endif
+        
+        // Monitor the loading progress
+        while (!asyncOperation.isDone)
+        {
+            // Progress goes from 0 to 0.9 (90%) when scene is ready to activate
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+            
+            // Update the progress bar
+            if (progressBar != null) progressBar.value = progress;
+            if (progressText != null) progressText.text = (progress * 100).ToString("F0") + "%";
+            
+            // If loading is almost done
+            if (asyncOperation.progress >= 0.9f)
+            {
+                // Check if we've displayed the loading screen for the minimum time
+                float elapsedTime = Time.time - loadStartTime;
+                if (elapsedTime >= minDisplayTime)
+                {
+                    // Show the start button
+                    if (startButton != null)
+                    {
+                        startButton.SetActive(true);
+                        
+                        // Play loading complete sound if available
+                        if (loadingCompleteSound != null)
+                        {
+                            loadingCompleteSound.Play();
+                        }
+                        
+                        if (loadingInfoText != null)
+                        {
+                            loadingInfoText.text = "Loading complete! Click to start.";
+                        }
+                    }
+                    else
+                    {
+                        // No start button, so activate right away
+                        asyncOperation.allowSceneActivation = true;
+                    }
+                }
+            }
+            
+            yield return null;
+        }
+        
+        isLoading = false;
+    }
+    
+    // WebGL-specific loading messages
+    IEnumerator UpdateLoadingInfo()
+    {
+        string[] loadingMessages = new string[]
+        {
+            "Downloading game data...",
+            "Preparing graphics...",
+            "Optimizing for your browser...",
+            "Almost there..."
+        };
+        
+        int messageIndex = 0;
+        float nextMessageTime = Time.time + 2.5f;
+        
+        while (isLoading)
+        {
+            if (Time.time > nextMessageTime)
+            {
+                messageIndex = (messageIndex + 1) % loadingMessages.Length;
+                if (loadingInfoText != null)
+                {
+                    loadingInfoText.text = loadingMessages[messageIndex];
+                }
+                nextMessageTime = Time.time + 2.5f;
+            }
+            
+            yield return null;
+        }
+    }
+    
+    // Called by the start button
+    public void OnStartButtonClick()
+    {
+        // Hide the loading screen
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(false);
+        }
+        
+        // Activate the main scene
+        SceneManager.LoadSceneAsync(mainSceneName).allowSceneActivation = true;
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>WebGL platform considerations:</p>
+                                <ul>
+                                    <li>Browser security restrictions limit certain features (file system access, etc.)</li>
+                                    <li>WebGL builds are usually larger than native builds</li>
+                                    <li>Performance is generally 50-70% of native builds</li>
+                                    <li>Loading feedback is crucial as WebGL builds can take time to initialize</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Publishing</h3>
+                        <ol>
+                            <li><strong>Create a publishing checklist</strong> specific to your game and target platforms</li>
+                            <li><strong>Test thoroughly</strong> on actual target devices, not just in the editor</li>
+                            <li><strong>Automate your build process</strong> to reduce errors and save time</li>
+                            <li><strong>Implement analytics</strong> to track user behavior and game performance</li>
+                            <li><strong>Plan your monetization strategy</strong> before publishing</li>
+                            <li><strong>Prepare marketing materials</strong> in advance (screenshots, videos, descriptions)</li>
+                            <li><strong>Test the user experience</strong> from installation through gameplay</li>
+                            <li><strong>Create a post-launch support plan</strong> for updates and bug fixes</li>
+                            <li><strong>Document your build process</strong> for consistency in future updates</li>
+                            <li><strong>Stay updated on platform requirements</strong> as they change frequently</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-optimization.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Optimization</a>
+                        <a href="unity-2d-platformer.html" class="next">Unity 2D Platformer <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

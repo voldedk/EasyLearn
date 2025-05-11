@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Component System - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Component System</h2>
+                    
+                    <div class="topic">
+                        <h3>Understanding the Component Architecture</h3>
+                        <p>Unity's component-based architecture is one of its most powerful features. Instead of using deep inheritance hierarchies, Unity uses a composition model where GameObjects are containers for Components that define their behavior and properties.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>How Unity's component system works</li>
+                            <li>Common built-in components and their uses</li>
+                            <li>Creating custom components with C# scripts</li>
+                            <li>Component communication techniques</li>
+                            <li>Component patterns and best practices</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Component-Based Design</h3>
+                        <p>The component system in Unity follows an architectural pattern called Composition over Inheritance, which offers better flexibility and reusability compared to traditional inheritance-based architectures.</p>
+                        
+                        <div class="example-box">
+                            <h4>Key Concepts:</h4>
+                            <ul>
+                                <li><strong>GameObject</strong>: A container that can hold multiple components</li>
+                                <li><strong>Component</strong>: A modular piece of functionality attached to a GameObject</li>
+                                <li><strong>Composition</strong>: Building complex objects by combining simpler components</li>
+                                <li><strong>MonoBehaviour</strong>: The base class for all script components in Unity</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Benefits of component-based design:</p>
+                                <ul>
+                                    <li><strong>Modularity</strong>: Components can be added or removed independently</li>
+                                    <li><strong>Reusability</strong>: The same component can be used on different GameObjects</li>
+                                    <li><strong>Flexibility</strong>: Components can be combined in countless ways</li>
+                                    <li><strong>Clarity</strong>: Each component has a single responsibility</li>
+                                    <li><strong>Testability</strong>: Components can be tested independently</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Essential Built-in Components</h3>
+                        <p>Unity provides many built-in components that handle common functionality. Understanding these components is essential for efficient development.</p>
+                        
+                        <div class="example-box">
+                            <h4>Common Built-in Components:</h4>
+                            <ul>
+                                <li><strong>Transform</strong>: Controls position, rotation, and scale (attached to all GameObjects)</li>
+                                <li><strong>Renderer</strong> (MeshRenderer, SpriteRenderer): Handles how objects appear visually</li>
+                                <li><strong>Collider</strong> (BoxCollider, SphereCollider, etc.): Defines physical shape for collision detection</li>
+                                <li><strong>Rigidbody/Rigidbody2D</strong>: Adds physics behavior to GameObjects</li>
+                                <li><strong>Camera</strong>: Renders the scene from a specific viewpoint</li>
+                                <li><strong>Light</strong>: Adds lighting to the scene</li>
+                                <li><strong>AudioSource</strong>: Plays audio clips</li>
+                                <li><strong>Animator</strong>: Controls animations</li>
+                                <li><strong>Canvas/UI components</strong>: For creating user interfaces</li>
+                                <li><strong>ParticleSystem</strong>: Creates particle effects</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Component Combinations</h4>
+                            <p>Common component combinations for game objects:</p>
+                            <ul>
+                                <li><strong>Character</strong>: Transform + Mesh/Sprite Renderer + Collider + Rigidbody + Custom Scripts</li>
+                                <li><strong>Static Object</strong>: Transform + Mesh/Sprite Renderer + Collider (no Rigidbody for immovable objects)</li>
+                                <li><strong>UI Element</strong>: RectTransform + Image/Text + Button/EventSystem components</li>
+                                <li><strong>Camera</strong>: Camera + AudioListener + Post-processing components</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Components in Code</h3>
+                        <p>You can add, access, modify, and remove components through C# scripts at runtime.</p>
+                        
+                        <div class="example-box">
+                            <h4>Component Manipulation:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ComponentManager : MonoBehaviour
+{
+    // Reference to target GameObject
+    public GameObject targetObject;
+    
+    void Start()
+    {
+        if (targetObject == null)
+            targetObject = gameObject; // Use this GameObject if no target specified
+        
+        // ADD COMPONENTS
+        
+        // Add a component if it doesn't exist
+        if (targetObject.GetComponent<Rigidbody>() == null)
+        {
+            // Add a Rigidbody component to the target
+            Rigidbody rb = targetObject.AddComponent<Rigidbody>();
+            // This adds a physics body to the object so it can be affected by forces
+            
+            // Configure the component properties
+            rb.mass = 2.0f;
+            rb.drag = 0.5f;
+            rb.useGravity = true;
+            // These lines set the mass, air resistance, and gravity effect
+        }
+        
+        // GET COMPONENTS
+        
+        // Method 1: Get a component from the GameObject
+        Renderer renderer = targetObject.GetComponent<Renderer>();
+        // Gets the first Renderer component (MeshRenderer, SpriteRenderer, etc.)
+        
+        // Method 2: Get component with direct type
+        MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
+        // Gets specifically a MeshRenderer component
+        
+        // Method 3: Get component with generic method
+        AudioSource audio = GetComponent<AudioSource>();
+        // Gets AudioSource from the GameObject this script is attached to
+        
+        // Check if component exists before using
+        if (renderer != null)
+        {
+            // Modify component properties
+            renderer.material.color = Color.red;
+            // Changes the object's material color to red
+        }
+        else
+        {
+            Debug.LogWarning("No renderer found on " + targetObject.name);
+        }
+        
+        // GET MULTIPLE COMPONENTS
+        
+        // Get all colliders on the object
+        Collider[] colliders = targetObject.GetComponents<Collider>();
+        Debug.Log($"Found {colliders.Length} colliders on {targetObject.name}");
+        
+        // Iterate through components
+        foreach (Collider collider in colliders)
+        {
+            // Modify each collider
+            collider.isTrigger = true;
+            // Makes all colliders into triggers (detect collisions without physics response)
+        }
+        
+        // GET COMPONENTS IN CHILDREN
+        
+        // Find all renderers in children (including the parent)
+        Renderer[] childRenderers = targetObject.GetComponentsInChildren<Renderer>();
+        Debug.Log($"Found {childRenderers.Length} renderers in children");
+        
+        // Change color of all child renderers
+        foreach (Renderer childRenderer in childRenderers)
+        {
+            childRenderer.material.color = new Color(
+                Random.value, // Random red component
+                Random.value, // Random green component
+                Random.value, // Random blue component
+                1.0f         // Fully opaque
+            );
+            // Sets each child object to a random color
+        }
+        
+        // REMOVE COMPONENTS
+        
+        // Find a specific component to remove
+        BoxCollider boxCollider = targetObject.GetComponent<BoxCollider>();
+        if (boxCollider != null)
+        {
+            // Remove the component (immediate)
+            Destroy(boxCollider);
+            // This immediately removes the BoxCollider component
+        }
+        
+        // Remove a component with delay
+        Light light = targetObject.GetComponent<Light>();
+        if (light != null)
+        {
+            // Remove the component after 5 seconds
+            Destroy(light, 5.0f);
+            // The Light component will be removed after 5 seconds
+        }
+    }
+    
+    void Update()
+    {
+        if (targetObject == null)
+            return;
+            
+        // Example: Toggle a component when a key is pressed
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            // Get the renderer
+            Renderer renderer = targetObject.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                // Toggle the renderer's enabled state
+                renderer.enabled = !renderer.enabled;
+                // This turns the visual rendering on/off without removing the component
+            }
+        }
+        
+        // Example: Check component behavior
+        Rigidbody rb = targetObject.GetComponent<Rigidbody>();
+        if (rb != null && rb.velocity.magnitude > 10f)
+        {
+            Debug.Log("Object is moving fast: " + rb.velocity.magnitude + " m/s");
+        }
+    }
+    
+    // Utility method to disable all components of a specific type
+    void DisableComponents<T>() where T : Behaviour
+    {
+        // Get all components of type T
+        T[] components = targetObject.GetComponents<T>();
+        
+        // Disable each component
+        foreach (T component in components)
+        {
+            component.enabled = false;
+            // This disables the component without removing it
+        }
+        
+        Debug.Log($"Disabled {components.Length} components of type {typeof(T).Name}");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key component methods:</p>
+                                <ul>
+                                    <li><strong>AddComponent&lt;T&gt;()</strong> - Adds a new component to the GameObject</li>
+                                    <li><strong>GetComponent&lt;T&gt;()</strong> - Gets the first component of type T</li>
+                                    <li><strong>GetComponents&lt;T&gt;()</strong> - Gets all components of type T</li>
+                                    <li><strong>GetComponentInChildren&lt;T&gt;()</strong> - Gets first component in children (depth-first)</li>
+                                    <li><strong>GetComponentsInChildren&lt;T&gt;()</strong> - Gets all components in children</li>
+                                    <li><strong>GetComponentInParent&lt;T&gt;()</strong> - Gets first component in parent hierarchy</li>
+                                    <li><strong>Destroy(component)</strong> - Removes a component</li>
+                                    <li><strong>component.enabled</strong> - Enables/disables a component (if it inherits from Behaviour)</li>
+                                    <li><strong>TryGetComponent&lt;T&gt;(out T component)</strong> - Efficiently checks and gets a component</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Component Communication</h3>
+                        <p>One of the challenges in component-based design is how components communicate with each other. Unity provides several ways for components to interact.</p>
+                        
+                        <div class="example-box">
+                            <h4>Communication Between Components:</h4>
+                            <pre><code>
+using UnityEngine;
+
+// EXAMPLE 1: Direct References
+
+// Health component that other components might need to access
+public class Health : MonoBehaviour
+{
+    public int currentHealth = 100;
+    public int maxHealth = 100;
+    
+    // Event for other components to subscribe to
+    public delegate void HealthChanged(int newHealth);
+    public event HealthChanged OnHealthChanged;
+    
+    public void TakeDamage(int amount)
+    {
+        // Reduce health
+        currentHealth = Mathf.Max(0, currentHealth - amount);
+        // This ensures health doesn't go below zero
+        
+        // Notify subscribers that health changed
+        OnHealthChanged?.Invoke(currentHealth);
+        // The ? operator ensures we only invoke if there are subscribers
+        
+        // Check for death
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    
+    public void Heal(int amount)
+    {
+        // Increase health, but don't exceed max
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        
+        // Notify subscribers
+        OnHealthChanged?.Invoke(currentHealth);
+    }
+    
+    private void Die()
+    {
+        // Death logic here
+        Debug.Log(gameObject.name + " has died!");
+    }
+}
+
+// Damage dealer component that needs to access Health
+public class DamageDealer : MonoBehaviour
+{
+    public int damageAmount = 10;
+    
+    // Direct reference to the health component
+    public Health targetHealth;
+    
+    void Start()
+    {
+        // Could alternatively find a reference if not set in inspector
+        if (targetHealth == null)
+        {
+            targetHealth = FindObjectOfType<Health>();
+            // This finds the first Health component in the scene
+            
+            if (targetHealth == null)
+            {
+                Debug.LogError("No Health component found!");
+            }
+        }
+    }
+    
+    void Update()
+    {
+        // Example: Deal damage when space is pressed
+        if (Input.GetKeyDown(KeyCode.Space) && targetHealth != null)
+        {
+            // Directly call the method on the referenced component
+            targetHealth.TakeDamage(damageAmount);
+            // This deals damage to the target through the direct reference
+        }
+    }
+}
+
+// EXAMPLE 2: GetComponent
+
+public class PlayerWeapon : MonoBehaviour
+{
+    public int damage = 25;
+    
+    void OnTriggerEnter(Collider other)
+    {
+        // When weapon collides with something, try to damage it
+        Health enemyHealth = other.GetComponent<Health>();
+        // Tries to get the Health component from the collided object
+        
+        if (enemyHealth != null)
+        {
+            // If the object has a Health component, damage it
+            enemyHealth.TakeDamage(damage);
+            // This deals damage to whatever was hit, if it has a Health component
+        }
+    }
+}
+
+// EXAMPLE 3: Messages
+
+public class Explosive : MonoBehaviour
+{
+    public float explosionRadius = 5f;
+    public int explosionDamage = 50;
+    
+    public void Explode()
+    {
+        // Find all colliders in explosion radius
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        
+        foreach (Collider hitCollider in hitColliders)
+        {
+            // Send a message to each affected object
+            hitCollider.SendMessage("ApplyDamage", explosionDamage, SendMessageOptions.DontRequireReceiver);
+            // This calls the "ApplyDamage" method on any component of the hit object,
+            // if such a method exists. Does nothing if the method doesn't exist.
+        }
+        
+        // Visual effect
+        Debug.Log("BOOM! Explosion at " + transform.position);
+        
+        // Destroy this object
+        Destroy(gameObject);
+    }
+}
+
+// Component that can receive damage messages
+public class Damageable : MonoBehaviour
+{
+    public int health = 100;
+    
+    // This method can be called via SendMessage
+    public void ApplyDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log(gameObject.name + " took " + damage + " damage. Health: " + health);
+        
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+    
+    private void Die()
+    {
+        // Death logic
+        Destroy(gameObject);
+    }
+}
+
+// EXAMPLE 4: Events and Observers
+
+public class HealthUI : MonoBehaviour
+{
+    public Health playerHealth;
+    
+    void Start()
+    {
+        if (playerHealth != null)
+        {
+            // Subscribe to the OnHealthChanged event
+            playerHealth.OnHealthChanged += UpdateHealthUI;
+            // This registers our method to be called whenever health changes
+        }
+    }
+    
+    void UpdateHealthUI(int newHealth)
+    {
+        // Update UI elements based on health
+        Debug.Log("UI updated to show health: " + newHealth);
+        // In a real implementation, this would update a health bar or text
+    }
+    
+    void OnDestroy()
+    {
+        // Always unsubscribe when this object is destroyed
+        if (playerHealth != null)
+        {
+            playerHealth.OnHealthChanged -= UpdateHealthUI;
+            // This prevents memory leaks by removing our subscription
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Communication methods by preference:</p>
+                                <ol>
+                                    <li><strong>Direct References</strong>: Most performant but creates tight coupling</li>
+                                    <li><strong>GetComponent</strong>: Decoupled but can be expensive if called frequently</li>
+                                    <li><strong>Events</strong>: Observer pattern for decoupled, efficient communication</li>
+                                    <li><strong>SendMessage</strong>: Convenient but slowest method (use sparingly)</li>
+                                    <li><strong>ScriptableObjects</strong>: Data container that multiple components can share</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Component Communication Best Practices</h4>
+                            <ul>
+                                <li><strong>Cache component references</strong> in Start() or Awake() rather than using GetComponent() repeatedly</li>
+                                <li><strong>Use [RequireComponent]</strong> attribute to ensure dependencies are met</li>
+                                <li><strong>Favor events</strong> over polling for state changes</li>
+                                <li><strong>Keep communication local</strong> when possible (between components on same GameObject)</li>
+                                <li><strong>Use interfaces</strong> to create more flexible communication between components</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Custom Components</h3>
+                        <p>Creating your own components is as simple as writing a C# script that inherits from MonoBehaviour. Let's look at some best practices for component design.</p>
+                        
+                        <div class="example-box">
+                            <h4>Component Design Patterns:</h4>
+                            <pre><code>
+using UnityEngine;
+
+// PATTERN 1: Component with Dependencies
+
+// Require that a Rigidbody component exists on the same GameObject
+[RequireComponent(typeof(Rigidbody))]
+public class Hover : MonoBehaviour
+{
+    public float hoverHeight = 2.0f;
+    public float hoverForce = 5.0f;
+    
+    private Rigidbody rb;
+    
+    void Awake()
+    {
+        // Cache the required component
+        rb = GetComponent<Rigidbody>();
+        // GetComponent will always succeed because of [RequireComponent]
+    }
+    
+    void FixedUpdate()
+    {
+        // Cast a ray downward to find the ground
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        
+        // If we detect ground below us
+        if (Physics.Raycast(ray, out hit, hoverHeight * 2))
+        {
+            // Calculate how much force to apply
+            float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            
+            // Apply hover force
+            rb.AddForce(appliedHoverForce, ForceMode.Acceleration);
+            // This adds an upward force proportional to how close the object is to the ground
+        }
+    }
+}
+
+// PATTERN 2: Reusable Component with Settings
+
+[System.Serializable]
+public class OscillationSettings
+{
+    public Vector3 direction = Vector3.up;
+    public float amplitude = 1.0f;
+    public float frequency = 1.0f;
+}
+
+public class Oscillator : MonoBehaviour
+{
+    // Expose settings in Inspector via a custom class
+    public OscillationSettings settings;
+    
+    // Original position for relative movement
+    private Vector3 startPosition;
+    
+    void Start()
+    {
+        // Store original position
+        startPosition = transform.position;
+    }
+    
+    void Update()
+    {
+        // Calculate oscillation based on time
+        float time = Time.time;
+        float sine = Mathf.Sin(time * settings.frequency * 2f * Mathf.PI);
+        
+        // Apply oscillation to position
+        Vector3 offset = settings.direction.normalized * sine * settings.amplitude;
+        transform.position = startPosition + offset;
+        // This makes the object move back and forth along the specified direction
+    }
+    
+    // Reset to start position when disabled
+    void OnDisable()
+    {
+        transform.position = startPosition;
+    }
+}
+
+// PATTERN 3: Component with Public API
+
+public class TurretController : MonoBehaviour
+{
+    [Header("Turret Settings")]
+    public float rotationSpeed = 30f;
+    public float maxAngle = 60f;
+    public Transform turretHead;
+    
+    [Header("Weapon Settings")]
+    public Transform firePoint;
+    public GameObject projectilePrefab;
+    public float fireRate = 0.5f;
+    public int ammo = 30;
+    
+    // Internal state
+    private bool isActive = false;
+    private float nextFireTime;
+    
+    // PUBLIC API - Methods for other components to use
+    
+    // Activate the turret
+    public void Activate()
+    {
+        isActive = true;
+        Debug.Log("Turret activated!");
+    }
+    
+    // Deactivate the turret
+    public void Deactivate()
+    {
+        isActive = false;
+        Debug.Log("Turret deactivated!");
+    }
+    
+    // Aim at a specific world position
+    public void AimAt(Vector3 targetPosition)
+    {
+        if (!isActive || turretHead == null)
+            return;
+            
+        // Calculate direction to target
+        Vector3 direction = targetPosition - turretHead.position;
+        
+        // Create rotation only on Y axis (for a turret that rotates horizontally)
+        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        
+        // Apply rotation with smooth interpolation
+        turretHead.rotation = Quaternion.RotateTowards(
+            turretHead.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
+        // This smoothly rotates the turret head toward the target
+    }
+    
+    // Fire a projectile
+    public bool Fire()
+    {
+        // Check if can fire
+        if (!isActive || Time.time < nextFireTime || ammo <= 0 || firePoint == null)
+            return false;
+            
+        // Update firing state
+        nextFireTime = Time.time + 1f / fireRate;
+        ammo--;
+        
+        // Spawn projectile
+        if (projectilePrefab != null)
+        {
+            Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            // This creates a new projectile at the fire point, facing the same direction
+        }
+        
+        Debug.Log($"Turret fired! Ammo remaining: {ammo}");
+        return true;
+    }
+    
+    // INTERNAL METHODS - Private functionality
+    
+    void Update()
+    {
+        if (!isActive)
+            return;
+            
+        // Example internal behavior: Auto-fire at nearest enemy
+        if (ShouldAutoFire())
+        {
+            Fire();
+        }
+    }
+    
+    private bool ShouldAutoFire()
+    {
+        // Simplified auto-fire logic
+        return Time.time >= nextFireTime && ammo > 0;
+    }
+    
+    // Public property to check status
+    public bool IsActive => isActive;
+    
+    // Public property that encapsulates internal state
+    public int RemainingAmmo => ammo;
+}
+
+// PATTERN 4: Modular Components Working Together
+
+// Base damage component that can be extended
+public abstract class DamageSource : MonoBehaviour
+{
+    public int baseDamage = 10;
+    
+    // Abstract method to be implemented by derived classes
+    public abstract void ApplyDamage(GameObject target);
+    
+    // Shared utility method
+    protected bool CanDamage(GameObject target)
+    {
+        // Check if target has health
+        return target.GetComponent<Health>() != null;
+    }
+}
+
+// Fire damage
+public class FireDamage : DamageSource
+{
+    public float burnDuration = 3.0f;
+    public float tickRate = 0.5f;
+    
+    public override void ApplyDamage(GameObject target)
+    {
+        if (!CanDamage(target))
+            return;
+            
+        // Apply initial damage
+        Health health = target.GetComponent<Health>();
+        health.TakeDamage(baseDamage);
+        
+        // Add a burning effect component to the target
+        BurningEffect burning = target.GetComponent<BurningEffect>();
+        if (burning == null)
+        {
+            burning = target.AddComponent<BurningEffect>();
+            // Add the burning effect component if it doesn't exist
+        }
+        
+        // Configure and activate burning
+        burning.duration = burnDuration;
+        burning.damagePerTick = Mathf.RoundToInt(baseDamage * 0.2f);
+        burning.tickRate = tickRate;
+        burning.StartBurning();
+        // This sets up the burning effect with our damage settings
+    }
+}
+
+// Freeze damage
+public class FreezeDamage : DamageSource
+{
+    public float slowAmount = 0.5f;
+    public float freezeDuration = 2.0f;
+    
+    public override void ApplyDamage(GameObject target)
+    {
+        if (!CanDamage(target))
+            return;
+            
+        // Apply damage
+        Health health = target.GetComponent<Health>();
+        health.TakeDamage(baseDamage);
+        
+        // Slow the target
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            // Apply immediate slowing effect
+            rb.velocity *= slowAmount;
+            // This reduces the target's velocity to simulate a freezing effect
+        }
+        
+        // Notify any speed-dependent components
+        target.BroadcastMessage("OnFrozen", freezeDuration, SendMessageOptions.DontRequireReceiver);
+        // This notifies any component that might care about the freezing effect
+    }
+}
+
+// Component for a burning effect
+public class BurningEffect : MonoBehaviour
+{
+    public float duration = 3.0f;
+    public int damagePerTick = 2;
+    public float tickRate = 0.5f;
+    
+    private float remainingTime;
+    private float nextTickTime;
+    
+    public void StartBurning()
+    {
+        // Initialize burning
+        remainingTime = duration;
+        nextTickTime = 0;
+        
+        // Make sure this component is enabled
+        enabled = true;
+    }
+    
+    void Update()
+    {
+        // Count down burning time
+        remainingTime -= Time.deltaTime;
+        
+        // Apply damage at regular intervals
+        if (Time.time >= nextTickTime)
+        {
+            ApplyBurningDamage();
+            nextTickTime = Time.time + tickRate;
+        }
+        
+        // Remove component when duration ends
+        if (remainingTime <= 0)
+        {
+            enabled = false;
+            Destroy(this);
+        }
+    }
+    
+    void ApplyBurningDamage()
+    {
+        // Apply burning damage
+        Health health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.TakeDamage(damagePerTick);
+            // This deals periodic damage from the burning effect
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Component design patterns:</p>
+                                <ul>
+                                    <li><strong>Required Components</strong>: Use [RequireComponent] to declare dependencies</li>
+                                    <li><strong>Reusable Settings</strong>: Use [Serializable] classes for configuration</li>
+                                    <li><strong>Public API</strong>: Create clear methods for other components to use</li>
+                                    <li><strong>Composition</strong>: Build complex behaviors from simple components</li>
+                                    <li><strong>Inheritance</strong>: Use for specialized variations of a base behavior</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Components</h3>
+                        <ol>
+                            <li><strong>Single Responsibility</strong>: Keep each component focused on one specific task</li>
+                            <li><strong>Encapsulation</strong>: Hide internal details, expose a clean public API</li>
+                            <li><strong>Cache References</strong>: Store component references in Awake() or Start()</li>
+                            <li><strong>Clear Dependencies</strong>: Use [RequireComponent] to declare dependencies</li>
+                            <li><strong>Optimize GetComponent</strong>: Avoid calling GetComponent in Update or FixedUpdate</li>
+                            <li><strong>Handle Null References</strong>: Always check for null before using references</li>
+                            <li><strong>Clean Communication</strong>: Use events for loose coupling between components</li>
+                            <li><strong>Use Interfaces</strong>: Implement interfaces for more flexible communication</li>
+                            <li><strong>Descriptive Naming</strong>: Name components clearly based on their function</li>
+                            <li><strong>Inspector Organization</strong>: Use [Header], [Tooltip], and other attributes to improve editor experience</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="working-with-gameobjects.html" class="prev"><i class="fas fa-arrow-left"></i> Working with GameObjects</a>
+                        <a href="jump-mechanics.html" class="next">Jump Mechanics <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

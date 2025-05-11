@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Switch Statements - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Switch Statements</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Switch Statements</h3>
+                        <p>The <code>switch</code> statement provides a way to select one of many code blocks to execute based on the value of a single expression. It's particularly useful when you have multiple potential values to test against, as an alternative to complex if-else-if chains.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Switch Statement Concepts:</h4>
+                            <ul>
+                                <li>Efficiently tests a variable against a list of values (cases)</li>
+                                <li>Each case needs to end with a <code>break</code> statement (except when using fall-through)</li>
+                                <li>The <code>default</code> case handles all values not explicitly matched</li>
+                                <li>In C# 8.0 and later, enhanced pattern matching expands switch capabilities</li>
+                                <li>Switch expressions (C# 8.0+) offer a more concise alternative to switch statements</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Switch Statement</h3>
+                        <p>The traditional switch statement evaluates an expression once and compares it with a series of case values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Switch Statement Syntax:</h4>
+                            <pre><code>
+switch (expression)
+{
+    case value1:
+        // Code to execute if expression equals value1
+        break;
+    case value2:
+        // Code to execute if expression equals value2
+        break;
+    // Additional cases as needed
+    default:
+        // Code to execute if expression doesn't match any case
+        break;
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key parts of a switch statement:</p>
+                                <ul>
+                                    <li>The <code>switch</code> keyword followed by an expression in parentheses</li>
+                                    <li>Multiple <code>case</code> clauses, each with a specific value and code to execute</li>
+                                    <li>The <code>break</code> statement to exit the switch block after a matching case</li>
+                                    <li>An optional <code>default</code> clause that executes when no cases match</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Switch Statement Example:</h4>
+                            <pre><code>
+int day = 3;
+string dayName;
+
+switch (day)
+{
+    case 1:
+        dayName = "Monday";
+        break;
+    case 2:
+        dayName = "Tuesday";
+        break;
+    case 3:
+        dayName = "Wednesday";
+        break;
+    case 4:
+        dayName = "Thursday";
+        break;
+    case 5:
+        dayName = "Friday";
+        break;
+    case 6:
+        dayName = "Saturday";
+        break;
+    case 7:
+        dayName = "Sunday";
+        break;
+    default:
+        dayName = "Invalid day";
+        break;
+}
+
+Console.WriteLine($"Day {day} is {dayName}");  // Output: "Day 3 is Wednesday"
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Multiple Case Labels</h3>
+                        <p>You can include multiple case labels for the same code block when you want the same action for different values:</p>
+                        
+                        <div class="example-box">
+                            <h4>Multiple Case Labels Example:</h4>
+                            <pre><code>
+char grade = 'B';
+string feedback;
+
+switch (grade)
+{
+    case 'A':
+        feedback = "Excellent work!";
+        break;
+    case 'B':
+    case 'C':
+        feedback = "Good job!";
+        break;
+    case 'D':
+        feedback = "You need to improve.";
+        break;
+    case 'F':
+        feedback = "Failed. Please try again.";
+        break;
+    default:
+        feedback = "Invalid grade.";
+        break;
+}
+
+Console.WriteLine(feedback);  // Output: "Good job!"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>In this example, both 'B' and 'C' grades produce the same feedback message. This is more concise than duplicating the same code in separate case blocks.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Switch with Strings</h3>
+                        <p>C# switch statements can work with strings, making them useful for command processing or text-based input:</p>
+                        
+                        <div class="example-box">
+                            <h4>String Switch Example:</h4>
+                            <pre><code>
+string command = "exit";
+string message;
+
+switch (command.ToLower())
+{
+    case "start":
+        message = "Starting the application...";
+        break;
+    case "stop":
+        message = "Stopping the application...";
+        break;
+    case "restart":
+        message = "Restarting the application...";
+        break;
+    case "exit":
+    case "quit":
+        message = "Exiting the application...";
+        break;
+    default:
+        message = "Command not recognized.";
+        break;
+}
+
+Console.WriteLine(message);  // Output: "Exiting the application..."
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Note the use of <code>ToLower()</code> to make the comparison case-insensitive. Be aware that string comparisons in switch statements are case-sensitive by default.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Switch Fall-Through (goto case)</h3>
+                        <p>Unlike some other languages, C# doesn't allow automatic fall-through between cases. However, you can use <code>goto case</code> to explicitly transfer control to another case:</p>
+                        
+                        <div class="example-box">
+                            <h4>Switch with goto case Example:</h4>
+                            <pre><code>
+int option = 2;
+string result;
+
+switch (option)
+{
+    case 1:
+        Console.WriteLine("Option 1 selected");
+        result = "Processing option 1";
+        break;
+    case 2:
+        Console.WriteLine("Option 2 selected");
+        result = "Setting up for option 2";
+        goto case 4;  // Explicitly go to case 4 after executing case 2 code
+    case 3:
+        Console.WriteLine("Option 3 selected");
+        result = "Processing option 3";
+        break;
+    case 4:
+        Console.WriteLine("Performing common processing");
+        result += " with additional processing";
+        break;
+    default:
+        result = "Invalid option";
+        break;
+}
+
+// Output:
+// "Option 2 selected"
+// "Performing common processing"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The <code>goto case</code> statement is useful when multiple cases need to share some common code, but also need their own specific processing. Use it sparingly, as excessive use can make code harder to follow.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Pattern Matching in Switch Statements (C# 7.0+)</h3>
+                        <p>C# 7.0 introduced pattern matching in switch statements, allowing for more advanced switch capabilities:</p>
+                        
+                        <div class="example-box">
+                            <h4>Type Pattern Matching:</h4>
+                            <pre><code>
+object item = "Hello, World!";
+string result;
+
+switch (item)
+{
+    case int i:
+        result = $"Integer: {i}";
+        break;
+    case string s:
+        result = $"String: {s}";
+        break;
+    case bool b:
+        result = $"Boolean: {b}";
+        break;
+    case DateTime d:
+        result = $"Date: {d.ToShortDateString()}";
+        break;
+    case null:
+        result = "Null value";
+        break;
+    default:
+        result = $"Other type: {item.GetType().Name}";
+        break;
+}
+
+Console.WriteLine(result);  // Output: "String: Hello, World!"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Type pattern matching allows you to:</p>
+                                <ul>
+                                    <li>Check the runtime type of an expression</li>
+                                    <li>Cast the value to that type</li>
+                                    <li>Assign it to a new variable (like <code>i</code>, <code>s</code>, <code>b</code>, and <code>d</code> in the example)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Pattern Matching with When Clause:</h4>
+                            <pre><code>
+object value = 42;
+string category;
+
+switch (value)
+{
+    case int i when i < 0:
+        category = "Negative integer";
+        break;
+    case int i when i == 0:
+        category = "Zero";
+        break;
+    case int i when i > 0 && i <= 10:
+        category = "Small positive integer";
+        break;
+    case int i when i > 10 && i <= 100:
+        category = "Medium positive integer";
+        break;
+    case int i when i > 100:
+        category = "Large positive integer";
+        break;
+    case string s when s.Length == 0:
+        category = "Empty string";
+        break;
+    case string s:
+        category = $"String with length {s.Length}";
+        break;
+    default:
+        category = "Other type";
+        break;
+}
+
+Console.WriteLine(category);  // Output: "Medium positive integer"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The <code>when</code> clause allows you to specify additional conditions for pattern matching, enabling more complex logic within the switch statement.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Switch Expressions (C# 8.0+)</h3>
+                        <p>C# 8.0 introduced switch expressions, a more concise way to write switch statements, particularly useful for simple value assignments:</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Switch Expression Syntax:</h4>
+                            <pre><code>
+result = expression switch
+{
+    pattern1 => expression1,
+    pattern2 => expression2,
+    pattern3 => expression3,
+    _ => defaultExpression
+};
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key differences from traditional switch statements:</p>
+                                <ul>
+                                    <li>The <code>switch</code> keyword follows the expression being tested</li>
+                                    <li>Uses <code>=></code> (lambda arrow) instead of <code>:</code> and <code>break</code></li>
+                                    <li>Uses <code>_</code> (discard pattern) for the default case</li>
+                                    <li>Each pattern-expression pair is separated by commas</li>
+                                    <li>The entire expression must be terminated with a semicolon</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Switch Expression Examples:</h4>
+                            <pre><code>
+// Basic switch expression
+int day = 3;
+string dayName = day switch
+{
+    1 => "Monday",
+    2 => "Tuesday",
+    3 => "Wednesday",
+    4 => "Thursday",
+    5 => "Friday",
+    6 => "Saturday",
+    7 => "Sunday",
+    _ => "Invalid day"
+};
+
+Console.WriteLine(dayName);  // Output: "Wednesday"
+
+// Switch expression with pattern matching
+object item = 42;
+string description = item switch
+{
+    null => "Nothing",
+    int i when i < 0 => "Negative",
+    int i when i == 0 => "Zero",
+    int i => $"Positive integer: {i}",
+    string s => $"String: {s}",
+    _ => $"Something else: {item.GetType().Name}"
+};
+
+Console.WriteLine(description);  // Output: "Positive integer: 42"
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Tuple Patterns in Switch Expressions (C# 8.0+)</h3>
+                        <p>Switch expressions can work with tuples, allowing you to match against multiple values simultaneously:</p>
+                        
+                        <div class="example-box">
+                            <h4>Tuple Pattern Examples:</h4>
+                            <pre><code>
+string GetQuadrant(int x, int y) => (x, y) switch
+{
+    (0, 0) => "Origin",
+    (> 0, > 0) => "Quadrant 1",
+    (< 0, > 0) => "Quadrant 2", 
+    (< 0, < 0) => "Quadrant 3",
+    (> 0, < 0) => "Quadrant 4",
+    (0, _) => "Y-axis",
+    (_, 0) => "X-axis",
+    _ => "Unknown"
+};
+
+Console.WriteLine(GetQuadrant(5, 10));   // Output: "Quadrant 1"
+Console.WriteLine(GetQuadrant(-5, 10));  // Output: "Quadrant 2"
+Console.WriteLine(GetQuadrant(0, 0));    // Output: "Origin"
+Console.WriteLine(GetQuadrant(0, 5));    // Output: "Y-axis"
+
+// Matching state transitions
+enum State { Inactive, Active, Suspended }
+enum Action { Activate, Suspend, Resume, Deactivate }
+
+State GetNextState(State current, Action action) => (current, action) switch
+{
+    (State.Inactive, Action.Activate) => State.Active,
+    (State.Active, Action.Suspend) => State.Suspended,
+    (State.Active, Action.Deactivate) => State.Inactive,
+    (State.Suspended, Action.Resume) => State.Active,
+    (State.Suspended, Action.Deactivate) => State.Inactive,
+    _ => current  // Default: stay in current state
+};
+
+// Usage
+State userState = State.Inactive;
+userState = GetNextState(userState, Action.Activate);
+Console.WriteLine(userState);  // Output: Active
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Relational patterns with <code>></code>, <code><</code>, <code>>=</code>, and <code><=</code> were introduced in C# 9.0 and can be used with tuple patterns for comparing numeric values.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Property Patterns (C# 8.0+)</h3>
+                        <p>Property patterns allow you to match based on the properties of an object:</p>
+                        
+                        <div class="example-box">
+                            <h4>Property Pattern Examples:</h4>
+                            <pre><code>
+// Simple class for the example
+class Point
+{
+    public int X { get; }
+    public int Y { get; }
+
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+// Using property patterns
+string GetPointDescription(Point point) => point switch
+{
+    { X: 0, Y: 0 } => "Origin",
+    { X: 0 } => "On Y-axis",
+    { Y: 0 } => "On X-axis",
+    { X: > 0, Y: > 0 } => "Quadrant 1",
+    { X: < 0, Y: > 0 } => "Quadrant 2",
+    { X: < 0, Y: < 0 } => "Quadrant 3",
+    { X: > 0, Y: < 0 } => "Quadrant 4",
+    _ => "Unknown"
+};
+
+var point = new Point(10, 5);
+Console.WriteLine(GetPointDescription(point));  // Output: "Quadrant 1"
+
+// Using nested property patterns
+class Address
+{
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string ZipCode { get; set; }
+    public string Country { get; set; }
+}
+
+class Customer
+{
+    public string Name { get; set; }
+    public Address ShippingAddress { get; set; }
+}
+
+string GetShippingZone(Customer customer) => customer switch
+{
+    { ShippingAddress: { Country: "USA", ZipCode: var zip } } when zip.StartsWith("9") => "West Coast",
+    { ShippingAddress: { Country: "USA", ZipCode: var zip } } when zip.StartsWith("1") => "East Coast",
+    { ShippingAddress: { Country: "USA" } } => "Other US",
+    { ShippingAddress: { Country: "Canada" } } => "Canada",
+    { ShippingAddress: null } => "No shipping address",
+    _ => "International"
+};
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Property patterns provide a concise way to test multiple properties simultaneously, making complex object matching more readable.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Switch vs. If-Else</h3>
+                        <p>When should you choose switch over if-else, and vice versa?</p>
+                        
+                        <div class="example-box">
+                            <h4>Comparison of Switch and If-Else:</h4>
+                            <table>
+                                <tr>
+                                    <th>Use Switch When</th>
+                                    <th>Use If-Else When</th>
+                                </tr>
+                                <tr>
+                                    <td>Testing a single variable against multiple discrete values</td>
+                                    <td>Testing multiple unrelated variables or conditions</td>
+                                </tr>
+                                <tr>
+                                    <td>The values are constants known at compile time</td>
+                                    <td>Using complex conditions with ranges or combinations</td>
+                                </tr>
+                                <tr>
+                                    <td>You need to match on types or patterns (with C# 7.0+)</td>
+                                    <td>You need to evaluate boolean expressions directly</td>
+                                </tr>
+                                <tr>
+                                    <td>You want better performance with many discrete cases</td>
+                                    <td>You have only a few conditions to check</td>
+                                </tr>
+                                <tr>
+                                    <td>The code is more readable with switch (often with enums)</td>
+                                    <td>The logic doesn't cleanly map to discrete cases</td>
+                                </tr>
+                            </table>
+                            <div class="explanation">
+                                <p>Example of a situation better suited for switch:</p>
+                                <pre><code>
+// Good for switch (enum with discrete values)
+enum Day { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+
+Day today = Day.Wednesday;
+
+switch (today)
+{
+    case Day.Monday:
+    case Day.Tuesday:
+    case Day.Wednesday:
+    case Day.Thursday:
+    case Day.Friday:
+        Console.WriteLine("It's a weekday.");
+        break;
+    case Day.Saturday:
+    case Day.Sunday:
+        Console.WriteLine("It's the weekend!");
+        break;
+}
+                                </code></pre>
+                                <p>Example of a situation better suited for if-else:</p>
+                                <pre><code>
+// Better for if-else (multiple conditions, ranges)
+int age = 25;
+double income = 50000;
+bool hasLoan = true;
+
+if (age < 18)
+{
+    Console.WriteLine("Youth rate applies.");
+}
+else if (age >= 65 || (income < 30000 && !hasLoan))
+{
+    Console.WriteLine("Discount rate applies.");
+}
+else if (income > 100000)
+{
+    Console.WriteLine("Premium rate applies.");
+}
+else
+{
+    Console.WriteLine("Standard rate applies.");
+}
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Switch Statements</h3>
+                        <p>Follow these guidelines to write effective and maintainable switch statements:</p>
+                        
+                        <div class="example-box">
+                            <h4>Switch Statement Best Practices:</h4>
+                            <pre><code>
+// DO: Include a default case
+switch (status)
+{
+    case Status.Pending:
+        // Handle pending status
+        break;
+    case Status.Approved:
+        // Handle approved status
+        break;
+    case Status.Rejected:
+        // Handle rejected status
+        break;
+    default:
+        // Handle unrecognized status
+        break;
+}
+
+// DO: Group related cases
+switch (keyPressed)
+{
+    case ConsoleKey.UpArrow:
+    case ConsoleKey.W:
+        MoveUp();
+        break;
+    case ConsoleKey.DownArrow:
+    case ConsoleKey.S:
+        MoveDown();
+        break;
+    case ConsoleKey.LeftArrow:
+    case ConsoleKey.A:
+        MoveLeft();
+        break;
+    case ConsoleKey.RightArrow:
+    case ConsoleKey.D:
+        MoveRight();
+        break;
+    default:
+        // Handle other keys
+        break;
+}
+
+// DON'T: Forget to break or use return/throw
+// This will cause a compile error in C#
+switch (option)
+{
+    case 1:
+        Console.WriteLine("Option 1");
+        // Missing break - C# will generate an error
+    case 2:
+        Console.WriteLine("Option 2");
+        break;
+}
+
+// DO: Use switch expressions for simple value assignments
+// Instead of:
+string GetMonthName(int month)
+{
+    switch (month)
+    {
+        case 1: return "January";
+        case 2: return "February";
+        // ... and so on
+        default: return "Invalid month";
+    }
+}
+
+// Better (C# 8.0+):
+string GetMonthName(int month) => month switch
+{
+    1 => "January",
+    2 => "February",
+    // ... and so on
+    _ => "Invalid month"
+};
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Additional tips:</p>
+                                <ul>
+                                    <li>Consider using enums instead of magic numbers for better readability</li>
+                                    <li>Extract complex case logic to separate methods</li>
+                                    <li>Use pattern matching for more sophisticated switching logic</li>
+                                    <li>Consider switch expressions for concise, expression-based logic</li>
+                                    <li>Order cases from most to least specific when using pattern matching</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="if-else.html" class="prev"><i class="fas fa-arrow-left"></i> If...Else</a>
+                        <a href="loops.html" class="next">Loops <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

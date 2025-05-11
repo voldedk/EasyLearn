@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity ScriptableObjects - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Unity ScriptableObjects</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            ScriptableObjects are a powerful but often overlooked feature in Unity that allow you to create 
+                            data containers which exist as assets in your project rather than as components attached to GameObjects. 
+                            They help improve architecture, reduce memory usage, and create more maintainable game systems.
+                            This tutorial will explore how to create and use ScriptableObjects effectively in your Unity projects.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>ScriptableObject Fundamentals</h2>
+                        <p>
+                            ScriptableObjects are data containers that exist as assets in your project. Unlike MonoBehaviours, they aren't attached to GameObjects
+                            and persist between scene loads. Let's understand their fundamental structure and benefits.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Identify Data to Extract</strong>: Look for data that doesn't need to be attached to specific objects</li>
+                            <li><strong>Create ScriptableObject Class</strong>: Create a class that inherits from ScriptableObject</li>
+                            <li><strong>Define Data Properties</strong>: Add fields or properties to store your data</li>
+                            <li><strong>Create Asset Menu</strong>: Add CreateAssetMenu attribute to make it easy to create instances</li>
+                            <li><strong>Create Assets</strong>: Right-click in the Project window and create instances</li>
+                            <li><strong>Reference in Scripts</strong>: Use the assets in your game scripts</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Basic ScriptableObject Structure</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+// The CreateAssetMenu attribute allows you to create instances from the Project window
+// fileName: The default name when creating a new asset
+// menuName: The path in the Create menu (Assets > Create > ...)
+// order: The order in the menu (lower numbers appear higher in the list)
+[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item", order = 1)]
+public class ItemData : ScriptableObject
+{
+    [Header("Basic Information")]
+    public string itemName = "New Item";    // Name of the item
+    public Sprite icon;                     // Visual representation in UI
+    [TextArea(3, 8)]                        // Makes the field a multi-line text area in the Inspector
+    public string description;              // Item description
+    
+    [Header("Item Properties")]
+    public ItemType type;                   // Enum for item categories (weapon, consumable, etc.)
+    public bool isStackable;                // Whether items can stack in inventory
+    public int maxStackSize = 1;            // Maximum stack size if stackable
+    public float weight = 0.1f;             // Weight affecting inventory capacity
+    
+    [Header("Item Values")]
+    public int buyPrice;                    // Base price to buy from vendors
+    public int sellPrice;                   // Base price when selling to vendors
+    
+    // You can add methods to ScriptableObjects too
+    public string GetTooltip()
+    {
+        return $"{itemName}\n{description}\nValue: {sellPrice} gold";
+    }
+    
+    // Optional: Add initialization logic
+    private void OnEnable()
+    {
+        // This runs when the ScriptableObject is loaded
+        // Great for initialization or validation
+        if (string.IsNullOrEmpty(itemName))
+            itemName = "Unnamed Item";
+            
+        if (sellPrice <= 0)
+            sellPrice = buyPrice / 2;
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Benefits of ScriptableObjects</h3>
+                        <ul>
+                            <li><strong>Data Persistence</strong>: Data is saved as assets rather than in scenes</li>
+                            <li><strong>Shared Data</strong>: Multiple objects can reference the same data asset</li>
+                            <li><strong>Memory Efficiency</strong>: Only one instance exists in memory regardless of how many times it's referenced</li>
+                            <li><strong>Designer Friendly</strong>: Can be edited in the Inspector without code changes</li>
+                            <li><strong>Decoupled Architecture</strong>: Separation of data from behavior</li>
+                            <li><strong>Scene Independence</strong>: Data persists between scene loads</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>ScriptableObjects for Game Data</h2>
+                        <p>
+                            One of the most common uses for ScriptableObjects is to store game data like items, abilities, character stats, etc.
+                            Let's create a comprehensive item system using ScriptableObjects.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Define Base Types</strong>: Create base ScriptableObjects for common data</li>
+                            <li><strong>Create Derived Types</strong>: Inherit from base types for specialized data</li>
+                            <li><strong>Organize in Folders</strong>: Keep related ScriptableObjects together</li>
+                            <li><strong>Use Custom Editors</strong>: Create custom Inspector views for complex data</li>
+                            <li><strong>Create Asset Instances</strong>: Populate your project with game data assets</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Item Database System</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+
+// Enum for item types
+public enum ItemType
+{
+    Weapon,
+    Armor,
+    Consumable,
+    Material,
+    Quest,
+    Miscellaneous
+}
+
+// Base class for all items
+[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item", order = 1)]
+public class ItemData : ScriptableObject
+{
+    [Header("Basic Information")]
+    public string itemName = "New Item";
+    public Sprite icon;
+    [TextArea(3, 8)]
+    public string description;
+    
+    [Header("Item Properties")]
+    public ItemType type;
+    public bool isStackable;
+    public int maxStackSize = 1;
+    public float weight = 0.1f;
+    
+    [Header("Item Values")]
+    public int buyPrice;
+    public int sellPrice;
+    
+    // Unique identifier for the item
+    [SerializeField, HideInInspector]
+    private string itemID;
+    
+    // Property to access the ID
+    public string ID
+    {
+        get
+        {
+            // If no ID assigned yet, create one (this should happen in editor)
+            #if UNITY_EDITOR
+            if (string.IsNullOrEmpty(itemID))
+            {
+                itemID = System.Guid.NewGuid().ToString();
+                // Save the asset
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+            #endif
+            
+            return itemID;
+        }
+    }
+    
+    // Virtual method to handle item usage
+    public virtual bool Use(GameObject user)
+    {
+        // Base implementation just logs the usage
+        Debug.Log($"{user.name} uses {itemName}");
+        return true; // Return true if successfully used
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Specialized Item Types</h4>
+                            <pre><code class="language-csharp">// Weapon item type
+[CreateAssetMenu(fileName = "NewWeapon", menuName = "Inventory/Weapon", order = 2)]
+public class WeaponData : ItemData
+{
+    [Header("Weapon Stats")]
+    public int damage;             // Base damage
+    public float attackSpeed;      // Attacks per second
+    public float range;            // Attack range
+    public WeaponType weaponType;  // Type of weapon (sword, bow, etc.)
+    
+    [Header("Visual & Audio")]
+    public GameObject weaponPrefab;  // 3D model for the weapon
+    public AudioClip attackSound;    // Sound played when attacking
+    
+    // Weapon effects
+    public List<StatusEffectData> statusEffects = new List<StatusEffectData>();
+    
+    // Override the Use method for weapons
+    public override bool Use(GameObject user)
+    {
+        // First check if this can be equipped (base implementation)
+        if (!base.Use(user))
+            return false;
+        
+        // Try to equip the weapon
+        EquipmentManager equipManager = user.GetComponent<EquipmentManager>();
+        if (equipManager != null)
+        {
+            return equipManager.EquipWeapon(this);
+        }
+        
+        return false;
+    }
+    
+    // Calculate damage based on character stats
+    public int CalculateDamage(CharacterStats stats)
+    {
+        // Simple formula that scales damage with strength or dexterity
+        float statMultiplier = 1.0f;
+        
+        if (weaponType == WeaponType.Bow || weaponType == WeaponType.Dagger)
+        {
+            // Dexterity-based weapons
+            statMultiplier = 1.0f + (stats.dexterity.GetValue() * 0.01f);
+        }
+        else
+        {
+            // Strength-based weapons
+            statMultiplier = 1.0f + (stats.strength.GetValue() * 0.01f);
+        }
+        
+        return Mathf.RoundToInt(damage * statMultiplier);
+    }
+}
+
+// Consumable item type
+[CreateAssetMenu(fileName = "NewConsumable", menuName = "Inventory/Consumable", order = 3)]
+public class ConsumableData : ItemData
+{
+    [Header("Consumable Effects")]
+    public int healthRestore;      // Health points restored
+    public int manaRestore;        // Mana points restored
+    public float duration = 0;     // Duration of effect (0 = instant)
+    
+    [Header("Status Effects")]
+    public List<StatusEffectData> statusEffects = new List<StatusEffectData>();
+    
+    [Header("Visual & Audio")]
+    public GameObject useEffect;   // Particle effect when consumed
+    public AudioClip useSound;     // Sound played when used
+    
+    // Override the Use method for consumables
+    public override bool Use(GameObject user)
+    {
+        // First check if this can be used (base implementation)
+        if (!base.Use(user))
+            return false;
+        
+        // Apply consumable effects
+        CharacterStats stats = user.GetComponent<CharacterStats>();
+        if (stats != null)
+        {
+            // Apply healing
+            if (healthRestore > 0)
+            {
+                stats.RestoreHealth(healthRestore);
+            }
+            
+            // Apply mana restoration
+            if (manaRestore > 0)
+            {
+                stats.RestoreMana(manaRestore);
+            }
+            
+            // Apply status effects
+            foreach (var effect in statusEffects)
+            {
+                stats.ApplyStatusEffect(effect, duration);
+            }
+            
+            // Play use effect and sound
+            if (useEffect != null)
+            {
+                Instantiate(useEffect, user.transform.position, Quaternion.identity);
+            }
+            
+            if (useSound != null)
+            {
+                AudioSource.PlayClipAtPoint(useSound, user.transform.position);
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Item Database Manager</h4>
+                            <pre><code class="language-csharp">// ScriptableObject to manage the entire item database
+[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/Item Database", order = 0)]
+public class ItemDatabase : ScriptableObject
+{
+    // List of all items in the game
+    [SerializeField] private List<ItemData> allItems = new List<ItemData>();
+    
+    // Dictionary for quick lookups by ID (not serialized)
+    private Dictionary<string, ItemData> itemLookup;
+    
+    // Initialize the lookup dictionary
+    private void OnEnable()
+    {
+        BuildLookupDictionary();
+    }
+    
+    // Build lookup dictionary for fast item retrieval
+    private void BuildLookupDictionary()
+    {
+        itemLookup = new Dictionary<string, ItemData>();
+        
+        foreach (var item in allItems)
+        {
+            if (item != null)
+            {
+                // Make sure we don't add duplicates
+                if (!itemLookup.ContainsKey(item.ID))
+                {
+                    itemLookup.Add(item.ID, item);
+                }
+                else
+                {
+                    Debug.LogWarning($"Duplicate item ID found: {item.ID} on item {item.itemName}");
+                }
+            }
+        }
+        
+        Debug.Log($"Item database initialized with {itemLookup.Count} items");
+    }
+    
+    // Get item by ID
+    public ItemData GetItem(string id)
+    {
+        // Ensure dictionary is initialized
+        if (itemLookup == null)
+        {
+            BuildLookupDictionary();
+        }
+        
+        // Try to get the item
+        if (itemLookup.TryGetValue(id, out ItemData item))
+        {
+            return item;
+        }
+        
+        Debug.LogWarning($"Item with ID {id} not found in database!");
+        return null;
+    }
+    
+    // Get all items of a specific type
+    public List<ItemData> GetItemsByType(ItemType type)
+    {
+        return allItems.FindAll(item => item.type == type);
+    }
+    
+    // Add a new item to the database (editor utility)
+    #if UNITY_EDITOR
+    public void AddItem(ItemData item)
+    {
+        if (!allItems.Contains(item))
+        {
+            allItems.Add(item);
+            // Update the lookup dictionary
+            if (itemLookup != null && !itemLookup.ContainsKey(item.ID))
+            {
+                itemLookup.Add(item.ID, item);
+            }
+            
+            // Mark the database as dirty to save changes
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+    }
+    #endif
+}</code></pre>
+                        </div>
+                        
+                        <h3>Using ScriptableObject Data in Your Game</h3>
+                        <p>
+                            To make use of the item system above:
+                        </p>
+                        <ol>
+                            <li>Create an instance of ItemDatabase in your project</li>
+                            <li>Create individual item assets for all your game items</li>
+                            <li>Add these items to the database</li>
+                            <li>Reference the database in your game managers:</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Referencing ScriptableObject Data</h4>
+                            <pre><code class="language-csharp">public class GameManager : MonoBehaviour
+{
+    [Header("Data References")]
+    public ItemDatabase itemDatabase; // Reference to the item database ScriptableObject
+    
+    private void Start()
+    {
+        // Validate database
+        if (itemDatabase == null)
+        {
+            Debug.LogError("Item database not assigned to GameManager!");
+        }
+    }
+    
+    // Example method to spawn an item in the world
+    public GameObject SpawnItem(string itemID, Vector3 position)
+    {
+        // Get item data from database
+        ItemData itemData = itemDatabase.GetItem(itemID);
+        if (itemData == null)
+            return null;
+            
+        // Create object
+        GameObject itemObject = new GameObject(itemData.itemName);
+        itemObject.transform.position = position;
+        
+        // Add item component
+        WorldItem worldItem = itemObject.AddComponent<WorldItem>();
+        worldItem.SetItemData(itemData);
+        
+        // Add collider for pickup
+        SphereCollider collider = itemObject.AddComponent<SphereCollider>();
+        collider.isTrigger = true;
+        collider.radius = 0.5f;
+        
+        return itemObject;
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>ScriptableObjects as Events</h2>
+                        <p>
+                            ScriptableObjects can also be used to create a powerful event system that decouples your game systems
+                            and allows for better modularity.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Event ScriptableObjects</strong>: Define base classes for events</li>
+                            <li><strong>Implement Event Raising</strong>: Add methods to raise events</li>
+                            <li><strong>Create Listener Scripts</strong>: Add scripts to listen for events</li>
+                            <li><strong>Register/Unregister Listeners</strong>: Manage lifecycle of event listeners</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Simple Event System</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Events;
+
+// Base class for all game events
+[CreateAssetMenu(fileName = "NewEvent", menuName = "Events/Game Event", order = 0)]
+public class GameEvent : ScriptableObject
+{
+    // List of listeners that will be notified when the event is raised
+    private List<GameEventListener> listeners = new List<GameEventListener>();
+    
+    // Raise the event
+    public void Raise()
+    {
+        // Notify all listeners from last to first
+        // Going backwards avoids issues if listeners remove themselves during execution
+        for (int i = listeners.Count - 1; i >= 0; i--)
+        {
+            listeners[i].OnEventRaised();
+        }
+    }
+    
+    // Registration methods
+    public void RegisterListener(GameEventListener listener)
+    {
+        if (!listeners.Contains(listener))
+            listeners.Add(listener);
+    }
+    
+    public void UnregisterListener(GameEventListener listener)
+    {
+        if (listeners.Contains(listener))
+            listeners.Remove(listener);
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Event Listener Component</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.Events;
+
+// Component to listen for a specific GameEvent
+public class GameEventListener : MonoBehaviour
+{
+    [Tooltip("Event to listen for")]
+    public GameEvent Event;
+    
+    [Tooltip("Response to invoke when Event is raised")]
+    public UnityEvent Response;
+    
+    private void OnEnable()
+    {
+        // Register with the event when this object is enabled
+        if (Event != null)
+            Event.RegisterListener(this);
+    }
+    
+    private void OnDisable()
+    {
+        // Unregister when disabled to prevent memory leaks
+        if (Event != null)
+            Event.UnregisterListener(this);
+    }
+    
+    // Method called by the event
+    public void OnEventRaised()
+    {
+        // Invoke the Unity event with all its registered actions
+        Response?.Invoke();
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Parameterized Event System</h4>
+                            <pre><code class="language-csharp">// Generic event with parameter
+[CreateAssetMenu(fileName = "NewEvent", menuName = "Events/Game Event With Parameter", order = 1)]
+public class GameEventWithParameter<T> : ScriptableObject
+{
+    // List of listeners that will be notified
+    private List<IGameEventListener<T>> listeners = new List<IGameEventListener<T>>();
+    
+    // Raise the event with a parameter
+    public void Raise(T parameter)
+    {
+        // Notify all listeners from last to first
+        for (int i = listeners.Count - 1; i >= 0; i--)
+        {
+            listeners[i].OnEventRaised(parameter);
+        }
+    }
+    
+    // Registration methods
+    public void RegisterListener(IGameEventListener<T> listener)
+    {
+        if (!listeners.Contains(listener))
+            listeners.Add(listener);
+    }
+    
+    public void UnregisterListener(IGameEventListener<T> listener)
+    {
+        if (listeners.Contains(listener))
+            listeners.Remove(listener);
+    }
+}
+
+// Interface for generic event listeners
+public interface IGameEventListener<T>
+{
+    void OnEventRaised(T parameter);
+}
+
+// Specific implementations for common types
+[CreateAssetMenu(fileName = "NewIntEvent", menuName = "Events/Int Event", order = 2)]
+public class IntEvent : GameEventWithParameter<int> { }
+
+[CreateAssetMenu(fileName = "NewFloatEvent", menuName = "Events/Float Event", order = 3)]
+public class FloatEvent : GameEventWithParameter<float> { }
+
+[CreateAssetMenu(fileName = "NewStringEvent", menuName = "Events/String Event", order = 4)]
+public class StringEvent : GameEventWithParameter<string> { }
+
+// Example of a more complex event
+[CreateAssetMenu(fileName = "NewItemEvent", menuName = "Events/Item Event", order = 5)]
+public class ItemEvent : GameEventWithParameter<ItemData> { }
+
+// Generic listener component
+public class GameEventListenerWithParameter<T, E> : MonoBehaviour, IGameEventListener<T> where E : GameEventWithParameter<T>
+{
+    [Tooltip("Event to listen for")]
+    public E Event;
+    
+    // Unity event that takes a parameter of type T
+    [System.Serializable]
+    public class ParameterizedUnityEvent : UnityEvent<T> { }
+    
+    [Tooltip("Response to invoke when Event is raised")]
+    public ParameterizedUnityEvent Response;
+    
+    private void OnEnable()
+    {
+        if (Event != null)
+            Event.RegisterListener(this);
+    }
+    
+    private void OnDisable()
+    {
+        if (Event != null)
+            Event.UnregisterListener(this);
+    }
+    
+    // Implementation of the interface method
+    public void OnEventRaised(T parameter)
+    {
+        Response?.Invoke(parameter);
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Using ScriptableObject Events</h3>
+                        <p>
+                            This event system provides several advantages:
+                        </p>
+                        <ul>
+                            <li><strong>Decoupling</strong>: Systems don't need direct references to each other</li>
+                            <li><strong>Scene Independence</strong>: Events work across scenes</li>
+                            <li><strong>Editor Wiring</strong>: Events can be wired up in the Unity Inspector</li>
+                            <li><strong>Easier Testing</strong>: Systems can be tested in isolation</li>
+                        </ul>
+                        <p>
+                            To use this system:
+                        </p>
+                        <ol>
+                            <li>Create event assets in your project for different game events</li>
+                            <li>Add GameEventListener components to objects that should respond to events</li>
+                            <li>Wire up the responses in the Inspector</li>
+                            <li>Call the Raise() method on the event when needed</li>
+                        </ol>
+                    </div>
+
+                    <div class="section">
+                        <h2>Runtime Collections with ScriptableObjects</h2>
+                        <p>
+                            ScriptableObjects can be used as runtime collections that persist throughout your game.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Collection ScriptableObjects</strong>: Define containers for runtime data</li>
+                            <li><strong>Add CRUD Operations</strong>: Methods to add, remove, and modify collection data</li>
+                            <li><strong>Implement Events</strong>: Notify listeners when collection changes</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Runtime Collection</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+
+// A ScriptableObject that serves as a runtime collection of GameObjects
+[CreateAssetMenu(fileName = "NewRuntimeSet", menuName = "Runtime Collections/GameObject Set", order = 0)]
+public class RuntimeSet<T> : ScriptableObject
+{
+    // The list of items in the collection
+    [SerializeField] private List<T> items = new List<T>();
+    
+    // Events for collection changes (optional)
+    public System.Action<T> OnItemAdded;
+    public System.Action<T> OnItemRemoved;
+    public System.Action OnSetCleared;
+    
+    // Clear the collection when the game starts
+    private void OnEnable()
+    {
+        items.Clear();
+    }
+    
+    // Add an item to the collection
+    public void Add(T item)
+    {
+        if (!items.Contains(item))
+        {
+            items.Add(item);
+            OnItemAdded?.Invoke(item);
+        }
+    }
+    
+    // Remove an item from the collection
+    public void Remove(T item)
+    {
+        if (items.Contains(item))
+        {
+            items.Remove(item);
+            OnItemRemoved?.Invoke(item);
+        }
+    }
+    
+    // Get the number of items in the collection
+    public int Count => items.Count;
+    
+    // Get an item at a specific index
+    public T GetItem(int index)
+    {
+        if (index >= 0 && index < items.Count)
+            return items[index];
+            
+        return default;
+    }
+    
+    // Get all items
+    public List<T> GetItems()
+    {
+        // Return a copy to prevent external modification
+        return new List<T>(items);
+    }
+    
+    // Clear all items
+    public void Clear()
+    {
+        items.Clear();
+        OnSetCleared?.Invoke();
+    }
+    
+    // Check if the collection contains an item
+    public bool Contains(T item)
+    {
+        return items.Contains(item);
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Specific Runtime Collections</h4>
+                            <pre><code class="language-csharp">// Collection for GameObjects
+[CreateAssetMenu(fileName = "NewGameObjectSet", menuName = "Runtime Collections/GameObject Set", order = 1)]
+public class GameObjectSet : RuntimeSet<GameObject> { }
+
+// Collection for enemies
+[CreateAssetMenu(fileName = "NewEnemySet", menuName = "Runtime Collections/Enemy Set", order = 2)]
+public class EnemySet : RuntimeSet<Enemy> { }
+
+// Collection for active quests
+[CreateAssetMenu(fileName = "NewQuestSet", menuName = "Runtime Collections/Active Quests", order = 3)]
+public class ActiveQuestSet : RuntimeSet<QuestData> { }
+
+// Auto-registering component for GameObjects
+public class RuntimeSetMember : MonoBehaviour
+{
+    public GameObjectSet targetSet;
+    
+    private void OnEnable()
+    {
+        // Register with the set when enabled
+        if (targetSet != null)
+            targetSet.Add(gameObject);
+    }
+    
+    private void OnDisable()
+    {
+        // Unregister when disabled
+        if (targetSet != null)
+            targetSet.Remove(gameObject);
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Using Runtime Collections</h3>
+                        <p>
+                            This pattern is useful for:
+                        </p>
+                        <ul>
+                            <li><strong>Tracking Active Entities</strong>: Track all enemies, NPCs, etc.</li>
+                            <li><strong>Managers Without Singletons</strong>: Replace manager singletons with ScriptableObject collections</li>
+                            <li><strong>Scene Transitions</strong>: Maintain collections across scene loads</li>
+                        </ul>
+                        <p>
+                            For example, to track all enemies in a level:
+                        </p>
+                        <ol>
+                            <li>Create an EnemySet asset in your project</li>
+                            <li>Add a RuntimeSetMember component to each enemy prefab, referencing the EnemySet</li>
+                            <li>Access the EnemySet from any script that needs to know about all enemies</li>
+                        </ol>
+                    </div>
+
+                    <div class="section">
+                        <h2>Best Practices for ScriptableObjects</h2>
+                        <p>
+                            To get the most out of ScriptableObjects, follow these best practices:
+                        </p>
+                        
+                        <h3>Organization</h3>
+                        <ul>
+                            <li><strong>Use Clear Folder Structure</strong>: Keep ScriptableObjects organized in logical folders</li>
+                            <li><strong>Use Naming Conventions</strong>: Adopt a consistent naming scheme (e.g., "SO_" prefix)</li>
+                            <li><strong>Create Editor Tools</strong>: Build custom tools to manage large numbers of assets</li>
+                        </ul>
+                        
+                        <h3>Runtime Considerations</h3>
+                        <ul>
+                            <li><strong>Reset Runtime Changes</strong>: ScriptableObject values changed at runtime persist in the editor</li>
+                            <li><strong>Handle Scene Reloads</strong>: Implement OnEnable() to reset values when needed</li>
+                            <li><strong>Be Careful with References</strong>: Reference the same ScriptableObject asset everywhere, don't create duplicates</li>
+                        </ul>
+                        
+                        <h3>Advanced Techniques</h3>
+                        <ul>
+                            <li><strong>Custom Editors</strong>: Create custom editors for complex ScriptableObjects</li>
+                            <li><strong>Validation</strong>: Add validation logic to ensure data integrity</li>
+                            <li><strong>Versioning</strong>: Add version fields for data migration</li>
+                            <li><strong>Build Pipelines</strong>: Use ScriptableObjects in build pipelines for game configuration</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h4>Runtime State Reset Example</h4>
+                            <pre><code class="language-csharp">// ScriptableObject with runtime state that should reset
+[CreateAssetMenu(fileName = "GameSettings", menuName = "Game/Settings", order = 0)]
+public class GameSettings : ScriptableObject
+{
+    [Header("Default Values")]
+    [SerializeField] private float defaultMusicVolume = 0.75f;
+    [SerializeField] private float defaultSFXVolume = 1.0f;
+    [SerializeField] private bool defaultFullscreen = true;
+    
+    [Header("Runtime Values")]
+    // These will be modified at runtime
+    public float musicVolume;
+    public float sfxVolume;
+    public bool fullscreen;
+    
+    // Called when the game starts and when the ScriptableObject is loaded
+    private void OnEnable()
+    {
+        // Reset to default values to avoid editor changes persisting
+        ResetToDefaults();
+    }
+    
+    // Reset all settings to their default values
+    public void ResetToDefaults()
+    {
+        musicVolume = defaultMusicVolume;
+        sfxVolume = defaultSFXVolume;
+        fullscreen = defaultFullscreen;
+    }
+    
+    // Save current values as the new defaults (should only be called in editor)
+    public void SaveCurrentAsDefaults()
+    {
+        #if UNITY_EDITOR
+        defaultMusicVolume = musicVolume;
+        defaultSFXVolume = sfxVolume;
+        defaultFullscreen = fullscreen;
+        
+        // Mark the asset as dirty to ensure changes are saved
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

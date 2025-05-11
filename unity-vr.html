@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity VR Development - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Unity VR Development</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            Virtual Reality (VR) development with Unity enables creating immersive experiences across a variety of VR platforms.
+                            This tutorial covers essential concepts, techniques, and best practices for developing VR applications using Unity and C#.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Setting Up a VR Project</h2>
+                        <p>
+                            Unity makes VR development more accessible through its XR Interaction Toolkit. Let's set up a proper VR development environment.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create New Project</strong>: Start with the 3D template in Unity</li>
+                            <li><strong>Install Packages</strong>:
+                                <ul>
+                                    <li>Open Package Manager (Window → Package Manager)</li>
+                                    <li>Set to "Unity Registry" and install:</li>
+                                    <li>XR Plugin Management</li>
+                                    <li>XR Interaction Toolkit</li>
+                                    <li>Device-specific XR plugins (Oculus, OpenXR, etc.)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure XR Plugin</strong>:
+                                <ul>
+                                    <li>Go to Project Settings → XR Plugin Management</li>
+                                    <li>Enable the appropriate plugins for your target platforms</li>
+                                </ul>
+                            </li>
+                            <li><strong>Project Structure</strong>: Set up folders for Scripts, Prefabs, Scenes, Materials, etc.</li>
+                            <li><strong>Create Base Scene</strong>: Set up a basic VR scene with proper settings</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>VR Scene Setup Helper</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
+
+// Helper component for setting up a basic VR scene with proper configurations
+public class VRSceneSetup : MonoBehaviour
+{
+    [Header("XR Rig Components")]
+    public XROrigin xrOrigin;                    // Reference to XR Origin
+    public Transform cameraOffset;               // Reference to camera offset transform
+    public Camera xrCamera;                      // Reference to the XR camera
+    
+    [Header("Interaction Components")]
+    public XRController leftHandController;      // Reference to left hand controller
+    public XRController rightHandController;     // Reference to right hand controller
+    public XRRayInteractor leftRayInteractor;    // Reference to left ray interactor
+    public XRRayInteractor rightRayInteractor;   // Reference to right ray interactor
+    
+    [Header("Settings")]
+    public bool setPlayerHeight = true;          // Whether to adjust player height
+    public float defaultPlayerHeight = 1.7f;     // Default player height in meters
+    public bool useControllerModels = true;      // Whether to show controller models
+    public bool useHandsInsteadOfControllers = false; // Use hand models instead of controllers
+    
+    private bool vrDeviceActive = false;
+    
+    private void Awake()
+    {
+        // Check if XR devices are available
+        CheckVRDevices();
+        
+        // Apply initial settings
+        ConfigureVREnvironment();
+    }
+    
+    private void CheckVRDevices()
+    {
+        // Check if any XR devices are connected
+        var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
+        SubsystemManager.GetInstances(xrDisplaySubsystems);
+        
+        foreach (var xrDisplay in xrDisplaySubsystems)
+        {
+            if (xrDisplay.running)
+            {
+                vrDeviceActive = true;
+                Debug.Log("XR Device active: " + xrDisplay.ToString());
+                break;
+            }
+        }
+        
+        if (!vrDeviceActive)
+        {
+            Debug.LogWarning("No active XR devices found. VR functionality may be limited.");
+        }
+    }
+    
+    private void ConfigureVREnvironment()
+    {
+        // Make sure all required components are assigned
+        if (xrOrigin == null)
+        {
+            xrOrigin = FindObjectOfType<XROrigin>();
+            if (xrOrigin == null)
+            {
+                Debug.LogError("No XROrigin found in the scene! Please add one or assign it.");
+                return;
+            }
+        }
+        
+        // Find camera reference if not assigned
+        if (xrCamera == null && xrOrigin != null)
+        {
+            xrCamera = xrOrigin.GetComponentInChildren<Camera>();
+        }
+        
+        // Find camera offset if not assigned
+        if (cameraOffset == null && xrOrigin != null)
+        {
+            cameraOffset = xrOrigin.transform.Find("Camera Offset");
+        }
+        
+        // Set player height if configured
+        if (setPlayerHeight && cameraOffset != null)
+        {
+            // Check if we can get actual user height
+            float userHeight = defaultPlayerHeight;
+            
+            #if UNITY_2019_3_OR_NEWER
+            // Try to get user height from device
+            InputDevice hmdDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+            if (hmdDevice.isValid && hmdDevice.TryGetFeatureValue(CommonUsages.eyesHeight, out float eyeHeight))
+            {
+                userHeight = eyeHeight;
+                Debug.Log("User eye height detected: " + eyeHeight + " meters");
+            }
+            #endif
+            
+            // Set the camera offset height
+            cameraOffset.localPosition = new Vector3(0, userHeight, 0);
+            Debug.Log("Camera height set to: " + userHeight + " meters");
+        }
+        
+        // Configure controller settings
+        ConfigureControllers();
+    }
+    
+    private void ConfigureControllers()
+    {
+        // Find controllers if not assigned
+        if (leftHandController == null || rightHandController == null)
+        {
+            var controllers = FindObjectsOfType<XRController>();
+            foreach (var controller in controllers)
+            {
+                if (controller.controllerNode == XRNode.LeftHand)
+                    leftHandController = controller;
+                else if (controller.controllerNode == XRNode.RightHand)
+                    rightHandController = controller;
+            }
+        }
+        
+        // Find ray interactors if not assigned
+        if (leftRayInteractor == null && leftHandController != null)
+        {
+            leftRayInteractor = leftHandController.GetComponent<XRRayInteractor>();
+        }
+        
+        if (rightRayInteractor == null && rightHandController != null)
+        {
+            rightRayInteractor = rightHandController.GetComponent<XRRayInteractor>();
+        }
+        
+        // Configure controller models visibility
+        if (leftHandController != null)
+        {
+            var controllerModel = leftHandController.transform.Find("Model");
+            if (controllerModel != null)
+            {
+                controllerModel.gameObject.SetActive(useControllerModels && !useHandsInsteadOfControllers);
+            }
+        }
+        
+        if (rightHandController != null)
+        {
+            var controllerModel = rightHandController.transform.Find("Model");
+            if (controllerModel != null)
+            {
+                controllerModel.gameObject.SetActive(useControllerModels && !useHandsInsteadOfControllers);
+            }
+        }
+        
+        // Configure hand models if used
+        if (useHandsInsteadOfControllers)
+        {
+            // This implementation would depend on the hand tracking solution used
+            // For Oculus hand tracking, SteamVR, or custom hand tracking
+            Debug.Log("Hand models activated instead of controllers");
+        }
+    }
+    
+    // Check for VR configuration changes during play
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus) // Resumed from pause
+        {
+            // Re-check VR device status after resume
+            CheckVRDevices();
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Basic XR Rig Structure</h3>
+                        <p>
+                            A VR scene requires a properly structured XR Rig. Here's the typical hierarchy you should have:
+                        </p>
+                        <pre><code class="language-csharp">// Typical XR Rig hierarchy:
+// XR Origin
+// ├── Camera Offset
+// │   ├── Main Camera (XR Camera)
+// │   ├── Left Controller
+// │   │   ├── Ray Interactor
+// │   │   └── Model (controller or hand)
+// │   └── Right Controller
+// │       ├── Ray Interactor
+// │       └── Model (controller or hand)
+// └── Locomotion System</code></pre>
+                    </div>
+
+                    <div class="section">
+                        <h2>VR Interactions and Input</h2>
+                        <p>
+                            VR experiences need intuitive ways for users to interact with the virtual world. Let's implement various interaction techniques.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Direct Grabbing</strong>: Allow players to directly grab and manipulate objects</li>
+                            <li><strong>Ray Interaction</strong>: Implement ray-based pointing and interaction for distant objects</li>
+                            <li><strong>UI Interaction</strong>: Create VR-friendly UI elements that work with controllers</li>
+                            <li><strong>Physics-Based Interactions</strong>: Make objects respond naturally to physical interactions</li>
+                            <li><strong>Haptic Feedback</strong>: Add controller vibration for tactile feedback</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Interactive VR Object</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
+
+// Component for making objects interactive in VR
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(XRGrabInteractable))]
+public class VRInteractableObject : MonoBehaviour
+{
+    [Header("Interaction Settings")]
+    public bool useGravity = true;              // Whether object uses gravity when not held
+    public bool snapToHand = true;              // Whether to snap to hand position when grabbed
+    public bool twoHandedGrabbing = false;      // Allow grabbing with two hands
+    public Transform grabAnchor;                // Optional custom grab position/rotation
+    
+    [Header("Physics Settings")]
+    public float throwVelocityMultiplier = 1.5f; // Multiplier for throw velocity
+    public float rotationMultiplier = 1.0f;      // Multiplier for rotation speed
+    public float grabMassScale = 0.1f;           // Scale down mass when grabbed for easier movement
+    
+    [Header("Haptic Feedback")]
+    public bool enableHaptics = true;            // Whether to use haptic feedback
+    public float hapticAmplitude = 0.5f;         // Strength of haptic feedback (0-1)
+    public float hapticDuration = 0.1f;          // Duration of haptic pulse in seconds
+    
+    [Header("Audio")]
+    public AudioClip grabSound;                  // Sound played when grabbed
+    public AudioClip releaseSound;               // Sound played when released
+    public AudioClip impactSound;                // Sound played on collision
+    
+    [Header("Events")]
+    public UnityEvent OnGrabbed;                 // Event triggered when object is grabbed
+    public UnityEvent OnReleased;                // Event triggered when object is released
+    
+    // Component references
+    private XRGrabInteractable grabInteractable;
+    private Rigidbody rb;
+    private AudioSource audioSource;
+    private float originalMass;
+    private bool isGrabbed = false;
+    
+    private void Awake()
+    {
+        // Get component references
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        
+        // Create audio source if needed
+        if (audioSource == null && (grabSound != null || releaseSound != null || impactSound != null))
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1.0f; // 3D sound
+        }
+        
+        // Store original mass
+        originalMass = rb.mass;
+        
+        // Configure XR grab interactable
+        ConfigureInteractable();
+    }
+    
+    private void ConfigureInteractable()
+    {
+        // Set custom grab anchor if specified
+        if (grabAnchor != null)
+        {
+            grabInteractable.attachTransform = grabAnchor;
+        }
+        
+        // Configure movement type
+        grabInteractable.movementType = snapToHand ? 
+            XRBaseInteractable.MovementType.Instantaneous : 
+            XRBaseInteractable.MovementType.VelocityTracking;
+        
+        // Configure two-handed grabbing
+        #if UNITY_2020_1_OR_NEWER
+        grabInteractable.selectMode = twoHandedGrabbing ? 
+            InteractableSelectMode.Multiple : 
+            InteractableSelectMode.Single;
+        #endif
+        
+        // Configure throw velocity
+        grabInteractable.throwSmoothingDuration = 0.2f;
+        grabInteractable.throwVelocityScale = throwVelocityMultiplier;
+        grabInteractable.throwAngularVelocityScale = rotationMultiplier;
+        
+        // Register event handlers
+        grabInteractable.selectEntered.AddListener(OnSelectEntered);
+        grabInteractable.selectExited.AddListener(OnSelectExited);
+    }
+    
+    private void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        isGrabbed = true;
+        
+        // Apply physics changes when grabbed
+        rb.useGravity = false;
+        rb.mass = originalMass * grabMassScale;
+        
+        // Play grab sound
+        if (audioSource != null && grabSound != null)
+        {
+            audioSource.clip = grabSound;
+            audioSource.Play();
+        }
+        
+        // Trigger haptic feedback on the controller
+        if (enableHaptics)
+        {
+            TriggerHapticFeedback(args.interactorObject);
+        }
+        
+        // Invoke grab event
+        OnGrabbed?.Invoke();
+    }
+    
+    private void OnSelectExited(SelectExitEventArgs args)
+    {
+        isGrabbed = false;
+        
+        // Restore physics when released
+        rb.useGravity = useGravity;
+        rb.mass = originalMass;
+        
+        // Play release sound
+        if (audioSource != null && releaseSound != null)
+        {
+            audioSource.clip = releaseSound;
+            audioSource.Play();
+        }
+        
+        // Invoke release event
+        OnReleased?.Invoke();
+    }
+    
+    private void TriggerHapticFeedback(IXRInteractor interactor)
+    {
+        if (interactor is XRBaseControllerInteractor controllerInteractor)
+        {
+            #if UNITY_2020_1_OR_NEWER
+            if (controllerInteractor.xrController != null)
+            {
+                controllerInteractor.xrController.SendHapticImpulse(hapticAmplitude, hapticDuration);
+            }
+            #endif
+        }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Don't play impact sound while grabbed
+        if (isGrabbed)
+            return;
+            
+        // Play impact sound based on collision force
+        if (audioSource != null && impactSound != null)
+        {
+            float collisionForce = collision.relativeVelocity.magnitude;
+            
+            // Only play for significant collisions
+            if (collisionForce > 1.0f)
+            {
+                // Scale volume by collision force (clamped)
+                float volume = Mathf.Clamp01(collisionForce / 10f);
+                audioSource.PlayOneShot(impactSound, volume);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>VR Button Interaction</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
+
+// Physical button that can be pressed in VR
+public class VRButton : XRBaseInteractable
+{
+    [Header("Button Settings")]
+    public float pressDistance = 0.01f;       // How far the button can be pressed
+    public float pressResistance = 50f;       // Spring force resistance to pressing
+    public float returnSpeed = 5f;            // How fast button returns to original position
+    
+    [Header("Button State")]
+    [SerializeField] private bool isPressed = false;
+    [SerializeField] private float pressAmount = 0f; // 0 to 1 value of how far pressed
+    
+    [Header("Audio")]
+    public AudioClip pressSound;
+    public AudioClip releaseSound;
+    
+    [Header("Events")]
+    public UnityEvent OnPressed;              // Called when button is fully pressed
+    public UnityEvent OnReleased;             // Called when button is released
+    public UnityEvent<float> OnPressAmountChanged; // Called when press amount changes
+    
+    // Components and internal state
+    private Transform buttonTransform;        // Transform that moves when pressed
+    private Vector3 initialPosition;
+    private Vector3 pressDirection = Vector3.down;
+    private AudioSource audioSource;
+    private float pressThreshold = 0.8f;      // How far button must be pressed to trigger
+    private bool wasPressed = false;          // Previous press state for edge detection
+    
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        // Set up button transform - use first child if available, otherwise use this transform
+        buttonTransform = transform.childCount > 0 ? transform.GetChild(0) : transform;
+        initialPosition = buttonTransform.localPosition;
+        
+        // Get or create audio source
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null && (pressSound != null || releaseSound != null))
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1.0f; // 3D sound
+        }
+    }
+    
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
+    {
+        base.ProcessInteractable(updatePhase);
+        
+        if (updatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic)
+        {
+            // Update button press state
+            UpdatePressAmount();
+        }
+    }
+    
+    private void UpdatePressAmount()
+    {
+        // Default state - no interactors
+        float targetPressAmount = 0f;
+        
+        // If we have interactors, calculate press amount based on their position
+        if (interactorsSelecting.Count > 0)
+        {
+            // Get the first interactor
+            var interactor = interactorsSelecting[0];
+            
+            // Calculate how far the interactor is pressing the button
+            Vector3 interactorPosition = interactor.transform.position;
+            
+            // Project the interactor position onto the press direction
+            float pressDepth = Vector3.Dot(
+                initialPosition - interactorPosition,
+                pressDirection
+            );
+            
+            // Calculate press amount (0 to 1)
+            targetPressAmount = Mathf.Clamp01(pressDepth / pressDistance);
+        }
+        
+        // Apply resistance and smoothing
+        if (interactorsSelecting.Count > 0)
+        {
+            // When being actively pressed, move quickly toward target
+            pressAmount = Mathf.Lerp(pressAmount, targetPressAmount, Time.deltaTime * 20f);
+        }
+        else
+        {
+            // When released, return to unpressed state
+            pressAmount = Mathf.Lerp(pressAmount, 0f, Time.deltaTime * returnSpeed);
+        }
+        
+        // Update button position
+        Vector3 newPosition = initialPosition + (pressDirection * pressAmount * pressDistance);
+        buttonTransform.localPosition = newPosition;
+        
+        // Detect state changes (for edge detection)
+        isPressed = pressAmount > pressThreshold;
+        
+        // Fire events on state change
+        if (isPressed != wasPressed)
+        {
+            if (isPressed)
+            {
+                // Button was just pressed
+                OnPressed?.Invoke();
+                
+                // Play press sound
+                if (audioSource != null && pressSound != null)
+                {
+                    audioSource.clip = pressSound;
+                    audioSource.Play();
+                }
+            }
+            else
+            {
+                // Button was just released
+                OnReleased?.Invoke();
+                
+                // Play release sound
+                if (audioSource != null && releaseSound != null)
+                {
+                    audioSource.clip = releaseSound;
+                    audioSource.Play();
+                }
+            }
+            
+            // Update previous state
+            wasPressed = isPressed;
+        }
+        
+        // Notify of continuous press amount (for animations, etc.)
+        OnPressAmountChanged?.Invoke(pressAmount);
+    }
+    
+    // Optional: Make the button light up or change appearance when hovered
+    protected override void OnHoverEntered(HoverEnterEventArgs args)
+    {
+        base.OnHoverEntered(args);
+        // Example: Highlight the button
+        // SetButtonHighlight(true);
+    }
+    
+    protected override void OnHoverExited(HoverExitEventArgs args)
+    {
+        base.OnHoverExited(args);
+        // Example: Remove highlight
+        // SetButtonHighlight(false);
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <!-- More sections to be added in subsequent edits -->
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

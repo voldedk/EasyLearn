@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Audio - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Audio Systems</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Audio</h3>
+                        <p>Audio is a crucial element of game development that greatly enhances player immersion and experience. Unity provides a powerful audio system that allows developers to easily incorporate sounds, music, and environmental effects into their games.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Unity's audio components and architecture</li>
+                            <li>Playing and controlling sounds from C# scripts</li>
+                            <li>Creating dynamic audio experiences</li>
+                            <li>Setting up 3D spatial audio</li>
+                            <li>Working with audio mixers and effects</li>
+                            <li>Optimizing audio performance</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity Audio Architecture</h3>
+                        <p>Unity's audio system consists of several primary components that work together:</p>
+                        
+                        <div class="example-box">
+                            <h4>Core Audio Components:</h4>
+                            <ul>
+                                <li><strong>AudioClip</strong>: The actual audio data (sound file)</li>
+                                <li><strong>AudioSource</strong>: Component that plays AudioClips</li>
+                                <li><strong>AudioListener</strong>: Component that receives sounds (usually attached to the camera)</li>
+                                <li><strong>Audio Mixer</strong>: Asset for routing, mixing, and applying effects to audio</li>
+                                <li><strong>Audio Effects</strong>: Processors that modify audio (reverb, echo, filters, etc.)</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Basic audio workflow:</p>
+                                <ol>
+                                    <li>Import audio files into your project</li>
+                                    <li>Configure import settings based on the audio type</li>
+                                    <li>Add AudioSource components to GameObjects</li>
+                                    <li>Assign AudioClips to AudioSources</li>
+                                    <li>Ensure there's an AudioListener in the scene (usually on the main camera)</li>
+                                    <li>Play sounds through direct component manipulation or script control</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Audio Import Settings</h4>
+                            <p>Configure these settings based on your audio type:</p>
+                            <ul>
+                                <li><strong>Compression Format</strong>: PCM (uncompressed), ADPCM (compressed), Vorbis (variable quality)</li>
+                                <li><strong>Force To Mono</strong>: Convert stereo to mono (good for 3D positioned sounds)</li>
+                                <li><strong>Load Type</strong>: Decompress on Load (low CPU, high memory), Compressed in Memory (balanced), Streaming (low memory, higher CPU)</li>
+                                <li><strong>Preload Audio Data</strong>: Whether to load the audio when the scene loads</li>
+                                <li><strong>Quality</strong>: Vorbis compression quality setting (for Vorbis format)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Audio Playback</h3>
+                        <p>Playing sounds in Unity can be done through the Inspector or via scripting.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Audio Controller:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class AudioController : MonoBehaviour
+{
+    // Audio clip references
+    public AudioClip musicTrack;
+    public AudioClip jumpSound;
+    public AudioClip pickupSound;
+    public AudioClip impactSound;
+    
+    // Audio source references
+    private AudioSource musicSource;
+    private AudioSource sfxSource;
+    
+    void Start()
+    {
+        // Create and configure audio sources
+        SetupAudioSources();
+        
+        // Start playing background music
+        PlayMusic(musicTrack, true);
+    }
+    
+    void SetupAudioSources()
+    {
+        // Create two audio sources - one for music, one for SFX
+        
+        // Music audio source
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.loop = true;        // Music usually loops
+        musicSource.volume = 0.5f;      // Lower volume for background music
+        musicSource.priority = 0;       // Highest priority
+        
+        // SFX audio source
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource.loop = false;         // Sound effects don't usually loop
+        sfxSource.volume = 1.0f;        // Full volume for sound effects
+        sfxSource.priority = 128;       // Normal priority
+    }
+    
+    // Play a music track
+    public void PlayMusic(AudioClip clip, bool loop = true)
+    {
+        if (clip == null) return;
+        
+        // Stop any currently playing music
+        musicSource.Stop();
+        
+        // Set the new music clip
+        musicSource.clip = clip;
+        musicSource.loop = loop;
+        
+        // Start playing
+        musicSource.Play();
+    }
+    
+    // Play a sound effect once
+    public void PlaySFX(AudioClip clip)
+    {
+        if (clip == null) return;
+        
+        // Play the sound effect
+        sfxSource.PlayOneShot(clip);
+    }
+    
+    // Play a sound effect with volume control
+    public void PlaySFX(AudioClip clip, float volume)
+    {
+        if (clip == null) return;
+        
+        sfxSource.PlayOneShot(clip, volume);
+    }
+    
+    // Example methods for specific game events
+    public void PlayJumpSound()
+    {
+        PlaySFX(jumpSound);
+    }
+    
+    public void PlayPickupSound()
+    {
+        PlaySFX(pickupSound, 0.7f);
+    }
+    
+    public void PlayImpactSound(float intensity)
+    {
+        // Scale volume based on impact intensity
+        float volume = Mathf.Clamp(intensity / 10f, 0.1f, 1.0f);
+        PlaySFX(impactSound, volume);
+    }
+    
+    // Control music volume
+    public void SetMusicVolume(float volume)
+    {
+        musicSource.volume = Mathf.Clamp01(volume);
+    }
+    
+    // Control SFX volume
+    public void SetSFXVolume(float volume)
+    {
+        sfxSource.volume = Mathf.Clamp01(volume);
+    }
+    
+    // Fade music in
+    public void FadeMusicIn(float duration = 1.0f)
+    {
+        StartCoroutine(FadeMusicVolume(0, musicSource.volume, duration));
+    }
+    
+    // Fade music out
+    public void FadeMusicOut(float duration = 1.0f)
+    {
+        StartCoroutine(FadeMusicVolume(musicSource.volume, 0, duration));
+    }
+    
+    // Coroutine to fade music volume
+    private System.Collections.IEnumerator FadeMusicVolume(float startVolume, float targetVolume, float duration)
+    {
+        float startTime = Time.time;
+        float elapsedTime = 0;
+        
+        musicSource.volume = startVolume;
+        
+        while (elapsedTime < duration)
+        {
+            elapsedTime = Time.time - startTime;
+            float normalizedTime = elapsedTime / duration;
+            musicSource.volume = Mathf.Lerp(startVolume, targetVolume, normalizedTime);
+            yield return null;
+        }
+        
+        musicSource.volume = targetVolume;
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key audio playback features:</p>
+                                <ul>
+                                    <li><strong>AudioSource.Play()</strong>: Start playing the assigned clip</li>
+                                    <li><strong>AudioSource.PlayOneShot()</strong>: Play a clip without replacing the assigned clip</li>
+                                    <li><strong>AudioSource.Stop()</strong>: Stop playback</li>
+                                    <li><strong>AudioSource.Pause()/UnPause()</strong>: Pause and resume playback</li>
+                                    <li><strong>AudioSource properties</strong>: volume, pitch, loop, priority, spatialBlend</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>3D Spatial Audio</h3>
+                        <p>3D spatial audio creates immersive sound experiences by simulating how sounds behave in physical space.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up 3D Audio:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class SpatialAudioExample : MonoBehaviour
+{
+    public AudioClip engineSound;
+    public AudioClip hornSound;
+    public float maxDistance = 20f;
+    public AnimationCurve volumeRolloff = AnimationCurve.EaseInOut(0, 1, 20, 0);
+    
+    private AudioSource engineSource;
+    private AudioSource hornSource;
+    
+    void Start()
+    {
+        // Create engine audio source with 3D settings
+        engineSource = gameObject.AddComponent<AudioSource>();
+        engineSource.clip = engineSound;
+        engineSource.loop = true;
+        
+        // Configure 3D sound settings
+        ConfigureSpatialAudio(engineSource);
+        
+        // Set up a second source for the horn
+        hornSource = gameObject.AddComponent<AudioSource>();
+        ConfigureSpatialAudio(hornSource);
+        
+        // Start the engine sound
+        engineSource.Play();
+    }
+    
+    void ConfigureSpatialAudio(AudioSource source)
+    {
+        // Set to full 3D spatial audio
+        source.spatialBlend = 1.0f;  // 0 = 2D, 1 = 3D
+        
+        // Set the minimum and maximum distances
+        source.minDistance = 1.0f;
+        source.maxDistance = maxDistance;
+        
+        // Use custom rolloff for more control
+        source.rolloffMode = AudioRolloffMode.Custom;
+        source.SetCustomCurve(AudioSourceCurveType.CustomRolloff, volumeRolloff);
+        
+        // Optional: configure doppler effect (pitch change when passing by)
+        source.dopplerLevel = 0.5f;
+        
+        // Optional: set spread angle for directional audio
+        source.spread = 60f;
+    }
+    
+    // Called by input or game events
+    public void HonkHorn()
+    {
+        hornSource.PlayOneShot(hornSound);
+    }
+    
+    // Adjust engine sound based on speed
+    public void UpdateEngineSound(float speed)
+    {
+        // Adjust pitch based on speed
+        float normalizedSpeed = Mathf.Clamp01(speed / 100f);
+        engineSource.pitch = Mathf.Lerp(0.8f, 1.2f, normalizedSpeed);
+        
+        // Adjust volume based on speed
+        engineSource.volume = Mathf.Lerp(0.3f, 1.0f, normalizedSpeed);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>3D audio key concepts:</p>
+                                <ul>
+                                    <li><strong>Spatial Blend</strong>: How much 3D positioning affects the sound (0-1)</li>
+                                    <li><strong>Min/Max Distance</strong>: Range where volume changes with distance</li>
+                                    <li><strong>Volume Rolloff</strong>: How volume decreases with distance (Linear, Logarithmic, Custom)</li>
+                                    <li><strong>Doppler Effect</strong>: Pitch shift when sound sources move relative to listener</li>
+                                    <li><strong>Spread/Stereopan</strong>: How directional or omnidirectional the sound is</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Audio Mixers</h3>
+                        <p>Audio Mixers allow you to group, control, and apply effects to multiple audio sources.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using Audio Mixers in Scripts:</h4>
+                            <pre><code>
+using UnityEngine;
+using UnityEngine.Audio;
+
+public class AudioMixerController : MonoBehaviour
+{
+    // References to Audio Mixer and groups
+    public AudioMixer mainMixer;
+    
+    // Exposed parameter names in the mixer
+    private const string MASTER_VOLUME = "MasterVolume";
+    private const string MUSIC_VOLUME = "MusicVolume";
+    private const string SFX_VOLUME = "SFXVolume";
+    private const string REVERB_AMOUNT = "ReverbAmount";
+    private const string LOWPASS_CUTOFF = "LowpassCutoff";
+    
+    // Convert linear volume (0-1) to mixer value (decibels)
+    private float ConvertToDecibel(float volume)
+    {
+        // Avoid log(0) which is -infinity
+        if (volume <= 0)
+            return -80f; // Min volume (-80dB is practically silent)
+            
+        // Convert to decibels (logarithmic scale)
+        return Mathf.Log10(volume) * 20f;
+    }
+    
+    // Set master volume (0-1 range)
+    public void SetMasterVolume(float volume)
+    {
+        mainMixer.SetFloat(MASTER_VOLUME, ConvertToDecibel(volume));
+    }
+    
+    // Set music volume (0-1 range)
+    public void SetMusicVolume(float volume)
+    {
+        mainMixer.SetFloat(MUSIC_VOLUME, ConvertToDecibel(volume));
+    }
+    
+    // Set SFX volume (0-1 range)
+    public void SetSFXVolume(float volume)
+    {
+        mainMixer.SetFloat(SFX_VOLUME, ConvertToDecibel(volume));
+    }
+    
+    // Apply low pass filter (for underwater, muffled effects)
+    public void ApplyLowPassFilter(bool enabled, float cutoffFrequency = 1000f)
+    {
+        if (enabled)
+        {
+            mainMixer.SetFloat(LOWPASS_CUTOFF, cutoffFrequency);
+        }
+        else
+        {
+            // Set to maximum frequency to effectively disable the filter
+            mainMixer.SetFloat(LOWPASS_CUTOFF, 22000f);
+        }
+    }
+    
+    // Adjust reverb for environment simulation
+    public void SetReverbAmount(float amount)
+    {
+        mainMixer.SetFloat(REVERB_AMOUNT, Mathf.Lerp(0f, 1f, amount));
+    }
+    
+    // Apply a preset effect (for example, changing environments)
+    public void ApplyPreset(string presetName)
+    {
+        switch (presetName)
+        {
+            case "cave":
+                SetReverbAmount(0.8f);
+                ApplyLowPassFilter(true, 5000f);
+                break;
+                
+            case "underwater":
+                SetReverbAmount(0.4f);
+                ApplyLowPassFilter(true, 1000f);
+                break;
+                
+            case "outdoor":
+                SetReverbAmount(0.2f);
+                ApplyLowPassFilter(false);
+                break;
+                
+            case "indoor":
+                SetReverbAmount(0.4f);
+                ApplyLowPassFilter(false);
+                break;
+                
+            default:
+                // Reset to default
+                SetReverbAmount(0f);
+                ApplyLowPassFilter(false);
+                break;
+        }
+    }
+    
+    // Save audio settings to PlayerPrefs
+    public void SaveAudioSettings(float master, float music, float sfx)
+    {
+        PlayerPrefs.SetFloat("MasterVolume", master);
+        PlayerPrefs.SetFloat("MusicVolume", music);
+        PlayerPrefs.SetFloat("SFXVolume", sfx);
+        PlayerPrefs.Save();
+    }
+    
+    // Load audio settings from PlayerPrefs
+    public void LoadAudioSettings()
+    {
+        float master = PlayerPrefs.GetFloat("MasterVolume", 1.0f);
+        float music = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        float sfx = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
+        
+        SetMasterVolume(master);
+        SetMusicVolume(music);
+        SetSFXVolume(sfx);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Audio Mixer features:</p>
+                                <ul>
+                                    <li><strong>Mixer Groups</strong>: Organize audio sources into categories (Music, SFX, Ambience)</li>
+                                    <li><strong>Effects</strong>: Apply audio processing (reverb, EQ, compression, etc.)</li>
+                                    <li><strong>Snapshots</strong>: Store and recall mixer states for different game situations</li>
+                                    <li><strong>Exposed Parameters</strong>: Properties that can be controlled via scripts</li>
+                                    <li><strong>Send Effects</strong>: Route audio to shared effect processors</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Setting Up an Audio Mixer</h4>
+                            <ol>
+                                <li>Create an Audio Mixer asset (right-click in Project window → Create → Audio Mixer)</li>
+                                <li>Add mixer groups for categories of sounds (Music, SFX, UI, Ambience, etc.)</li>
+                                <li>Add effects to groups (EQ, reverb, compression, etc.)</li>
+                                <li>Expose parameters you want to control via script</li>
+                                <li>Create snapshots for different game states or environments</li>
+                                <li>Assign AudioSources to the appropriate mixer groups</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Dynamic Audio System</h3>
+                        <p>Create an adaptive audio system that responds to game events and player actions.</p>
+                        
+                        <div class="example-box">
+                            <h4>Advanced Audio Manager:</h4>
+                            <pre><code>
+using UnityEngine;
+using UnityEngine.Audio;
+using System.Collections;
+using System.Collections.Generic;
+
+public class AudioManager : MonoBehaviour
+{
+    // Singleton instance
+    public static AudioManager Instance { get; private set; }
+    
+    // Audio mixer
+    public AudioMixer audioMixer;
+    
+    // Sound categories
+    [System.Serializable]
+    public class Sound
+    {
+        public string name;
+        public AudioClip clip;
+        public AudioMixerGroup mixerGroup;
+        [Range(0f, 1f)]
+        public float volume = 1f;
+        [Range(0.1f, 3f)]
+        public float pitch = 1f;
+        [Range(0f, 1f)]
+        public float spatialBlend = 0f;
+        public bool loop = false;
+        
+        [HideInInspector]
+        public AudioSource source;
+    }
+    
+    // List of music tracks
+    public Sound[] music;
+    
+    // List of sound effects
+    public Sound[] soundEffects;
+    
+    // Ambient sound layers
+    public Sound[] ambientSounds;
+    
+    // Currently playing music
+    private Sound currentMusic;
+    
+    // Currently active ambient layers
+    private List<Sound> activeAmbientLayers = new List<Sound>();
+    
+    // For crossfading music
+    private Coroutine musicFadeCoroutine;
+    
+    void Awake()
+    {
+        // Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        InitializeSounds();
+    }
+    
+    // Initialize all audio sources
+    void InitializeSounds()
+    {
+        // Initialize music tracks
+        foreach (Sound s in music)
+        {
+            CreateAudioSource(s);
+        }
+        
+        // Initialize sound effects
+        foreach (Sound s in soundEffects)
+        {
+            CreateAudioSource(s);
+        }
+        
+        // Initialize ambient sounds
+        foreach (Sound s in ambientSounds)
+        {
+            CreateAudioSource(s);
+        }
+    }
+    
+    // Create an audio source for a sound
+    void CreateAudioSource(Sound sound)
+    {
+        // Create a child object for the sound
+        GameObject soundObject = new GameObject("Sound_" + sound.name);
+        soundObject.transform.parent = transform;
+        
+        // Add audio source component
+        sound.source = soundObject.AddComponent<AudioSource>();
+        sound.source.clip = sound.clip;
+        sound.source.outputAudioMixerGroup = sound.mixerGroup;
+        sound.source.volume = sound.volume;
+        sound.source.pitch = sound.pitch;
+        sound.source.spatialBlend = sound.spatialBlend;
+        sound.source.loop = sound.loop;
+        sound.source.playOnAwake = false;
+    }
+    
+    // Play a music track with optional crossfade
+    public void PlayMusic(string name, float fadeTime = 1.0f)
+    {
+        // Find the music track
+        Sound s = System.Array.Find(music, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Music: " + name + " not found!");
+            return;
+        }
+        
+        // If already playing this track, do nothing
+        if (currentMusic == s && s.source.isPlaying)
+            return;
+        
+        // Stop any current fade
+        if (musicFadeCoroutine != null)
+            StopCoroutine(musicFadeCoroutine);
+        
+        // Start a new fade
+        if (fadeTime > 0 && currentMusic != null)
+        {
+            musicFadeCoroutine = StartCoroutine(CrossfadeMusic(currentMusic, s, fadeTime));
+        }
+        else
+        {
+            // Stop current music
+            if (currentMusic != null)
+                currentMusic.source.Stop();
+            
+            // Play new music
+            s.source.Play();
+        }
+        
+        currentMusic = s;
+    }
+    
+    // Crossfade between two music tracks
+    IEnumerator CrossfadeMusic(Sound oldMusic, Sound newMusic, float fadeTime)
+    {
+        // Start playing new track at zero volume
+        newMusic.source.volume = 0;
+        newMusic.source.Play();
+        
+        float startVolume = oldMusic.source.volume;
+        float targetVolume = newMusic.volume;
+        
+        // Fade out old music, fade in new music
+        float timeElapsed = 0;
+        
+        while (timeElapsed < fadeTime)
+        {
+            timeElapsed += Time.deltaTime;
+            float t = timeElapsed / fadeTime;
+            
+            oldMusic.source.volume = Mathf.Lerp(startVolume, 0, t);
+            newMusic.source.volume = Mathf.Lerp(0, targetVolume, t);
+            
+            yield return null;
+        }
+        
+        // Ensure final volumes are set correctly
+        oldMusic.source.volume = 0;
+        newMusic.source.volume = targetVolume;
+        
+        // Stop the old track
+        oldMusic.source.Stop();
+        
+        // Reset old music volume for future use
+        oldMusic.source.volume = oldMusic.volume;
+        
+        musicFadeCoroutine = null;
+    }
+    
+    // Play a sound effect
+    public void PlaySFX(string name)
+    {
+        Sound s = System.Array.Find(soundEffects, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("SFX: " + name + " not found!");
+            return;
+        }
+        
+        // Random pitch variation for more natural sound
+        s.source.pitch = s.pitch * Random.Range(0.9f, 1.1f);
+        s.source.Play();
+    }
+    
+    // Play a sound effect at a specific position
+    public void PlaySFXAtPosition(string name, Vector3 position)
+    {
+        Sound s = System.Array.Find(soundEffects, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("SFX: " + name + " not found!");
+            return;
+        }
+        
+        // Create a temporary object at the position
+        AudioSource.PlayClipAtPoint(s.clip, position, s.volume);
+    }
+    
+    // Start an ambient sound layer
+    public void StartAmbientLayer(string name)
+    {
+        Sound s = System.Array.Find(ambientSounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Ambient sound: " + name + " not found!");
+            return;
+        }
+        
+        // If not already playing
+        if (!s.source.isPlaying)
+        {
+            s.source.Play();
+            activeAmbientLayers.Add(s);
+        }
+    }
+    
+    // Stop an ambient sound layer
+    public void StopAmbientLayer(string name)
+    {
+        Sound s = System.Array.Find(ambientSounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Ambient sound: " + name + " not found!");
+            return;
+        }
+        
+        if (s.source.isPlaying)
+        {
+            s.source.Stop();
+            activeAmbientLayers.Remove(s);
+        }
+    }
+    
+    // Set environmental audio state (uses Audio Mixer snapshots)
+    public void SetEnvironment(string environmentType)
+    {
+        switch (environmentType.ToLower())
+        {
+            case "cave":
+                // Start cave ambient sounds
+                StartAmbientLayer("CaveAmbience");
+                StopAmbientLayer("ForestAmbience");
+                break;
+                
+            case "forest":
+                // Start forest ambient sounds
+                StartAmbientLayer("ForestAmbience");
+                StopAmbientLayer("CaveAmbience");
+                break;
+                
+            // Add more environment types as needed
+        }
+    }
+    
+    // Pause/resume all audio
+    public void SetPaused(bool isPaused)
+    {
+        if (isPaused)
+        {
+            // Pause all active sounds
+            if (currentMusic != null)
+                currentMusic.source.Pause();
+                
+            foreach (Sound s in activeAmbientLayers)
+            {
+                s.source.Pause();
+            }
+        }
+        else
+        {
+            // Resume all sounds
+            if (currentMusic != null)
+                currentMusic.source.UnPause();
+                
+            foreach (Sound s in activeAmbientLayers)
+            {
+                s.source.UnPause();
+            }
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Audio Optimization</h3>
+                        <p>Audio can impact game performance. Here are techniques to optimize audio usage:</p>
+                        
+                        <ol>
+                            <li><strong>Compression settings</strong>: Use appropriate compression for different audio types</li>
+                            <li><strong>Streaming</strong>: Stream large audio files instead of loading them entirely into memory</li>
+                            <li><strong>Audio pooling</strong>: Reuse AudioSources for frequently played sounds</li>
+                            <li><strong>Distance-based culling</strong>: Disable distant audio sources</li>
+                            <li><strong>Sample rate reduction</strong>: Lower sample rates for less critical sounds</li>
+                            <li><strong>Mono conversion</strong>: Use mono for 3D positioned sounds</li>
+                            <li><strong>Sound prioritization</strong>: Set priorities to ensure important sounds are played</li>
+                            <li><strong>Voice limiting</strong>: Limit the maximum number of simultaneous sounds</li>
+                        </ol>
+                        
+                        <div class="example-box">
+                            <h4>Audio Pooling System:</h4>
+                            <pre><code>
+using UnityEngine;
+using System.Collections.Generic;
+
+public class AudioPool : MonoBehaviour
+{
+    // Singleton instance
+    public static AudioPool Instance { get; private set; }
+    
+    // Pool settings
+    public int initialPoolSize = 10;
+    public int maxPoolSize = 20;
+    
+    // The prefab with AudioSource to clone
+    public AudioSource audioSourcePrefab;
+    
+    // The pool of available sources
+    private Queue<AudioSource> availableSources = new Queue<AudioSource>();
+    
+    // Currently active sources
+    private List<AudioSource> activeSources = new List<AudioSource>();
+    
+    // Reference to audio mixer group for all pooled sources
+    public UnityEngine.Audio.AudioMixerGroup mixerGroup;
+    
+    void Awake()
+    {
+        // Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            InitializePool();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    void InitializePool()
+    {
+        // Create initial pool of audio sources
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            CreatePooledSource();
+        }
+    }
+    
+    // Create a new audio source for the pool
+    AudioSource CreatePooledSource()
+    {
+        AudioSource newSource = Instantiate(audioSourcePrefab, transform);
+        newSource.outputAudioMixerGroup = mixerGroup;
+        newSource.playOnAwake = false;
+        newSource.gameObject.name = "PooledAudioSource_" + availableSources.Count;
+        newSource.gameObject.SetActive(false);
+        availableSources.Enqueue(newSource);
+        return newSource;
+    }
+    
+    // Get an available audio source from the pool
+    public AudioSource GetSource()
+    {
+        AudioSource source;
+        
+        // If no sources available, create new one if possible
+        if (availableSources.Count == 0)
+        {
+            if (activeSources.Count < maxPoolSize)
+            {
+                source = CreatePooledSource();
+            }
+            else
+            {
+                // Find the oldest active source
+                source = activeSources[0];
+                activeSources.RemoveAt(0);
+                
+                // Stop and reset it
+                source.Stop();
+                source.transform.position = transform.position;
+            }
+        }
+        else
+        {
+            // Get from pool
+            source = availableSources.Dequeue();
+        }
+        
+        // Activate the source
+        source.gameObject.SetActive(true);
+        activeSources.Add(source);
+        
+        // Reset source properties
+        source.loop = false;
+        source.spatialBlend = 0f;
+        source.volume = 1f;
+        source.pitch = 1f;
+        
+        return source;
+    }
+    
+    // Release an audio source back to the pool
+    public void ReleaseSource(AudioSource source)
+    {
+        if (source != null && activeSources.Contains(source))
+        {
+            activeSources.Remove(source);
+            source.Stop();
+            source.clip = null;
+            source.gameObject.SetActive(false);
+            availableSources.Enqueue(source);
+        }
+    }
+    
+    // Play a sound and automatically return to pool when finished
+    public AudioSource PlaySound(AudioClip clip, Vector3 position, float volume = 1f, float pitch = 1f, bool spatial = false)
+    {
+        if (clip == null)
+            return null;
+            
+        AudioSource source = GetSource();
+        source.clip = clip;
+        source.transform.position = position;
+        source.volume = volume;
+        source.pitch = pitch;
+        source.spatialBlend = spatial ? 1f : 0f;
+        source.Play();
+        
+        // Return to pool after playing
+        StartCoroutine(ReturnToPoolWhenFinished(source, clip.length));
+        
+        return source;
+    }
+    
+    // Release the source after it finishes playing
+    private System.Collections.IEnumerator ReturnToPoolWhenFinished(AudioSource source, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        if (source != null && source.gameObject.activeInHierarchy)
+        {
+            ReleaseSource(source);
+        }
+    }
+    
+    // Clean up any unused sources (call periodically or during scene transitions)
+    public void CleanupUnusedSources()
+    {
+        // Return any non-playing active sources to the pool
+        for (int i = activeSources.Count - 1; i >= 0; i--)
+        {
+            if (!activeSources[i].isPlaying)
+            {
+                ReleaseSource(activeSources[i]);
+            }
+        }
+        
+        // Trim excess pool size if needed
+        while (availableSources.Count > initialPoolSize)
+        {
+            AudioSource excess = availableSources.Dequeue();
+            Destroy(excess.gameObject);
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Audio</h3>
+                        <ol>
+                            <li><strong>Use appropriate import settings</strong> for different audio types</li>
+                            <li><strong>Organize sounds into categories</strong> with mixer groups</li>
+                            <li><strong>Create a centralized audio manager</strong> for easier control</li>
+                            <li><strong>Add subtle variations</strong> to repeated sounds (pitch, volume)</li>
+                            <li><strong>Use 3D sound positioning</strong> for immersive environments</li>
+                            <li><strong>Implement audio fallbacks</strong> for when resources are limited</li>
+                            <li><strong>Provide volume controls</strong> for different audio categories</li>
+                            <li><strong>Test on target platforms</strong> to identify performance issues</li>
+                            <li><strong>Consider accessibility</strong> (subtitles, visual feedback for audio cues)</li>
+                            <li><strong>Keep reference levels consistent</strong> across all audio assets</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-ui.html" class="prev"><i class="fas fa-arrow-left"></i> Unity UI Development</a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

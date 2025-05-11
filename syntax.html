@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Syntax - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Syntax</h2>
+                    
+                    <div class="topic">
+                        <h3>Basic Syntax</h3>
+                        <p>C# syntax is similar to other C-style languages like C, C++, and Java. If you know any of these languages, C# syntax will look familiar.</p>
+                        
+                        <div class="example-box">
+                            <h4>Example:</h4>
+                            <pre><code>
+using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Output text to the console
+            Console.WriteLine("Hello World!");
+            
+            // Ask for user input
+            Console.Write("What is your name? ");
+            
+            // Read user input from the console
+            string name = Console.ReadLine();
+            
+            // Output using the input
+            Console.WriteLine($"Hello, {name}!");
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Let's break down this code:</p>
+                                <ul>
+                                    <li><code>using System;</code> - This line imports the System namespace which contains the Console class</li>
+                                    <li><code>namespace HelloWorld { ... }</code> - Groups your code into a namespace called "HelloWorld"</li>
+                                    <li><code>class Program { ... }</code> - Defines a class called "Program"</li>
+                                    <li><code>static void Main(string[] args) { ... }</code> - The Main method is the entry point of your program</li>
+                                    <li><code>Console.WriteLine("Hello World!");</code> - Prints text to the console with a new line at the end</li>
+                                    <li><code>Console.Write("What is your name? ");</code> - Prints text without a new line</li>
+                                    <li><code>string name = Console.ReadLine();</code> - Reads a line of input from the user and stores it in a variable</li>
+                                    <li><code>Console.WriteLine($"Hello, {name}!");</code> - Prints text with the user's input using string interpolation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Statement Structure</h3>
+                        <p>In C#, statements end with a semicolon (;) and code blocks are enclosed in curly braces { }.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Single statements end with semicolons
+int x = 10;
+Console.WriteLine(x);
+
+// Code blocks use curly braces
+if (x > 5) 
+{
+    Console.WriteLine("x is greater than 5");
+    x = 5;  // This is also within the block
+}
+
+// Single statement blocks can omit braces (not recommended)
+if (x == 5)
+    Console.WriteLine("x equals 5");  // Only this line is in the if block
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes:</p>
+                                <ul>
+                                    <li>Every statement must end with a semicolon</li>
+                                    <li>Code blocks define the scope of variables declared within them</li>
+                                    <li>While you can omit braces for single-statement blocks, it's generally not recommended for readability and to prevent bugs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Case Sensitivity</h3>
+                        <p>C# is a case-sensitive language. This means that <code>myVariable</code> and <code>MyVariable</code> are considered different identifiers.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// These are three different variables
+int value = 10;
+int Value = 20;
+int VALUE = 30;
+
+// This works
+Console.WriteLine(value);  // Outputs: 10
+Console.WriteLine(Value);  // Outputs: 20
+Console.WriteLine(VALUE);  // Outputs: 30
+
+// This would cause an error
+// Console.WriteLine(vAlUe);  // Variable 'vAlUe' doesn't exist
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Comments</h3>
+                        <p>Comments are used to explain code and are ignored by the compiler.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// This is a single-line comment
+
+/* This is a 
+   multi-line comment */
+
+/// &lt;summary&gt;
+/// XML documentation comments are used to generate documentation
+/// &lt;/summary&gt;
+public void DocumentedMethod()
+{
+    // Method implementation
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>C# supports three types of comments:</p>
+                                <ul>
+                                    <li><code>// Single-line comments</code> - Everything after // on that line is a comment</li>
+                                    <li><code>/* Multi-line comments */</code> - Everything between /* and */ is a comment, even across multiple lines</li>
+                                    <li><code>/// XML documentation comments</code> - Special comments that can be used to generate documentation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Coding Conventions</h3>
+                        <p>Following are some common C# coding conventions:</p>
+                        <ul>
+                            <li><strong>PascalCase</strong>: Used for class names, method names, and public members (e.g., <code>ClassName</code>, <code>MethodName</code>)</li>
+                            <li><strong>camelCase</strong>: Used for local variables and parameters (e.g., <code>localVariable</code>, <code>parameterName</code>)</li>
+                            <li><strong>_camelCase</strong>: Often used for private fields (e.g., <code>_privateField</code>)</li>
+                            <li><strong>ALL_CAPS</strong>: Sometimes used for constants (e.g., <code>MAX_SIZE</code>)</li>
+                            <li>Braces on their own line (typically) for methods and classes</li>
+                            <li>Use four spaces for indentation (or a tab set to four spaces)</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="environment.html" class="prev"><i class="fas fa-arrow-left"></i> Setting Up Environment</a>
+                        <a href="output.html" class="next">C# Output <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity UI Development - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity UI Development</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity UI</h3>
+                        <p>User interfaces are a critical component of any game, providing players with important information, controls, and feedback. Unity offers a powerful and flexible UI system that allows developers to create responsive and visually appealing interfaces for their games.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>The basics of Unity's UI system</li>
+                            <li>Creating and organizing UI elements</li>
+                            <li>Working with Canvas, Panels, and Layouts</li>
+                            <li>Implementing responsive UI designs</li>
+                            <li>Animating UI elements</li>
+                            <li>Making UI interactive with C# scripts</li>
+                            <li>Best practices for UI development</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity UI Fundamentals</h3>
+                        <p>Unity's UI system is based on several core components that work together:</p>
+                        
+                        <div class="example-box">
+                            <h4>Core UI Components:</h4>
+                            <ul>
+                                <li><strong>Canvas</strong>: The root container for all UI elements</li>
+                                <li><strong>Canvas Scaler</strong>: Controls how UI elements scale with different screen sizes</li>
+                                <li><strong>Graphic Raycaster</strong>: Allows UI elements to receive input events</li>
+                                <li><strong>UI Elements</strong>: Text, Images, Buttons, Sliders, etc.</li>
+                                <li><strong>Layout Components</strong>: Grid Layout, Horizontal/Vertical Layout Group, etc.</li>
+                                <li><strong>Rect Transform</strong>: Special transform for UI elements with anchoring and pivots</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Setting up a basic UI:</p>
+                                <ol>
+                                    <li>Create a Canvas (GameObject → UI → Canvas)</li>
+                                    <li>Choose a Canvas Render Mode (Screen Space - Overlay, Screen Space - Camera, or World Space)</li>
+                                    <li>Configure the Canvas Scaler for your target platforms</li>
+                                    <li>Add UI elements as children of the Canvas</li>
+                                    <li>Organize UI elements with Panels and Layout components</li>
+                                    <li>Add functionality with C# scripts</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Canvas Render Modes</h4>
+                            <p>The Canvas Render Mode determines how UI is displayed relative to your game scene:</p>
+                            <ul>
+                                <li><strong>Screen Space - Overlay</strong>: UI is rendered on top of everything else (common for menus, HUDs)</li>
+                                <li><strong>Screen Space - Camera</strong>: UI is rendered from a specific camera's perspective (allows for effects like perspective)</li>
+                                <li><strong>World Space</strong>: UI exists in the 3D world (good for in-game interfaces like control panels, speech bubbles)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating UI Elements</h3>
+                        <p>Unity provides a wide range of UI elements for different needs:</p>
+                        
+                        <div class="example-box">
+                            <h4>Common UI Elements:</h4>
+                            <ul>
+                                <li><strong>Text</strong>: For displaying text content</li>
+                                <li><strong>Image</strong>: For displaying sprites and textures</li>
+                                <li><strong>Raw Image</strong>: For displaying non-sprite textures</li>
+                                <li><strong>Button</strong>: Clickable element with built-in visual states</li>
+                                <li><strong>Toggle</strong>: On/off control (checkbox)</li>
+                                <li><strong>Slider</strong>: For selecting a value from a range</li>
+                                <li><strong>Scrollbar</strong>: For scrolling content</li>
+                                <li><strong>Dropdown</strong>: For selecting from a list of options</li>
+                                <li><strong>Input Field</strong>: For text input</li>
+                                <li><strong>Scroll View</strong>: For scrollable content areas</li>
+                                <li><strong>Panel</strong>: Container for organizing UI elements</li>
+                                <li><strong>TextMeshPro</strong>: Higher quality text (in TextMeshPro package)</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Creating UI elements:</p>
+                                <ol>
+                                    <li>Right-click in the Hierarchy under a Canvas</li>
+                                    <li>Select UI and choose the desired element type</li>
+                                    <li>Configure the element properties in the Inspector</li>
+                                    <li>Position and size the element using the Rect Transform</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Rect Transform</h3>
+                        <p>The Rect Transform is a special kind of Transform that is designed for UI elements, offering powerful positioning and sizing tools.</p>
+                        
+                        <div class="example-box">
+                            <h4>Key Rect Transform Concepts:</h4>
+                            <ul>
+                                <li><strong>Anchors</strong>: Define how an element's position and size relate to its parent</li>
+                                <li><strong>Pivot</strong>: The point around which the element rotates and scales</li>
+                                <li><strong>Anchored Position</strong>: Position relative to the anchors</li>
+                                <li><strong>Size Delta</strong>: Size adjustment relative to the anchor rectangle</li>
+                                <li><strong>Stretch</strong>: Set anchors to opposite edges to make elements stretch with parent</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Common anchor presets:</p>
+                                <ul>
+                                    <li><strong>Center</strong>: Element stays centered in parent</li>
+                                    <li><strong>Top/Bottom/Left/Right</strong>: Element sticks to a specific edge</li>
+                                    <li><strong>Corners</strong>: Element sticks to a specific corner</li>
+                                    <li><strong>Stretch Horizontal/Vertical</strong>: Element stretches along one axis</li>
+                                    <li><strong>Stretch All</strong>: Element stretches to fill the parent</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Responsive UI Design Tips</h4>
+                            <ul>
+                                <li>Use anchors to create UI that adapts to different screen sizes</li>
+                                <li>Set the Canvas Scaler to "Scale With Screen Size" for consistent UI across devices</li>
+                                <li>Use layout groups to automatically arrange and resize UI elements</li>
+                                <li>Test your UI with different aspect ratios during development</li>
+                                <li>Use the "Safe Area" component for notches and curved screens on mobile devices</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Layout Components</h3>
+                        <p>Layout components automate the arrangement of UI elements, making it easier to create responsive interfaces.</p>
+                        
+                        <div class="example-box">
+                            <h4>Common Layout Components:</h4>
+                            <ul>
+                                <li><strong>Horizontal Layout Group</strong>: Arranges elements in a row</li>
+                                <li><strong>Vertical Layout Group</strong>: Arranges elements in a column</li>
+                                <li><strong>Grid Layout Group</strong>: Arranges elements in a grid</li>
+                                <li><strong>Layout Element</strong>: Controls how an element behaves within a layout group</li>
+                                <li><strong>Content Size Fitter</strong>: Adjusts element size based on its content</li>
+                                <li><strong>Aspect Ratio Fitter</strong>: Maintains a specific aspect ratio</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Layout group properties:</p>
+                                <ul>
+                                    <li><strong>Padding</strong>: Space around the edges of the layout</li>
+                                    <li><strong>Spacing</strong>: Space between elements</li>
+                                    <li><strong>Child Alignment</strong>: How children are aligned within the layout</li>
+                                    <li><strong>Control Child Size</strong>: Whether the layout controls the width/height of children</li>
+                                    <li><strong>Child Force Expand</strong>: Whether children should expand to fill available space</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Interacting with UI through Code</h3>
+                        <p>C# scripts can be used to control UI elements and respond to user interactions.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic UI Interaction:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI; // Required for UI components
+using TMPro; // Required for TextMeshPro components
+
+public class UIController : MonoBehaviour
+{
+    // References to UI elements
+    public Button playButton;
+    public Button settingsButton;
+    public Button quitButton;
+    public Slider volumeSlider;
+    public Toggle fullscreenToggle;
+    public TextMeshProUGUI scoreText;
+    public Image healthBar;
+    
+    // Game state variables
+    private int score = 0;
+    private float health = 1.0f;
+    
+    void Start()
+    {
+        // Set up button click listeners
+        playButton.onClick.AddListener(OnPlayButtonClick);
+        settingsButton.onClick.AddListener(OnSettingsButtonClick);
+        quitButton.onClick.AddListener(OnQuitButtonClick);
+        
+        // Set up slider value change listener
+        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+        
+        // Set up toggle value change listener
+        fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggled);
+        
+        // Initialize UI elements
+        UpdateScoreText();
+        UpdateHealthBar();
+    }
+    
+    // Button click event handlers
+    void OnPlayButtonClick()
+    {
+        Debug.Log("Play button clicked!");
+        // Load game scene or start game
+        // SceneManager.LoadScene("GameScene");
+    }
+    
+    void OnSettingsButtonClick()
+    {
+        Debug.Log("Settings button clicked!");
+        // Show settings panel
+        // settingsPanel.SetActive(true);
+    }
+    
+    void OnQuitButtonClick()
+    {
+        Debug.Log("Quit button clicked!");
+        // Quit the game
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
+    
+    // Slider event handler
+    void OnVolumeChanged(float value)
+    {
+        Debug.Log("Volume changed to: " + value);
+        // Update audio volume
+        AudioListener.volume = value;
+    }
+    
+    // Toggle event handler
+    void OnFullscreenToggled(bool isOn)
+    {
+        Debug.Log("Fullscreen toggled: " + isOn);
+        // Set fullscreen mode
+        Screen.fullScreen = isOn;
+    }
+    
+    // Methods to update UI based on game state
+    public void AddScore(int points)
+    {
+        score += points;
+        UpdateScoreText();
+    }
+    
+    public void TakeDamage(float damage)
+    {
+        health = Mathf.Clamp01(health - damage);
+        UpdateHealthBar();
+        
+        if (health <= 0)
+        {
+            GameOver();
+        }
+    }
+    
+    void UpdateScoreText()
+    {
+        scoreText.text = "Score: " + score;
+    }
+    
+    void UpdateHealthBar()
+    {
+        // Update the fill amount of the health bar image
+        healthBar.fillAmount = health;
+        
+        // Optional: Change color based on health
+        if (health > 0.5f)
+        {
+            healthBar.color = Color.green;
+        }
+        else if (health > 0.25f)
+        {
+            healthBar.color = Color.yellow;
+        }
+        else
+        {
+            healthBar.color = Color.red;
+        }
+    }
+    
+    void GameOver()
+    {
+        Debug.Log("Game Over!");
+        // Show game over screen
+        // gameOverPanel.SetActive(true);
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Key UI interaction concepts:</p>
+                                <ul>
+                                    <li><strong>Event Listeners</strong>: Respond to UI events like clicks and value changes</li>
+                                    <li><strong>UI References</strong>: Connect script variables to UI elements via the Inspector</li>
+                                    <li><strong>State Updates</strong>: Update UI elements to reflect game state</li>
+                                    <li><strong>Visual Feedback</strong>: Change appearance (color, size, etc.) for feedback</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Advanced UI Techniques:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections;
+
+public class AdvancedUIController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+{
+    public CanvasGroup canvasGroup;
+    public RectTransform panel;
+    
+    // Animation parameters
+    public float fadeDuration = 0.5f;
+    public float moveDuration = 0.3f;
+    public AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
+    // Hover effect parameters
+    public float hoverScaleAmount = 1.1f;
+    public float hoverScaleSpeed = 0.1f;
+    
+    // Original values
+    private Vector2 originalScale;
+    private Vector3 originalPosition;
+    
+    void Start()
+    {
+        if (panel != null)
+        {
+            originalScale = panel.localScale;
+            originalPosition = panel.localPosition;
+        }
+    }
+    
+    // Fade in the UI panel
+    public void FadeIn()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeCanvasGroup(canvasGroup, 0f, 1f, fadeDuration));
+    }
+    
+    // Fade out the UI panel
+    public void FadeOut()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeCanvasGroup(canvasGroup, 1f, 0f, fadeDuration));
+    }
+    
+    // Slide the panel in from the right
+    public void SlideIn()
+    {
+        StopAllCoroutines();
+        canvasGroup.alpha = 1f;
+        StartCoroutine(MovePanel(new Vector3(1000f, 0f, 0f), originalPosition, moveDuration));
+    }
+    
+    // Slide the panel out to the right
+    public void SlideOut()
+    {
+        StopAllCoroutines();
+        StartCoroutine(MovePanel(originalPosition, new Vector3(1000f, 0f, 0f), moveDuration));
+    }
+    
+    // Fade coroutine with easing
+    IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            float normalizedTime = elapsed / duration;
+            float easedTime = animationCurve.Evaluate(normalizedTime);
+            cg.alpha = Mathf.Lerp(start, end, easedTime);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        cg.alpha = end;
+        
+        // Disable blocking when fully transparent
+        if (end == 0f)
+        {
+            cg.blocksRaycasts = false;
+            cg.interactable = false;
+        }
+        else
+        {
+            cg.blocksRaycasts = true;
+            cg.interactable = true;
+        }
+    }
+    
+    // Move panel coroutine with easing
+    IEnumerator MovePanel(Vector3 start, Vector3 end, float duration)
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            float normalizedTime = elapsed / duration;
+            float easedTime = animationCurve.Evaluate(normalizedTime);
+            panel.localPosition = Vector3.Lerp(start, end, easedTime);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        panel.localPosition = end;
+        
+        // Disable interactions if moved off-screen
+        if (end.x > 900f)
+        {
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+        }
+        else
+        {
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
+    }
+    
+    // Interface implementations for hover effects
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ScaleElement(originalScale, originalScale * hoverScaleAmount, hoverScaleSpeed));
+    }
+    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ScaleElement(panel.localScale, originalScale, hoverScaleSpeed));
+    }
+    
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        // Pressed effect - scale down slightly
+        StopAllCoroutines();
+        StartCoroutine(ScaleElement(panel.localScale, originalScale * 0.95f, hoverScaleSpeed * 0.5f));
+    }
+    
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        // Return to hover scale
+        StopAllCoroutines();
+        StartCoroutine(ScaleElement(panel.localScale, originalScale * hoverScaleAmount, hoverScaleSpeed));
+    }
+    
+    // Scale element coroutine with easing
+    IEnumerator ScaleElement(Vector2 start, Vector2 end, float duration)
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            float normalizedTime = elapsed / duration;
+            float easedTime = animationCurve.Evaluate(normalizedTime);
+            panel.localScale = Vector2.Lerp(start, end, easedTime);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        panel.localScale = end;
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Advanced UI features:</p>
+                                <ul>
+                                    <li><strong>Canvas Group</strong>: Controls visibility, interactivity of a group of elements</li>
+                                    <li><strong>Animation with Coroutines</strong>: Smooth transitions and effects</li>
+                                    <li><strong>Interface Callbacks</strong>: Respond to different pointer events (hover, click, etc.)</li>
+                                    <li><strong>Animation Curves</strong>: Custom easing for more natural animations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating a Dynamic Inventory System</h3>
+                        <p>This example shows how to create a grid-based inventory system that dynamically populates with items.</p>
+                        
+                        <div class="example-box">
+                            <h4>Inventory UI System:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+
+public class InventorySystem : MonoBehaviour
+{
+    // References to UI elements
+    public Transform itemsContainer;
+    public GameObject itemSlotPrefab;
+    public TextMeshProUGUI inventoryTitleText;
+    public TextMeshProUGUI descriptionText;
+    public Image selectedItemImage;
+    
+    // Inventory data
+    private List&lt;InventoryItem&gt; inventoryItems = new List&lt;InventoryItem&gt;();
+    private InventoryItem selectedItem;
+    
+    // Max inventory size
+    public int maxItems = 20;
+    
+    void Start()
+    {
+        // Initialize the inventory UI
+        InitializeInventory();
+        
+        // Add some test items
+        AddItem(new InventoryItem("Health Potion", "Restores 50 HP", Resources.Load&lt;Sprite&gt;("Items/HealthPotion"), 5));
+        AddItem(new InventoryItem("Mana Potion", "Restores 50 MP", Resources.Load&lt;Sprite&gt;("Items/ManaPotion"), 3));
+        AddItem(new InventoryItem("Sword", "Deals 10-15 damage", Resources.Load&lt;Sprite&gt;("Items/Sword"), 1));
+        
+        // Update the UI
+        UpdateInventoryUI();
+    }
+    
+    void InitializeInventory()
+    {
+        // Clear any existing slots
+        foreach (Transform child in itemsContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        // Create empty slots
+        for (int i = 0; i < maxItems; i++)
+        {
+            GameObject slot = Instantiate(itemSlotPrefab, itemsContainer);
+            slot.name = "Slot_" + i;
+            
+            // Store the slot index
+            int index = i;
+            
+            // Add click listener
+            Button button = slot.GetComponent&lt;Button&gt;();
+            if (button != null)
+            {
+                button.onClick.AddListener(() => OnSlotClicked(index));
+            }
+        }
+        
+        // Clear description
+        descriptionText.text = "Select an item to see its description.";
+        selectedItemImage.gameObject.SetActive(false);
+    }
+    
+    void UpdateInventoryUI()
+    {
+        // Update inventory title
+        inventoryTitleText.text = "Inventory (" + inventoryItems.Count + "/" + maxItems + ")";
+        
+        // Update all slots
+        for (int i = 0; i < maxItems; i++)
+        {
+            Transform slot = itemsContainer.GetChild(i);
+            Image icon = slot.Find("Icon").GetComponent&lt;Image&gt;();
+            TextMeshProUGUI countText = slot.Find("Count").GetComponent&lt;TextMeshProUGUI&gt;();
+            
+            if (i < inventoryItems.Count)
+            {
+                // Slot has an item
+                InventoryItem item = inventoryItems[i];
+                
+                // Update icon
+                icon.sprite = item.icon;
+                icon.enabled = true;
+                
+                // Update count
+                if (item.count > 1)
+                {
+                    countText.text = item.count.ToString();
+                    countText.gameObject.SetActive(true);
+                }
+                else
+                {
+                    countText.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                // Empty slot
+                icon.enabled = false;
+                countText.gameObject.SetActive(false);
+            }
+        }
+    }
+    
+    void OnSlotClicked(int index)
+    {
+        if (index < inventoryItems.Count)
+        {
+            // Select the item
+            selectedItem = inventoryItems[index];
+            
+            // Update description
+            descriptionText.text = selectedItem.name + "\n" + selectedItem.description;
+            
+            // Update selected item image
+            selectedItemImage.sprite = selectedItem.icon;
+            selectedItemImage.gameObject.SetActive(true);
+            
+            Debug.Log("Selected: " + selectedItem.name);
+        }
+        else
+        {
+            // Deselect
+            selectedItem = null;
+            descriptionText.text = "Select an item to see its description.";
+            selectedItemImage.gameObject.SetActive(false);
+        }
+    }
+    
+    public void AddItem(InventoryItem item)
+    {
+        // Check if we already have this item type (for stackable items)
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if (inventoryItems[i].name == item.name)
+            {
+                // Increase count
+                inventoryItems[i].count += item.count;
+                UpdateInventoryUI();
+                return;
+            }
+        }
+        
+        // Add new item if we have space
+        if (inventoryItems.Count < maxItems)
+        {
+            inventoryItems.Add(item);
+            UpdateInventoryUI();
+        }
+        else
+        {
+            Debug.LogWarning("Inventory is full!");
+        }
+    }
+    
+    public void RemoveItem(string itemName, int count = 1)
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if (inventoryItems[i].name == itemName)
+            {
+                // Decrease count
+                inventoryItems[i].count -= count;
+                
+                // Remove item if count reaches 0
+                if (inventoryItems[i].count <= 0)
+                {
+                    inventoryItems.RemoveAt(i);
+                    
+                    // Clear selection if it was the selected item
+                    if (selectedItem != null && selectedItem.name == itemName)
+                    {
+                        selectedItem = null;
+                        descriptionText.text = "Select an item to see its description.";
+                        selectedItemImage.gameObject.SetActive(false);
+                    }
+                }
+                
+                UpdateInventoryUI();
+                return;
+            }
+        }
+    }
+    
+    public void UseSelectedItem()
+    {
+        if (selectedItem != null)
+        {
+            Debug.Log("Using: " + selectedItem.name);
+            
+            // Implement item usage logic here
+            // For example:
+            if (selectedItem.name == "Health Potion")
+            {
+                // Heal the player
+                Debug.Log("Healed 50 HP");
+            }
+            
+            // Decrease item count
+            RemoveItem(selectedItem.name, 1);
+        }
+    }
+    
+    // Item drop for drag-and-drop functionality
+    public void DropSelectedItem()
+    {
+        if (selectedItem != null)
+        {
+            Debug.Log("Dropped: " + selectedItem.name);
+            
+            // Implement drop logic here
+            // For example, instantiate a 3D model of the item in the game world
+            
+            // Remove from inventory
+            RemoveItem(selectedItem.name, 1);
+        }
+    }
+}
+
+// Class to represent an inventory item
+[System.Serializable]
+public class InventoryItem
+{
+    public string name;
+    public string description;
+    public Sprite icon;
+    public int count;
+    
+    public InventoryItem(string name, string description, Sprite icon, int count = 1)
+    {
+        this.name = name;
+        this.description = description;
+        this.icon = icon;
+        this.count = count;
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Key features of this inventory system:</p>
+                                <ul>
+                                    <li>Dynamic item slots created at runtime</li>
+                                    <li>Item stacking for identical items</li>
+                                    <li>Selection and detailed item view</li>
+                                    <li>Add/remove item functionality</li>
+                                    <li>Use/drop item actions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>UI Animation</h3>
+                        <p>Unity provides several ways to animate UI elements:</p>
+                        
+                        <ol>
+                            <li><strong>Animation System</strong>: Use Unity's Animation system with keyframes</li>
+                            <li><strong>Animator Controller</strong>: Create state machines for complex UI behavior</li>
+                            <li><strong>Coroutines</strong>: Write custom animation code using coroutines</li>
+                            <li><strong>DOTween</strong>: A popular third-party tweening library for smooth animations</li>
+                            <li><strong>UI Animation Components</strong>: Simple animations with built-in components</li>
+                        </ol>
+                        
+                        <div class="example-box">
+                            <h4>Creating a Simple UI Animation Controller:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class UIAnimator : MonoBehaviour
+{
+    public float pulseMagnitude = 0.1f;
+    public float pulseSpeed = 2f;
+    
+    public float rotationSpeed = 45f;
+    
+    public float bounceMagnitude = 20f;
+    public float bounceSpeed = 2f;
+    
+    private RectTransform rectTransform;
+    private Vector3 originalScale;
+    private Vector3 originalPosition;
+    
+    void Start()
+    {
+        rectTransform = GetComponent&lt;RectTransform&gt;();
+        originalScale = rectTransform.localScale;
+        originalPosition = rectTransform.anchoredPosition;
+    }
+    
+    public void StartPulse()
+    {
+        StopAllCoroutines();
+        StartCoroutine(PulseAnimation());
+    }
+    
+    public void StartRotation()
+    {
+        StopAllCoroutines();
+        StartCoroutine(RotationAnimation());
+    }
+    
+    public void StartBounce()
+    {
+        StopAllCoroutines();
+        StartCoroutine(BounceAnimation());
+    }
+    
+    public void StopAnimation()
+    {
+        StopAllCoroutines();
+        rectTransform.localScale = originalScale;
+        rectTransform.anchoredPosition = originalPosition;
+        rectTransform.localRotation = Quaternion.identity;
+    }
+    
+    IEnumerator PulseAnimation()
+    {
+        while (true)
+        {
+            float scale = 1f + pulseMagnitude * Mathf.Sin(Time.time * pulseSpeed);
+            rectTransform.localScale = originalScale * scale;
+            yield return null;
+        }
+    }
+    
+    IEnumerator RotationAnimation()
+    {
+        while (true)
+        {
+            rectTransform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
+    
+    IEnumerator BounceAnimation()
+    {
+        while (true)
+        {
+            float yOffset = bounceMagnitude * Mathf.Sin(Time.time * bounceSpeed);
+            rectTransform.anchoredPosition = originalPosition + new Vector3(0, yOffset, 0);
+            yield return null;
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for UI Development</h3>
+                        <ol>
+                            <li><strong>Organize your UI hierarchy</strong> with meaningful names and structure</li>
+                            <li><strong>Use prefabs</strong> for reusable UI elements and components</li>
+                            <li><strong>Design for multiple screen sizes</strong> using proper anchoring and layout</li>
+                            <li><strong>Create a consistent visual style</strong> with shared colors, fonts, and spacing</li>
+                            <li><strong>Ensure UI is accessible</strong> with readable text sizes and good contrast</li>
+                            <li><strong>Provide clear visual feedback</strong> for interactive elements</li>
+                            <li><strong>Optimize UI performance</strong> by minimizing overdraw and canvas rebuilds</li>
+                            <li><strong>Use TextMeshPro</strong> for high-quality text rendering</li>
+                            <li><strong>Test UI on target devices</strong> to ensure proper display and interaction</li>
+                            <li><strong>Create a UI manager</strong> to handle UI state and transitions</li>
+                        </ol>
+                        
+                        <div class="note-box">
+                            <h4>UI Performance Tips</h4>
+                            <ul>
+                                <li>Use multiple canvases to separate static and dynamic UI elements</li>
+                                <li>Set "Pixel Perfect" on the Canvas Scaler to avoid blurry UI</li>
+                                <li>Use sprite atlases to reduce draw calls</li>
+                                <li>Minimize nested layout groups and content size fitters</li>
+                                <li>Avoid excessive nesting of UI elements</li>
+                                <li>Use object pooling for dynamically created UI elements</li>
+                                <li>Disable Canvas components when not in use to save processing power</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-physics.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Physics</a>
+                        <a href="unity-audio.html" class="next">Unity Audio <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

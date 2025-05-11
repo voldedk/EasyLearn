@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Strings - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Strings</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Strings</h3>
+                        <p>In C#, a string is a sequence of characters. Strings are used to store text such as words, sentences, or any other character data. C# strings are objects of type <code>System.String</code>, which provides many methods for safely creating, manipulating, and comparing strings.</p>
+                        
+                        <div class="note-box">
+                            <h4>Important String Characteristics:</h4>
+                            <ul>
+                                <li>Strings are <strong>reference types</strong>, but are immutable (cannot be changed after creation)</li>
+                                <li>String literals are enclosed in double quotes <code>"example"</code></li>
+                                <li>C# provides extensive built-in functionality for string manipulation</li>
+                                <li>String operations are optimized through string interning and the StringBuilder class</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Strings</h3>
+                        <p>There are multiple ways to create strings in C#:</p>
+                        
+                        <div class="example-box">
+                            <h4>String Declaration and Initialization:</h4>
+                            <pre><code>
+// Using string literals
+string firstName = "John";
+string lastName = "Doe";
+
+// Using the String constructor
+string greeting = new string('*', 10);  // Creates "**********"
+
+// Empty and null strings
+string empty = "";            // Empty string (length = 0)
+string empty2 = String.Empty; // Also an empty string
+string nullString = null;     // Null string (no object reference)
+                            </code></pre>
+                            <div class="explanation">
+                                <p>It's generally more efficient to use string literals rather than the String constructor. The <code>string</code> keyword is an alias for the <code>System.String</code> class.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Concatenation</h3>
+                        <p>Joining strings together is called concatenation. C# provides several ways to concatenate strings:</p>
+                        
+                        <div class="example-box">
+                            <h4>Concatenation Methods:</h4>
+                            <pre><code>
+// Using the + operator
+string fullName = firstName + " " + lastName;  // "John Doe"
+
+// Using string.Concat method
+string fullNameConcat = string.Concat(firstName, " ", lastName);  // "John Doe"
+
+// Using StringBuilder for efficient multiple concatenations
+using System.Text;
+StringBuilder sb = new StringBuilder();
+sb.Append(firstName);
+sb.Append(" ");
+sb.Append(lastName);
+string fullNameBuilder = sb.ToString();  // "John Doe"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When concatenating many strings in a loop, the <code>StringBuilder</code> class is more efficient because it avoids creating multiple intermediate string objects.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Interpolation</h3>
+                        <p>String interpolation provides a more readable and convenient syntax to create formatted strings. It's available in C# 6.0 and later.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using String Interpolation:</h4>
+                            <pre><code>
+string firstName = "John";
+string lastName = "Doe";
+int age = 30;
+
+// String interpolation with $
+string message = $"Name: {firstName} {lastName}, Age: {age}";
+// "Name: John Doe, Age: 30"
+
+// With expressions
+string greeting = $"Hello, {firstName.ToUpper()}!";
+// "Hello, JOHN!"
+
+// With format specifiers
+double price = 123.45;
+string formattedPrice = $"Price: {price:C2}";
+// "Price: $123.45" (culture-specific)
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The <code>$</code> symbol before the string indicates an interpolated string. Inside curly braces <code>{}</code>, you can include variables, expressions, and format specifiers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Methods</h3>
+                        <p>C# strings come with many built-in methods for manipulation and analysis:</p>
+                        
+                        <div class="example-box">
+                            <h4>Common String Methods:</h4>
+                            <pre><code>
+string text = "Hello, World!";
+
+// Length property
+int length = text.Length;  // 13
+
+// Accessing characters (zero-based indexing)
+char firstChar = text[0];  // 'H'
+
+// Changing case
+string lower = text.ToLower();   // "hello, world!"
+string upper = text.ToUpper();   // "HELLO, WORLD!"
+
+// Substring
+string sub = text.Substring(7, 5);  // "World"
+
+// Contains, StartsWith, EndsWith
+bool containsWorld = text.Contains("World");  // true
+bool startsWithHello = text.StartsWith("Hello");  // true
+bool endsWithExclamation = text.EndsWith("!");  // true
+
+// IndexOf, LastIndexOf
+int indexOfComma = text.IndexOf(",");  // 5
+int lastIndexOfL = text.LastIndexOf("l");  // 10
+
+// Replace
+string replaced = text.Replace("World", "C#");  // "Hello, C#!"
+
+// Trim, TrimStart, TrimEnd
+string paddedText = "  Padded  ";
+string trimmed = paddedText.Trim();  // "Padded"
+string trimmedStart = paddedText.TrimStart();  // "Padded  "
+string trimmedEnd = paddedText.TrimEnd();  // "  Padded"
+
+// Split
+string csvLine = "apple,orange,banana";
+string[] fruits = csvLine.Split(',');  // ["apple", "orange", "banana"]
+
+// Join
+string[] words = {"Hello", "C#", "World"};
+string joined = string.Join(" ", words);  // "Hello C# World"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Remember that strings are immutable, so methods like <code>Replace</code>, <code>ToLower</code>, etc. don't modify the original string but return a new string with the requested changes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Formatting</h3>
+                        <p>The <code>String.Format</code> method provides powerful formatting capabilities:</p>
+                        
+                        <div class="example-box">
+                            <h4>String.Format Examples:</h4>
+                            <pre><code>
+// Basic formatting
+string formatted = string.Format("Name: {0}, Age: {1}", "John", 30);
+// "Name: John, Age: 30"
+
+// Reusing parameters
+string reuse = string.Format("{0} {0} {1}", "Hello", "World");
+// "Hello Hello World"
+
+// Formatting numbers
+string numberFormat = string.Format("Number: {0:N2}", 12345.6789);
+// "Number: 12,345.68"
+
+// Currency formatting
+string currency = string.Format("Price: {0:C}", 123.45);
+// "Price: $123.45" (culture-specific)
+
+// Date formatting
+DateTime now = DateTime.Now;
+string dateFormat = string.Format("Date: {0:d}, Time: {0:t}", now);
+// "Date: 5/10/2023, Time: 10:30 AM" (culture-specific)
+
+// Padding and alignment
+string leftAlign = string.Format("[{0,-10}]", "Left");    // "[Left      ]"
+string rightAlign = string.Format("[{0,10}]", "Right");   // "[     Right]"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Format specifiers follow a colon after the parameter index. Common format specifiers include:</p>
+                                <ul>
+                                    <li><code>C</code> - Currency</li>
+                                    <li><code>D</code> - Decimal (integers)</li>
+                                    <li><code>E</code> - Exponential</li>
+                                    <li><code>F</code> - Fixed-point</li>
+                                    <li><code>N</code> - Number with thousand separators</li>
+                                    <li><code>P</code> - Percentage</li>
+                                    <li><code>X</code> - Hexadecimal</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Verbatim Strings</h3>
+                        <p>C# provides verbatim strings which are prefixed with <code>@</code> and preserve whitespace and newlines:</p>
+                        
+                        <div class="example-box">
+                            <h4>Verbatim String Examples:</h4>
+                            <pre><code>
+// Regular string with escape sequences
+string path = "C:\\Program Files\\dotnet\\dotnet.exe";
+
+// Verbatim string (no need to escape backslashes)
+string verbatimPath = @"C:\Program Files\dotnet\dotnet.exe";
+
+// Multiline verbatim string
+string multiline = @"This is a
+multiline string
+that preserves all line breaks
+and whitespace.";
+
+// Verbatim string with double quotes (use "" for a single ")
+string quote = @"He said, ""Hello, World!""";
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Verbatim strings are especially useful for:</p>
+                                <ul>
+                                    <li>File paths (to avoid escaping backslashes)</li>
+                                    <li>Regular expressions (which often contain backslashes)</li>
+                                    <li>Multiline text (like SQL queries or XML/JSON data)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Comparison</h3>
+                        <p>When comparing strings, it's important to use the right method to handle case sensitivity and cultural differences:</p>
+                        
+                        <div class="example-box">
+                            <h4>String Comparison Methods:</h4>
+                            <pre><code>
+string str1 = "Hello";
+string str2 = "hello";
+
+// Equality operators
+bool equalOperator = (str1 == str2);  // false (case-sensitive)
+
+// String.Equals
+bool caseSensitive = string.Equals(str1, str2);  // false
+bool caseInsensitive = string.Equals(str1, str2, StringComparison.OrdinalIgnoreCase);  // true
+
+// String.Compare
+int compareResult = string.Compare(str1, str2);  // > 0 (str1 > str2)
+int compareIgnoreCase = string.Compare(str1, str2, true);  // 0 (equal when ignoring case)
+
+// Using specific culture for comparison
+int culturalComparison = string.Compare(str1, str2, 
+    System.Globalization.CultureInfo.CurrentCulture, 
+    System.Globalization.CompareOptions.None);
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Common <code>StringComparison</code> options:</p>
+                                <ul>
+                                    <li><code>Ordinal</code> - Fast, binary comparison (preferred for most comparisons)</li>
+                                    <li><code>OrdinalIgnoreCase</code> - Case-insensitive ordinal comparison</li>
+                                    <li><code>CurrentCulture</code> - Culture-sensitive comparison (for user display)</li>
+                                    <li><code>CurrentCultureIgnoreCase</code> - Case-insensitive, culture-sensitive comparison</li>
+                                    <li><code>InvariantCulture</code> - Culture-independent comparison</li>
+                                    <li><code>InvariantCultureIgnoreCase</code> - Case-insensitive, culture-independent comparison</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>StringBuilder</h3>
+                        <p>For complex string manipulations, especially in loops, the <code>StringBuilder</code> class offers better performance than repeated string concatenation:</p>
+                        
+                        <div class="example-box">
+                            <h4>Using StringBuilder:</h4>
+                            <pre><code>
+using System.Text;
+
+// Initialize with initial string and capacity
+StringBuilder sb = new StringBuilder("Initial text", 50);
+
+// Append methods
+sb.Append(" and more text");
+sb.AppendLine();  // Adds a new line
+sb.AppendLine("This is on a new line");
+sb.AppendFormat("Formatted: {0:D3}", 42);  // "Formatted: 042"
+
+// Insert at specific position
+sb.Insert(7, "modified ");  // "Initial modified text..."
+
+// Replace parts of the string
+sb.Replace("text", "content");
+
+// Remove portion of the string
+sb.Remove(20, 5);
+
+// Get the final string
+string result = sb.ToString();
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Benefits of <code>StringBuilder</code>:</p>
+                                <ul>
+                                    <li>More efficient for multiple string operations</li>
+                                    <li>Creates fewer temporary objects than string concatenation</li>
+                                    <li>Allows direct modification of character sequences</li>
+                                    <li>Can preallocate capacity for better performance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Interpolation vs. String.Format</h3>
+                        <p>C# offers multiple ways to format strings. Here's a comparison:</p>
+                        
+                        <div class="example-box">
+                            <h4>Comparison:</h4>
+                            <pre><code>
+// String concatenation
+string concat = "Name: " + firstName + " " + lastName + ", Age: " + age;
+
+// String.Format
+string format = string.Format("Name: {0} {1}, Age: {2}", firstName, lastName, age);
+
+// String interpolation
+string interpolation = $"Name: {firstName} {lastName}, Age: {age}";
+
+// StringBuilder
+StringBuilder sb = new StringBuilder();
+sb.Append("Name: ");
+sb.Append(firstName);
+sb.Append(" ");
+sb.Append(lastName);
+sb.Append(", Age: ");
+sb.Append(age);
+string builderResult = sb.ToString();
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Guidelines for choosing the right approach:</p>
+                                <table>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Best Used For</th>
+                                    </tr>
+                                    <tr>
+                                        <td>String interpolation ($)</td>
+                                        <td>Simple formatting, readability, compile-time checking</td>
+                                    </tr>
+                                    <tr>
+                                        <td>String.Format</td>
+                                        <td>When format strings are stored separately or reused</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Concatenation (+)</td>
+                                        <td>Very simple cases with few strings</td>
+                                    </tr>
+                                    <tr>
+                                        <td>StringBuilder</td>
+                                        <td>Loops, many concatenations, best performance</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="math.html" class="prev"><i class="fas fa-arrow-left"></i> Math Functions</a>
+                        <a href="booleans.html" class="next">Booleans <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

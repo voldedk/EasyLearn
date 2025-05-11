@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Optimization - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Optimization</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Optimization</h3>
+                        <p>Optimization is crucial for creating games that run smoothly across various platforms and devices. Unity provides numerous tools and techniques to help improve performance and ensure your game delivers the best possible experience to players.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Profiling and measuring performance</li>
+                            <li>CPU optimization techniques</li>
+                            <li>GPU and rendering optimization</li>
+                            <li>Memory management</li>
+                            <li>Mobile-specific optimizations</li>
+                            <li>Physics optimizations</li>
+                            <li>Asset optimization strategies</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Using the Unity Profiler</h3>
+                        <p>The Unity Profiler is your primary tool for identifying performance bottlenecks. It provides real-time data about CPU usage, memory allocation, rendering costs, and more.</p>
+                        
+                        <div class="example-box">
+                            <h4>Profiling Basics:</h4>
+                            <ol>
+                                <li>Open the Profiler (Window → Analysis → Profiler)</li>
+                                <li>Click "Record" to start capturing performance data</li>
+                                <li>Play your game to generate profiling information</li>
+                                <li>Analyze the data to identify performance issues</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Key Profiler modules:</p>
+                                <ul>
+                                    <li><strong>CPU Usage</strong>: Shows what scripts and systems are using processing time</li>
+                                    <li><strong>GPU Usage</strong>: Displays rendering costs and bottlenecks</li>
+                                    <li><strong>Memory</strong>: Shows memory allocation and potential leaks</li>
+                                    <li><strong>Audio</strong>: Displays audio processing costs</li>
+                                    <li><strong>Physics</strong>: Shows physics simulation costs</li>
+                                    <li><strong>UI</strong>: Displays UI rendering and layout costs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Profiling Tips</h4>
+                            <ul>
+                                <li>Always profile on your target platform (especially for mobile games)</li>
+                                <li>Use the Deep Profile option to get detailed script information (but beware of overhead)</li>
+                                <li>Utilize the Frame Debugger for rendering optimizations</li>
+                                <li>Set realistic performance targets based on target hardware</li>
+                                <li>Performance-test regularly throughout development</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h3>CPU Optimization Techniques</h3>
+                        <p>Most performance problems in Unity games stem from inefficient CPU usage. Here are key strategies to optimize your code:</p>
+                        
+                        <div class="example-box">
+                            <h4>Optimizing Update Calls:</h4>
+                            <pre><code>using UnityEngine;
+using System.Collections;
+
+public class OptimizedUpdates : MonoBehaviour
+{
+    // Cache component references to avoid GetComponent calls every frame
+    private Transform myTransform;
+    private Rigidbody myRigidbody;
+    
+    // Cache frequently accessed values
+    private Vector3 targetPosition;
+    private float moveSpeed = 5f;
+    
+    // Use for initialization
+    private void Awake()
+    {
+        // Cache component references in Awake - only done once
+        myTransform = transform;
+        myRigidbody = GetComponent&lt;Rigidbody&gt;();
+        
+        // Initialize target position
+        targetPosition = new Vector3(0, 0, 10);
+    }
+    
+    // Example of a custom timer system for spreading logic across frames
+    private float timer = 0f;
+    private float checkPathInterval = 0.5f; // Check path every 0.5 seconds instead of every frame
+    
+    private void Update()
+    {
+        // Example 1: Optimized movement calculation - cache calculations that don't need to be repeated
+        Vector3 direction = (targetPosition - myTransform.position).normalized;
+        
+        // Example 2: Use Time.deltaTime to ensure frame-rate independent movement
+        myTransform.position += direction * moveSpeed * Time.deltaTime;
+        
+        // Example 3: Throttle expensive operations with a timer
+        timer += Time.deltaTime;
+        if (timer >= checkPathInterval)
+        {
+            timer = 0f;
+            // Run expensive path calculation or other heavy operations here
+            RecalculatePath();
+        }
+    }
+    
+    // Expensive operation that doesn't need to run every frame
+    private void RecalculatePath()
+    {
+        // Simulate an expensive operation
+        Debug.Log("Recalculating path - this would be an expensive operation");
+        
+        // Update target based on new path calculation
+        // targetPosition = newCalculatedPosition;
+    }
+    
+    // Example 4: Use coroutines for delayed or spread-out operations
+    private IEnumerator UpdateAICoroutine()
+    {
+        while (true)
+        {
+            // Complex AI logic here
+            
+            // Wait for specified seconds before updating AI again
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    
+    // Example 5: Object pooling for frequently created/destroyed objects
+    private void InitializeObjectPool()
+    {
+        // Set up object pool instead of using Instantiate/Destroy frequently
+        // This avoids garbage collection hitches
+    }
+    
+    // Example 6: Using FixedUpdate correctly
+    private void FixedUpdate()
+    {
+        // Put physics-related code here, not in Update
+        if (myRigidbody != null)
+        {
+            // Physics calculations
+        }
+    }
+    
+    // Example 7: Efficient collision detection
+    private void OnTriggerEnter(Collider other)
+    {
+        // Use CompareTag instead of tag == for better performance
+        if (other.CompareTag("Enemy"))
+        {
+            // Handle collision with enemy
+        }
+    }
+    
+    // Example 8: Use InvokeRepeating for simple repeating tasks
+    private void StartRepeatingTasks()
+    {
+        // Invoke a method every 2 seconds, starting after 1 second
+        InvokeRepeating("RegenerateHealth", 1.0f, 2.0f);
+    }
+    
+    private void RegenerateHealth()
+    {
+        // Simple repeating logic
+        // health += 1;
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Key CPU optimization principles:</p>
+                                <ul>
+                                    <li><strong>Cache references</strong>: Avoid GetComponent and Find calls during gameplay</li>
+                                    <li><strong>Throttle updates</strong>: Not every system needs to update every frame</li>
+                                    <li><strong>Use coroutines</strong>: Spread computational costs across frames</li>
+                                    <li><strong>Object pooling</strong>: Reuse objects instead of instantiating/destroying</li>
+                                    <li><strong>Optimize loops</strong>: Minimize work inside loops and avoid nested loops</li>
+                                    <li><strong>Use appropriate message functions</strong>: FixedUpdate for physics, Update for inputs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Object Pooling Implementation:</h4>
+                            <pre><code>using System.Collections.Generic;
+using UnityEngine;
+
+public class ObjectPool : MonoBehaviour
+{
+    // Singleton instance
+    public static ObjectPool Instance;
+    
+    // Object prefab to pool
+    public GameObject prefab;
+    
+    // Initial pool size
+    public int initialPoolSize = 20;
+    
+    // Maximum pool size (to prevent unlimited growth)
+    public int maxPoolSize = 100;
+    
+    // List of inactive pooled objects
+    private List&lt;GameObject&gt; pooledObjects;
+    
+    private void Awake()
+    {
+        // Set up singleton
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        // Initialize the pool
+        pooledObjects = new List&lt;GameObject&gt;(initialPoolSize);
+        
+        // Pre-instantiate objects
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            CreateNewPooledObject();
+        }
+    }
+    
+    // Create a new pooled object and add it to the inactive list
+    private GameObject CreateNewPooledObject()
+    {
+        GameObject obj = Instantiate(prefab);
+        obj.SetActive(false);
+        pooledObjects.Add(obj);
+        
+        // Parent to this object for hierarchy organization
+        obj.transform.SetParent(transform);
+        
+        return obj;
+    }
+    
+    // Get an object from the pool
+    public GameObject GetPooledObject()
+    {
+        // First, try to find an inactive object in the pool
+        for (int i = 0; i < pooledObjects.Count; i++)
+        {
+            if (!pooledObjects[i].activeInHierarchy)
+            {
+                return pooledObjects[i];
+            }
+        }
+        
+        // If we didn't find an inactive object and haven't reached max size,
+        // create a new one
+        if (pooledObjects.Count < maxPoolSize)
+        {
+            return CreateNewPooledObject();
+        }
+        
+        // If we reached max size, either return null or reuse the oldest object
+        // Here we'll return null, but you could implement an LRU strategy
+        Debug.LogWarning("Object pool reached maximum size. Consider increasing maxPoolSize.");
+        return null;
+    }
+    
+    // Example usage method
+    public void SpawnPooledObject(Vector3 position, Quaternion rotation)
+    {
+        // Get an object from the pool
+        GameObject obj = GetPooledObject();
+        
+        if (obj != null)
+        {
+            // Position and enable the object
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+            obj.SetActive(true);
+            
+            // If the object has a PooledObject component, initialize it
+            PooledObject pooledObj = obj.GetComponent&lt;PooledObject&gt;();
+            if (pooledObj != null)
+            {
+                pooledObj.OnObjectSpawn();
+            }
+        }
+    }
+}
+
+// Optional component for pooled objects to handle initialization/cleanup
+public class PooledObject : MonoBehaviour
+{
+    // Time after which the object returns to pool automatically
+    // (Set to 0 or negative to disable auto-return)
+    public float autoReturnTime = 3f;
+    
+    private void OnEnable()
+    {
+        // If auto-return is enabled, schedule it
+        if (autoReturnTime > 0)
+        {
+            Invoke("ReturnToPool", autoReturnTime);
+        }
+    }
+    
+    // Called when object is taken from the pool
+    public virtual void OnObjectSpawn()
+    {
+        // Reset object state here
+    }
+    
+    // Return this object to the pool
+    public void ReturnToPool()
+    {
+        gameObject.SetActive(false);
+        
+        // Cancel any pending auto-return
+        CancelInvoke("ReturnToPool");
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Using the object pool:</p>
+                                <pre><code>// Instead of:
+// Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+// Use:
+ObjectPool.Instance.SpawnPooledObject(firePoint.position, firePoint.rotation);
+
+// And to return an object to the pool:
+GetComponent&lt;PooledObject&gt;().ReturnToPool();
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>GPU and Rendering Optimization</h3>
+                        <p>Rendering is often a major performance bottleneck, especially on mobile devices. Optimizing your graphics pipeline can lead to significant performance improvements.</p>
+                        
+                        <div class="example-box">
+                            <h4>Key Rendering Optimizations:</h4>
+                            <ul>
+                                <li><strong>Draw Call Batching</strong>: Combine multiple mesh renderers into single draw calls</li>
+                                <li><strong>LOD (Level of Detail)</strong>: Use simpler meshes at greater distances</li>
+                                <li><strong>Occlusion Culling</strong>: Don't render objects that aren't visible</li>
+                                <li><strong>Texture Atlasing</strong>: Combine multiple textures into a single larger texture</li>
+                                <li><strong>Shaders</strong>: Use optimized shaders for your target platforms</li>
+                                <li><strong>Lighting</strong>: Choose appropriate lighting techniques for your game</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Setting up LOD (Level of Detail):</h4>
+                            <pre><code>using UnityEngine;
+
+public class LODExample : MonoBehaviour
+{
+    // Reference to LOD Group component
+    private LODGroup lodGroup;
+    
+    // Camera reference for distance checks
+    private Camera mainCamera;
+    
+    void Start()
+    {
+        // Get or add the LOD Group component
+        lodGroup = GetComponent&lt;LODGroup&gt;();
+        if (lodGroup == null)
+        {
+            lodGroup = gameObject.AddComponent&lt;LODGroup&gt;();
+            SetupLODs();
+        }
+        
+        mainCamera = Camera.main;
+    }
+    
+    // Manual LOD setup example
+    void SetupLODs()
+    {
+        // Create LOD levels
+        LOD[] lods = new LOD[3];
+        
+        // High detail LOD (used when close to camera)
+        Renderer[] highLODRenderers = transform.Find("HighDetail").GetComponentsInChildren&lt;Renderer&gt;();
+        lods[0] = new LOD(0.6f, highLODRenderers);
+        
+        // Medium detail LOD (used at medium distance)
+        Renderer[] mediumLODRenderers = transform.Find("MediumDetail").GetComponentsInChildren&lt;Renderer&gt;();
+        lods[1] = new LOD(0.3f, mediumLODRenderers);
+        
+        // Low detail LOD (used at far distance)
+        Renderer[] lowLODRenderers = transform.Find("LowDetail").GetComponentsInChildren&lt;Renderer&gt;();
+        lods[2] = new LOD(0.1f, lowLODRenderers);
+        
+        // Set LODs on the LODGroup
+        lodGroup.SetLODs(lods);
+        
+        // Set the LOD group's size (adjusts the transition distances)
+        lodGroup.RecalculateBounds();
+    }
+    
+    // Custom LOD implementation for objects without meshes
+    // or for more control over LOD switching
+    void CustomLODCheck()
+    {
+        if (mainCamera == null) return;
+        
+        // Calculate distance to camera
+        float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
+        
+        // Switch behavior based on distance
+        if (distanceToCamera < 10f)
+        {
+            // Close distance - high detail
+            // Enable detailed particle effects, high-frequency updates
+            InvokeRepeating("HighDetailUpdate", 0f, 0.02f);
+        }
+        else if (distanceToCamera < 50f)
+        {
+            // Medium distance - medium detail
+            // Reduce particle count, lower update frequency
+            InvokeRepeating("MediumDetailUpdate", 0f, 0.1f);
+        }
+        else
+        {
+            // Far distance - low detail
+            // Minimal visual effects, very infrequent updates
+            InvokeRepeating("LowDetailUpdate", 0f, 0.5f);
+        }
+    }
+    
+    // Debugging and visualization
+    void OnDrawGizmosSelected()
+    {
+        if (lodGroup != null)
+        {
+            LOD[] lods = lodGroup.GetLODs();
+            
+            // Draw spheres representing LOD transition distances
+            for (int i = 0; i < lods.Length; i++)
+            {
+                // Calculate radius based on LOD percentage
+                float radius = lodGroup.size.magnitude * (1 - lods[i].screenRelativeTransitionHeight);
+                
+                // Draw sphere with different colors for each LOD level
+                switch (i)
+                {
+                    case 0: Gizmos.color = Color.green; break;   // High detail
+                    case 1: Gizmos.color = Color.yellow; break;  // Medium detail
+                    case 2: Gizmos.color = Color.red; break;     // Low detail
+                    default: Gizmos.color = Color.gray; break;
+                }
+                
+                Gizmos.DrawWireSphere(transform.position, radius);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Memory Optimization</h3>
+                        <p>Efficient memory management is critical, especially for mobile games or games with large open worlds.</p>
+                        
+                        <div class="example-box">
+                            <h4>Asset Loading and Unloading:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+public class AssetManager : MonoBehaviour
+{
+    // Singleton instance
+    public static AssetManager Instance;
+    
+    // References to common assets to prevent reloading
+    private Texture2D[] commonTextures;
+    private AudioClip[] commonSounds;
+    
+    // Track loaded asset bundles
+    private Dictionary&lt;string, AssetBundle&gt; loadedBundles = new Dictionary&lt;string, AssetBundle&gt;();
+    
+    private void Awake()
+    {
+        // Set up singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        // Subscribe to scene change events
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+    
+    private void OnDestroy()
+    {
+        // Unsubscribe from scene events
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+    
+    // Load level-specific assets when a new scene is loaded
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        string sceneName = scene.name;
+        
+        // Unload unused assets when changing scenes
+        if (mode == LoadSceneMode.Single)
+        {
+            StartCoroutine(UnloadUnusedAssetsDelayed());
+        }
+        
+        // Load scene-specific assets
+        StartCoroutine(LoadLevelSpecificAssets(sceneName));
+    }
+    
+    // Clean up when scenes are unloaded
+    private void OnSceneUnloaded(Scene scene)
+    {
+        // Consider unloading specific assets for this scene
+        string sceneName = scene.name;
+        UnloadLevelSpecificAssets(sceneName);
+    }
+    
+    // Delayed asset unloading to avoid hitches during scene transitions
+    private IEnumerator UnloadUnusedAssetsDelayed()
+    {
+        // Wait for new scene to be fully loaded
+        yield return new WaitForSeconds(1.0f);
+        
+        // Unload unused assets
+        AsyncOperation asyncUnload = Resources.UnloadUnusedAssets();
+        yield return asyncUnload;
+        
+        // Force garbage collection after unloading
+        System.GC.Collect();
+    }
+    
+    // Load assets specific to a level/scene
+    private IEnumerator LoadLevelSpecificAssets(string levelName)
+    {
+        // Example: Load an asset bundle for the level
+        string bundlePath = Application.streamingAssetsPath + "/bundles/" + levelName.ToLower();
+        
+        if (System.IO.File.Exists(bundlePath))
+        {
+            AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
+            yield return bundleRequest;
+            
+            if (bundleRequest.assetBundle != null)
+            {
+                // Store the loaded bundle
+                loadedBundles[levelName] = bundleRequest.assetBundle;
+                
+                // Example: Load specific assets from the bundle
+                string[] assetNames = bundleRequest.assetBundle.GetAllAssetNames();
+                foreach (string assetName in assetNames)
+                {
+                    // Only load assets we need immediately
+                    if (assetName.Contains("required"))
+                    {
+                        AssetBundleRequest assetRequest = bundleRequest.assetBundle.LoadAssetAsync&lt;GameObject&gt;(assetName);
+                        yield return assetRequest;
+                        
+                        // Use the loaded asset
+                        GameObject prefab = assetRequest.asset as GameObject;
+                        if (prefab != null)
+                        {
+                            // Add to a prefab cache or instantiate as needed
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Unload assets specific to a level/scene
+    private void UnloadLevelSpecificAssets(string levelName)
+    {
+        // Unload the bundle if it exists
+        if (loadedBundles.TryGetValue(levelName, out AssetBundle bundle))
+        {
+            bundle.Unload(true); // true = unload all loaded objects
+            loadedBundles.Remove(levelName);
+        }
+    }
+    
+    // Example method to load assets on demand
+    public IEnumerator LoadAssetOnDemand&lt;T&gt;(string assetPath, System.Action&lt;T&gt; callback) where T : Object
+    {
+        // First check if asset is already loaded in a bundle
+        foreach (var bundle in loadedBundles.Values)
+        {
+            string[] assetNames = bundle.GetAllAssetNames();
+            foreach (string name in assetNames)
+            {
+                if (name.EndsWith(assetPath))
+                {
+                    AssetBundleRequest request = bundle.LoadAssetAsync&lt;T&gt;(name);
+                    yield return request;
+                    
+                    if (request.asset != null)
+                    {
+                        callback(request.asset as T);
+                        yield break;
+                    }
+                }
+            }
+        }
+        
+        // If not in a bundle, try loading from Resources
+        ResourceRequest request = Resources.LoadAsync&lt;T&gt;(assetPath);
+        yield return request;
+        
+        if (request.asset != null)
+        {
+            callback(request.asset as T);
+        }
+        else
+        {
+            Debug.LogWarning("Failed to load asset: " + assetPath);
+        }
+    }
+    
+    // Example: Resources.Load is simple but doesn't allow for good memory management
+    // Avoid using this pattern for large assets or frequent loading/unloading
+    public T LoadFromResources&lt;T&gt;(string path) where T : Object
+    {
+        return Resources.Load&lt;T&gt;(path);
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>Memory optimization strategies:</p>
+                                <ul>
+                                    <li><strong>Asset Bundles</strong>: Load and unload assets in groups</li>
+                                    <li><strong>Addressables</strong>: Modern Unity system for asset management</li>
+                                    <li><strong>Streaming</strong>: Load assets as needed and unload when not needed</li>
+                                    <li><strong>Texture Compression</strong>: Use appropriate formats for each platform</li>
+                                    <li><strong>Asset References</strong>: Be careful with static references that prevent garbage collection</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Mobile Optimization</h3>
+                        <p>Mobile platforms require special consideration due to their hardware limitations and battery concerns.</p>
+                        
+                        <div class="example-box">
+                            <h4>Mobile-Specific Optimizations:</h4>
+                            <ul>
+                                <li><strong>Reduce draw calls</strong>: Mobile GPUs are particularly sensitive to draw call count</li>
+                                <li><strong>Lower poly models</strong>: Use significantly simplified geometry</li>
+                                <li><strong>Texture sizes</strong>: Keep textures small (512x512 or less when possible)</li>
+                                <li><strong>Avoid overdraw</strong>: Minimize transparent objects that cause pixels to be drawn multiple times</li>
+                                <li><strong>Reduce shader complexity</strong>: Use mobile-optimized shaders with fewer instructions</li>
+                                <li><strong>Disable unnecessary features</strong>: Turn off shadows, reflection probes, etc. when not critical</li>
+                                <li><strong>Application size</strong>: Compress assets to reduce download size</li>
+                                <li><strong>Battery usage</strong>: Lower frame rate targets, reduce physics updates</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Adaptive Quality Settings:</h4>
+                            <pre><code>using UnityEngine;
+
+public class AdaptiveQuality : MonoBehaviour
+{
+    // Target framerate ranges
+    public int targetFrameRate = 60;
+    public int minimumFrameRate = 30;
+    
+    // Current quality level
+    private int currentQualityLevel;
+    
+    // Performance tracking
+    private float[] frameTimeHistory = new float[30]; // Track last 30 frames
+    private int frameTimeIndex = 0;
+    private float averageFrameTime = 0.0f;
+    
+    // Cooldown to avoid rapid quality changes
+    private float qualityChangeCooldown = 0f;
+    private const float COOLDOWN_DURATION = 5.0f;
+    
+    void Start()
+    {
+        // Initialize with the current quality setting
+        currentQualityLevel = QualitySettings.GetQualityLevel();
+        
+        // Set initial target framerate
+        Application.targetFrameRate = targetFrameRate;
+        
+        // Initialize frame time history
+        for (int i = 0; i < frameTimeHistory.Length; i++)
+        {
+            frameTimeHistory[i] = 1.0f / targetFrameRate;
+        }
+    }
+    
+    void Update()
+    {
+        // Update frame time history
+        frameTimeHistory[frameTimeIndex] = Time.unscaledDeltaTime;
+        frameTimeIndex = (frameTimeIndex + 1) % frameTimeHistory.Length;
+        
+        // Calculate average frame time
+        averageFrameTime = 0;
+        foreach (float frameTime in frameTimeHistory)
+        {
+            averageFrameTime += frameTime;
+        }
+        averageFrameTime /= frameTimeHistory.Length;
+        
+        // Reduce cooldown timer
+        qualityChangeCooldown -= Time.deltaTime;
+        
+        // Only adjust quality if cooldown is expired
+        if (qualityChangeCooldown <= 0)
+        {
+            AdjustQuality();
+        }
+    }
+    
+    void AdjustQuality()
+    {
+        // Calculate current FPS
+        float currentFPS = 1.0f / averageFrameTime;
+        
+        // Number of quality levels available
+        int qualityLevelCount = QualitySettings.names.Length;
+        
+        // If FPS is too low, reduce quality
+        if (currentFPS < minimumFrameRate && currentQualityLevel > 0)
+        {
+            currentQualityLevel--;
+            QualitySettings.SetQualityLevel(currentQualityLevel, true);
+            ApplyQualitySpecificSettings();
+            
+            // Set cooldown to allow adjustment to take effect
+            qualityChangeCooldown = COOLDOWN_DURATION;
+            
+            Debug.Log("Performance low - reducing quality to level " + 
+                      currentQualityLevel + " (" + QualitySettings.names[currentQualityLevel] + ")");
+        }
+        // If FPS is well above target, we can try increasing quality
+        else if (currentFPS > targetFrameRate * 1.2f && currentQualityLevel < qualityLevelCount - 1)
+        {
+            currentQualityLevel++;
+            QualitySettings.SetQualityLevel(currentQualityLevel, true);
+            ApplyQualitySpecificSettings();
+            
+            // Set cooldown to allow adjustment to take effect
+            qualityChangeCooldown = COOLDOWN_DURATION;
+            
+            Debug.Log("Performance good - increasing quality to level " + 
+                      currentQualityLevel + " (" + QualitySettings.names[currentQualityLevel] + ")");
+        }
+    }
+    
+    // Apply additional settings based on quality level
+    void ApplyQualitySpecificSettings()
+    {
+        switch (currentQualityLevel)
+        {
+            case 0: // Lowest quality
+                // Reduce view distance dramatically
+                Camera.main.farClipPlane = 50f;
+                
+                // Disable post-processing
+                MonoBehaviour[] postProcessing = GetComponentsInChildren&lt;MonoBehaviour&gt;();
+                foreach (MonoBehaviour pp in postProcessing)
+                {
+                    if (pp.GetType().Name.Contains("PostProcess"))
+                    {
+                        pp.enabled = false;
+                    }
+                }
+                
+                // Lower resolution on mobile
+                if (Application.isMobilePlatform)
+                {
+                    Screen.SetResolution(
+                        Screen.width / 2, 
+                        Screen.height / 2, 
+                        Screen.fullScreen
+                    );
+                }
+                break;
+                
+            case 1: // Low quality
+                Camera.main.farClipPlane = 100f;
+                
+                // Maybe enable basic post-processing
+                
+                // Use native resolution but with reduced render texture sizes
+                if (Application.isMobilePlatform)
+                {
+                    Screen.SetResolution(
+                        Screen.width, 
+                        Screen.height, 
+                        Screen.fullScreen
+                    );
+                }
+                break;
+                
+            case 2: // Medium quality
+                Camera.main.farClipPlane = 300f;
+                
+                // Enable post-processing
+                MonoBehaviour[] mediumPostProcessing = GetComponentsInChildren&lt;MonoBehaviour&gt;();
+                foreach (MonoBehaviour pp in mediumPostProcessing)
+                {
+                    if (pp.GetType().Name.Contains("PostProcess"))
+                    {
+                        pp.enabled = true;
+                    }
+                }
+                break;
+                
+            default: // High quality or better
+                Camera.main.farClipPlane = 1000f;
+                break;
+        }
+    }
+    
+    // Draw debug UI to show current performance
+    void OnGUI()
+    {
+        // Only display in development or when debug mode is enabled
+        #if UNITY_EDITOR || DEVELOPMENT_BUILD
+        GUI.Label(new Rect(10, 10, 200, 20), "FPS: " + (1.0f / averageFrameTime).ToString("F1"));
+        GUI.Label(new Rect(10, 30, 200, 20), "Quality: " + QualitySettings.names[currentQualityLevel]);
+        
+        // Show cooldown timer
+        if (qualityChangeCooldown > 0)
+        {
+            GUI.Label(new Rect(10, 50, 200, 20), 
+                     "Quality cooldown: " + qualityChangeCooldown.ToString("F1"));
+        }
+        #endif
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Optimization</h3>
+                        <ol>
+                            <li><strong>Profile first, optimize second</strong>: Always identify the actual bottleneck before optimizing</li>
+                            <li><strong>Focus on the biggest issues</strong>: Tackle the areas that will give the most performance gain</li>
+                            <li><strong>Test on target hardware</strong>: Performance characteristics can vary dramatically between devices</li>
+                            <li><strong>Batch optimizations</strong>: Group related optimizations together to better measure their impact</li>
+                            <li><strong>Balance quality and performance</strong>: Provide graphical options for different hardware capabilities</li>
+                            <li><strong>Build size matters</strong>: Remove unused assets and compress files for faster downloads</li>
+                            <li><strong>Use Unity's built-in tools</strong>: Profiler, Frame Debugger, Memory Profiler, etc.</li>
+                            <li><strong>Update Unity</strong>: Newer versions often include performance improvements</li>
+                            <li><strong>Optimize continuously</strong>: Don't wait until the end of development to address performance</li>
+                            <li><strong>Know your platform</strong>: Each platform has specific optimization requirements and limitations</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-saving.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Saving Systems</a>
+                        <a href="unity-publishing.html" class="next">Unity Publishing <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Type Casting - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded from sidebar.php -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Removing duplicate sidebar toggle button -->
+            
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Type Casting</h2>
+                    
+                    <div class="topic">
+                        <h3>What is Type Casting?</h3>
+                        <p>Type casting is the process of converting a variable from one data type to another. In C#, there are two types of casting:</p>
+                        <ul>
+                            <li><strong>Implicit Casting</strong> - Automatically done when there is no risk of data loss (e.g., converting smaller types to larger types)</li>
+                            <li><strong>Explicit Casting</strong> - Manually done when there is a risk of data loss (e.g., converting larger types to smaller types)</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Implicit Casting</h3>
+                        <p>Implicit casting occurs automatically when there is no risk of data loss. The conversion happens without any special syntax.</p>
+                        
+                        <div class="example-box">
+                            <h4>Implicit Casting Examples:</h4>
+                            <pre><code>
+// Implicit casting examples
+byte myByte = 10;      // 8-bit unsigned integer
+int myInt = myByte;    // Implicit casting from byte to int (8-bit to 32-bit)
+
+int myInteger = 100;
+long myLong = myInteger;  // Implicit casting from int to long (32-bit to 64-bit)
+
+float myFloat = 3.14f;
+double myDouble = myFloat;  // Implicit casting from float to double (32-bit to 64-bit)
+
+// Common implicit conversions in C#:
+// byte → short → int → long → decimal
+// int → double
+// float → double
+// char → int
+                            </code></pre>
+                            <div class="explanation">
+                                <p>In the examples above, C# automatically converts the smaller data types to larger ones. This is safe because the destination type can hold all possible values of the source type.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Explicit Casting</h3>
+                        <p>Explicit casting is required when there is a risk of data loss during conversion. You need to use the cast operator <code>(type)</code> to perform explicit casting.</p>
+                        
+                        <div class="example-box">
+                            <h4>Explicit Casting Examples:</h4>
+                            <pre><code>
+// Explicit casting examples
+double myDouble = 9.78;
+int myInt = (int)myDouble;  // Explicit casting: double to int, drops decimal part
+Console.WriteLine(myInt);   // Outputs: 9
+
+long myLong = 1234567890123;
+int myInteger = (int)myLong; // Explicit casting: long to int (potential data loss)
+
+float myFloat = 3.14f;
+int myNumber = (int)myFloat; // Explicit casting: float to int, drops decimal part
+
+// Be careful with overflow:
+int largeValue = int.MaxValue;
+short smallValue = (short)largeValue; // This will cause overflow/data loss
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When performing explicit casting, you should be aware of potential data loss:</p>
+                                <ul>
+                                    <li>When converting floating-point numbers to integers, the decimal portion is truncated (not rounded)</li>
+                                    <li>When converting larger integer types to smaller ones, any bits that don't fit are dropped, which can lead to unexpected values</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Type Conversion Methods</h3>
+                        <p>C# provides methods for converting between types safely. These methods provide more control and can check for potential errors during conversion.</p>
+                        
+                        <div class="example-box">
+                            <h4>Conversion Methods:</h4>
+                            <pre><code>
+// Using Convert class
+int myInt = 10;
+double myDouble = Convert.ToDouble(myInt);    // int to double
+string myString = Convert.ToString(myInt);    // int to string
+bool myBool = Convert.ToBoolean(myInt);       // Non-zero to true, zero to false
+
+// Using Parse methods (for converting from strings)
+string numberString = "123";
+int parsedInt = int.Parse(numberString);      // String to int
+
+// Using TryParse methods (safer, handles errors gracefully)
+string input = "123";
+int result;
+bool success = int.TryParse(input, out result);
+
+if (success)
+{
+    Console.WriteLine($"Parsing successful. Value: {result}");
+}
+else
+{
+    Console.WriteLine("Parsing failed.");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Use <code>TryParse</code> methods when converting user input or any string data that could potentially be invalid. It returns a boolean indicating whether the conversion was successful and outputs the converted value through an <code>out</code> parameter.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Converting Between Value and Reference Types</h3>
+                        <p>Converting between value types and reference types involves special considerations:</p>
+                        
+                        <div class="example-box">
+                            <h4>Boxing and Unboxing:</h4>
+                            <pre><code>
+// Boxing (implicit): Converting a value type to a reference type
+int number = 42;
+object boxedNumber = number;  // Boxing
+
+// Unboxing (explicit): Converting a reference type back to a value type
+int unboxedNumber = (int)boxedNumber;  // Unboxing
+
+// Performance note: Boxing and unboxing operations require extra processing
+// and can impact performance when done frequently
+                            </code></pre>
+                            <div class="explanation">
+                                <p><strong>Boxing</strong> is the process of converting a value type to an object (reference type). The value is wrapped inside an object instance on the heap.</p>
+                                <p><strong>Unboxing</strong> extracts the value from the boxed object. It requires an explicit cast and the boxed object must be a box of the correct value type.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Converting with Nullable Types</h3>
+                        <p>Nullable types can represent the normal range of values plus the <code>null</code> value. They're useful when working with databases or any scenario where a value might be missing.</p>
+                        
+                        <div class="example-box">
+                            <h4>Nullable Type Conversion:</h4>
+                            <pre><code>
+// Declare nullable types using ? suffix
+int? nullableInt = null;
+double? nullableDouble = 3.14;
+
+// Converting from nullable to non-nullable (must handle potential null)
+int regularInt = nullableInt ?? 0;  // Using null-coalescing operator to provide default
+
+// Another approach using HasValue
+if (nullableInt.HasValue)
+{
+    int value = nullableInt.Value;
+    Console.WriteLine(value);
+}
+else
+{
+    Console.WriteLine("The value is null");
+}
+
+// Converting from non-nullable to nullable (always safe)
+int number = 42;
+int? nullableNumber = number;  // Implicit conversion
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Custom Type Conversions</h3>
+                        <p>For user-defined types, you can implement custom type conversions by defining conversion operators.</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Conversion Operators:</h4>
+                            <pre><code>
+public class Temperature
+{
+    public double Celsius { get; set; }
+    
+    // Implicit conversion from double to Temperature
+    public static implicit operator Temperature(double celsius)
+    {
+        return new Temperature { Celsius = celsius };
+    }
+    
+    // Explicit conversion from Temperature to double (returning Celsius value)
+    public static explicit operator double(Temperature temperature)
+    {
+        return temperature.Celsius;
+    }
+    
+    // Explicit conversion from Temperature to Fahrenheit (as int)
+    public static explicit operator int(Temperature temperature)
+    {
+        // Convert Celsius to Fahrenheit and round to nearest integer
+        return (int)Math.Round(temperature.Celsius * 9 / 5 + 32);
+    }
+}
+
+// Usage:
+Temperature temp = 23.5;  // Implicit conversion from double
+double celsius = (double)temp;  // Explicit conversion to double
+int fahrenheit = (int)temp;  // Explicit conversion to int (Fahrenheit)
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Type Conversion Issues</h3>
+                        <p>Be aware of these common issues when casting types:</p>
+                        <ul>
+                            <li><strong>Overflow</strong>: When a value is too large for the target type</li>
+                            <li><strong>Precision Loss</strong>: When converting from floating-point to integer types</li>
+                            <li><strong>Format Exceptions</strong>: When parsing strings that don't contain valid numbers</li>
+                            <li><strong>Invalid Cast Exceptions</strong>: When trying to unbox to the wrong type</li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Handling Potential Issues:</h4>
+                            <pre><code>
+// Using checked context to detect overflow
+checked
+{
+    try
+    {
+        int maxInt = int.MaxValue;
+        int willOverflow = maxInt + 1;  // This will throw an OverflowException
+    }
+    catch (OverflowException ex)
+    {
+        Console.WriteLine("Overflow occurred: " + ex.Message);
+    }
+}
+
+// Safely parsing string input
+string userInput = "abc";
+try
+{
+    int number = int.Parse(userInput);
+}
+catch (FormatException)
+{
+    Console.WriteLine("Input is not a valid number.");
+}
+catch (OverflowException)
+{
+    Console.WriteLine("Input represents a number that is too large or too small.");
+}
+
+// Better approach using TryParse
+if (!int.TryParse(userInput, out int result))
+{
+    Console.WriteLine("Conversion failed. Using default value instead.");
+    result = 0;  // Default value
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Type Casting</h3>
+                        <ul>
+                            <li>Prefer implicit casting when possible to avoid data loss</li>
+                            <li>Use <code>TryParse</code> methods instead of <code>Parse</code> when handling user input</li>
+                            <li>Avoid unnecessary boxing and unboxing operations, especially in performance-critical code</li>
+                            <li>Be careful when casting between floating-point and integer types, as this truncates (not rounds) decimal places</li>
+                            <li>Use the <code>checked</code> keyword or the <code>checked</code> statement when overflow detection is necessary</li>
+                            <li>Consider using explicit conversion methods (like <code>Convert.ToInt32()</code>) for more predictable conversions</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="data-types.html" class="prev"><i class="fas fa-arrow-left"></i> Data Types</a>
+                        <a href="operators.html" class="next">Operators <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

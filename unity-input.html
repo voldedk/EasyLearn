@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Systems - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Input Systems in Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Input Systems</h3>
+                        <p>Input handling is a critical part of any interactive application. Unity provides multiple input systems to accommodate different project needs, from the classic Input Manager to the newer Input System package. Understanding how to effectively handle user input is essential for creating responsive and intuitive games.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>How to use the classic Input Manager</li>
+                            <li>How to set up and use the new Input System package</li>
+                            <li>Input handling best practices for different game types</li>
+                            <li>How to handle multi-platform input (keyboard, controller, touch)</li>
+                            <li>Creating rebindable controls and input settings</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>The Classic Input Manager</h3>
+                        <p>Unity's traditional input system has been around since the beginning and provides a straightforward way to handle common input scenarios.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using the Input Manager:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ClassicInputExample : MonoBehaviour
+{
+    public float moveSpeed = 5f;
+    public float jumpForce = 10f;
+    private Rigidbody rb;
+    
+    void Start()
+    {
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
+        // This will be used for physics-based movement
+    }
+    
+    void Update()
+    {
+        // BUTTON INPUT
+        
+        // Check for a button press (returns true during the frame the button is first pressed)
+        if (Input.GetButtonDown("Jump"))
+        {
+            // Execute a jump
+            Jump();
+            // This detects the moment the jump button is pressed
+        }
+        
+        // Check for a button held down (returns true while the button is held)
+        if (Input.GetButton("Fire1"))
+        {
+            // Execute continuous firing
+            Fire();
+            // This allows for automatic firing while the button is held
+        }
+        
+        // Check for a button release (returns true during the frame the button is released)
+        if (Input.GetButtonUp("Fire1"))
+        {
+            // Stop firing
+            StopFire();
+            // This detects when the fire button is released
+        }
+        
+        // AXIS INPUT (returns a float between -1 and 1)
+        
+        // Get horizontal input (A/D, Left/Right arrows, or gamepad)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        
+        // Get vertical input (W/S, Up/Down arrows, or gamepad)
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        // Create a movement vector
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
+        
+        // Apply movement
+        transform.Translate(movement * moveSpeed * Time.deltaTime);
+        // This moves the character based on axis input
+        
+        // KEY INPUT
+        
+        // Check for specific keyboard keys
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // Reload weapon
+            Reload();
+            // This detects when the R key is pressed
+        }
+        
+        // MOUSE INPUT
+        
+        // Get mouse position in screen coordinates
+        Vector3 mousePos = Input.mousePosition;
+        
+        // Convert to world position (for 3D)
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(
+            mousePos.x, mousePos.y, Camera.main.transform.position.y));
+        
+        // Get mouse button input
+        if (Input.GetMouseButtonDown(0)) // 0 = left, 1 = right, 2 = middle
+        {
+            // Handle left click
+            Debug.Log("Left mouse button clicked at: " + worldPos);
+        }
+        
+        // Get mouse scroll wheel
+        float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollWheel != 0)
+        {
+            // Zoom camera or change weapon
+            Zoom(scrollWheel);
+        }
+    }
+    
+    // Example methods that would be implemented in a real game
+    void Jump()
+    {
+        Debug.Log("Jump button pressed");
+        
+        // Add upward force to the Rigidbody
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+    
+    void Fire()
+    {
+        Debug.Log("Firing weapon");
+        // Weapon firing logic would go here
+    }
+    
+    void StopFire()
+    {
+        Debug.Log("Stopped firing");
+        // Logic to stop firing would go here
+    }
+    
+    void Reload()
+    {
+        Debug.Log("Reloading weapon");
+        // Weapon reload logic would go here
+    }
+    
+    void Zoom(float amount)
+    {
+        Debug.Log("Zooming by amount: " + amount);
+        // Camera zoom logic would go here
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The classic Input Manager features:</p>
+                                <ul>
+                                    <li><strong>Predefined input axes and buttons</strong> that can be configured in Edit → Project Settings → Input Manager</li>
+                                    <li><strong>GetButton/GetButtonDown/GetButtonUp</strong> for digital button input</li>
+                                    <li><strong>GetAxis/GetAxisRaw</strong> for analog input with or without smoothing</li>
+                                    <li><strong>GetKey/GetKeyDown/GetKeyUp</strong> for keyboard-specific input</li>
+                                    <li><strong>GetMouseButton/GetMouseButtonDown/GetMouseButtonUp</strong> for mouse buttons</li>
+                                    <li><strong>mousePosition</strong> for cursor coordinates</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Input Manager Configuration</h4>
+                            <p>The Input Manager is configured in Edit → Project Settings → Input Manager. Default configurations include:</p>
+                            <ul>
+                                <li><strong>Horizontal</strong>: A/D keys, left/right arrows, and gamepad left stick X</li>
+                                <li><strong>Vertical</strong>: W/S keys, up/down arrows, and gamepad left stick Y</li>
+                                <li><strong>Fire1</strong>: Left Ctrl, mouse button 0, gamepad button 0</li>
+                                <li><strong>Jump</strong>: Space key, gamepad button 0</li>
+                                <li><strong>Mouse X/Y</strong>: Mouse movement</li>
+                                <li><strong>Submit</strong>: Enter key, gamepad button 0</li>
+                                <li><strong>Cancel</strong>: Escape key, gamepad button 1</li>
+                            </ul>
+                            <p>You can add, edit, or remove these inputs to match your game's requirements.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>The New Input System Package</h3>
+                        <p>Unity's new Input System is a package that provides a more flexible, modern approach to input handling with support for a wider range of devices, action mapping, and input rebinding.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up the New Input System:</h4>
+                            <ol>
+                                <li><strong>Install the package</strong>: Window → Package Manager → Unity Registry → "Input System" → Install</li>
+                                <li><strong>Switch to the new system</strong>: Edit → Project Settings → Player → Active Input Handling → "Both" or "Input System Package"</li>
+                                <li><strong>Create an Input Action Asset</strong>: Right-click in Project window → Create → Input Actions</li>
+                                <li><strong>Configure your input actions</strong>: Double-click the asset to open the Input Actions editor</li>
+                            </ol>
+                            
+                            <h4>Using the New Input System:</h4>
+                            <pre><code>
+using UnityEngine;
+using UnityEngine.InputSystem;  // Requires the Input System package
+
+public class NewInputSystemExample : MonoBehaviour
+{
+    // Reference to the generated C# class from your Input Actions asset
+    private PlayerControls controls;
+    private Vector2 moveInput;
+    private bool isJumping;
+    
+    public float moveSpeed = 5f;
+    public float jumpForce = 10f;
+    private Rigidbody rb;
+    
+    void Awake()
+    {
+        // Initialize the controls
+        controls = new PlayerControls();
+        
+        // Set up callbacks for control events
+        
+        // Movement input callback (performed = while action is active)
+        controls.Gameplay.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        controls.Gameplay.Move.canceled += ctx => moveInput = Vector2.zero;
+        
+        // Jump input callbacks (started = when action begins)
+        controls.Gameplay.Jump.started += ctx => OnJumpPerformed();
+        controls.Gameplay.Jump.canceled += ctx => isJumping = false;
+        
+        // Fire callback with alternate syntax
+        controls.Gameplay.Fire.performed += OnFirePerformed;
+        
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
+    }
+    
+    // Enable controls when the GameObject is enabled
+    void OnEnable()
+    {
+        controls.Gameplay.Enable();
+    }
+    
+    // Disable controls when the GameObject is disabled
+    void OnDisable()
+    {
+        controls.Gameplay.Disable();
+    }
+    
+    void Update()
+    {
+        // Apply movement based on input
+        Vector3 movement = new Vector3(moveInput.x, 0f, moveInput.y);
+        transform.Translate(movement * moveSpeed * Time.deltaTime);
+    }
+    
+    // Jump callback method
+    void OnJumpPerformed()
+    {
+        Debug.Log("Jump performed");
+        isJumping = true;
+        
+        // Add upward force to the Rigidbody
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+    
+    // Fire callback method
+    void OnFirePerformed(InputAction.CallbackContext context)
+    {
+        // The context parameter contains information about the input event
+        Debug.Log("Fire performed with value: " + context.ReadValue<float>());
+        
+        // Get the phase of the input action
+        InputActionPhase phase = context.phase;
+        Debug.Log("Phase: " + phase.ToString());
+        
+        // Fire logic would go here
+    }
+    
+    // Example of handling control scheme changes
+    void OnControlsChanged(PlayerInput input)
+    {
+        if (input.currentControlScheme == "Keyboard&Mouse")
+        {
+            Debug.Log("Switched to Keyboard and Mouse");
+        }
+        else if (input.currentControlScheme == "Gamepad")
+        {
+            Debug.Log("Switched to Gamepad");
+        }
+    }
+}
+
+// Auto-generated code from the Input Actions asset would define PlayerControls
+// This is just an example structure of what it would look like
+/*
+public class PlayerControls : IInputActionCollection
+{
+    public InputActionAsset asset { get; }
+    
+    public InputActionMap Gameplay;
+    
+    public InputAction Move;
+    public InputAction Jump;
+    public InputAction Fire;
+    
+    // Methods to enable/disable action maps
+    public void Enable() { ... }
+    public void Disable() { ... }
+}
+*/
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The new Input System advantages:</p>
+                                <ul>
+                                    <li><strong>Device-agnostic input</strong>: Design actions rather than specific device inputs</li>
+                                    <li><strong>Action Maps</strong>: Group actions by context (e.g., Gameplay, UI, Menus)</li>
+                                    <li><strong>Binding Composites</strong>: Complex bindings (e.g., WASD for 2D movement)</li>
+                                    <li><strong>Control Schemes</strong>: Define different input methods (Keyboard/Mouse, Gamepad)</li>
+                                    <li><strong>Runtime Rebinding</strong>: Allow players to change control bindings</li>
+                                    <li><strong>Event-driven architecture</strong>: Use callbacks for cleaner code</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Input Rebinding Example:</h4>
+                            <pre><code>
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+public class InputRebindingExample : MonoBehaviour
+{
+    public PlayerControls controls;
+    public InputActionReference jumpAction;
+    public Text currentBindingText;
+    public Button rebindButton;
+    
+    private InputActionRebindingExtensions.RebindingOperation rebindOperation;
+    
+    void Awake()
+    {
+        controls = new PlayerControls();
+    }
+    
+    void OnEnable()
+    {
+        controls.Enable();
+        
+        // Update the display of the current binding
+        UpdateBindingDisplay();
+        
+        // Set up the rebind button
+        if (rebindButton != null)
+        {
+            rebindButton.onClick.AddListener(StartRebinding);
+        }
+    }
+    
+    void OnDisable()
+    {
+        controls.Disable();
+        
+        // Clean up the rebind button
+        if (rebindButton != null)
+        {
+            rebindButton.onClick.RemoveListener(StartRebinding);
+        }
+        
+        // Clean up any ongoing rebinding operation
+        rebindOperation?.Dispose();
+        rebindOperation = null;
+    }
+    
+    void UpdateBindingDisplay()
+    {
+        if (currentBindingText != null && jumpAction != null)
+        {
+            // Get the path of the current binding for display
+            string bindingPath = jumpAction.action.bindings[0].effectivePath;
+            string displayString = InputControlPath.ToHumanReadableString(bindingPath);
+            
+            currentBindingText.text = "Jump: " + displayString;
+        }
+    }
+    
+    void StartRebinding()
+    {
+        if (jumpAction == null)
+            return;
+        
+        // Disable the action while rebinding
+        jumpAction.action.Disable();
+        
+        // Start the rebinding process
+        rebindOperation = jumpAction.action.PerformInteractiveRebinding()
+            // Configure to ignore mouse movement
+            .WithControlsExcluding("Mouse")
+            // Set callbacks
+            .OnComplete(operation => RebindComplete())
+            .OnCancel(operation => RebindComplete())
+            // Start the rebinding
+            .Start();
+    }
+    
+    void RebindComplete()
+    {
+        // Clean up the rebinding operation
+        rebindOperation.Dispose();
+        rebindOperation = null;
+        
+        // Re-enable the action
+        jumpAction.action.Enable();
+        
+        // Update the display with the new binding
+        UpdateBindingDisplay();
+        
+        // Save the new bindings (to PlayerPrefs, for example)
+        SaveBindings();
+    }
+    
+    void SaveBindings()
+    {
+        // Convert the bindings to JSON
+        string rebinds = controls.asset.SaveBindingOverridesAsJson();
+        
+        // Save to PlayerPrefs
+        PlayerPrefs.SetString("inputBindings", rebinds);
+        PlayerPrefs.Save();
+    }
+    
+    void LoadBindings()
+    {
+        // Check if we have saved bindings
+        if (PlayerPrefs.HasKey("inputBindings"))
+        {
+            // Get the saved JSON
+            string rebinds = PlayerPrefs.GetString("inputBindings");
+            
+            // Apply the bindings to the action asset
+            controls.asset.LoadBindingOverridesFromJson(rebinds);
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Touch Input for Mobile Games</h3>
+                        <p>Mobile games require specific input handling for touch screens. Both input systems provide ways to handle touch input, but with different approaches.</p>
+                        
+                        <div class="example-box">
+                            <h4>Touch Input with Classic Input Manager:</h4>
+                            <pre><code>
+using UnityEngine;
+using System.Collections.Generic;
+
+public class ClassicTouchInput : MonoBehaviour
+{
+    // For tracking active touches
+    private Dictionary<int, Vector2> activeTouches = new Dictionary<int, Vector2>();
+    
+    // Movement speed for objects
+    public float moveSpeed = 5f;
+    
+    // Reference to the object being controlled
+    public Transform controlledObject;
+    
+    void Update()
+    {
+        // Get all current touches
+        if (Input.touchCount > 0)
+        {
+            // Loop through all touches
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                Touch touch = Input.GetTouch(i);
+                
+                // Handle different touch phases
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        // New touch started
+                        OnTouchBegan(touch);
+                        break;
+                        
+                    case TouchPhase.Moved:
+                    case TouchPhase.Stationary:
+                        // Touch moving or held in place
+                        OnTouchMoved(touch);
+                        break;
+                        
+                    case TouchPhase.Ended:
+                    case TouchPhase.Canceled:
+                        // Touch finished
+                        OnTouchEnded(touch);
+                        break;
+                }
+            }
+        }
+        
+        // Handle multi-touch gestures
+        HandlePinchZoom();
+    }
+    
+    void OnTouchBegan(Touch touch)
+    {
+        // Store initial touch position
+        activeTouches[touch.fingerId] = touch.position;
+        
+        // Example: Raycast to detect object at touch position
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        RaycastHit hit;
+        
+        if (Physics.Raycast(ray, out hit))
+        {
+            Debug.Log("Touched object: " + hit.collider.gameObject.name);
+            
+            // Select the object that was touched
+            SelectObject(hit.collider.gameObject);
+        }
+    }
+    
+    void OnTouchMoved(Touch touch)
+    {
+        // Update touch position
+        activeTouches[touch.fingerId] = touch.position;
+        
+        // If we have a controlled object and this is the first finger
+        if (controlledObject != null && touch.fingerId == 0)
+        {
+            // Move the object based on touch delta
+            Vector3 worldDelta = Camera.main.ScreenToWorldPoint(new Vector3(
+                touch.deltaPosition.x, touch.deltaPosition.y, 10));
+            
+            // Apply movement
+            controlledObject.Translate(
+                worldDelta.x * moveSpeed * Time.deltaTime,
+                worldDelta.y * moveSpeed * Time.deltaTime,
+                0);
+        }
+    }
+    
+    void OnTouchEnded(Touch touch)
+    {
+        // Remove the touch from our dictionary
+        if (activeTouches.ContainsKey(touch.fingerId))
+        {
+            activeTouches.Remove(touch.fingerId);
+        }
+        
+        // If this was the controlling touch, release the object
+        if (touch.fingerId == 0)
+        {
+            ReleaseObject();
+        }
+    }
+    
+    void HandlePinchZoom()
+    {
+        // Need at least two touches for pinch
+        if (activeTouches.Count < 2)
+            return;
+            
+        // Get the first two touches
+        Touch touch1 = Input.GetTouch(0);
+        Touch touch2 = Input.GetTouch(1);
+        
+        // Find the previous positions
+        Vector2 touch1PrevPos = activeTouches[touch1.fingerId];
+        Vector2 touch2PrevPos = activeTouches[touch2.fingerId];
+        
+        // Calculate the previous and current distance between touches
+        float prevDistance = Vector2.Distance(touch1PrevPos, touch2PrevPos);
+        float currentDistance = Vector2.Distance(touch1.position, touch2.position);
+        
+        // Calculate the zoom factor
+        float zoomFactor = currentDistance / prevDistance;
+        
+        // Apply zoom
+        if (Mathf.Abs(zoomFactor - 1) > 0.01f) // Small threshold to avoid jitter
+        {
+            ApplyZoom(zoomFactor);
+        }
+    }
+    
+    // Example methods that would be implemented in a real game
+    void SelectObject(GameObject obj)
+    {
+        Debug.Log("Selected: " + obj.name);
+        // Object selection logic
+    }
+    
+    void ReleaseObject()
+    {
+        Debug.Log("Released object");
+        // Object release logic
+    }
+    
+    void ApplyZoom(float zoomFactor)
+    {
+        Debug.Log("Zoom: " + zoomFactor);
+        // Camera zoom logic
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Touch input features:</p>
+                                <ul>
+                                    <li><strong>Input.touchCount</strong>: Number of current touches</li>
+                                    <li><strong>Input.GetTouch(index)</strong>: Get a specific touch</li>
+                                    <li><strong>Touch phases</strong>: Began, Moved, Stationary, Ended, Canceled</li>
+                                    <li><strong>Touch properties</strong>: position, deltaPosition, fingerId, tapCount</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Common Mobile Input Gestures</h4>
+                            <p>Common touch gestures to implement in mobile games:</p>
+                            <ul>
+                                <li><strong>Tap</strong>: Quick touch and release for selection</li>
+                                <li><strong>Double Tap</strong>: Two taps in quick succession</li>
+                                <li><strong>Long Press</strong>: Touch and hold for a duration</li>
+                                <li><strong>Drag</strong>: Touch, hold, and move</li>
+                                <li><strong>Swipe</strong>: Quick movement in a direction</li>
+                                <li><strong>Pinch</strong>: Two-finger movement for zoom</li>
+                                <li><strong>Rotate</strong>: Two-finger circular movement</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Input Handling</h3>
+                        <ol>
+                            <li><strong>Separate input from behavior</strong>: Decouple input detection from the actions it triggers</li>
+                            <li><strong>Use an input manager class</strong>: Centralize input handling for easier maintenance</li>
+                            <li><strong>Test across devices</strong>: Verify input works correctly on all target platforms</li>
+                            <li><strong>Add input buffering</strong>: Store inputs briefly to improve responsiveness</li>
+                            <li><strong>Provide input rebinding</strong>: Allow players to customize controls</li>
+                            <li><strong>Include accessibility options</strong>: Support alternative input methods</li>
+                            <li><strong>Add input visualization</strong>: Show available controls to players</li>
+                            <li><strong>Test for input conflicts</strong>: Ensure multiple inputs don't cause issues</li>
+                            <li><strong>Add input settings</strong>: Let players adjust sensitivity and other preferences</li>
+                            <li><strong>Implement fallbacks</strong>: Provide alternative input methods if primary ones fail</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="jump-mechanics.html" class="prev"><i class="fas fa-arrow-left"></i> Jump Mechanics</a>
+                        <a href="unity-collision.html" class="next">Collisions & Triggers <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

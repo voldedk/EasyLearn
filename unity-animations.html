@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Systems - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Animation Systems in Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Animations</h3>
+                        <p>Animation brings your game objects to life, allowing characters to move realistically, environments to be dynamic, and interfaces to be engaging. Unity provides a powerful and flexible animation system that can handle everything from simple property changes to complex character animations with blending and state management.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Unity's animation tools and components</li>
+                            <li>Creating and working with animation clips</li>
+                            <li>Using Animation Controllers and State Machines</li>
+                            <li>Controlling animations through scripting</li>
+                            <li>Animation blending and transitions</li>
+                            <li>Animation events and callbacks</li>
+                            <li>Performance optimization for animations</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity Animation Components</h3>
+                        <p>Unity's animation system consists of several key components that work together:</p>
+                        
+                        <div class="example-box">
+                            <h4>Core Animation Components:</h4>
+                            <ul>
+                                <li><strong>Animation Clip</strong>: A recording of animated properties over time</li>
+                                <li><strong>Animator Component</strong>: The main component that plays animations on a GameObject</li>
+                                <li><strong>Animator Controller</strong>: State machine asset that manages animation clips and transitions</li>
+                                <li><strong>Animation State</strong>: A specific animation clip within the Animator Controller</li>
+                                <li><strong>Blend Tree</strong>: Allows for blending between multiple animations based on parameters</li>
+                                <li><strong>Animation Layer</strong>: Allows different parts of the character to be animated independently</li>
+                                <li><strong>Avatar</strong>: Maps animations to a specific character's skeleton (for humanoid animations)</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Animation workflow:</p>
+                                <ol>
+                                    <li>Create Animation Clips (in Unity or import from 3D software)</li>
+                                    <li>Set up an Animator Controller with States and Transitions</li>
+                                    <li>Attach the Animator component to your GameObject</li>
+                                    <li>Assign the Controller to the Animator component</li>
+                                    <li>Control animations via Parameters from scripts</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Animation Clips</h3>
+                        <p>There are several ways to create animation clips in Unity:</p>
+                        
+                        <div class="example-box">
+                            <h4>Methods for Creating Animations:</h4>
+                            <ol>
+                                <li><strong>Import from 3D software</strong>: Blender, Maya, 3ds Max, etc.</li>
+                                <li><strong>Unity's Animation Window</strong>: Record property changes over time</li>
+                                <li><strong>Animation Rigging</strong>: Procedural and constraint-based animation</li>
+                                <li><strong>Scripting</strong>: Create animations at runtime</li>
+                            </ol>
+                            
+                            <h4>Creating Animation Clips in Unity:</h4>
+                            <ol>
+                                <li>Select the GameObject you want to animate</li>
+                                <li>Open the Animation window (Window > Animation > Animation)</li>
+                                <li>Click "Create" to create a new animation clip</li>
+                                <li>Enter a name and save location for the clip</li>
+                                <li>Use the Record button (red circle) to start recording property changes</li>
+                                <li>Set keyframes by changing properties in the Inspector</li>
+                                <li>Use the dopesheet and curves view to fine-tune timing and values</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Common properties to animate:</p>
+                                <ul>
+                                    <li><strong>Transform</strong>: Position, rotation, scale</li>
+                                    <li><strong>Visibility</strong>: Enabling/disabling GameObjects</li>
+                                    <li><strong>Material properties</strong>: Color, texture offsets</li>
+                                    <li><strong>Light properties</strong>: Intensity, color, range</li>
+                                    <li><strong>Sprite changes</strong>: For 2D animations</li>
+                                    <li><strong>Custom properties</strong>: Any serialized property in your components</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Animator Controllers and State Machines</h3>
+                        <p>The Animator Controller is a powerful state machine that manages transitions between animations.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up an Animator Controller:</h4>
+                            <ol>
+                                <li>Create an Animator Controller asset (Right-click in Project window > Create > Animator Controller)</li>
+                                <li>Double-click to open in the Animator window</li>
+                                <li>Add animation clips by dragging them into the Animator window</li>
+                                <li>Create transitions between states by right-clicking a state and selecting "Make Transition"</li>
+                                <li>Configure transition conditions using Parameters</li>
+                                <li>Set the default state (orange color)</li>
+                            </ol>
+                            
+                            <h4>Animator Parameters:</h4>
+                            <ul>
+                                <li><strong>Float</strong>: Decimal values (e.g., speed, blend amount)</li>
+                                <li><strong>Int</strong>: Whole numbers (e.g., animation ID, weapon type)</li>
+                                <li><strong>Bool</strong>: True/false values (e.g., isJumping, isGrounded)</li>
+                                <li><strong>Trigger</strong>: Special boolean that automatically resets after use (e.g., jump, attack)</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>State machine features:</p>
+                                <ul>
+                                    <li><strong>States</strong>: Each represents an animation clip or blend tree</li>
+                                    <li><strong>Transitions</strong>: Connections between states with conditions</li>
+                                    <li><strong>Sub-State Machines</strong>: Nested state machines for organization</li>
+                                    <li><strong>Any State</strong>: Special node for transitions that can occur from any state</li>
+                                    <li><strong>Entry/Exit</strong>: Define start and end points of state machines</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Transition Settings</h4>
+                            <p>Important settings when configuring transitions:</p>
+                            <ul>
+                                <li><strong>Has Exit Time</strong>: If enabled, transition waits until a certain point in the current animation</li>
+                                <li><strong>Exit Time</strong>: When to trigger the transition (0-1, percentage of animation)</li>
+                                <li><strong>Transition Duration</strong>: How long the blend between animations takes</li>
+                                <li><strong>Transition Offset</strong>: Where to start the next animation</li>
+                                <li><strong>Interruption Source</strong>: How other transitions can interrupt this one</li>
+                                <li><strong>Conditions</strong>: Parameter-based rules that determine when to transition</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Controlling Animations with C# Scripts</h3>
+                        <p>Scripts allow you to control animations at runtime by manipulating Animator parameters.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Animation Control:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class CharacterAnimationController : MonoBehaviour
+{
+    // Reference to the Animator component
+    private Animator animator;
+    
+    // Parameter IDs for faster access
+    private int speedId;
+    private int groundedId;
+    private int jumpId;
+    
+    void Start()
+    {
+        // Get the Animator component
+        animator = GetComponent<Animator>();
+        
+        // Cache parameter IDs (more efficient than using strings repeatedly)
+        speedId = Animator.StringToHash("Speed");
+        groundedId = Animator.StringToHash("Grounded");
+        jumpId = Animator.StringToHash("Jump");
+        // Using hash IDs is more efficient than using string names directly
+    }
+    
+    void Update()
+    {
+        // Get input for movement
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        // Calculate movement speed for animation
+        Vector2 input = new Vector2(horizontalInput, verticalInput);
+        float speed = input.magnitude;
+        
+        // Set the Speed parameter (controls blend between idle and walk/run)
+        animator.SetFloat(speedId, speed);
+        // This updates the Speed parameter in the Animator Controller
+        
+        // Handle jump input
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            // Trigger the jump animation
+            animator.SetTrigger(jumpId);
+            // Trigger parameters automatically reset after they're consumed
+        }
+        
+        // Update grounded state
+        animator.SetBool(groundedId, IsGrounded());
+        // This updates the Grounded boolean parameter
+    }
+    
+    // Check if character is on the ground
+    bool IsGrounded()
+    {
+        // Simple ground check using raycasting
+        return Physics.Raycast(transform.position, Vector3.down, 0.2f);
+    }
+    
+    // Change animation state directly
+    public void PlayAttackAnimation()
+    {
+        // Trigger an attack animation
+        animator.SetTrigger("Attack");
+        // This sets a trigger parameter named "Attack"
+    }
+    
+    // Get information about current animation state
+    public bool IsPlayingAttackAnimation()
+    {
+        // Check if we're in a specific state
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
+        // This checks if the current state in layer 0 is named "Attack"
+    }
+    
+    // Adjust animation speed
+    public void SetAnimationSpeed(float speedMultiplier)
+    {
+        // Change the playback speed of all animations
+        animator.speed = speedMultiplier;
+        // This affects the entire Animator - all layers and states
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key Animator methods:</p>
+                                <ul>
+                                    <li><strong>SetFloat/SetInt/SetBool/SetTrigger</strong>: Set parameter values</li>
+                                    <li><strong>GetFloat/GetInt/GetBool</strong>: Get parameter values</li>
+                                    <li><strong>Play</strong>: Force a specific animation to play</li>
+                                    <li><strong>GetCurrentAnimatorStateInfo</strong>: Get information about the current state</li>
+                                    <li><strong>CrossFade</strong>: Smoothly transition to a specific state</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Advanced Animation Control:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class AdvancedAnimationController : MonoBehaviour
+{
+    private Animator animator;
+    private int layerIndex = 0; // Base layer
+    
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+    
+    // Play an animation with CrossFade for smoother transitions
+    public void CrossFadeAnimation(string stateName, float transitionDuration)
+    {
+        // Smoothly transition to the specified state
+        animator.CrossFade(stateName, transitionDuration);
+        // This creates a smooth blend to the target animation
+    }
+    
+    // Work with animation layers
+    public void SetLayerWeight(int layerIndex, float weight)
+    {
+        // Adjust the influence of a specific animation layer
+        animator.SetLayerWeight(layerIndex, weight);
+        // This controls how much a layer affects the final pose (0-1)
+    }
+    
+    // Access animation state information
+    public void CheckAnimationProgress()
+    {
+        // Get info about the current state in the specified layer
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+        
+        // Get the normalized time (0-1 represents progress through the clip)
+        float normalizedTime = stateInfo.normalizedTime;
+        Debug.Log($"Animation progress: {normalizedTime * 100}%");
+        
+        // Check if we're in a specific state
+        bool isRunning = stateInfo.IsName("Run");
+        
+        // Get the current animation length
+        float length = stateInfo.length;
+        Debug.Log($"Animation length: {length} seconds");
+        
+        // Get the current animation speed
+        float speed = stateInfo.speed;
+        Debug.Log($"Animation speed: {speed}x");
+    }
+    
+    // Play a specific state immediately
+    public void PlayState(string stateName)
+    {
+        // Force immediate play of a state
+        animator.Play(stateName);
+        // This immediately switches to the specified state
+    }
+    
+    // Work with animator transitions
+    public void CheckTransitionInfo()
+    {
+        // Get information about any ongoing transition
+        AnimatorTransitionInfo transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
+        
+        // Check if a transition is in progress
+        bool isTransitioning = animator.IsInTransition(layerIndex);
+        
+        if (isTransitioning)
+        {
+            // Get the normalized time of the transition (0-1)
+            float transitionTime = transitionInfo.normalizedTime;
+            Debug.Log($"Transition progress: {transitionTime * 100}%");
+        }
+    }
+    
+    // Match target allows precise positioning during animations
+    public void MatchTargetExample()
+    {
+        // Make the character's hand reach for a door handle at a specific position
+        // during frames 10-20 of the "OpenDoor" animation
+        Vector3 doorHandlePosition = new Vector3(1, 1, 0);
+        
+        animator.MatchTarget(
+            doorHandlePosition,       // Target position
+            Quaternion.identity,      // Target rotation (not matching rotation in this case)
+            AvatarTarget.RightHand,   // Which body part to match
+            new MatchTargetWeightMask(Vector3.one, 0), // Match position only, not rotation
+            0.1f,                     // Start time (normalized)
+            0.2f                      // End time (normalized)
+        );
+        // This makes the animation adjust to match environmental objects
+    }
+    
+    // Apply root motion manually
+    public void HandleRootMotion()
+    {
+        // Get the root motion delta position and rotation
+        Vector3 deltaPosition = animator.deltaPosition;
+        Quaternion deltaRotation = animator.deltaRotation;
+        
+        // Apply to transform (if you've disabled Apply Root Motion on the Animator)
+        transform.position += deltaPosition;
+        transform.rotation *= deltaRotation;
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Advanced animation features:</p>
+                                <ul>
+                                    <li><strong>Animation Layers</strong>: Control different body parts independently</li>
+                                    <li><strong>Cross Fading</strong>: Create smooth transitions between animations</li>
+                                    <li><strong>Animation Events</strong>: Trigger functions at specific points in animations</li>
+                                    <li><strong>Root Motion</strong>: Use animation to drive character movement</li>
+                                    <li><strong>Match Target</strong>: Adjust animations to match environmental interactions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Animation Blending and Blend Trees</h3>
+                        <p>Blend Trees allow you to create smooth transitions between multiple animations based on one or more parameters.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up Blend Trees:</h4>
+                            <ol>
+                                <li>In the Animator window, right-click and select Create State > From New Blend Tree</li>
+                                <li>Double-click the Blend Tree to open it</li>
+                                <li>Set the Blend Type (1D, 2D Simple Directional, 2D Freeform Directional, or 2D Freeform Cartesian)</li>
+                                <li>Set the Parameter that will control the blending</li>
+                                <li>Add motion fields by clicking the + button</li>
+                                <li>Assign animation clips to each motion</li>
+                                <li>Set threshold values that determine when each animation plays</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Common Blend Tree uses:</p>
+                                <ul>
+                                    <li><strong>1D Blend Tree</strong>: For blending based on one parameter (e.g., speed: idle -> walk -> run)</li>
+                                    <li><strong>2D Blend Tree</strong>: For directional movement (e.g., walk forward, backward, left, right)</li>
+                                    <li><strong>Nested Blend Trees</strong>: Blend trees within blend trees for complex animations</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Controlling Blend Trees from Scripts:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class BlendTreeController : MonoBehaviour
+{
+    private Animator animator;
+    private int speedId;
+    private int horizontalId;
+    private int verticalId;
+    
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        
+        // Cache parameter hashes
+        speedId = Animator.StringToHash("Speed");
+        horizontalId = Animator.StringToHash("Horizontal");
+        verticalId = Animator.StringToHash("Vertical");
+    }
+    
+    void Update()
+    {
+        // 1D BLEND TREE EXAMPLE (e.g., Idle-Walk-Run)
+        
+        // Get player input
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        // Calculate movement speed (0-1 range)
+        Vector2 input = new Vector2(horizontalInput, verticalInput);
+        float speed = Mathf.Clamp01(input.magnitude);
+        
+        // Apply to animator - this controls a 1D blend tree
+        animator.SetFloat(speedId, speed);
+        
+        // 2D BLEND TREE EXAMPLE (e.g., Directional movement)
+        
+        // The raw input values control the 2D blend
+        animator.SetFloat(horizontalId, horizontalInput);
+        animator.SetFloat(verticalId, verticalInput);
+        
+        // For smoother animation transitions, you can use Mathf.SmoothDamp
+        float currentHorizontal = animator.GetFloat(horizontalId);
+        float currentVertical = animator.GetFloat(verticalId);
+        float smoothTime = 0.1f;
+        float velocityH = 0f, velocityV = 0f;
+        
+        float smoothHorizontal = Mathf.SmoothDamp(currentHorizontal, horizontalInput, ref velocityH, smoothTime);
+        float smoothVertical = Mathf.SmoothDamp(currentVertical, verticalInput, ref velocityV, smoothTime);
+        
+        animator.SetFloat(horizontalId, smoothHorizontal);
+        animator.SetFloat(verticalId, smoothVertical);
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Animation Events</h3>
+                        <p>Animation Events allow you to trigger functions at specific points in an animation clip.</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating and Handling Animation Events:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class AnimationEventsHandler : MonoBehaviour
+{
+    // References for effects and sounds
+    public ParticleSystem footstepDustEffect;
+    public AudioClip footstepSound;
+    public AudioClip swordSwingSound;
+    
+    private AudioSource audioSource;
+    
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            // Add an AudioSource component if one doesn't exist
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
+    
+    // Called by animation event - no parameters
+    public void FootstepEvent()
+    {
+        // Play footstep sound
+        if (audioSource != null && footstepSound != null)
+        {
+            audioSource.PlayOneShot(footstepSound);
+        }
+        
+        // Play dust particle effect
+        if (footstepDustEffect != null)
+        {
+            footstepDustEffect.Play();
+        }
+        
+        Debug.Log("Footstep event triggered at: " + Time.time);
+    }
+    
+    // Animation event with integer parameter
+    public void AttackEvent(int attackType)
+    {
+        switch (attackType)
+        {
+            case 0: // Light attack
+                Debug.Log("Light attack executed");
+                break;
+                
+            case 1: // Heavy attack
+                Debug.Log("Heavy attack executed");
+                break;
+                
+            case 2: // Special attack
+                Debug.Log("Special attack executed");
+                break;
+        }
+        
+        // Play sword swing sound
+        if (audioSource != null && swordSwingSound != null)
+        {
+            audioSource.PlayOneShot(swordSwingSound);
+        }
+    }
+    
+    // Animation event with string parameter
+    public void PlaySound(string soundName)
+    {
+        Debug.Log("Playing sound: " + soundName);
+        
+        // You could have a dictionary of sounds and play the appropriate one
+        // Or use Resources.Load to load audio clips dynamically
+    }
+    
+    // Animation event with float parameter
+    public void ApplyDamage(float damageAmount)
+    {
+        Debug.Log("Applying damage: " + damageAmount);
+        
+        // Find nearby enemies and apply damage
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            // Check if it's an enemy
+            if (hitCollider.CompareTag("Enemy"))
+            {
+                // Try to get the enemy's health component
+                EnemyHealth enemyHealth = hitCollider.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    // Apply damage
+                    enemyHealth.TakeDamage(damageAmount);
+                }
+            }
+        }
+    }
+    
+    // Animation event with object parameter
+    public void SpawnObject(Object prefab)
+    {
+        if (prefab is GameObject)
+        {
+            GameObject go = prefab as GameObject;
+            Instantiate(go, transform.position, transform.rotation);
+            Debug.Log("Spawned object: " + go.name);
+        }
+    }
+}
+
+// Example of an enemy health component
+public class EnemyHealth : MonoBehaviour
+{
+    public float health = 100f;
+    
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        Debug.Log(gameObject.name + " took " + amount + " damage. Health: " + health);
+        
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+    
+    void Die()
+    {
+        Debug.Log(gameObject.name + " died!");
+        Destroy(gameObject);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Creating Animation Events:</p>
+                                <ol>
+                                    <li>Select the Animation Clip in the Project window</li>
+                                    <li>Open the Animation window</li>
+                                    <li>Add an event marker by right-clicking the timeline and selecting "Add Event"</li>
+                                    <li>In the Inspector, specify the function name and any parameters</li>
+                                </ol>
+                                
+                                <p>Animation Event parameters:</p>
+                                <ul>
+                                    <li><strong>No parameter</strong>: Simple function call</li>
+                                    <li><strong>Int</strong>: Pass an integer value</li>
+                                    <li><strong>Float</strong>: Pass a float value</li>
+                                    <li><strong>String</strong>: Pass a string</li>
+                                    <li><strong>Object</strong>: Pass a reference to an Object (e.g., GameObject, AudioClip)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Animation Performance Optimization</h3>
+                        <p>Animations can be performance-intensive. Here are some tips to optimize them:</p>
+                        
+                        <div class="example-box">
+                            <h4>Performance Optimization Techniques:</h4>
+                            <ol>
+                                <li><strong>Culling Mode</strong>: Configure the Animator's Culling Mode to stop animating objects that aren't visible</li>
+                                <li><strong>Keyframe Reduction</strong>: Remove unnecessary keyframes from animation clips</li>
+                                <li><strong>Animation Compression</strong>: Use appropriate compression settings in the Import Settings</li>
+                                <li><strong>LOD System</strong>: Use simpler animations for distant characters</li>
+                                <li><strong>Animation Pooling</strong>: Reuse animations across similar characters</li>
+                                <li><strong>Avatar Masks</strong>: Animate only necessary body parts</li>
+                                <li><strong>Update Mode</strong>: Consider using "Normal" or "AnimatePhysics" instead of "UnscaledTime" when possible</li>
+                            </ol>
+                            
+                            <h4>Setting Up Animator Culling:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class AnimatorOptimizer : MonoBehaviour
+{
+    private Animator animator;
+    
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        
+        // Set culling mode
+        animator.cullingMode = AnimatorCullingMode.CullCompletely;
+        // Options:
+        // - AlwaysAnimate: Always animate, even when off-screen (most expensive)
+        // - CullUpdateTransforms: Skip animation that update transforms when off-screen
+        // - CullCompletely: Don't animate at all when off-screen (most efficient)
+    }
+    
+    // Toggle animation based on distance from player
+    void Update()
+    {
+        // Get distance to player
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        
+        // Disable animator if too far away
+        if (distanceToPlayer > 50f)
+        {
+            animator.enabled = false;
+        }
+        else
+        {
+            animator.enabled = true;
+            
+            // Additionally, you can adjust animation quality based on distance
+            if (distanceToPlayer > 30f)
+            {
+                // Use lower quality for distant characters
+                animator.updateMode = AnimatorUpdateMode.Normal;
+                animator.speed = 0.5f; // Lower animation frame rate
+            }
+            else
+            {
+                // Use full quality for nearby characters
+                animator.updateMode = AnimatorUpdateMode.Normal;
+                animator.speed = 1f;
+            }
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Animation</h3>
+                        <ol>
+                            <li><strong>Organize your Animator Controller</strong> with sub-state machines for clarity</li>
+                            <li><strong>Use parameters efficiently</strong> - minimize the number of parameters and use appropriate types</li>
+                            <li><strong>Cache parameter hashes</strong> with StringToHash for better performance</li>
+                            <li><strong>Create smooth transitions</strong> between animations for natural movement</li>
+                            <li><strong>Use Animation Layers</strong> to animate different body parts independently</li>
+                            <li><strong>Incorporate Animation Events</strong> for synchronized effects and gameplay logic</li>
+                            <li><strong>Adjust animation weights</strong> for partial blending between animations</li>
+                            <li><strong>Consider performance</strong> by using culling and appropriate update modes</li>
+                            <li><strong>Test animations on target platforms</strong> to ensure smooth performance</li>
+                            <li><strong>Standardize animation naming</strong> for easier management</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-collision.html" class="prev"><i class="fas fa-arrow-left"></i> Collisions & Triggers</a>
+                        <a href="unity-physics.html" class="next">Unity Physics <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

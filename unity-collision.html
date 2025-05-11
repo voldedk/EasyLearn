@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collisions & Triggers - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Collisions & Triggers in Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Collision System</h3>
+                        <p>Collisions and triggers are fundamental components of game physics in Unity. They allow objects to interact with each other physically, detect overlaps, and respond to various interaction scenarios. Understanding how collisions work is essential for creating realistic physics-based interactions, implementing game mechanics, and optimizing performance.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>How Unity's collision system works</li>
+                            <li>Different types of colliders and their uses</li>
+                            <li>The difference between colliders and triggers</li>
+                            <li>How to detect and respond to collisions in code</li>
+                            <li>Best practices for efficient collision detection</li>
+                            <li>Common collision-related problems and solutions</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Collider Components</h3>
+                        <p>Colliders define the physical shape of an object for collision detection. Unity provides several types of colliders for different needs.</p>
+                        
+                        <div class="example-box">
+                            <h4>Types of Colliders:</h4>
+                            <ul>
+                                <li><strong>Box Collider</strong>: Simple rectangular shape, good for boxes, crates, buildings</li>
+                                <li><strong>Sphere Collider</strong>: Spherical shape, good for balls, projectiles</li>
+                                <li><strong>Capsule Collider</strong>: Pill-shaped, good for character controllers</li>
+                                <li><strong>Mesh Collider</strong>: Follows the exact shape of a mesh, more expensive but precise</li>
+                                <li><strong>Wheel Collider</strong>: Specialized for vehicle wheels with suspension and friction</li>
+                                <li><strong>Terrain Collider</strong>: For Unity terrain objects</li>
+                                <li><strong>2D Variants</strong>: Box, Circle, Polygon, Edge, and Composite colliders for 2D games</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Collider selection considerations:</p>
+                                <ul>
+                                    <li><strong>Performance</strong>: Primitive colliders (Box, Sphere, Capsule) are more efficient</li>
+                                    <li><strong>Accuracy</strong>: Mesh colliders are more precise but computationally expensive</li>
+                                    <li><strong>Shape</strong>: Choose a collider that reasonably approximates the visual shape</li>
+                                    <li><strong>Complexity</strong>: For complex objects, consider using multiple primitive colliders</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Collider Properties</h4>
+                            <p>Key properties of colliders:</p>
+                            <ul>
+                                <li><strong>Is Trigger</strong>: When enabled, the collider detects overlaps but doesn't produce physics reactions</li>
+                                <li><strong>Material</strong>: Physics Material that defines friction and bounciness</li>
+                                <li><strong>Center/Size</strong>: Position and dimensions of the collider relative to the GameObject</li>
+                                <li><strong>Convex</strong> (Mesh Collider): Enables collision detection with other Mesh Colliders (with some limitations)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Rigidbody Components</h3>
+                        <p>Rigidbodies work together with colliders to enable full physics simulation and collision response.</p>
+                        
+                        <div class="example-box">
+                            <h4>Rigidbody Properties:</h4>
+                            <ul>
+                                <li><strong>Mass</strong>: How heavy the object is (affects physics interactions)</li>
+                                <li><strong>Drag/Angular Drag</strong>: How quickly the object slows down when moving/rotating</li>
+                                <li><strong>Use Gravity</strong>: Whether the object is affected by gravity</li>
+                                <li><strong>Is Kinematic</strong>: When enabled, the object isn't affected by physics (useful for moving platforms)</li>
+                                <li><strong>Interpolate</strong>: Smooths position between physics updates</li>
+                                <li><strong>Collision Detection</strong>: Controls how collision detection works at high speeds</li>
+                                <li><strong>Constraints</strong>: Freeze position or rotation on specific axes</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Rigidbody interactions:</p>
+                                <ul>
+                                    <li><strong>Dynamic</strong>: Has Rigidbody, not Kinematic - Fully simulated by physics</li>
+                                    <li><strong>Kinematic</strong>: Has Rigidbody, is Kinematic - Moved by script, affects other objects</li>
+                                    <li><strong>Static</strong>: No Rigidbody - Doesn't move, collides with Dynamic objects</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Collision Detection in Code</h3>
+                        <p>Unity provides several methods to detect and respond to collisions in your scripts.</p>
+                        
+                        <div class="example-box">
+                            <h4>Collision Event Methods:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class CollisionExample : MonoBehaviour
+{
+    // COLLISION EVENTS (physical collisions with non-trigger colliders)
+    
+    // Called when this collider/rigidbody begins touching another collider/rigidbody
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision began with: " + collision.gameObject.name);
+        
+        // Get information about the collision
+        
+        // The GameObject we collided with
+        GameObject otherObject = collision.gameObject;
+        
+        // The contact points (where the objects are touching)
+        ContactPoint contact = collision.contacts[0];
+        
+        // The collision normal (direction of the impact)
+        Vector3 normal = contact.normal;
+        
+        // The point where the collision occurred
+        Vector3 point = contact.point;
+        
+        // The relative velocity of the collision
+        Vector3 relativeVelocity = collision.relativeVelocity;
+        
+        // The impulse force of the collision
+        float impulse = collision.impulse.magnitude;
+        
+        // Example: Check the tag of the object we collided with
+        if (otherObject.CompareTag("Enemy"))
+        {
+            TakeDamage(10);
+            // Handle collision with enemy
+        }
+        else if (otherObject.CompareTag("Ground"))
+        {
+            // Handle landing on ground
+            PlayLandingSound();
+        }
+        
+        // Example: Apply damage based on collision force
+        float damageAmount = impulse / 10f;
+        if (damageAmount > 5f)
+        {
+            TakeDamage(Mathf.RoundToInt(damageAmount));
+        }
+        
+        // Visual feedback at collision point
+        CreateImpactEffect(point, normal);
+    }
+    
+    // Called each frame while the collision is active
+    void OnCollisionStay(Collision collision)
+    {
+        // This runs every frame that the objects remain in contact
+        
+        // Example: Slowly push back against the object
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 pushDirection = transform.position - collision.transform.position;
+            pushDirection.Normalize();
+            rb.AddForce(pushDirection * 0.5f);
+        }
+    }
+    
+    // Called when this collider/rigidbody stops touching another collider/rigidbody
+    void OnCollisionExit(Collision collision)
+    {
+        Debug.Log("Collision ended with: " + collision.gameObject.name);
+        
+        // Example: Play a separation sound
+        PlaySeparationSound();
+    }
+    
+    // TRIGGER EVENTS (overlaps with trigger colliders)
+    
+    // Called when this collider enters a trigger collider
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger entered: " + other.gameObject.name);
+        
+        // Example: Player enters a trigger zone
+        if (other.CompareTag("Player"))
+        {
+            // Activate a checkpoint
+            ActivateCheckpoint();
+        }
+        else if (other.CompareTag("Pickup"))
+        {
+            // Collect an item
+            CollectItem(other.gameObject);
+        }
+        else if (other.CompareTag("TrapZone"))
+        {
+            // Enter a dangerous area
+            EnterDangerZone();
+        }
+    }
+    
+    // Called each frame while this collider is in a trigger
+    void OnTriggerStay(Collider other)
+    {
+        // Example: Player is in a healing zone
+        if (other.CompareTag("HealZone"))
+        {
+            // Heal the player gradually
+            Heal(Time.deltaTime * 5f);
+        }
+        else if (other.CompareTag("DamageZone"))
+        {
+            // Damage the player gradually
+            TakeDamage(Time.deltaTime * 10f);
+        }
+    }
+    
+    // Called when this collider exits a trigger collider
+    void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Trigger exited: " + other.gameObject.name);
+        
+        // Example: Player exits a trigger zone
+        if (other.CompareTag("SafeZone"))
+        {
+            // No longer in the safe zone
+            ExitSafeZone();
+        }
+    }
+    
+    // 2D COLLISION EVENTS (for 2D physics)
+    
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Similar to OnCollisionEnter but for 2D physics
+        Debug.Log("2D collision started with: " + collision.gameObject.name);
+    }
+    
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        // Called each frame for active 2D collisions
+    }
+    
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        // Called when a 2D collision ends
+    }
+    
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Similar to OnTriggerEnter but for 2D triggers
+    }
+    
+    void OnTriggerStay2D(Collider2D other)
+    {
+        // Called each frame for active 2D triggers
+    }
+    
+    void OnTriggerExit2D(Collider2D other)
+    {
+        // Called when exiting a 2D trigger
+    }
+    
+    // Example helper methods (would be implemented in real code)
+    void TakeDamage(float amount)
+    {
+        Debug.Log("Taking damage: " + amount);
+    }
+    
+    void PlayLandingSound()
+    {
+        Debug.Log("Playing landing sound");
+    }
+    
+    void CreateImpactEffect(Vector3 position, Vector3 normal)
+    {
+        Debug.Log("Creating impact effect at " + position);
+    }
+    
+    void PlaySeparationSound()
+    {
+        Debug.Log("Playing separation sound");
+    }
+    
+    void ActivateCheckpoint()
+    {
+        Debug.Log("Checkpoint activated");
+    }
+    
+    void CollectItem(GameObject item)
+    {
+        Debug.Log("Collecting item: " + item.name);
+        Destroy(item);
+    }
+    
+    void EnterDangerZone()
+    {
+        Debug.Log("Entered danger zone");
+    }
+    
+    void Heal(float amount)
+    {
+        Debug.Log("Healing for: " + amount);
+    }
+    
+    void ExitSafeZone()
+    {
+        Debug.Log("Exited safe zone");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key collision methods:</p>
+                                <ul>
+                                    <li><strong>OnCollisionEnter/Exit/Stay</strong>: For physical collisions where objects react with physics</li>
+                                    <li><strong>OnTriggerEnter/Exit/Stay</strong>: For overlaps with trigger colliders that don't cause physical reactions</li>
+                                    <li><strong>2D variants</strong>: Same methods but for 2D physics system</li>
+                                </ul>
+                                
+                                <p>Important collision data:</p>
+                                <ul>
+                                    <li><strong>contact points</strong>: Where objects are touching</li>
+                                    <li><strong>normal</strong>: Direction of the impact</li>
+                                    <li><strong>relative velocity</strong>: Speed and direction of objects relative to each other</li>
+                                    <li><strong>impulse</strong>: Force of the impact</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Manual Collision Detection</h3>
+                        <p>Besides collision events, Unity provides methods to manually check for collisions and overlaps.</p>
+                        
+                        <div class="example-box">
+                            <h4>Raycasting and Overlap Testing:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ManualCollisionDetection : MonoBehaviour
+{
+    public float raycastDistance = 10f;
+    public LayerMask raycastLayers;
+    
+    void Update()
+    {
+        // RAYCASTING EXAMPLES
+        
+        // Simple raycast
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, raycastDistance))
+        {
+            // Something was hit
+            Debug.Log("Hit object: " + hit.collider.gameObject.name);
+            Debug.Log("Hit point: " + hit.point);
+            Debug.Log("Hit normal: " + hit.normal);
+            Debug.Log("Distance: " + hit.distance);
+            
+            // You can get the material at the hit point
+            if (hit.collider.sharedMaterial != null)
+            {
+                Debug.Log("Hit material: " + hit.collider.sharedMaterial.name);
+            }
+        }
+        
+        // Raycast with layer mask (only detect certain layers)
+        if (Physics.Raycast(transform.position, transform.forward, out hit, raycastDistance, raycastLayers))
+        {
+            // Only objects on the specified layers will be detected
+            Debug.Log("Layer-filtered raycast hit: " + hit.collider.gameObject.name);
+        }
+        
+        // Raycast all - get all hits along the ray
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, raycastDistance, raycastLayers);
+        foreach (RaycastHit hitInfo in hits)
+        {
+            // Process each hit
+            Debug.Log("RaycastAll hit: " + hitInfo.collider.gameObject.name);
+        }
+        
+        // PHYSICS OVERLAP TESTS
+        
+        // Check for colliders in a sphere
+        Collider[] sphereResults = Physics.OverlapSphere(transform.position, 5f, raycastLayers);
+        Debug.Log("Found " + sphereResults.Length + " colliders in sphere");
+        
+        // Check for colliders in a box
+        Vector3 boxSize = new Vector3(2f, 2f, 2f);
+        Collider[] boxResults = Physics.OverlapBox(transform.position, boxSize / 2f, transform.rotation, raycastLayers);
+        Debug.Log("Found " + boxResults.Length + " colliders in box");
+        
+        // Check for colliders in a capsule
+        Vector3 capsulePoint1 = transform.position + Vector3.up;
+        Vector3 capsulePoint2 = transform.position - Vector3.up;
+        float capsuleRadius = 1f;
+        Collider[] capsuleResults = Physics.OverlapCapsule(capsulePoint1, capsulePoint2, capsuleRadius, raycastLayers);
+        Debug.Log("Found " + capsuleResults.Length + " colliders in capsule");
+        
+        // LINECAST, SPHERECAST, BOXCAST
+        
+        // Linecast (similar to raycast but with start and end points)
+        Vector3 lineEnd = transform.position + transform.forward * raycastDistance;
+        if (Physics.Linecast(transform.position, lineEnd, out hit))
+        {
+            Debug.Log("Linecast hit: " + hit.collider.gameObject.name);
+        }
+        
+        // SphereCast (like a raycast but with thickness)
+        float sphereRadius = 0.5f;
+        if (Physics.SphereCast(transform.position, sphereRadius, transform.forward, out hit, raycastDistance))
+        {
+            Debug.Log("SphereCast hit: " + hit.collider.gameObject.name);
+        }
+        
+        // BoxCast (like a raycast but with a box)
+        Vector3 boxHalfExtents = new Vector3(0.5f, 0.5f, 0.5f);
+        if (Physics.BoxCast(transform.position, boxHalfExtents, transform.forward, out hit, transform.rotation, raycastDistance))
+        {
+            Debug.Log("BoxCast hit: " + hit.collider.gameObject.name);
+        }
+        
+        // 2D VARIANTS
+        
+        // 2D Raycast example
+        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, transform.right, raycastDistance, raycastLayers);
+        if (hit2D.collider != null)
+        {
+            Debug.Log("2D Raycast hit: " + hit2D.collider.gameObject.name);
+        }
+        
+        // 2D Circle overlap example
+        Collider2D[] circleResults = Physics2D.OverlapCircleAll(transform.position, 5f, raycastLayers);
+        Debug.Log("Found " + circleResults.Length + " 2D colliders in circle");
+    }
+    
+    // Visualize raycasts and overlap tests in the Scene view
+    void OnDrawGizmos()
+    {
+        // Draw the main raycast
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * raycastDistance);
+        
+        // Draw a sphere for the OverlapSphere
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 5f);
+        
+        // Draw a box for the OverlapBox
+        Gizmos.color = Color.blue;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(2f, 2f, 2f));
+        Gizmos.matrix = Matrix4x4.identity;
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Manual detection methods:</p>
+                                <ul>
+                                    <li><strong>Raycast</strong>: Line from a point in a direction</li>
+                                    <li><strong>SphereCast/BoxCast</strong>: Like Raycast but with volume</li>
+                                    <li><strong>OverlapSphere/Box/Capsule</strong>: Find all colliders in a volume</li>
+                                    <li><strong>Linecast</strong>: Line between two specific points</li>
+                                    <li><strong>2D variants</strong>: Similar functions for 2D physics</li>
+                                </ul>
+                                
+                                <p>Uses for manual detection:</p>
+                                <ul>
+                                    <li><strong>Line of sight</strong>: Check if objects can "see" each other</li>
+                                    <li><strong>Range detection</strong>: Find objects within a certain distance</li>
+                                    <li><strong>Targeting</strong>: Find potential targets for weapons or abilities</li>
+                                    <li><strong>Ground detection</strong>: Check if character is on ground</li>
+                                    <li><strong>Environmental interaction</strong>: Detect interactive objects</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Physics Materials</h3>
+                        <p>Physics Materials define how surfaces interact in terms of friction and bounciness (restitution).</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating and Using Physics Materials:</h4>
+                            <ol>
+                                <li><strong>Create a Physics Material</strong>: Right-click in Project window → Create → Physics Material (or Physic Material 2D)</li>
+                                <li><strong>Configure Properties</strong>:
+                                    <ul>
+                                        <li><strong>Dynamic Friction</strong>: Friction when objects are moving</li>
+                                        <li><strong>Static Friction</strong>: Friction when objects are stationary</li>
+                                        <li><strong>Bounciness</strong>: How bouncy the surface is (0 = no bounce, 1 = perfect bounce)</li>
+                                        <li><strong>Friction Combine</strong>: How to combine friction with other materials (Average, Minimum, Maximum, Multiply)</li>
+                                        <li><strong>Bounce Combine</strong>: How to combine bounciness with other materials</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Apply to Collider</strong>: Drag the Physics Material to the Material property of a Collider component</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Common Physics Materials examples:</p>
+                                <ul>
+                                    <li><strong>Ice</strong>: Low friction (0.05), low bounciness</li>
+                                    <li><strong>Rubber</strong>: Medium friction (0.4), high bounciness (0.8)</li>
+                                    <li><strong>Metal</strong>: Medium friction (0.3), medium bounciness (0.4)</li>
+                                    <li><strong>Mud</strong>: High friction (0.8), low bounciness (0.1)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Collision Layers and Filtering</h3>
+                        <p>Unity uses layers and collision matrices to control which objects can collide with each other.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up Collision Layers:</h4>
+                            <ol>
+                                <li><strong>Define Layers</strong>: Edit → Project Settings → Tags and Layers → Layers</li>
+                                <li><strong>Assign Layers</strong>: Select GameObjects and set their Layer in the Inspector</li>
+                                <li><strong>Configure Collision Matrix</strong>: Edit → Project Settings → Physics → Layer Collision Matrix</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Common layer setups:</p>
+                                <ul>
+                                    <li><strong>Player</strong>: The player character</li>
+                                    <li><strong>Enemy</strong>: Enemy characters</li>
+                                    <li><strong>Ground</strong>: Terrain and floors</li>
+                                    <li><strong>Pickup</strong>: Collectible items</li>
+                                    <li><strong>Obstacle</strong>: Walls and barriers</li>
+                                    <li><strong>Projectile</strong>: Bullets, arrows, etc.</li>
+                                    <li><strong>Trigger</strong>: Objects that only act as triggers</li>
+                                    <li><strong>Ignore Raycast</strong>: Objects that shouldn't be detected by raycasts</li>
+                                </ul>
+                                
+                                <p>Example collision rules:</p>
+                                <ul>
+                                    <li>Player can collide with Ground, Obstacle, Enemy, Pickup</li>
+                                    <li>Projectiles can collide with Player, Enemy, Obstacle, but not other Projectiles</li>
+                                    <li>Pickup can only collide with Player</li>
+                                    <li>Triggers don't collide with anything (use trigger callbacks instead)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Collision Issues and Solutions</h3>
+                        <ol>
+                            <li>
+                                <strong>Objects passing through each other at high speeds</strong>
+                                <p>Solution: Use Continuous Collision Detection on fast-moving Rigidbodies, or use larger colliders for small, fast objects.</p>
+                            </li>
+                            <li>
+                                <strong>Character getting stuck on edges</strong>
+                                <p>Solution: Use a capsule collider for characters and ensure the bottom is rounded. Add a Physics Material with low friction.</p>
+                            </li>
+                            <li>
+                                <strong>Unstable stacking of objects</strong>
+                                <p>Solution: Increase solver iteration count in Physics settings, and ensure objects have appropriate mass ratios.</p>
+                            </li>
+                            <li>
+                                <strong>Jittering when objects are in contact</strong>
+                                <p>Solution: Enable interpolation on Rigidbodies, adjust mass values, or use Continuous Collision Detection.</p>
+                            </li>
+                            <li>
+                                <strong>Colliders not matching visual appearance</strong>
+                                <p>Solution: Use compound colliders (multiple primitive colliders) to better match complex shapes.</p>
+                            </li>
+                            <li>
+                                <strong>Performance issues with many collisions</strong>
+                                <p>Solution: Use simpler collider shapes, implement object pooling, and use collision layers to filter unnecessary collisions.</p>
+                            </li>
+                            <li>
+                                <strong>Trigger events not firing</strong>
+                                <p>Solution: Ensure at least one object has a non-kinematic Rigidbody, and check layer collision settings.</p>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Collision and Triggers</h3>
+                        <ol>
+                            <li><strong>Use primitive colliders</strong> whenever possible (box, sphere, capsule) for better performance</li>
+                            <li><strong>Set up proper collision layers</strong> to avoid unnecessary collision checks</li>
+                            <li><strong>Make colliders slightly smaller</strong> than visual meshes to prevent visual overlapping</li>
+                            <li><strong>Use compound colliders</strong> (multiple primitive colliders) for complex shapes instead of mesh colliders</li>
+                            <li><strong>Avoid moving colliders by changing transform</strong> directly; use Rigidbody movement methods instead</li>
+                            <li><strong>Don't scale colliders non-uniformly</strong> as it can cause physics inconsistencies</li>
+                            <li><strong>Cache references to components</strong> in collision callbacks rather than using GetComponent repeatedly</li>
+                            <li><strong>Use triggers for detection zones</strong> and regular colliders for physical obstacles</li>
+                            <li><strong>Keep physics consistent</strong> by using FixedUpdate for physics operations</li>
+                            <li><strong>Test collision behavior across different frame rates</strong> to ensure consistent results</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-input.html" class="prev"><i class="fas fa-arrow-left"></i> Input Systems</a>
+                        <a href="unity-animations.html" class="next">Animation Systems <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Saving Systems - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Saving Systems</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Game Data Persistence</h3>
+                        <p>Saving and loading game data is an essential feature for almost every game. Whether it's saving player progress, high scores, settings, or the entire game state, a robust saving system enhances the player experience and allows for continuous gameplay across sessions.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Different data persistence approaches in Unity</li>
+                            <li>Working with PlayerPrefs for simple data</li>
+                            <li>Serialization techniques for complex data</li>
+                            <li>Creating save/load systems with JSON</li>
+                            <li>Binary serialization for better security</li>
+                            <li>Building a complete save system architecture</li>
+                            <li>Cross-platform saving considerations</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Using PlayerPrefs for Simple Data</h3>
+                        <p>PlayerPrefs is Unity's built-in solution for storing small amounts of data persistently between game sessions. It's essentially a key-value store that saves data to the registry (on Windows), plist files (on macOS), or specific locations on other platforms.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic PlayerPrefs Usage:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerPrefsExample : MonoBehaviour
+{
+    // References to UI elements
+    public InputField playerNameInput;
+    public Slider volumeSlider;
+    public Toggle fullscreenToggle;
+    public Text highScoreText;
+    
+    // Current score and high score
+    private int currentScore = 0;
+    private int highScore = 0;
+    
+    void Start()
+    {
+        // Load saved settings when the game starts
+        LoadSettings();
+        
+        // Set up UI callbacks
+        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+        fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggled);
+        
+        // Initialize high score display
+        UpdateHighScoreDisplay();
+    }
+    
+    // Load all settings from PlayerPrefs
+    void LoadSettings()
+    {
+        // Load player name (with a default if not found)
+        string playerName = PlayerPrefs.GetString("PlayerName", "New Player");
+        playerNameInput.text = playerName;
+        
+        // Load volume setting (default to 0.75 if not found)
+        float volume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
+        volumeSlider.value = volume;
+        
+        // Set the actual volume
+        AudioListener.volume = volume;
+        
+        // Load fullscreen preference (default to true if not found)
+        bool fullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        fullscreenToggle.isOn = fullscreen;
+        
+        // Apply fullscreen setting
+        Screen.fullScreen = fullscreen;
+        
+        // Load high score
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+    }
+    
+    // Save the player name when the input field changes
+    public void OnPlayerNameChanged()
+    {
+        string newName = playerNameInput.text;
+        
+        // Save to PlayerPrefs
+        PlayerPrefs.SetString("PlayerName", newName);
+        
+        // Call Save to write to disk immediately (optional)
+        PlayerPrefs.Save();
+        
+        Debug.Log("Player name saved: " + newName);
+    }
+    
+    // Handle volume change from slider
+    void OnVolumeChanged(float newVolume)
+    {
+        // Set actual volume
+        AudioListener.volume = newVolume;
+        
+        // Save to PlayerPrefs
+        PlayerPrefs.SetFloat("MasterVolume", newVolume);
+        PlayerPrefs.Save();
+        
+        Debug.Log("Volume saved: " + newVolume);
+    }
+    
+    // Handle fullscreen toggle
+    void OnFullscreenToggled(bool isFullscreen)
+    {
+        // Apply fullscreen
+        Screen.fullScreen = isFullscreen;
+        
+        // Save to PlayerPrefs (convert bool to int since PlayerPrefs doesn't support bool)
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+        
+        Debug.Log("Fullscreen saved: " + isFullscreen);
+    }
+    
+    // When the player scores points
+    public void AddScore(int points)
+    {
+        currentScore += points;
+        
+        // Check if this is a new high score
+        if (currentScore > highScore)
+        {
+            highScore = currentScore;
+            
+            // Save the new high score
+            PlayerPrefs.SetInt("HighScore", highScore);
+            PlayerPrefs.Save();
+            
+            // Update the display
+            UpdateHighScoreDisplay();
+            
+            Debug.Log("New high score saved: " + highScore);
+        }
+    }
+    
+    // Reset the high score (might be triggered by a button)
+    public void ResetHighScore()
+    {
+        highScore = 0;
+        
+        // Save to PlayerPrefs
+        PlayerPrefs.SetInt("HighScore", 0);
+        PlayerPrefs.Save();
+        
+        // Update the display
+        UpdateHighScoreDisplay();
+        
+        Debug.Log("High score reset");
+    }
+    
+    // Delete all saved PlayerPrefs
+    public void DeleteAllSavedData()
+    {
+        // This will erase ALL PlayerPrefs data
+        PlayerPrefs.DeleteAll();
+        
+        // Reload default settings
+        LoadSettings();
+        
+        Debug.Log("All saved data deleted");
+    }
+    
+    // Update the high score text display
+    void UpdateHighScoreDisplay()
+    {
+        if (highScoreText != null)
+        {
+            highScoreText.text = "High Score: " + highScore;
+        }
+    }
+</div>
+
+<div class="topic">
+    <h3>Creating a PlayerPrefs Manager:</h3>
+    <p>A centralized PlayerPrefs manager can help manage PlayerPrefs more efficiently and reduce code duplication. Here's an example implementation:</p>
+    
+    <div class="example-box">
+        <h4>PlayerPrefs Manager Code:</h4>
+        <pre><code>using UnityEngine;
+using System;
+
+// Static class for centralized PlayerPrefs access
+public static class PlayerPrefsManager
+{
+    // Key constants to avoid typos and ensure consistency
+    private static class Keys
+    {
+        // Player settings
+        public const string PLAYER_NAME = "PlayerName";
+        public const string PLAYER_LEVEL = "PlayerLevel";
+        public const string PLAYER_EXPERIENCE = "PlayerExperience";
+        public const string PLAYER_HEALTH = "PlayerHealth";
+        
+        // Game settings
+        public const string MASTER_VOLUME = "MasterVolume";
+        public const string MUSIC_VOLUME = "MusicVolume";
+        public const string SFX_VOLUME = "SFXVolume";
+        public const string FULLSCREEN = "Fullscreen";
+        public const string GRAPHICS_QUALITY = "GraphicsQuality";
+        
+        // Game progress
+        public const string HIGHEST_LEVEL_COMPLETED = "HighestLevelCompleted";
+        public const string TOTAL_PLAYTIME = "TotalPlaytime";
+        public const string HIGH_SCORE = "HighScore";
+        
+        // Tutorial flags
+        public const string TUTORIAL_COMPLETED = "TutorialCompleted";
+        
+        // Custom settings - create a key with a prefix
+        private const string CUSTOM_SETTING_PREFIX = "CustomSetting_";
+        public static string GetCustomSettingKey(string settingName)
+        {
+            return CUSTOM_SETTING_PREFIX + settingName;
+        }
+    }
+    
+    #region Player Data Methods
+    
+    // Player name
+    public static string GetPlayerName()
+    {
+        return PlayerPrefs.GetString(Keys.PLAYER_NAME, "New Player");
+    }
+    
+    public static void SetPlayerName(string name)
+    {
+        PlayerPrefs.SetString(Keys.PLAYER_NAME, name);
+        PlayerPrefs.Save();
+    }
+    
+    // Player level
+    public static int GetPlayerLevel()
+    {
+        return PlayerPrefs.GetInt(Keys.PLAYER_LEVEL, 1);
+    }
+    
+    public static void SetPlayerLevel(int level)
+    {
+        PlayerPrefs.SetInt(Keys.PLAYER_LEVEL, level);
+        PlayerPrefs.Save();
+    }
+    
+    // Player experience
+    public static int GetPlayerExperience()
+    {
+        return PlayerPrefs.GetInt(Keys.PLAYER_EXPERIENCE, 0);
+    }
+    
+    public static void SetPlayerExperience(int exp)
+    {
+        PlayerPrefs.SetInt(Keys.PLAYER_EXPERIENCE, exp);
+        PlayerPrefs.Save();
+    }
+    
+    // Player health
+    public static float GetPlayerHealth()
+    {
+        return PlayerPrefs.GetFloat(Keys.PLAYER_HEALTH, 100f);
+    }
+    
+    public static void SetPlayerHealth(float health)
+    {
+        PlayerPrefs.SetFloat(Keys.PLAYER_HEALTH, health);
+        PlayerPrefs.Save();
+    }
+    
+    #endregion
+    
+    #region Game Settings Methods
+    
+    // Master volume
+    public static float GetMasterVolume()
+    {
+        return PlayerPrefs.GetFloat(Keys.MASTER_VOLUME, 0.75f);
+    }
+    
+    public static void SetMasterVolume(float volume)
+    {
+        // Clamp the value between 0 and 1
+        volume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(Keys.MASTER_VOLUME, volume);
+        PlayerPrefs.Save();
+    }
+    
+    // Music volume
+    public static float GetMusicVolume()
+    {
+        return PlayerPrefs.GetFloat(Keys.MUSIC_VOLUME, 0.5f);
+    }
+    
+    public static void SetMusicVolume(float volume)
+    {
+        volume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(Keys.MUSIC_VOLUME, volume);
+        PlayerPrefs.Save();
+    }
+    
+    // SFX volume
+    public static float GetSFXVolume()
+    {
+        return PlayerPrefs.GetFloat(Keys.SFX_VOLUME, 0.8f);
+    }
+    
+    public static void SetSFXVolume(float volume)
+    {
+        volume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(Keys.SFX_VOLUME, volume);
+        PlayerPrefs.Save();
+    }
+    
+    // Fullscreen setting
+    public static bool GetFullscreenEnabled()
+    {
+        return PlayerPrefs.GetInt(Keys.FULLSCREEN, 1) == 1;
+    }
+    
+    public static void SetFullscreenEnabled(bool enabled)
+    {
+        PlayerPrefs.SetInt(Keys.FULLSCREEN, enabled ? 1 : 0);
+        Screen.fullScreen = enabled; // Apply right away
+        PlayerPrefs.Save();
+    }
+    
+    // Graphics quality setting
+    public static int GetGraphicsQuality()
+    {
+        return PlayerPrefs.GetInt(Keys.GRAPHICS_QUALITY, QualitySettings.GetQualityLevel());
+    }
+    
+    public static void SetGraphicsQuality(int qualityIndex)
+    {
+        // Ensure the index is valid
+        int maxQuality = QualitySettings.names.Length - 1;
+        qualityIndex = Mathf.Clamp(qualityIndex, 0, maxQuality);
+        
+        // Save the setting
+        PlayerPrefs.SetInt(Keys.GRAPHICS_QUALITY, qualityIndex);
+        
+        // Apply right away
+        QualitySettings.SetQualityLevel(qualityIndex);
+        
+        PlayerPrefs.Save();
+    }
+    
+    #endregion
+    
+    #region Game Progress Methods
+    
+    // Highest level completed
+    public static int GetHighestLevelCompleted()
+    {
+        return PlayerPrefs.GetInt(Keys.HIGHEST_LEVEL_COMPLETED, 0);
+    }
+    
+    public static void SetHighestLevelCompleted(int level)
+    {
+        // Only update if it's a higher level than before
+        int currentHighest = GetHighestLevelCompleted();
+        if (level > currentHighest)
+        {
+            PlayerPrefs.SetInt(Keys.HIGHEST_LEVEL_COMPLETED, level);
+            PlayerPrefs.Save();
+        }
+    }
+    
+    // Total playtime
+    public static float GetTotalPlaytime()
+    {
+        return PlayerPrefs.GetFloat(Keys.TOTAL_PLAYTIME, 0f);
+    }
+    
+    public static void UpdateTotalPlaytime(float sessionTime)
+    {
+        float currentTotal = GetTotalPlaytime();
+        PlayerPrefs.SetFloat(Keys.TOTAL_PLAYTIME, currentTotal + sessionTime);
+        PlayerPrefs.Save();
+    }
+    
+    // High score
+    public static int GetHighScore()
+    {
+        return PlayerPrefs.GetInt(Keys.HIGH_SCORE, 0);
+    }
+    
+    public static bool TrySetHighScore(int score)
+    {
+        int currentHighScore = GetHighScore();
+        
+        if (score > currentHighScore)
+        {
+            PlayerPrefs.SetInt(Keys.HIGH_SCORE, score);
+            PlayerPrefs.Save();
+            return true; // New high score
+        }
+        
+        return false; // Not a new high score
+    }
+    
+    #endregion
+    
+    #region Tutorial Flags Methods
+    
+    public static bool IsTutorialCompleted()
+    {
+        return PlayerPrefs.GetInt(Keys.TUTORIAL_COMPLETED, 0) == 1;
+    }
+    
+    public static void SetTutorialCompleted(bool completed)
+    {
+        PlayerPrefs.SetInt(Keys.TUTORIAL_COMPLETED, completed ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+    
+    #endregion
+    
+    #region Custom Settings Methods
+    
+    // Get a custom string setting
+    public static string GetCustomSetting(string settingName, string defaultValue = "")
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        return PlayerPrefs.GetString(key, defaultValue);
+    }
+    
+    // Set a custom string setting
+    public static void SetCustomSetting(string settingName, string value)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        PlayerPrefs.SetString(key, value);
+        PlayerPrefs.Save();
+    }
+    
+    // Get a custom int setting
+    public static int GetCustomSettingInt(string settingName, int defaultValue = 0)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        return PlayerPrefs.GetInt(key, defaultValue);
+    }
+    
+    // Set a custom int setting
+    public static void SetCustomSettingInt(string settingName, int value)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        PlayerPrefs.SetInt(key, value);
+        PlayerPrefs.Save();
+    }
+    
+    // Get a custom float setting
+    public static float GetCustomSettingFloat(string settingName, float defaultValue = 0f)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        return PlayerPrefs.GetFloat(key, defaultValue);
+    }
+    
+    // Set a custom float setting
+    public static void SetCustomSettingFloat(string settingName, float value)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        PlayerPrefs.SetFloat(key, value);
+        PlayerPrefs.Save();
+    }
+    
+    // Get a custom bool setting
+    public static bool GetCustomSettingBool(string settingName, bool defaultValue = false)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        return PlayerPrefs.GetInt(key, defaultValue ? 1 : 0) == 1;
+    }
+    
+    // Set a custom bool setting
+    public static void SetCustomSettingBool(string settingName, bool value)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        PlayerPrefs.SetInt(key, value ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+    
+    // Check if a custom setting exists
+    public static bool HasCustomSetting(string settingName)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        return PlayerPrefs.HasKey(key);
+    }
+    
+    // Delete a custom setting
+    public static void DeleteCustomSetting(string settingName)
+    {
+        string key = Keys.GetCustomSettingKey(settingName);
+        if (PlayerPrefs.HasKey(key))
+        {
+            PlayerPrefs.DeleteKey(key);
+            PlayerPrefs.Save();
+        }
+    }
+    
+    #endregion
+    
+    #region Global Methods
+    
+    // Save all settings immediately
+    public static void SaveAll()
+    {
+        PlayerPrefs.Save();
+    }
+    
+    // Clear all settings
+    public static void DeleteAll()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+    
+    // Check if this is the first time running the game
+    public static bool IsFirstRun()
+    {
+        const string FIRST_RUN_KEY = "HasGameRunBefore";
+        bool isFirst = !PlayerPrefs.HasKey(FIRST_RUN_KEY);
+        
+        if (isFirst)
+        {
+            // Mark that the game has run before
+            PlayerPrefs.SetInt(FIRST_RUN_KEY, 1);
+            PlayerPrefs.Save();
+        }
+        
+        return isFirst;
+    }
+    
+    #endregion
+}</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of a centralized PlayerPrefs manager:</p>
+                                <ul>
+                                    <li><strong>Type safety</strong>: Prevent errors by using strongly typed methods</li>
+                                    <li><strong>Key consistency</strong>: Avoid typos in key names with constants</li>
+                                    <li><strong>Default values</strong>: Centralized defaults for consistent fallbacks</li>
+                                    <li><strong>Validation</strong>: Add validation logic in one place (e.g., clamping values)</li>
+                                    <li><strong>Organization</strong>: Group related settings for better code organization</li>
+                                    <li><strong>Extensibility</strong>: Easy to add new settings or change implementation</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>PlayerPrefs Limitations</h4>
+                            <ul>
+                                <li><strong>Limited data types</strong>: Only supports int, float, and string</li>
+                                <li><strong>No complex data</strong>: Can't directly store objects, arrays, or collections</li>
+                                <li><strong>Not secure</strong>: Data is stored in easily accessible locations and not encrypted</li>
+                                <li><strong>Size limitations</strong>: Not suitable for large amounts of data</li>
+                                <li><strong>Platform differences</strong>: Storage locations and behavior vary by platform</li>
+                                <li><strong>No version control</strong>: No built-in way to handle data format changes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-ai.html" class="prev"><i class="fas fa-arrow-left"></i> Unity AI</a>
+                        <a href="index.html" class="next">Home <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

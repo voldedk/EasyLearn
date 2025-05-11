@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Variables - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Variables</h2>
+                    
+                    <div class="topic">
+                        <h3>What is a Variable?</h3>
+                        <p>In C#, a variable is a container for storing data values. Variables serve as named memory locations where data can be stored and manipulated during program execution. Each variable has a specific data type that determines what kind of information it can hold.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Variable Declaration:</h4>
+                            <pre><code>
+// Type variableName = value;
+int myNum = 5;               // Integer (whole number)
+double myDoubleNum = 5.99D;  // Floating point number
+char myLetter = 'D';         // Character
+bool myBool = true;          // Boolean
+string myText = "Hello";     // String
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Naming Rules</h3>
+                        <p>When naming variables in C#, you must follow these rules:</p>
+                        
+                        <ul>
+                            <li><strong>Must start with a letter or underscore (_)</strong></li>
+                            <li><strong>Cannot start with a number</strong></li>
+                            <li><strong>Cannot contain spaces or special characters like !, @, #, etc.</strong></li>
+                            <li><strong>Cannot be a C# keyword (like int, string, class, etc.)</strong></li>
+                            <li><strong>Are case-sensitive (age and Age are different variables)</strong></li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Valid and Invalid Variable Names:</h4>
+                            <pre><code>
+// Valid variable names
+int age;
+string userName;
+double _temperature;
+bool isActive;
+int totalItems123;
+
+// Invalid variable names
+// int 1stNumber;      // Cannot start with a number
+// string user-name;   // Cannot contain hyphen
+// double class;       // Cannot use C# keywords
+// bool my variable;   // Cannot contain spaces
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Naming Conventions</h3>
+                        <p>While not required by the compiler, following these conventions makes your code more readable and maintainable:</p>
+                        
+                        <ul>
+                            <li><strong>camelCase</strong> for local variables and method parameters (e.g., <code>firstName</code>, <code>totalAmount</code>)</li>
+                            <li><strong>PascalCase</strong> for class names, method names, and properties (e.g., <code>Customer</code>, <code>CalculateTotal</code>)</li>
+                            <li><strong>_camelCase</strong> for private fields (e.g., <code>_firstName</code>)</li>
+                            <li><strong>ALL_UPPERCASE</strong> for constants (e.g., <code>MAX_SIZE</code>, <code>PI</code>)</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Declaration and Initialization</h3>
+                        <p>In C#, you have several ways to declare and initialize variables:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Declaration without initialization (default values are assigned)
+int count;          // Default value: 0
+bool flag;          // Default value: false
+string name;        // Default value: null
+
+// Declaration with initialization
+int age = 25;
+string firstName = "John";
+
+// Multiple declarations of the same type
+int x = 10, y = 20, z = 30;
+
+// Using var (type inference) - compiler determines the type based on the value
+var total = 100;        // Inferred as int
+var message = "Hello";  // Inferred as string
+var price = 29.99;      // Inferred as double
+var today = DateTime.Now;  // Inferred as DateTime
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Note on var:</h4>
+                            <p>When using <code>var</code>, the variable must be initialized at the time of declaration, as the compiler needs the initial value to determine the type. Once the type is inferred, it cannot be changed later.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Getting User Input for Variables</h3>
+                        <p>In console applications, you can use <code>Console.ReadLine()</code> to get user input and assign it to variables:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Reading string input
+Console.Write("Enter your name: ");
+string name = Console.ReadLine();  // ReadLine returns a string
+
+// Converting string input to numeric types
+Console.Write("Enter your age: ");
+string ageInput = Console.ReadLine();
+int age = Convert.ToInt32(ageInput);  // Convert string to int
+
+// Alternative conversion methods
+Console.Write("Enter your height in meters: ");
+double height = double.Parse(Console.ReadLine());  // Using parse method
+
+// Safe conversion with TryParse
+Console.Write("Enter number of items: ");
+string itemsInput = Console.ReadLine();
+if (int.TryParse(itemsInput, out int items))
+{
+    Console.WriteLine($"You entered {items} items");
+}
+else
+{
+    Console.WriteLine("That's not a valid number");
+}
+
+// Reading multiple inputs
+Console.Write("Enter first name and last name separated by space: ");
+string fullNameInput = Console.ReadLine();
+string[] nameParts = fullNameInput.Split(' ');
+string firstName = nameParts[0];
+string lastName = nameParts[1];
+Console.WriteLine($"First name: {firstName}, Last name: {lastName}");
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Important Notes on User Input:</h4>
+                            <ul>
+                                <li><code>Console.ReadLine()</code> always returns a string, regardless of what the user types</li>
+                                <li>To use numeric input, you must convert the string to the appropriate type</li>
+                                <li>Always validate user input to handle invalid entries, especially when converting to numeric types</li>
+                                <li>Use <code>TryParse</code> methods for safer conversion that won't crash on invalid input</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Scope</h3>
+                        <p>The scope of a variable determines where in the code the variable is accessible. C# has several levels of scope:</p>
+                        
+                        <div class="example-box">
+                            <h4>Block Scope:</h4>
+                            <pre><code>
+void ExampleMethod()
+{
+    // Method-level scope
+    int outerVariable = 10;
+    
+    if (outerVariable > 5)
+    {
+        // Block-level scope
+        int innerVariable = 20;
+        Console.WriteLine(outerVariable);    // Can access outerVariable
+        Console.WriteLine(innerVariable);    // Can access innerVariable
+    }
+    
+    Console.WriteLine(outerVariable);    // Can access outerVariable
+    // Console.WriteLine(innerVariable); // ERROR: Cannot access innerVariable here
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Class Scope:</h4>
+                            <pre><code>
+class Person
+{
+    // Class-level fields (accessible throughout the class)
+    private string _name;
+    private int _age;
+    
+    // Constructor
+    public Person(string name, int age)
+    {
+        // Constructor parameters (method scope)
+        _name = name;  // Assign parameter to field
+        _age = age;    // Assign parameter to field
+    }
+    
+    public void DisplayInfo()
+    {
+        // Local variable (method scope)
+        string message = $"Name: {_name}, Age: {_age}";
+        Console.WriteLine(message);
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Constants</h3>
+                        <p>Constants are values that cannot be modified after they are declared. They must be initialized at the time of declaration:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Constants must be assigned a value when declared
+const double PI = 3.14159;
+const int MAX_USERS = 100;
+const string CONNECTION_STRING = "Server=myServerAddress;Database=myDataBase;";
+
+// This will cause a compilation error:
+// PI = 3.14; // Constants cannot be changed
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>When to Use Constants:</h4>
+                            <p>Use constants for values that are truly fixed and will never change, such as mathematical constants, fixed configuration values, or fixed business rules. Constants are evaluated at compile time, so they're very efficient.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Read-only Fields</h3>
+                        <p>For class-level variables that should be immutable but can be set at runtime (usually in a constructor), use the <code>readonly</code> keyword:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+public class Configuration
+{
+    // Read-only fields - can only be assigned in declaration or constructor
+    private readonly string _serverName;
+    private readonly int _timeoutSeconds;
+    public readonly DateTime CreationTime = DateTime.Now;
+    
+    public Configuration(string serverName)
+    {
+        _serverName = serverName;
+        _timeoutSeconds = 30; // Can set in constructor
+    }
+    
+    public void ChangeSettings()
+    {
+        // This would cause a compilation error:
+        // _serverName = "newServer"; // Cannot modify readonly fields
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Variables</h3>
+                        <p>Once declared, variables can be manipulated in various ways:</p>
+                        
+                        <div class="example-box">
+                            <h4>Variable Operations:</h4>
+                            <pre><code>
+// Arithmetic operations
+int a = 10;
+int b = 3;
+int sum = a + b;        // Addition: 13
+int difference = a - b; // Subtraction: 7
+int product = a * b;    // Multiplication: 30
+int quotient = a / b;   // Division: 3 (integer division)
+int remainder = a % b;  // Modulus (remainder): 1
+
+// Compound assignment operators
+int count = 5;
+count += 2;  // Equivalent to: count = count + 2; (count becomes 7)
+count -= 1;  // Equivalent to: count = count - 1; (count becomes 6)
+count *= 3;  // Equivalent to: count = count * 3; (count becomes 18)
+count /= 2;  // Equivalent to: count = count / 2; (count becomes 9)
+
+// Increment and decrement
+int x = 10;
+x++;  // Increment by 1 (x becomes 11)
+x--;  // Decrement by 1 (x becomes 10)
+
+// Pre-increment and post-increment
+int y = 5;
+int z1 = ++y;  // Pre-increment: y becomes 6, then z1 is assigned 6
+int z2 = y++;  // Post-increment: z2 is assigned 6, then y becomes 7
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Displaying Variables</h3>
+                        <p>There are multiple ways to display variables in C#:</p>
+                        
+                        <div class="example-box">
+                            <h4>Output Methods:</h4>
+                            <pre><code>
+// String concatenation (using + operator)
+string name = "Alice";
+int age = 28;
+Console.WriteLine("Name: " + name + ", Age: " + age);
+
+// String interpolation (recommended, C# 6.0+)
+Console.WriteLine($"Name: {name}, Age: {age}");
+
+// String.Format method
+Console.WriteLine(String.Format("Name: {0}, Age: {1}", name, age));
+
+// Composite formatting
+Console.WriteLine("Name: {0}, Age: {1}", name, age);
+
+// With formatting options
+double price = 123.45;
+Console.WriteLine($"Price: {price:C}");  // Currency format: $123.45 (locale-dependent)
+Console.WriteLine($"Price: {price:F1}"); // Fixed-point: 123.5 (1 decimal place)
+Console.WriteLine($"Tax rate: {0.0825:P}"); // Percentage: 8.25%
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Pitfalls</h3>
+                        <ul>
+                            <li><strong>Uninitialized Variables</strong> - Local variables must be initialized before use</li>
+                            <li><strong>Variable Shadowing</strong> - Declaring a variable inside a block with the same name as a variable in an outer block</li>
+                            <li><strong>Confusing Value vs. Reference Types</strong> - Understanding how variables store data (by value or by reference)</li>
+                            <li><strong>Var Misuse</strong> - Using var excessively can make code harder to understand</li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Variable Shadowing Example:</h4>
+                            <pre><code>
+int x = 10;  // Outer variable
+
+if (true)
+{
+    int x = 20;  // Inner variable (shadows the outer one)
+    Console.WriteLine(x);  // Outputs: 20 (refers to the inner variable)
+}
+
+Console.WriteLine(x);  // Outputs: 10 (refers to the outer variable)
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Practice with Variables</h3>
+                        <p>To practice using variables, try the <a href="beginner-course.html">Beginner C# Course</a> which includes hands-on exercises where you can write and run code.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Test Your Knowledge: Variables</h3>
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                <p><strong>Question 1:</strong> Which of the following correctly declares an integer variable named 'count' with a value of 10?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="a">
+                                        <span>var count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="b">
+                                        <span>int count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="c">
+                                        <span>count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="d">
+                                        <span>integer count = 10;</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="b"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 2:</strong> What will be the output of the following code?</p>
+                                <pre><code>int x = 5;
+int y = 2;
+int z = x + y;
+Console.WriteLine(z);</code></pre>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="a">
+                                        <span>5 + 2</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="b">
+                                        <span>x + y</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="c">
+                                        <span>7</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="d">
+                                        <span>Error</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 3:</strong> Which statement about the <code>const</code> keyword is true?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="a">
+                                        <span>Const variables can be changed at runtime.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="b">
+                                        <span>Const variables can be declared without an initial value.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="c">
+                                        <span>Const variables must be initialized when declared and cannot be changed.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="d">
+                                        <span>Const is used for reference types only.</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <button class="check-answers-btn">Check Answers</button>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="output.html" class="prev"><i class="fas fa-arrow-left"></i> C# Output</a>
+                        <a href="data-types.html" class="next">Data Types <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

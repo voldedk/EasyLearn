@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Introduction - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Introduction</h2>
+                    
+                    <div class="topic">
+                        <h3>What is Unity?</h3>
+                        <p>Unity is a cross-platform game engine developed by Unity Technologies. It's widely used to create 2D and 3D games, simulations, and interactive experiences across multiple platforms including mobile, desktop, consoles, and VR/AR devices.</p>
+                        
+                        <p>Unity has become one of the most popular game development platforms due to its:</p>
+                        <ul>
+                            <li><strong>Accessibility</strong> - Beginner-friendly with a visual editor and component-based architecture</li>
+                            <li><strong>Versatility</strong> - Supports development for over 25 platforms including iOS, Android, Windows, macOS, and game consoles</li>
+                            <li><strong>Community</strong> - Large and active community with abundant learning resources and assets</li>
+                            <li><strong>C# Scripting</strong> - Uses C# as its primary programming language, making it powerful and flexible</li>
+                            <li><strong>Asset Store</strong> - Marketplace with thousands of pre-made assets, tools, and plugins</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Why Learn Unity with C#?</h3>
+                        <p>Learning Unity with C# offers numerous advantages for aspiring game developers:</p>
+                        
+                        <div class="example-box">
+                            <h4>Benefits of Using Unity with C#:</h4>
+                            <ul>
+                                <li><strong>Powerful Programming Language</strong> - C# is a modern, object-oriented language with strong typing and excellent tooling support</li>
+                                <li><strong>Industry Standard</strong> - Both Unity and C# are widely used in the game development industry</li>
+                                <li><strong>Transferable Skills</strong> - C# skills learned for Unity can be applied to other software development areas</li>
+                                <li><strong>Performance</strong> - C# offers good performance for game development, especially with Unity's optimized runtime</li>
+                                <li><strong>Microsoft Support</strong> - C# is backed by Microsoft and has excellent documentation and tooling</li>
+                                <li><strong>Career Opportunities</strong> - Many game development jobs require Unity and C# experience</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>How Unity and C# Work Together</h3>
+                        <p>In Unity, C# is used to write scripts that control the behavior of game objects and implement game mechanics. Unity's architecture combines a visual editor with C# scripting in the following way:</p>
+                        
+                        <div class="example-box">
+                            <h4>Unity's Development Model:</h4>
+                            <ul>
+                                <li><strong>Scene-Based Design</strong> - Visual scenes built with the Unity editor</li>
+                                <li><strong>GameObject and Component System</strong> - Objects in the scene use a component-based architecture</li>
+                                <li><strong>C# Scripts as Components</strong> - Scripts are attached to GameObjects as components to define behavior</li>
+                                <li><strong>Event-Driven Programming</strong> - Scripts respond to built-in Unity events like Start(), Update()</li>
+                                <li><strong>Inspector Integration</strong> - Variables in C# scripts can be exposed to the Unity Inspector for easy configuration</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Your First Unity C# Script:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    // Variables exposed to the Unity Inspector
+    public float moveSpeed = 5f;
+    public float jumpForce = 10f;
+    
+    // Called when the script is first enabled
+    void Start()
+    {
+        Debug.Log("Player initialized!");
+    }
+    
+    // Called once per frame
+    void Update()
+    {
+        // Get horizontal input (left/right arrows or A/D keys)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        
+        // Move the player
+        transform.position += new Vector3(horizontalInput * moveSpeed * Time.deltaTime, 0, 0);
+        
+        // Jump when space key is pressed
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Getting Started with Unity and C#</h3>
+                        <p>To begin your journey in Unity game development with C#, you'll need to:</p>
+                        
+                        <ol>
+                            <li><strong>Download and install Unity Hub</strong> - The Unity Hub manages your Unity installations and projects</li>
+                            <li><strong>Install a compatible Unity version</strong> - Through Unity Hub, you can install the latest stable version</li>
+                            <li><strong>Set up a code editor</strong> - Visual Studio or Visual Studio Code are recommended for C# development</li>
+                            <li><strong>Create your first project</strong> - Start with a simple 2D or 3D project to learn the basics</li>
+                            <li><strong>Learn Unity's interface</strong> - Familiarize yourself with the Scene view, Game view, Hierarchy, Inspector, and Project panels</li>
+                            <li><strong>Write your first C# script</strong> - Begin with simple behaviors like movement or object interaction</li>
+                        </ol>
+                        
+                        <p>The next lessons in this Unity C# section will guide you through each of these steps in detail.</p>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="enums.html" class="prev"><i class="fas fa-arrow-left"></i> Enums</a>
+                        <a href="unity-setup.html" class="next">Setting Up Unity <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

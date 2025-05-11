@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Physics - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Physics Systems</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Physics</h3>
+                        <p>Physics simulation is a vital component of almost every game, allowing for realistic object interactions, movement, and dynamics. Unity provides robust physics systems for both 3D and 2D games, helping developers create convincing physical behaviors without having to implement complex physics calculations manually.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>How Unity's physics engines work (3D and 2D)</li>
+                            <li>Working with Rigidbodies and forces</li>
+                            <li>Implementing realistic object movement</li>
+                            <li>Using joints and constraints</li>
+                            <li>Raycasting and physics queries</li>
+                            <li>Optimizing physics performance</li>
+                            <li>Advanced physics techniques</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity's Physics Systems</h3>
+                        <p>Unity includes two separate physics engines:</p>
+                        
+                        <div class="example-box">
+                            <h4>Physics Systems Overview:</h4>
+                            <ul>
+                                <li><strong>3D Physics (NVIDIA PhysX)</strong>: For 3D games with Rigidbody, Collider components</li>
+                                <li><strong>2D Physics (Box2D)</strong>: For 2D games with Rigidbody2D, Collider2D components</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Key components of both systems:</p>
+                                <ul>
+                                    <li><strong>Rigidbodies</strong>: Components that allow GameObjects to be affected by physics</li>
+                                    <li><strong>Colliders</strong>: Define the physical shape used for collision detection</li>
+                                    <li><strong>Physics Materials</strong>: Define surface properties like friction and bounciness</li>
+                                    <li><strong>Joints/Constraints</strong>: Connect Rigidbodies and limit their movement</li>
+                                    <li><strong>Forces</strong>: External influences applied to Rigidbodies (gravity, wind, etc.)</li>
+                                    <li><strong>Raycasts</strong>: Line-based collision detection for various gameplay needs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Physics Settings</h4>
+                            <p>Configure global physics settings in Edit → Project Settings → Physics/Physics 2D:</p>
+                            <ul>
+                                <li><strong>Gravity</strong>: Global gravity strength and direction</li>
+                                <li><strong>Collision/Layer Matrix</strong>: Define which layers can collide with each other</li>
+                                <li><strong>Solver Iterations</strong>: Affects physics simulation accuracy and performance</li>
+                                <li><strong>Sleep Threshold</strong>: When objects become inactive to save performance</li>
+                                <li><strong>Default Contact Offset</strong>: Skin width for collision detection</li>
+                                <li><strong>Bounce Threshold</strong>: Minimum impact velocity for bouncing</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Rigidbodies</h3>
+                        <p>Rigidbodies are the core component that make GameObjects interact with the physics system.</p>
+                        
+                        <div class="example-box">
+                            <h4>Controlling 3D Rigidbodies:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class RigidbodyController : MonoBehaviour
+{
+    public float moveForce = 10f;
+    public float jumpForce = 300f;
+    public float maxSpeed = 5f;
+    
+    private Rigidbody rb;
+    private bool isGrounded;
+    
+    void Start()
+    {
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
+        
+        // Optional: Override the default gravity
+        // Physics.gravity = new Vector3(0, -20f, 0);
+    }
+    
+    void Update()
+    {
+        // Check for jump input
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+        }
+    }
+    
+    // Use FixedUpdate for physics-related code
+    void FixedUpdate()
+    {
+        // APPLYING FORCES
+        
+        // Get input axes
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        
+        // Create movement vector
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        
+        // METHOD 1: AddForce - Most physically accurate
+        rb.AddForce(movement * moveForce);
+        // This gradually accelerates the object, simulating inertia
+        
+        // Limit maximum speed (optional)
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
+        
+        // METHOD 2: Velocity - Direct control, less physically accurate
+        // rb.velocity = new Vector3(moveHorizontal * maxSpeed, rb.velocity.y, moveVertical * maxSpeed);
+        // This directly sets velocity, ignoring inertia but providing responsive control
+        
+        // METHOD 3: MovePosition - For precise movement with physics interaction
+        // rb.MovePosition(transform.position + movement * maxSpeed * Time.fixedDeltaTime);
+        // This moves the object while still interacting with the physics system
+        
+        // FORCE MODES EXAMPLES
+        
+        // Apply an impulse force (immediate force)
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.AddForce(movement * 10f, ForceMode.Impulse);
+            // ForceMode.Impulse applies the force instantly (good for jumps, impacts)
+        }
+        
+        // Apply a continuous force ignoring mass
+        if (Input.GetKey(KeyCode.R))
+        {
+            rb.AddForce(Vector3.up * 20f, ForceMode.Acceleration);
+            // ForceMode.Acceleration applies force ignoring mass (like gravity)
+        }
+        
+        // Apply force at a specific point (creates torque/rotation)
+        if (Input.GetKey(KeyCode.E))
+        {
+            Vector3 forcePoint = transform.position + new Vector3(0, -0.5f, 0.5f);
+            rb.AddForceAtPosition(Vector3.right * 10f, forcePoint, ForceMode.Force);
+            // This creates both movement and rotation
+        }
+        
+        // Add torque (rotational force)
+        if (Input.GetKey(KeyCode.Q))
+        {
+            rb.AddTorque(Vector3.up * 10f);
+            // This makes the object spin around its Y axis
+        }
+        
+        // GROUND CHECK
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f);
+    }
+    
+    void Jump()
+    {
+        // Apply upward force
+        rb.AddForce(Vector3.up * jumpForce);
+        
+        // Alternative: Set vertical velocity directly
+        // rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+    }
+    
+    // Rigidbody's collision detection
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collided with: " + collision.gameObject.name);
+        
+        // Check collision velocity
+        float impactForce = collision.impulse.magnitude;
+        
+        if (impactForce > 10f)
+        {
+            Debug.Log("Hard impact: " + impactForce);
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key Rigidbody concepts:</p>
+                                <ul>
+                                    <li><strong>AddForce/AddTorque</strong>: Apply forces to move/rotate the Rigidbody</li>
+                                    <li><strong>ForceMode</strong>: Different ways to apply force (Force, Impulse, Acceleration, VelocityChange)</li>
+                                    <li><strong>Velocity</strong>: Directly control the speed and direction</li>
+                                    <li><strong>MovePosition/MoveRotation</strong>: Kinematic movement with physics interactions</li>
+                                    <li><strong>FixedUpdate</strong>: Used for physics code because it syncs with the physics engine</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Working with 2D Rigidbodies:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class Rigidbody2DController : MonoBehaviour
+{
+    public float moveSpeed = 5f;
+    public float jumpForce = 10f;
+    
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool isFacingRight = true;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // Handle jumping
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Get horizontal input
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        
+        // MOVEMENT METHODS
+        
+        // METHOD 1: AddForce - physics-based movement
+        // rb.AddForce(new Vector2(moveHorizontal * moveSpeed, 0));
+        
+        // METHOD 2: Velocity - direct control (most common for 2D platformers)
+        rb.velocity = new Vector2(moveHorizontal * moveSpeed, rb.velocity.y);
+        // Allows for responsive movement while keeping vertical velocity (gravity/jumping)
+        
+        // Flip sprite to face movement direction
+        if (moveHorizontal > 0 && !isFacingRight)
+        {
+            Flip();
+        }
+        else if (moveHorizontal < 0 && isFacingRight)
+        {
+            Flip();
+        }
+        
+        // Ground check with 2D physics
+        isGrounded = Physics2D.OverlapCircle(
+            transform.position + new Vector3(0, -0.5f, 0), // Position to check (feet)
+            0.2f, // Radius of check
+            LayerMask.GetMask("Ground") // Only check for ground layer
+        );
+    }
+    
+    void Jump()
+    {
+        // Set vertical velocity directly (most responsive for platformers)
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        
+        // Alternative: Add impulse force
+        // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+    
+    void Flip()
+    {
+        // Flip the character to face the other direction
+        isFacingRight = !isFacingRight;
+        
+        // METHOD 1: Flip using transform scale
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+        
+        // METHOD 2: Flip using rotation
+        // transform.Rotate(0f, 180f, 0f);
+    }
+    
+    // 2D collision detection
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("2D collision with: " + collision.gameObject.name);
+        
+        // Get collision normal (direction)
+        Vector2 normal = collision.contacts[0].normal;
+        
+        // Check if we hit something from below (ceiling)
+        if (normal.y < -0.5f)
+        {
+            // Hit head on ceiling, stop upward velocity
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>2D vs 3D physics differences:</p>
+                                <ul>
+                                    <li><strong>2D space</strong>: Uses Vector2 and operates on the XY plane</li>
+                                    <li><strong>ForceMode2D</strong>: 2D-specific force modes (Force and Impulse only)</li>
+                                    <li><strong>2D Colliders</strong>: BoxCollider2D, CircleCollider2D, etc.</li>
+                                    <li><strong>Physics2D.*</strong>: All physics queries use the Physics2D class</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Joints and Constraints</h3>
+                        <p>Joints connect Rigidbodies together, allowing for complex physical interactions like hinges, springs, and ropes.</p>
+                        
+                        <div class="example-box">
+                            <h4>Working with Joints:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class JointExamples : MonoBehaviour
+{
+    // References to the objects we'll connect
+    public GameObject objectA;
+    public GameObject objectB;
+    
+    void Start()
+    {
+        // Make sure both objects have Rigidbody components
+        EnsureRigidbody(objectA);
+        EnsureRigidbody(objectB);
+        
+        // Create various joint types
+        
+        // 1. HINGE JOINT - acts like a door hinge
+        CreateHingeJoint();
+        
+        // 2. SPRING JOINT - elastic connection
+        // CreateSpringJoint();
+        
+        // 3. FIXED JOINT - rigid connection
+        // CreateFixedJoint();
+        
+        // 4. CHARACTER JOINT - for ragdoll physics
+        // CreateCharacterJoint();
+        
+        // 5. CONFIGURABLE JOINT - most flexible
+        // CreateConfigurableJoint();
+    }
+    
+    void EnsureRigidbody(GameObject obj)
+    {
+        // Add Rigidbody if it doesn't exist
+        if (obj.GetComponent<Rigidbody>() == null)
+        {
+            obj.AddComponent<Rigidbody>();
+        }
+    }
+    
+    void CreateHingeJoint()
+    {
+        // Add a HingeJoint to objectA
+        HingeJoint hinge = objectA.AddComponent<HingeJoint>();
+        
+        // Connect to objectB
+        hinge.connectedBody = objectB.GetComponent<Rigidbody>();
+        
+        // Set the anchor point (local to objectA)
+        hinge.anchor = new Vector3(0, 0.5f, 0);
+        
+        // Set the axis of rotation (local to objectA)
+        hinge.axis = new Vector3(0, 0, 1); // Rotate around Z axis
+        
+        // Add limits to the hinge motion
+        hinge.useLimits = true;
+        JointLimits limits = new JointLimits();
+        limits.min = -45f; // 45 degrees one way
+        limits.max = 45f;  // 45 degrees the other way
+        limits.bounciness = 0.5f; // Bounce when hitting limits
+        hinge.limits = limits;
+        
+        // Add a motor to the hinge
+        hinge.useMotor = true;
+        JointMotor motor = new JointMotor();
+        motor.targetVelocity = 80f; // Degrees per second
+        motor.force = 10f; // Maximum force to apply
+        hinge.motor = motor;
+    }
+    
+    void CreateSpringJoint()
+    {
+        // Add a SpringJoint to objectA
+        SpringJoint spring = objectA.AddComponent<SpringJoint>();
+        
+        // Connect to objectB
+        spring.connectedBody = objectB.GetComponent<Rigidbody>();
+        
+        // Configure spring properties
+        spring.spring = 10f; // Spring force
+        spring.damper = 0.2f; // Damping to reduce oscillation
+        spring.minDistance = 0.5f; // Minimum distance before spring applies force
+        spring.maxDistance = 2f; // Maximum distance before spring applies force
+        spring.tolerance = 0.025f; // Position tolerance
+        
+        // Auto-calculate positions
+        spring.autoConfigureConnectedAnchor = true;
+    }
+    
+    void CreateFixedJoint()
+    {
+        // Add a FixedJoint to objectA
+        FixedJoint fixedJoint = objectA.AddComponent<FixedJoint>();
+        
+        // Connect to objectB
+        fixedJoint.connectedBody = objectB.GetComponent<Rigidbody>();
+        
+        // Configure break force (will break if force exceeds this value)
+        fixedJoint.breakForce = 1000f;
+        fixedJoint.breakTorque = 1000f;
+    }
+    
+    void CreateCharacterJoint()
+    {
+        // Add a CharacterJoint to objectA (like a human limb)
+        CharacterJoint charJoint = objectA.AddComponent<CharacterJoint>();
+        
+        // Connect to objectB
+        charJoint.connectedBody = objectB.GetComponent<Rigidbody>();
+        
+        // Configure twist limits (rotation around the axis)
+        SoftJointLimit twistLimit = new SoftJointLimit();
+        twistLimit.limit = 20f; // Degrees
+        charJoint.lowTwistLimit = twistLimit;
+        
+        // Configure swing limits (cone of movement)
+        SoftJointLimit swingLimit = new SoftJointLimit();
+        swingLimit.limit = 30f; // Degrees
+        charJoint.swing1Limit = swingLimit;
+    }
+    
+    void CreateConfigurableJoint()
+    {
+        // Add a ConfigurableJoint to objectA (most flexible joint)
+        ConfigurableJoint configJoint = objectA.AddComponent<ConfigurableJoint>();
+        
+        // Connect to objectB
+        configJoint.connectedBody = objectB.GetComponent<Rigidbody>();
+        
+        // Setting up a joint that acts like a door hinge
+        
+        // Lock all motion except rotation around Z
+        configJoint.xMotion = ConfigurableJointMotion.Locked;
+        configJoint.yMotion = ConfigurableJointMotion.Locked;
+        configJoint.zMotion = ConfigurableJointMotion.Locked;
+        
+        configJoint.angularXMotion = ConfigurableJointMotion.Locked;
+        configJoint.angularYMotion = ConfigurableJointMotion.Locked;
+        configJoint.angularZMotion = ConfigurableJointMotion.Limited;
+        
+        // Set up rotation limits
+        SoftJointLimit limit = new SoftJointLimit();
+        limit.limit = 45f; // 45 degrees
+        configJoint.lowAngularZLimit = limit;
+        
+        limit.limit = 45f; // 45 degrees in the other direction
+        configJoint.highAngularZLimit = limit;
+    }
+    
+    // Dynamic joint creation at runtime
+    public void CreateJointBetween(GameObject a, GameObject b)
+    {
+        // Ensure both have Rigidbody components
+        Rigidbody rbA = a.GetComponent<Rigidbody>();
+        if (rbA == null) rbA = a.AddComponent<Rigidbody>();
+        
+        Rigidbody rbB = b.GetComponent<Rigidbody>();
+        if (rbB == null) rbB = b.AddComponent<Rigidbody>();
+        
+        // Create a spring joint
+        SpringJoint joint = a.AddComponent<SpringJoint>();
+        joint.connectedBody = rbB;
+        
+        // Configure the joint
+        joint.spring = 100f;
+        joint.damper = 5f;
+        
+        // Calculate actual world distance between objects
+        float distance = Vector3.Distance(a.transform.position, b.transform.position);
+        joint.minDistance = distance * 0.8f;
+        joint.maxDistance = distance * 1.2f;
+    }
+    
+    // Break a joint
+    public void BreakJoint(GameObject obj)
+    {
+        Joint joint = obj.GetComponent<Joint>();
+        if (joint != null)
+        {
+            Destroy(joint);
+            Debug.Log("Joint broken!");
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Common joint types:</p>
+                                <ul>
+                                    <li><strong>Hinge Joint</strong>: Rotation around a single axis (doors, wheels)</li>
+                                    <li><strong>Spring Joint</strong>: Elastic connection with damping (springs, bungee cords)</li>
+                                    <li><strong>Fixed Joint</strong>: Rigid connection that transfers forces (welded objects)</li>
+                                    <li><strong>Character Joint</strong>: Specialized for character limbs with constraints (ragdolls)</li>
+                                    <li><strong>Configurable Joint</strong>: Most flexible, can mimic any other joint type</li>
+                                    <li><strong>Distance Joint</strong>: Maintains a specific distance between objects</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>2D Joints</h4>
+                            <p>2D physics has its own set of joints with similar functionality:</p>
+                            <ul>
+                                <li><strong>HingeJoint2D</strong>: 2D version of hinge joint</li>
+                                <li><strong>SpringJoint2D</strong>: 2D version of spring joint</li>
+                                <li><strong>DistanceJoint2D</strong>: Maintains distance between objects</li>
+                                <li><strong>SliderJoint2D</strong>: Constrains movement to a line</li>
+                                <li><strong>FixedJoint2D</strong>: Rigidly connects objects</li>
+                                <li><strong>RelativeJoint2D</strong>: Maintains relative position and rotation</li>
+                                <li><strong>TargetJoint2D</strong>: Pulls object toward a target position</li>
+                                <li><strong>WheelJoint2D</strong>: Simulates a wheel with suspension</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced Physics Techniques</h3>
+                        <p>Beyond basic physics, Unity provides tools for more complex physics interactions and optimizations.</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Gravity:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class CustomGravity : MonoBehaviour
+{
+    public Transform gravitySource;
+    public float gravityStrength = 9.81f;
+    
+    private Rigidbody rb;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        
+        // Disable Unity's standard gravity
+        rb.useGravity = false;
+    }
+    
+    void FixedUpdate()
+    {
+        if (gravitySource != null)
+        {
+            // Calculate direction to gravity source
+            Vector3 gravityDirection = (gravitySource.position - transform.position).normalized;
+            
+            // Apply custom gravity
+            rb.AddForce(gravityDirection * gravityStrength, ForceMode.Acceleration);
+            
+            // Optional: Orient object to gravity source
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -gravityDirection) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Soft Body Physics Simulation:</h4>
+                            <pre><code>
+using UnityEngine;
+using System.Collections.Generic;
+
+public class SoftBody : MonoBehaviour
+{
+    public GameObject nodePrefab;  // Prefab for mass points
+    public float nodeMass = 1f;    // Mass of each node
+    public float springStiffness = 100f;  // Stiffness of springs
+    public float springDamping = 5f;     // Damping of springs
+    public int resolution = 5;     // Number of nodes per side
+    public float size = 2f;        // Size of the soft body
+    
+    private List<GameObject> nodes = new List<GameObject>();
+    private List<SpringJoint> springs = new List<SpringJoint>();
+    
+    void Start()
+    {
+        CreateSoftBody();
+    }
+    
+    void CreateSoftBody()
+    {
+        // Create nodes in a grid
+        for (int x = 0; x < resolution; x++)
+        {
+            for (int y = 0; y < resolution; y++)
+            {
+                // Calculate position
+                float xPos = (x / (float)(resolution - 1) - 0.5f) * size;
+                float yPos = (y / (float)(resolution - 1) - 0.5f) * size;
+                
+                // Create node
+                GameObject node = Instantiate(nodePrefab, transform.position + new Vector3(xPos, yPos, 0), Quaternion.identity);
+                node.transform.parent = transform;
+                
+                // Configure node
+                Rigidbody nodeRb = node.GetComponent<Rigidbody>();
+                if (nodeRb == null) nodeRb = node.AddComponent<Rigidbody>();
+                nodeRb.mass = nodeMass;
+                
+                // Fix the corners in place (optional)
+                if ((x == 0 && y == 0) || (x == resolution-1 && y == 0))
+                {
+                    nodeRb.isKinematic = true;
+                }
+                
+                // Add to node list
+                nodes.Add(node);
+            }
+        }
+        
+        // Create springs between nodes
+        for (int x = 0; x < resolution; x++)
+        {
+            for (int y = 0; y < resolution; y++)
+            {
+                int index = x * resolution + y;
+                GameObject currentNode = nodes[index];
+                
+                // Connect to right neighbor
+                if (x < resolution - 1)
+                {
+                    int rightIndex = (x + 1) * resolution + y;
+                    CreateSpring(currentNode, nodes[rightIndex]);
+                }
+                
+                // Connect to bottom neighbor
+                if (y < resolution - 1)
+                {
+                    int bottomIndex = x * resolution + (y + 1);
+                    CreateSpring(currentNode, nodes[bottomIndex]);
+                }
+                
+                // Connect to diagonal (optional, creates more stability)
+                if (x < resolution - 1 && y < resolution - 1)
+                {
+                    int diagonalIndex = (x + 1) * resolution + (y + 1);
+                    CreateSpring(currentNode, nodes[diagonalIndex]);
+                }
+            }
+        }
+    }
+    
+    void CreateSpring(GameObject nodeA, GameObject nodeB)
+    {
+        SpringJoint spring = nodeA.AddComponent<SpringJoint>();
+        spring.connectedBody = nodeB.GetComponent<Rigidbody>();
+        
+        // Configure spring
+        spring.spring = springStiffness;
+        spring.damper = springDamping;
+        spring.autoConfigureConnectedAnchor = false;
+        spring.anchor = Vector3.zero;
+        spring.connectedAnchor = Vector3.zero;
+        
+        // Calculate actual distance
+        float distance = Vector3.Distance(nodeA.transform.position, nodeB.transform.position);
+        spring.minDistance = 0;
+        spring.maxDistance = distance * 1.5f;
+        
+        // Add to spring list
+        springs.Add(spring);
+    }
+    
+    // Apply an explosion force to the soft body
+    public void ApplyExplosion(Vector3 position, float force, float radius)
+    {
+        foreach (GameObject node in nodes)
+        {
+            Rigidbody nodeRb = node.GetComponent<Rigidbody>();
+            if (nodeRb != null && !nodeRb.isKinematic)
+            {
+                nodeRb.AddExplosionForce(force, position, radius);
+            }
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Physics Optimization</h3>
+                        <p>Physics simulation can be expensive. Here are some tips to optimize physics performance:</p>
+                        
+                        <ol>
+                            <li><strong>Use primitive colliders</strong> instead of mesh colliders whenever possible</li>
+                            <li><strong>Use compound colliders</strong> (multiple simple colliders) instead of complex mesh colliders</li>
+                            <li><strong>Enable "Is Trigger"</strong> for colliders that don't need physical responses</li>
+                            <li><strong>Adjust Time.fixedDeltaTime</strong> for fewer physics updates in less demanding games</li>
+                            <li><strong>Use layer-based collision</strong> to skip unnecessary collision checks</li>
+                            <li><strong>Apply sleep thresholds</strong> to make inactive objects stop calculating physics</li>
+                            <li><strong>Use kinematic Rigidbodies</strong> for objects that don't need full physics simulation</li>
+                            <li><strong>Disable auto-syncing transforms</strong> for objects where you manually set position</li>
+                            <li><strong>Use continuous collision detection</strong> only for fast-moving objects</li>
+                            <li><strong>Don't simulate physics for distant objects</strong></li>
+                        </ol>
+                        
+                        <div class="example-box">
+                            <h4>Physics Optimization Code Example:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class PhysicsOptimizer : MonoBehaviour
+{
+    public float activationDistance = 20f;
+    public Transform player;
+    
+    private Rigidbody rb;
+    private Collider[] colliders;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        colliders = GetComponentsInChildren<Collider>();
+        
+        // Optimize continuous collision detection
+        rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        
+        // Adjust solver iterations for less accuracy but better performance
+        rb.solverIterations = 2;  // Default is 6
+        rb.solverVelocityIterations = 1;  // Default is 1
+        
+        // Increase sleep threshold for earlier deactivation
+        rb.sleepThreshold = 0.1f;  // Default is 0.005
+        
+        // Disable auto sync transforms (if you're not reading the transform directly)
+        Physics.autoSyncTransforms = false;
+    }
+    
+    void Update()
+    {
+        if (player != null)
+        {
+            // Calculate distance to player
+            float distance = Vector3.Distance(transform.position, player.position);
+            
+            // Activate/deactivate physics based on distance
+            if (distance > activationDistance)
+            {
+                DisablePhysics();
+            }
+            else
+            {
+                EnablePhysics();
+                
+                // Only use continuous collision detection for close objects
+                if (distance < 5f)
+                {
+                    rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                }
+                else
+                {
+                    rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                }
+            }
+        }
+    }
+    
+    void EnablePhysics()
+    {
+        if (!rb.isKinematic)
+            return;
+            
+        rb.isKinematic = false;
+        foreach (Collider col in colliders)
+        {
+            col.enabled = true;
+        }
+    }
+    
+    void DisablePhysics()
+    {
+        if (rb.isKinematic)
+            return;
+            
+        rb.isKinematic = true;
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
+    }
+    
+    // Call at the end of frame when you're done changing transforms
+    void LateUpdate()
+    {
+        Physics.SyncTransforms();
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Physics</h3>
+                        <ol>
+                            <li><strong>Use FixedUpdate</strong> for physics code, not Update</li>
+                            <li><strong>Avoid changing transform directly</strong> on physics objects (use Rigidbody movement methods)</li>
+                            <li><strong>Use appropriate collider types</strong> for your objects (primitive colliders for performance)</li>
+                            <li><strong>Set up proper collision layers</strong> to avoid unnecessary collision checks</li>
+                            <li><strong>Don't scale colliders non-uniformly</strong> as it can cause physics inconsistencies</li>
+                            <li><strong>Use continuous collision detection</strong> for fast-moving objects to prevent tunneling</li>
+                            <li><strong>Balance performance and accuracy</strong> by adjusting physics settings</li>
+                            <li><strong>Use kinematic Rigidbodies</strong> for objects controlled by animation or direct code</li>
+                            <li><strong>Keep physics objects properly scaled</strong> (not too small or too large)</li>
+                            <li><strong>Test physics behavior across different frame rates</strong> to ensure consistency</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-animations.html" class="prev"><i class="fas fa-arrow-left"></i> Animation Systems</a>
+                        <a href="unity-ui.html" class="next">Unity UI Development <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

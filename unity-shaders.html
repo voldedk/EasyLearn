@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Shader Development - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Unity Shader Development</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            Shaders are specialized programs that run on the GPU to determine how each pixel on the screen is rendered. 
+                            They enable you to create unique visual effects, optimize rendering performance, and bring your Unity 
+                            projects to life with custom materials and visual styles. This tutorial will guide you through shader 
+                            fundamentals, development techniques, and practical implementations using Unity's shader systems.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Shader Fundamentals</h2>
+                        <p>
+                            Before diving into shader development, it's important to understand the basics of how shaders work
+                            and the different types available in Unity.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Choose the Right Shader Type</strong>:
+                                <ul>
+                                    <li>Surface Shaders: Easiest to use, best for standard lighting models</li>
+                                    <li>Vertex/Fragment Shaders: More control, better performance</li>
+                                    <li>Compute Shaders: For non-graphical data processing on the GPU</li>
+                                    <li>Shader Graph: Visual node-based shader creation (no coding required)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Create Proper Folder Structure</strong>:
+                                <ul>
+                                    <li>Keep shaders in a dedicated "Shaders" folder</li>
+                                    <li>Group related shaders together</li>
+                                    <li>Create a matching "Materials" folder for instances of your shaders</li>
+                                </ul>
+                            </li>
+                            <li><strong>Understand the Rendering Pipeline</strong>:
+                                <ul>
+                                    <li>Know whether you're using Built-in, URP, or HDRP</li>
+                                    <li>Each pipeline has different shader requirements and capabilities</li>
+                                </ul>
+                            </li>
+                            <li><strong>Start with Templates</strong>: Use Unity's shader templates as starting points</li>
+                            <li><strong>Test on Multiple Devices</strong>: Shaders may perform differently across hardware</li>
+                        </ol>
+                        
+                        <h3>Shader Structure</h3>
+                        <p>
+                            Understanding the structure of a shader file is essential for creating custom shaders.
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Basic Shader Structure</h4>
+                            <pre><code class="language-csharp">Shader "Custom/BasicShader" // Path in shader selection menu
+{
+    Properties
+    {
+        // Properties visible in the Inspector
+        _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1,1,1,1)
+    }
+    
+    SubShader
+    {
+        // SubShader for more capable hardware
+        Tags { "RenderType"="Opaque" }
+        LOD 200
+        
+        CGPROGRAM
+        // Physically based Standard lighting model, enabling shadows on all light types
+        #pragma surface surf Standard fullforwardshadows
+        
+        // Use shader model 3.0 target
+        #pragma target 3.0
+        
+        sampler2D _MainTex;
+        fixed4 _Color;
+        
+        struct Input
+        {
+            float2 uv_MainTex;
+        };
+        
+        void surf (Input IN, inout SurfaceOutputStandard o)
+        {
+            // Albedo comes from a texture tinted by color
+            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+            o.Albedo = c.rgb;
+            o.Alpha = c.a;
+        }
+        ENDCG
+    }
+    
+    // Fallback for older hardware or if the above fails
+    FallBack "Diffuse"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>Creating a Surface Shader</h2>
+                        <p>
+                            Surface shaders are the easiest way to write shaders that interact with lighting in Unity.
+                            Let's create a custom surface shader with several useful properties.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Shader File</strong>: Right-click in Project, Create → Shader → Standard Surface Shader</li>
+                            <li><strong>Define Properties</strong>: Add parameters that artists can adjust in the Inspector</li>
+                            <li><strong>Write Surface Function</strong>: Implement the surf() function to calculate surface properties</li>
+                            <li><strong>Create Material</strong>: Create a new material that uses your shader</li>
+                            <li><strong>Apply Material</strong>: Assign the material to objects in your scene</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Custom Texture Blending Shader</h4>
+                            <pre><code class="language-csharp">Shader "Custom/TextureBlending"
+{
+    Properties
+    {
+        _Color ("Color", Color) = (1,1,1,1)
+        _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _SecondTex ("Second Texture", 2D) = "white" {} // Second texture to blend
+        _BlendAmount ("Blend Amount", Range(0,1)) = 0.5 // Slider to control blending
+        _Glossiness ("Smoothness", Range(0,1)) = 0.5
+        _Metallic ("Metallic", Range(0,1)) = 0.0
+        _BumpMap ("Normal Map", 2D) = "bump" {} // Normal map for detail
+        _BumpStrength ("Normal Strength", Range(0,2)) = 1.0 // Control normal intensity
+    }
+    
+    SubShader
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 200
+        
+        CGPROGRAM
+        // Physically based Standard lighting model
+        #pragma surface surf Standard fullforwardshadows
+        
+        // Use shader model 3.0 target for better effects
+        #pragma target 3.0
+        
+        // Input texture properties
+        sampler2D _MainTex;
+        sampler2D _SecondTex;
+        sampler2D _BumpMap;
+        
+        // Input scalar properties
+        half _Glossiness;
+        half _Metallic;
+        half _BlendAmount;
+        half _BumpStrength;
+        
+        // Input color property
+        fixed4 _Color;
+        
+        // Input structure from vertex shader to surface shader
+        struct Input
+        {
+            float2 uv_MainTex; // UVs for main texture and normal map
+            float2 uv_SecondTex; // UVs for second texture
+        };
+        
+        // Surface shader function
+        void surf (Input IN, inout SurfaceOutputStandard o)
+        {
+            // Sample textures at the appropriate UV coordinates
+            fixed4 c1 = tex2D(_MainTex, IN.uv_MainTex);
+            fixed4 c2 = tex2D(_SecondTex, IN.uv_SecondTex);
+            
+            // Blend between the two textures based on blend amount
+            fixed4 c = lerp(c1, c2, _BlendAmount) * _Color;
+            
+            // Sample the normal map
+            fixed4 normalMap = tex2D(_BumpMap, IN.uv_MainTex);
+            
+            // Apply material properties to the output
+            o.Albedo = c.rgb; // Set diffuse color
+            o.Metallic = _Metallic; // Set metallic value
+            o.Smoothness = _Glossiness; // Set smoothness/glossiness
+            
+            // UnpackNormal converts the texture values to a normal vector
+            // _BumpStrength controls the intensity of the normal map effect
+            o.Normal = UnpackNormal(normalMap) * float3(_BumpStrength, _BumpStrength, 1);
+            
+            o.Alpha = c.a; // Set transparency
+        }
+        ENDCG
+    }
+    
+    FallBack "Diffuse" // Fallback for low-end devices
+}</code></pre>
+                        </div>
+
+                        <h3>How to Use the Shader</h3>
+                        <p>
+                            To use your new shader:
+                        </p>
+                        <ol>
+                            <li>Create a new material (right-click in Project view, Create → Material)</li>
+                            <li>In the Inspector, click the Shader dropdown and select "Custom/TextureBlending"</li>
+                            <li>Assign textures to the Albedo, Second Texture, and Normal Map slots</li>
+                            <li>Adjust the sliders to achieve the desired effect</li>
+                            <li>Apply the material to your 3D objects</li>
+                        </ol>
+                    </div>
+
+                    <div class="section">
+                        <h2>Custom Lighting Models</h2>
+                        <p>
+                            Creating custom lighting models allows you to develop unique visual styles that can define
+                            the aesthetic of your game. Let's implement a custom toon (cel) shader.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Define Custom Lighting Function</strong>: Override Unity's lighting calculations</li>
+                            <li><strong>Use Ramps or Steps</strong>: For toon shading, use discrete steps or ramp textures</li>
+                            <li><strong>Add Outline Options</strong>: For a complete toon look, consider adding outlines</li>
+                            <li><strong>Test with Different Light Types</strong>: Ensure your shader works with point, directional, and spot lights</li>
+                            <li><strong>Optimize</strong>: Simplify calculations for better performance</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Toon Shader with Custom Lighting</h4>
+                            <pre><code class="language-csharp">Shader "Custom/ToonShader"
+{
+    Properties
+    {
+        _Color ("Color", Color) = (1,1,1,1)
+        _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _RampTex ("Toon Ramp", 2D) = "white" {} // Gradient texture for toon shading
+        _OutlineColor ("Outline Color", Color) = (0,0,0,1)
+        _OutlineWidth ("Outline Width", Range(0, 0.1)) = 0.01
+        _Bands ("Light Bands", Range(1, 8)) = 3 // Number of lighting bands
+        _SpecularColor ("Specular Color", Color) = (1,1,1,1)
+        _Glossiness ("Gloss", Range(0, 32)) = 10 // Specular power
+    }
+    
+    SubShader
+    {
+        // Main pass - renders the object with toon shading
+        Tags { "RenderType"="Opaque" }
+        LOD 200
+        
+        CGPROGRAM
+        // Use a custom lighting model
+        #pragma surface surf Toon fullforwardshadows
+        #pragma target 3.0
+        
+        sampler2D _MainTex;
+        sampler2D _RampTex;
+        float _Bands;
+        float _Glossiness;
+        fixed4 _Color;
+        fixed4 _SpecularColor;
+        
+        // Custom lighting function
+        half4 LightingToon(SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
+        {
+            // Calculate diffuse lighting
+            half NdotL = dot(s.Normal, lightDir);
+            
+            // Two options for toon shading:
+            
+            // Option 1: Discrete bands
+            // Quantize the lighting into discrete bands
+            half lighting = floor(NdotL * _Bands) / _Bands;
+            
+            // Option 2: Using a ramp texture (comment out Option 1 if using this)
+            // half lighting = tex2D(_RampTex, half2(NdotL * 0.5 + 0.5, 0.5)).r;
+            
+            // Calculate specular highlight
+            half3 h = normalize(lightDir + viewDir);
+            float nh = max(0, dot(s.Normal, h));
+            float spec = pow(nh, _Glossiness);
+            // Threshold the specular to make it toon-like
+            float specularBands = step(0.9, spec);
+            
+            // Combine lighting with attenuation and shadows
+            half4 c;
+            c.rgb = s.Albedo * _LightColor0.rgb * (lighting * atten * 2) + 
+                    _SpecularColor.rgb * specularBands * _LightColor0.rgb * atten;
+            c.a = s.Alpha;
+            
+            return c;
+        }
+        
+        struct Input
+        {
+            float2 uv_MainTex;
+        };
+        
+        void surf (Input IN, inout SurfaceOutput o)
+        {
+            // Sample the texture
+            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+            o.Albedo = c.rgb;
+            o.Alpha = c.a;
+        }
+        ENDCG
+        
+        // Second pass - renders the outline
+        Pass {
+            Cull Front // Render back faces
+            
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            
+            float _OutlineWidth;
+            fixed4 _OutlineColor;
+            
+            struct appdata {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+            
+            struct v2f {
+                float4 pos : SV_POSITION;
+            };
+            
+            v2f vert(appdata v) {
+                v2f o;
+                // Expand vertices along normals for outline effect
+                float3 normal = normalize(v.normal);
+                v.vertex.xyz += normal * _OutlineWidth;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+            
+            fixed4 frag(v2f i) : SV_Target {
+                // Just return outline color
+                return _OutlineColor;
+            }
+            ENDCG
+        }
+    }
+    FallBack "Diffuse"
+}</code></pre>
+                        </div>
+                        
+                        <h3>Creating a Ramp Texture</h3>
+                        <p>
+                            For the toon shader above, it's helpful to create a custom ramp texture:
+                        </p>
+                        <ol>
+                            <li>Create a new texture in an image editor that's 256x2 pixels</li>
+                            <li>Fill it with a gradient from black to white, or with distinct color bands</li>
+                            <li>Import it into Unity with these settings:
+                                <ul>
+                                    <li>Wrap Mode: Clamp</li>
+                                    <li>Filter Mode: Bilinear</li>
+                                    <li>Disable sRGB (Color Texture)</li>
+                                </ul>
+                            </li>
+                            <li>Assign it to the _RampTex property of your shader</li>
+                        </ol>
+                    </div>
+
+                    <div class="section">
+                        <h2>Vertex/Fragment Shaders</h2>
+                        <p>
+                            For more control and often better performance, you can write vertex and fragment shaders directly.
+                            These give you complete control over the rendering pipeline.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Define Vertex Function</strong>: Manipulate vertices (position, UVs, etc.)</li>
+                            <li><strong>Define Fragment Function</strong>: Calculate the final color of each pixel</li>
+                            <li><strong>Optimize</strong>: Move calculations to the vertex shader when possible</li>
+                            <li><strong>Test Performance</strong>: Use the Frame Debugger to measure shader performance</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Vertex Animation Shader</h4>
+                            <pre><code class="language-csharp">Shader "Custom/VertexAnimation"
+{
+    Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1,1,1,1)
+        _WaveHeight ("Wave Height", Range(0, 1)) = 0.1
+        _WaveFrequency ("Wave Frequency", Range(0, 10)) = 1
+        _WaveSpeed ("Wave Speed", Range(0, 10)) = 1
+    }
+    
+    SubShader
+    {
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
+        LOD 100
+        
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            
+            // Input properties
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            float4 _Color;
+            float _WaveHeight;
+            float _WaveFrequency;
+            float _WaveSpeed;
+            
+            // Input vertex data
+            struct appdata
+            {
+                float4 vertex : POSITION;   // Vertex position
+                float2 uv : TEXCOORD0;      // Texture coordinates
+                float3 normal : NORMAL;     // Vertex normal
+            };
+            
+            // Data passed from vertex to fragment shader
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;      // Texture coordinates
+                float4 vertex : SV_POSITION;  // Clip space position
+                float3 normal : NORMAL;     // Transformed normal
+            };
+            
+            // Vertex shader function
+            v2f vert (appdata v)
+            {
+                v2f o;
+                
+                // Apply wave animation to vertices
+                // This creates a sine wave effect based on position and time
+                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                
+                // Create a wave based on X and Z coordinates
+                float wave = sin(worldPos.x * _WaveFrequency + _Time.y * _WaveSpeed) * 
+                            cos(worldPos.z * _WaveFrequency + _Time.y * _WaveSpeed);
+                
+                // Apply the wave to the Y coordinate, scaled by _WaveHeight
+                // Adjust the vertex position along the normal direction
+                float3 offset = v.normal * wave * _WaveHeight;
+                v.vertex.xyz += offset;
+                
+                // Transform vertex from object to clip space
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                
+                // Pass UVs to fragment shader, applying texture tiling and offset
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                
+                // Transform normal from object to world space
+                o.normal = UnityObjectToWorldNormal(v.normal);
+                
+                return o;
+            }
+            
+            // Fragment shader function
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // Calculate simple lighting (dot product of normal and up direction)
+                // This adds basic light variation to the animated mesh
+                float3 lightDir = normalize(float3(0.5, 0.5, 0.5)); // Directional light
+                float ndotl = max(0, dot(i.normal, lightDir));
+                
+                // Sample the texture
+                fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+                
+                // Apply simple lighting
+                col.rgb *= 0.2 + 0.8 * ndotl; // Ambient + diffuse
+                
+                return col;
+            }
+            ENDCG
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>Shader Graph (Visual Shader Editor)</h2>
+                        <p>
+                            Unity's Shader Graph allows you to create shaders visually without writing code. It's available in URP and HDRP.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Set Up Project</strong>: Ensure you're using URP or HDRP</li>
+                            <li><strong>Create Shader Graph</strong>: Right-click in Project, Create → Shader Graph</li>
+                            <li><strong>Add Nodes</strong>: Connect nodes to build shader functionality</li>
+                            <li><strong>Expose Properties</strong>: Create Material properties for adjustments</li>
+                            <li><strong>Assign Output</strong>: Connect final values to the Master node</li>
+                        </ol>
+                        
+                        <h3>Creating a Hologram Shader</h3>
+                        <p>
+                            Here's how to create a hologram effect using Shader Graph:
+                        </p>
+                        <ol>
+                            <li>Create a new Shader Graph</li>
+                            <li>Add these properties:
+                                <ul>
+                                    <li>Color (Vector4): Base color for the hologram</li>
+                                    <li>FresnelPower (Float): Controls the rim highlight intensity</li>
+                                    <li>ScanlineSpeed (Float): Controls the speed of scrolling lines</li>
+                                    <li>ScanlineDensity (Float): Controls the number of scan lines</li>
+                                </ul>
+                            </li>
+                            <li>Create the following node network:
+                                <ul>
+                                    <li>Add a Fresnel Effect node (for edge glow)</li>
+                                    <li>Add Time and Tiling and Offset nodes (for scrolling scan lines)</li>
+                                    <li>Add a Gradient Noise node (for the line pattern)</li>
+                                    <li>Combine these with Step and Lerp nodes</li>
+                                    <li>Connect to Emission and Alpha outputs</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <div class="code-example">
+                            <h4>C# Script for Runtime Shader Property Control</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+// This script allows you to animate shader properties at runtime
+// Useful for effects like holograms, shields, etc.
+public class ShaderController : MonoBehaviour
+{
+    [Header("Shader References")]
+    public Material targetMaterial;  // Material with the shader to control
+    
+    [Header("Animation Settings")]
+    public bool animateProperties = true;
+    public float pulseSpeed = 1.0f;
+    public float pulseMinValue = 0.5f;
+    public float pulseMaxValue = 2.0f;
+    
+    [Header("Property Names")]
+    public string fresnelPowerProperty = "_FresnelPower";
+    public string emissionIntensityProperty = "_EmissionIntensity";
+    public string scanlineSpeedProperty = "_ScanlineSpeed";
+    
+    [Header("Current Values")]
+    [SerializeField] private float currentFresnel;
+    [SerializeField] private float currentEmission;
+    
+    private float animationTime;
+    
+    private void Start()
+    {
+        // If no material assigned, try to get it from the renderer
+        if (targetMaterial == null)
+        {
+            Renderer renderer = GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                // Create an instance of the material to avoid changing all objects using it
+                targetMaterial = new Material(renderer.sharedMaterial);
+                renderer.material = targetMaterial;
+            }
+        }
+        
+        // Initialize animation time
+        animationTime = 0f;
+    }
+    
+    private void Update()
+    {
+        if (!animateProperties || targetMaterial == null)
+            return;
+        
+        // Update animation time
+        animationTime += Time.deltaTime * pulseSpeed;
+        
+        // Calculate pulse values using sin wave
+        float pulse = Mathf.Lerp(pulseMinValue, pulseMaxValue, 
+                                (Mathf.Sin(animationTime) + 1f) * 0.5f);
+        
+        // Apply to shader properties
+        if (targetMaterial.HasProperty(fresnelPowerProperty))
+        {
+            currentFresnel = pulse;
+            targetMaterial.SetFloat(fresnelPowerProperty, currentFresnel);
+        }
+        
+        if (targetMaterial.HasProperty(emissionIntensityProperty))
+        {
+            // Make emission counter to fresnel for interesting effects
+            currentEmission = Mathf.Lerp(pulseMaxValue, pulseMinValue, 
+                                       (Mathf.Sin(animationTime) + 1f) * 0.5f);
+            targetMaterial.SetFloat(emissionIntensityProperty, currentEmission);
+        }
+        
+        // You can expose more properties for animation here
+    }
+    
+    // Call this method to flicker the hologram (useful for damage effects, etc.)
+    public void TriggerFlicker(float duration = 0.5f, float intensity = 3.0f)
+    {
+        StartCoroutine(FlickerRoutine(duration, intensity));
+    }
+    
+    private System.Collections.IEnumerator FlickerRoutine(float duration, float intensity)
+    {
+        // Store original values
+        float originalFresnel = currentFresnel;
+        float originalEmission = currentEmission;
+        
+        float endTime = Time.time + duration;
+        
+        while (Time.time < endTime)
+        {
+            // Random flicker values
+            float randomFresnel = Random.Range(originalFresnel, originalFresnel * intensity);
+            float randomEmission = Random.Range(originalEmission * 0.5f, originalEmission * intensity);
+            
+            // Apply to material
+            if (targetMaterial.HasProperty(fresnelPowerProperty))
+                targetMaterial.SetFloat(fresnelPowerProperty, randomFresnel);
+                
+            if (targetMaterial.HasProperty(emissionIntensityProperty))
+                targetMaterial.SetFloat(emissionIntensityProperty, randomEmission);
+            
+            // Short delay between flickers
+            yield return new WaitForSeconds(0.05f);
+        }
+        
+        // Restore original values
+        if (targetMaterial.HasProperty(fresnelPowerProperty))
+            targetMaterial.SetFloat(fresnelPowerProperty, originalFresnel);
+            
+        if (targetMaterial.HasProperty(emissionIntensityProperty))
+            targetMaterial.SetFloat(emissionIntensityProperty, originalEmission);
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>Performance Optimization</h2>
+                        <p>
+                            Shader optimization is crucial for maintaining good performance, especially on mobile devices.
+                        </p>
+                        
+                        <h3>Best Practices</h3>
+                        <ul>
+                            <li><strong>Reduce Texture Sampling</strong>: Each texture sample has a performance cost</li>
+                            <li><strong>Use Appropriate Precision</strong>: Use half/fixed precision where possible</li>
+                            <li><strong>Move Calculations to Vertex Shader</strong>: When the result can be interpolated</li>
+                            <li><strong>Use LOD Variants</strong>: Create simpler versions for distant objects</li>
+                            <li><strong>Profile Your Shaders</strong>: Use the Frame Debugger to identify bottlenecks</li>
+                            <li><strong>Avoid Dynamic Branching</strong>: Especially on mobile GPUs</li>
+                            <li><strong>Consider Shader Variants</strong>: Use #pragma multi_compile for feature toggles</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h4>Optimized Shader with LOD Variants</h4>
+                            <pre><code class="language-csharp">Shader "Custom/OptimizedShader"
+{
+    Properties
+    {
+        _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _Color ("Color", Color) = (1,1,1,1)
+        _Glossiness ("Smoothness", Range(0,1)) = 0.5
+        _Metallic ("Metallic", Range(0,1)) = 0.0
+        [Toggle] _UseDetail ("Use Detail Texture", Float) = 1
+        _DetailTex ("Detail Texture", 2D) = "white" {}
+    }
+    
+    // Define different LOD SubShaders
+    SubShader // LOD 300 - Highest quality
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 300
+        
+        CGPROGRAM
+        #pragma surface surf Standard fullforwardshadows
+        #pragma shader_feature _USEDETAIL_ON
+        #pragma target 3.0
+        
+        sampler2D _MainTex;
+        sampler2D _DetailTex;
+        half _Glossiness;
+        half _Metallic;
+        fixed4 _Color;
+        
+        struct Input
+        {
+            float2 uv_MainTex;
+            float2 uv_DetailTex;
+        };
+        
+        void surf (Input IN, inout SurfaceOutputStandard o)
+        {
+            // Sample main texture
+            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+            
+            // Sample and apply detail texture if enabled
+            #ifdef _USEDETAIL_ON
+            fixed4 detail = tex2D(_DetailTex, IN.uv_DetailTex);
+            c.rgb *= detail.rgb * 2.0; // Multiply blend detail
+            #endif
+            
+            o.Albedo = c.rgb;
+            o.Metallic = _Metallic;
+            o.Smoothness = _Glossiness;
+            o.Alpha = c.a;
+        }
+        ENDCG
+    }
+    
+    SubShader // LOD 200 - Medium quality
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 200
+        
+        CGPROGRAM
+        #pragma surface surf Standard
+        #pragma target 2.0
+        
+        sampler2D _MainTex;
+        half _Glossiness;
+        half _Metallic;
+        fixed4 _Color;
+        
+        struct Input
+        {
+            float2 uv_MainTex;
+        };
+        
+        void surf (Input IN, inout SurfaceOutputStandard o)
+        {
+            // Only sample main texture (no detail texture)
+            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+            
+            o.Albedo = c.rgb;
+            o.Metallic = _Metallic;
+            o.Smoothness = _Glossiness;
+            o.Alpha = c.a;
+        }
+        ENDCG
+    }
+    
+    SubShader // LOD 100 - Low quality
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+        
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma target 2.0
+            #include "UnityCG.cginc"
+            
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+            
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+            };
+            
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            fixed4 _Color;
+            
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                return o;
+            }
+            
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // Most basic rendering - just texture and color
+                fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+                return col;
+            }
+            ENDCG
+        }
+    }
+    
+    FallBack "Diffuse"
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

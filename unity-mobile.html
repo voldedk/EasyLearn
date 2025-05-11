@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Mobile Game Development - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Unity Mobile Game Development</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            Mobile game development with Unity offers the opportunity to reach billions of potential players
+                            on iOS and Android platforms. This tutorial will guide you through the essential aspects of creating,
+                            optimizing, and deploying mobile games using Unity and C#.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Setting Up Your Mobile Project</h2>
+                        <p>
+                            Proper project setup is crucial for successful mobile development. Let's start with configuring
+                            Unity for mobile platforms.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Project</strong>: Start a new Unity project using the Mobile template, or convert an existing project</li>
+                            <li><strong>Configure Build Settings</strong>:
+                                <ul>
+                                    <li>Open File → Build Settings</li>
+                                    <li>Select either Android or iOS as the target platform</li>
+                                    <li>Click "Switch Platform" to change Unity's build target</li>
+                                </ul>
+                            </li>
+                            <li><strong>Set Up Development Environment</strong>:
+                                <ul>
+                                    <li>For Android: Install Android Studio, configure SDK/NDK paths in Unity (Edit → Preferences → External Tools)</li>
+                                    <li>For iOS: You'll need a Mac with Xcode installed</li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure Player Settings</strong>:
+                                <ul>
+                                    <li>Set proper app identification (bundle ID/package name)</li>
+                                    <li>Configure minimum OS versions</li>
+                                    <li>Set default orientation (portrait/landscape)</li>
+                                    <li>Configure icon and splash screen</li>
+                                </ul>
+                            </li>
+                            <li><strong>Establish Project Structure</strong>: Organize your project with folders for Scripts, Prefabs, Scenes, etc.</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Mobile Configuration Helper</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+// Helper class to manage mobile-specific settings at runtime
+public class MobileConfigManager : MonoBehaviour
+{
+    [Header("Screen Settings")]
+    public bool dontSleepScreen = true;    // Prevent screen from sleeping
+    public bool fullScreen = true;         // Run in fullscreen mode
+    
+    [Header("Quality Settings")]
+    [Range(0, 5)]
+    public int defaultQualityLevel = 3;    // Default quality level (0-5)
+    public bool dynamicResolution = true;  // Enable dynamic resolution scaling
+    
+    [Header("Frame Rate")]
+    public int targetFrameRate = 60;       // Target frame rate (30/60)
+    public bool vSyncEnabled = true;       // Enable VSync
+    
+    [Header("Debug Options")]
+    public bool showFpsCounter = false;    // Show FPS counter in development builds
+    
+    // Track performance metrics
+    private float deltaTime = 0.0f;
+    private GUIStyle fpsStyle;
+    
+    private void Awake()
+    {
+        // Apply settings on startup
+        ApplyMobileSettings();
+    }
+    
+    private void ApplyMobileSettings()
+    {
+        // Screen sleep and display
+        Screen.sleepTimeout = dontSleepScreen ? SleepTimeout.NeverSleep : SleepTimeout.SystemSetting;
+        Screen.fullScreen = fullScreen;
+        
+        // Quality settings
+        QualitySettings.SetQualityLevel(defaultQualityLevel);
+        
+        // Frame rate settings
+        Application.targetFrameRate = targetFrameRate;
+        QualitySettings.vSyncCount = vSyncEnabled ? 1 : 0;
+        
+        // Set up dynamic resolution if enabled
+        if (dynamicResolution)
+        {
+            #if UNITY_2019_3_OR_NEWER
+            DynamicResolutionHandler.SetDynamicResolutionEnabled(true);
+            #endif
+        }
+        
+        // Log applied settings
+        Debug.Log($"Mobile settings applied: Quality Level {QualitySettings.GetQualityLevel()}, " +
+                 $"Target FPS {Application.targetFrameRate}, VSync {QualitySettings.vSyncCount}");
+        
+        // Create FPS counter style
+        if (showFpsCounter)
+        {
+            fpsStyle = new GUIStyle();
+            fpsStyle.alignment = TextAnchor.UpperRight;
+            fpsStyle.fontSize = Screen.height / 40;
+            fpsStyle.normal.textColor = Color.white;
+        }
+    }
+    
+    private void Update()
+    {
+        // Update frame time for FPS counter
+        if (showFpsCounter)
+        {
+            deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        }
+    }
+    
+    private void OnGUI()
+    {
+        // Draw FPS counter if enabled (development builds only)
+        if (showFpsCounter && Debug.isDebugBuild)
+        {
+            float msec = deltaTime * 1000.0f;
+            float fps = 1.0f / deltaTime;
+            string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
+            
+            Rect rect = new Rect(20, 20, Screen.width - 40, Screen.height - 40);
+            GUI.Label(rect, text, fpsStyle);
+        }
+    }
+    
+    // Detect when app is paused/resumed (when user switches apps)
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            // App is paused - save state if needed
+            Debug.Log("Application paused");
+        }
+        else
+        {
+            // App is resumed - restore state if needed
+            Debug.Log("Application resumed");
+        }
+    }
+    
+    // Called before app is terminated
+    private void OnApplicationQuit()
+    {
+        // Save any necessary data before the app is closed
+        Debug.Log("Application quitting");
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Device Compatibility Best Practices</h3>
+                        <p>
+                            Mobile devices vary greatly in capabilities. Here are some best practices for ensuring compatibility:
+                        </p>
+                        <ul>
+                            <li><strong>Test on Multiple Devices</strong>: Test on both high-end and low-end devices to ensure performance</li>
+                            <li><strong>Create Adaptive UI</strong>: Design UI that adapts to different screen sizes and aspect ratios</li>
+                            <li><strong>Implement Fallbacks</strong>: Provide fallbacks for features not supported on all devices</li>
+                            <li><strong>Target Reasonable Specs</strong>: Don't require the latest hardware features; maintain backward compatibility</li>
+                            <li><strong>Use Device Simulators</strong>: Unity's Device Simulator package helps test various screen sizes and orientations</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>Touch Input and Mobile Controls</h2>
+                        <p>
+                            Mobile games rely on touch input rather than keyboard and mouse. Let's implement responsive touch controls.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Design for Touch</strong>: Create UI elements that are finger-friendly (at least 44x44 pixels)</li>
+                            <li><strong>Handle Multiple Input Types</strong>: Support both simple taps and more complex gestures</li>
+                            <li><strong>Create Input Feedback</strong>: Provide visual/audio feedback for touches</li>
+                            <li><strong>Test on Real Devices</strong>: Touch input feels different on actual devices vs. simulators</li>
+                            <li><strong>Consider Screen Areas</strong>: Place controls where they won't be blocked by thumbs</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Basic Touch Input Manager</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Events;
+
+// Handles various touch input types for mobile games
+public class TouchInputManager : MonoBehaviour
+{
+    [System.Serializable]
+    public class TouchEvent : UnityEvent<Vector2> {}
+    
+    [Header("Single Touch Events")]
+    public TouchEvent onTap;               // Fired when player taps the screen
+    public TouchEvent onDoubleTap;         // Fired on double-tap
+    public TouchEvent onLongPress;         // Fired when player holds finger down
+    
+    [Header("Gesture Settings")]
+    public float doubleTapTimeThreshold = 0.3f;   // Max time between taps for double-tap
+    public float longPressTimeThreshold = 0.7f;   // Time needed to trigger long press
+    public float swipeThreshold = 50f;            // Min distance for swipe detection
+    
+    [Header("Swipe Events")]
+    public TouchEvent onSwipeLeft;         // Fired on left swipe
+    public TouchEvent onSwipeRight;        // Fired on right swipe
+    public TouchEvent onSwipeUp;           // Fired on up swipe
+    public TouchEvent onSwipeDown;         // Fired on down swipe
+    
+    [Header("Pinch/Zoom")]
+    public UnityEvent<float> onPinch;      // Fired during pinch with delta value
+
+    // Touch state tracking
+    private float lastTapTime;
+    private Vector2 touchStartPosition;
+    private float touchStartTime;
+    private bool isLongPressing;
+    private int longPressFingerID = -1;
+    private List<int> trackedFingers = new List<int>();
+    
+    private void Update()
+    {
+        // Track touch count
+        int touchCount = Input.touchCount;
+        
+        // Process multi-touch gestures first (pinch)
+        if (touchCount >= 2)
+        {
+            ProcessPinchGesture();
+        }
+        
+        // Process single touch events
+        if (touchCount > 0)
+        {
+            foreach (Touch touch in Input.touches)
+            {
+                ProcessTouch(touch);
+            }
+        }
+        
+        // For editor/debug: simulate touch with mouse
+        #if UNITY_EDITOR
+        SimulateTouchWithMouse();
+        #endif
+    }
+    
+    private void ProcessTouch(Touch touch)
+    {
+        switch (touch.phase)
+        {
+            case TouchPhase.Began:
+                // Store initial position and time
+                if (!trackedFingers.Contains(touch.fingerId))
+                {
+                    trackedFingers.Add(touch.fingerId);
+                    touchStartPosition = touch.position;
+                    touchStartTime = Time.time;
+                    
+                    // Start tracking for long press
+                    if (longPressFingerID == -1)
+                    {
+                        longPressFingerID = touch.fingerId;
+                        isLongPressing = true;
+                        Invoke("TriggerLongPress", longPressTimeThreshold);
+                    }
+                }
+                break;
+                
+            case TouchPhase.Moved:
+                // Cancel long press if finger moved too much
+                if (isLongPressing && touch.fingerId == longPressFingerID)
+                {
+                    if (Vector2.Distance(touchStartPosition, touch.position) > 20)
+                    {
+                        CancelLongPress();
+                    }
+                }
+                break;
+                
+            case TouchPhase.Ended:
+                if (trackedFingers.Contains(touch.fingerId))
+                {
+                    // Cancel long press detection for this finger
+                    if (touch.fingerId == longPressFingerID)
+                    {
+                        CancelLongPress();
+                    }
+                    
+                    // Calculate touch duration and distance
+                    float touchDuration = Time.time - touchStartTime;
+                    float touchDistance = Vector2.Distance(touchStartPosition, touch.position);
+                    
+                    // Determine gesture type
+                    if (touchDistance > swipeThreshold)
+                    {
+                        // This was a swipe
+                        ProcessSwipe(touchStartPosition, touch.position);
+                    }
+                    else if (touchDuration < longPressTimeThreshold)
+                    {
+                        // This was a tap or double tap
+                        float timeSinceLastTap = Time.time - lastTapTime;
+                        
+                        if (timeSinceLastTap <= doubleTapTimeThreshold)
+                        {
+                            // Double tap
+                            onDoubleTap?.Invoke(touch.position);
+                            lastTapTime = 0; // Reset to avoid triple-tap
+                        }
+                        else
+                        {
+                            // Single tap
+                            onTap?.Invoke(touch.position);
+                            lastTapTime = Time.time;
+                        }
+                    }
+                    
+                    // Remove from tracked fingers
+                    trackedFingers.Remove(touch.fingerId);
+                }
+                break;
+                
+            case TouchPhase.Canceled:
+                // Touch was canceled, clean up
+                if (touch.fingerId == longPressFingerID)
+                {
+                    CancelLongPress();
+                }
+                
+                if (trackedFingers.Contains(touch.fingerId))
+                {
+                    trackedFingers.Remove(touch.fingerId);
+                }
+                break;
+        }
+    }
+    
+    private void TriggerLongPress()
+    {
+        // Ensure we're still in a long press state
+        if (isLongPressing && longPressFingerID != -1)
+        {
+            // Find the current position of the finger
+            foreach (Touch touch in Input.touches)
+            {
+                if (touch.fingerId == longPressFingerID)
+                {
+                    onLongPress?.Invoke(touch.position);
+                    break;
+                }
+            }
+            
+            isLongPressing = false;
+        }
+    }
+    
+    private void CancelLongPress()
+    {
+        if (isLongPressing)
+        {
+            CancelInvoke("TriggerLongPress");
+            isLongPressing = false;
+            longPressFingerID = -1;
+        }
+    }
+    
+    private void ProcessSwipe(Vector2 startPos, Vector2 endPos)
+    {
+        // Calculate swipe direction
+        Vector2 direction = endPos - startPos;
+        
+        // Determine primary direction
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            // Horizontal swipe
+            if (direction.x > 0)
+            {
+                onSwipeRight?.Invoke(endPos);
+            }
+            else
+            {
+                onSwipeLeft?.Invoke(endPos);
+            }
+        }
+        else
+        {
+            // Vertical swipe
+            if (direction.y > 0)
+            {
+                onSwipeUp?.Invoke(endPos);
+            }
+            else
+            {
+                onSwipeDown?.Invoke(endPos);
+            }
+        }
+    }
+    
+    private void ProcessPinchGesture()
+    {
+        // Need exactly 2 touches for pinch
+        if (Input.touchCount != 2)
+            return;
+            
+        Touch touch1 = Input.GetTouch(0);
+        Touch touch2 = Input.GetTouch(1);
+        
+        // Check if either touch just began or ended
+        if (touch1.phase == TouchPhase.Began || touch2.phase == TouchPhase.Began ||
+            touch1.phase == TouchPhase.Ended || touch2.phase == TouchPhase.Ended)
+        {
+            // Just store the current distance
+            return;
+        }
+        
+        // Calculate current and previous touch positions
+        Vector2 touch1PrevPos = touch1.position - touch1.deltaPosition;
+        Vector2 touch2PrevPos = touch2.position - touch2.deltaPosition;
+        
+        // Calculate distance between touches (current and previous frame)
+        float prevTouchDeltaMag = (touch1PrevPos - touch2PrevPos).magnitude;
+        float touchDeltaMag = (touch1.position - touch2.position).magnitude;
+        
+        // Calculate the difference in distances
+        float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
+        
+        // Trigger pinch event with delta value
+        onPinch?.Invoke(deltaMagnitudeDiff);
+    }
+    
+    #if UNITY_EDITOR
+    // Mouse simulation for testing in editor
+    private bool isMouseDown = false;
+    private Vector2 mouseDownPosition;
+    private float mouseDownTime;
+    
+    private void SimulateTouchWithMouse()
+    {
+        // Mouse button down - simulate touch begin
+        if (Input.GetMouseButtonDown(0))
+        {
+            isMouseDown = true;
+            mouseDownPosition = Input.mousePosition;
+            mouseDownTime = Time.time;
+            
+            // Start long press detection
+            isLongPressing = true;
+            longPressFingerID = 0; // Use 0 for mouse
+            Invoke("TriggerLongPress", longPressTimeThreshold);
+        }
+        
+        // Mouse moved while button down - simulate touch move
+        if (isMouseDown && Input.GetMouseButton(0))
+        {
+            // Check if moved far enough to cancel long press
+            if (isLongPressing && Vector2.Distance(mouseDownPosition, (Vector2)Input.mousePosition) > 20)
+            {
+                CancelLongPress();
+            }
+        }
+        
+        // Mouse button up - simulate touch end
+        if (Input.GetMouseButtonUp(0) && isMouseDown)
+        {
+            // Cancel long press
+            if (isLongPressing)
+            {
+                CancelLongPress();
+            }
+            
+            // Calculate duration and distance
+            float clickDuration = Time.time - mouseDownTime;
+            float clickDistance = Vector2.Distance(mouseDownPosition, Input.mousePosition);
+            
+            // Determine gesture type
+            if (clickDistance > swipeThreshold)
+            {
+                // This was a swipe
+                ProcessSwipe(mouseDownPosition, Input.mousePosition);
+            }
+            else if (clickDuration < longPressTimeThreshold)
+            {
+                // This was a tap or double tap
+                float timeSinceLastTap = Time.time - lastTapTime;
+                
+                if (timeSinceLastTap <= doubleTapTimeThreshold)
+                {
+                    // Double tap
+                    onDoubleTap?.Invoke(Input.mousePosition);
+                    lastTapTime = 0; // Reset to avoid triple-tap
+                }
+                else
+                {
+                    // Single tap
+                    onTap?.Invoke(Input.mousePosition);
+                    lastTapTime = Time.time;
+                }
+            }
+            
+            isMouseDown = false;
+        }
+    }
+    #endif
+</div>
+
+<div class="section">
+    <h2>Touch Input and Mobile Controls</h2>
+    <p>
+        Mobile games rely on touch input rather than keyboard and mouse. Let's implement responsive touch controls.
+    </p>
+    
+    <h3>Implementation Guidelines</h3>
+    <ol>
+        <li><strong>Design for Touch</strong>: Create UI elements that are finger-friendly (at least 44x44 pixels)</li>
+        <li><strong>Handle Multiple Input Types</strong>: Support both simple taps and more complex gestures</li>
+        <li><strong>Create Input Feedback</strong>: Provide visual/audio feedback for touches</li>
+        <li><strong>Test on Real Devices</strong>: Touch input feels different on actual devices vs. simulators</li>
+        <li><strong>Consider Screen Areas</strong>: Place controls where they won't be blocked by thumbs</li>
+    </ol>
+    
+    <div class="code-example">
+        <h4>Basic Touch Input Manager</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Events;
+
+// Handles various touch input types for mobile games
+public class TouchInputManager : MonoBehaviour
+{
+    [System.Serializable]
+    public class TouchEvent : UnityEvent<Vector2> {}
+    
+    [Header("Single Touch Events")]
+    public TouchEvent onTap;               // Fired when player taps the screen
+    public TouchEvent onDoubleTap;         // Fired on double-tap
+    public TouchEvent onLongPress;         // Fired when player holds finger down
+    
+    [Header("Gesture Settings")]
+    public float doubleTapTimeThreshold = 0.3f;   // Max time between taps for double-tap
+    public float longPressTimeThreshold = 0.7f;   // Time needed to trigger long press
+    public float swipeThreshold = 50f;            // Min distance for swipe detection
+    
+    [Header("Swipe Events")]
+    public TouchEvent onSwipeLeft;         // Fired on left swipe
+    public TouchEvent onSwipeRight;        // Fired on right swipe
+    public TouchEvent onSwipeUp;           // Fired on up swipe
+    public TouchEvent onSwipeDown;         // Fired on down swipe
+    
+    [Header("Pinch/Zoom")]
+    public UnityEvent<float> onPinch;      // Fired during pinch with delta value
+
+    // Touch state tracking
+    private float lastTapTime;
+    private Vector2 touchStartPosition;
+    private float touchStartTime;
+    private bool isLongPressing;
+    private int longPressFingerID = -1;
+    private List<int> trackedFingers = new List<int>();
+    
+    private void Update()
+    {
+        // Track touch count
+        int touchCount = Input.touchCount;
+        
+        // Process multi-touch gestures first (pinch)
+        if (touchCount >= 2)
+        {
+            ProcessPinchGesture();
+        }
+        
+        // Process single touch events
+        if (touchCount > 0)
+        {
+            foreach (Touch touch in Input.touches)
+            {
+                ProcessTouch(touch);
+            }
+        }
+        
+        // For editor/debug: simulate touch with mouse
+        #if UNITY_EDITOR
+        SimulateTouchWithMouse();
+        #endif
+    }
+    
+    private void ProcessTouch(Touch touch)
+    {
+        switch (touch.phase)
+        {
+            case TouchPhase.Began:
+                // Store initial position and time
+                if (!trackedFingers.Contains(touch.fingerId))
+                {
+                    trackedFingers.Add(touch.fingerId);
+                    touchStartPosition = touch.position;
+                    touchStartTime = Time.time;
+                    
+                    // Start tracking for long press
+                    if (longPressFingerID == -1)
+                    {
+                        longPressFingerID = touch.fingerId;
+                        isLongPressing = true;
+                        Invoke("TriggerLongPress", longPressTimeThreshold);
+                    }
+                }
+                break;
+                
+            case TouchPhase.Moved:
+                // Cancel long press if finger moved too much
+                if (isLongPressing && touch.fingerId == longPressFingerID)
+                {
+                    if (Vector2.Distance(touchStartPosition, touch.position) > 20)
+                    {
+                        CancelLongPress();
+                    }
+                }
+                break;
+                
+            case TouchPhase.Ended:
+                if (trackedFingers.Contains(touch.fingerId))
+                {
+                    // Cancel long press detection for this finger
+                    if (touch.fingerId == longPressFingerID)
+                    {
+                        CancelLongPress();
+                    }
+                    
+                    // Calculate touch duration and distance
+                    float touchDuration = Time.time - touchStartTime;
+                    float touchDistance = Vector2.Distance(touchStartPosition, touch.position);
+                    
+                    // Determine gesture type
+                    if (touchDistance > swipeThreshold)
+                    {
+                        // This was a swipe
+                        ProcessSwipe(touchStartPosition, touch.position);
+                    }
+                    else if (touchDuration < longPressTimeThreshold)
+                    {
+                        // This was a tap or double tap
+                        float timeSinceLastTap = Time.time - lastTapTime;
+                        
+                        if (timeSinceLastTap <= doubleTapTimeThreshold)
+                        {
+                            // Double tap
+                            onDoubleTap?.Invoke(touch.position);
+                            lastTapTime = 0; // Reset to avoid triple-tap
+                        }
+                        else
+                        {
+                            // Single tap
+                            onTap?.Invoke(touch.position);
+                            lastTapTime = Time.time;
+                        }
+                    }
+                    
+                    // Remove from tracked fingers
+                    trackedFingers.Remove(touch.fingerId);
+                }
+                break;
+                
+            case TouchPhase.Canceled:
+                // Touch was canceled, clean up
+                if (touch.fingerId == longPressFingerID)
+                {
+                    CancelLongPress();
+                }
+                
+                if (trackedFingers.Contains(touch.fingerId))
+                {
+                    trackedFingers.Remove(touch.fingerId);
+                }
+                break;
+        }
+    }
+    
+    private void TriggerLongPress()
+    {
+        // Ensure we're still in a long press state
+        if (isLongPressing && longPressFingerID != -1)
+        {
+            // Find the current position of the finger
+            foreach (Touch touch in Input.touches)
+            {
+                if (touch.fingerId == longPressFingerID)
+                {
+                    onLongPress?.Invoke(touch.position);
+                    break;
+                }
+            }
+            
+            isLongPressing = false;
+        }
+    }
+    
+    private void CancelLongPress()
+    {
+        if (isLongPressing)
+        {
+            CancelInvoke("TriggerLongPress");
+            isLongPressing = false;
+            longPressFingerID = -1;
+        }
+    }
+    
+    private void ProcessSwipe(Vector2 startPos, Vector2 endPos)
+    {
+        // Calculate swipe direction
+        Vector2 direction = endPos - startPos;
+        
+        // Determine primary direction
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            // Horizontal swipe
+            if (direction.x > 0)
+            {
+                onSwipeRight?.Invoke(endPos);
+            }
+            else
+            {
+                onSwipeLeft?.Invoke(endPos);
+            }
+        }
+        else
+        {
+            // Vertical swipe
+            if (direction.y > 0)
+            {
+                onSwipeUp?.Invoke(endPos);
+            }
+            else
+            {
+                onSwipeDown?.Invoke(endPos);
+            }
+        }
+    }
+    
+    private void ProcessPinchGesture()
+    {
+        // Need exactly 2 touches for pinch
+        if (Input.touchCount != 2)
+            return;
+            
+        Touch touch1 = Input.GetTouch(0);
+        Touch touch2 = Input.GetTouch(1);
+        
+        // Check if either touch just began or ended
+        if (touch1.phase == TouchPhase.Began || touch2.phase == TouchPhase.Began ||
+            touch1.phase == TouchPhase.Ended || touch2.phase == TouchPhase.Ended)
+        {
+            // Just store the current distance
+            return;
+        }
+        
+        // Calculate current and previous touch positions
+        Vector2 touch1PrevPos = touch1.position - touch1.deltaPosition;
+        Vector2 touch2PrevPos = touch2.position - touch2.deltaPosition;
+        
+        // Calculate distance between touches (current and previous frame)
+        float prevTouchDeltaMag = (touch1PrevPos - touch2PrevPos).magnitude;
+        float touchDeltaMag = (touch1.position - touch2.position).magnitude;
+        
+        // Calculate the difference in distances
+        float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
+        
+        // Trigger pinch event with delta value
+        onPinch?.Invoke(deltaMagnitudeDiff);
+    }
+    
+    #if UNITY_EDITOR
+    // Mouse simulation for testing in editor
+    private bool isMouseDown = false;
+    private Vector2 mouseDownPosition;
+    private float mouseDownTime;
+    
+    private void SimulateTouchWithMouse()
+    {
+        // Mouse button down - simulate touch begin
+        if (Input.GetMouseButtonDown(0))
+        {
+            isMouseDown = true;
+            mouseDownPosition = Input.mousePosition;
+            mouseDownTime = Time.time;
+            
+            // Start long press detection
+            isLongPressing = true;
+            longPressFingerID = 0; // Use 0 for mouse
+            Invoke("TriggerLongPress", longPressTimeThreshold);
+        }
+        
+        // Mouse moved while button down - simulate touch move
+        if (isMouseDown && Input.GetMouseButton(0))
+        {
+            // Check if moved far enough to cancel long press
+            if (isLongPressing && Vector2.Distance(mouseDownPosition, (Vector2)Input.mousePosition) > 20)
+            {
+                CancelLongPress();
+            }
+        }
+        
+        // Mouse button up - simulate touch end
+        if (Input.GetMouseButtonUp(0) && isMouseDown)
+        {
+            // Cancel long press
+            if (isLongPressing)
+            {
+                CancelLongPress();
+            }
+            
+            // Calculate duration and distance
+            float clickDuration = Time.time - mouseDownTime;
+            float clickDistance = Vector2.Distance(mouseDownPosition, Input.mousePosition);
+            
+            // Determine gesture type
+            if (clickDistance > swipeThreshold)
+            {
+                // This was a swipe
+                ProcessSwipe(mouseDownPosition, Input.mousePosition);
+            }
+            else if (clickDuration < longPressTimeThreshold)
+            {
+                // This was a tap or double tap
+                float timeSinceLastTap = Time.time - lastTapTime;
+                
+                if (timeSinceLastTap <= doubleTapTimeThreshold)
+                {
+                    // Double tap
+                    onDoubleTap?.Invoke(Input.mousePosition);
+                    lastTapTime = 0; // Reset to avoid triple-tap
+                }
+                else
+                {
+                    // Single tap
+                    onTap?.Invoke(Input.mousePosition);
+                    lastTapTime = Time.time;
+                }
+            }
+            
+            isMouseDown = false;
+        }
+    }
+    #endif
+}</code></pre>
+    </div>
+    
+    <div class="code-example">
+        <h4>Mobile Joystick Controller</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+// Virtual joystick for mobile character movement
+public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+{
+    [Header("Components")]
+    public RectTransform backgroundRect;   // The outer background circle
+    public RectTransform handleRect;       // The inner handle/knob
+    
+    [Header("Settings")]
+    public float joystickRange = 50f;      // Maximum distance handle can move from center
+    public bool hideJoystickUntilTouched = true; // Hide joystick until used
+    public bool resetHandleOnRelease = true;     // Reset handle to center on release
+    public bool isDynamicJoystick = false;       // Joystick appears at touch position
+    
+    [Header("Output")]
+    public Vector2 inputVector;             // Current input direction vector (normalized)
+    public float inputMagnitude;            // Input strength (0-1)
+    
+    // Private variables
+    private Vector2 joystickCenter;         // Center position of joystick
+    private Canvas parentCanvas;            // Reference to parent canvas
+    private CanvasGroup canvasGroup;        // For opacity control
+    
+    private void Awake()
+    {
+        // Get component references
+        parentCanvas = GetComponentInParent<Canvas>();
+        canvasGroup = GetComponent<CanvasGroup>();
+        
+        // Create CanvasGroup if needed
+        if (canvasGroup == null && hideJoystickUntilTouched)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+        
+        // Initialize joystick center
+        joystickCenter = backgroundRect.position;
+        
+        // Hide joystick if configured
+        if (hideJoystickUntilTouched && canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+        }
+        
+        // Reset input
+        inputVector = Vector2.zero;
+        inputMagnitude = 0f;
+    }
+    
+    // Called when pointer touches the joystick area
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        // Show joystick
+        if (hideJoystickUntilTouched && canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+        }
+        
+        // For dynamic joystick, move the background to touch position
+        if (isDynamicJoystick)
+        {
+            // Convert screen position to canvas position
+            Vector2 touchPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parentCanvas.GetComponent<RectTransform>(),
+                eventData.position,
+                parentCanvas.worldCamera,
+                out touchPos
+            );
+            
+            // Set new position
+            backgroundRect.localPosition = touchPos;
+            joystickCenter = backgroundRect.position;
+        }
+        
+        // Process the drag
+        OnDrag(eventData);
+    }
+    
+    // Called when pointer is dragged over the joystick
+    public void OnDrag(PointerEventData eventData)
+    {
+        // Convert screen position to canvas position
+        Vector2 touchPos;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            backgroundRect,
+            eventData.position,
+            eventData.pressEventCamera,
+            out touchPos))
+        {
+            // Calculate input vector (direction from center to touch)
+            Vector2 direction = touchPos;
+            
+            // Normalize input based on joystick range
+            inputMagnitude = Mathf.Clamp01(direction.magnitude / joystickRange);
+            
+            // Normalize direction
+            inputVector = (direction.magnitude > 0.01f) ? direction.normalized : Vector2.zero;
+            
+            // Move handle to touch position, clamped to joystick range
+            Vector2 clampedPosition = inputVector * (joystickRange * inputMagnitude);
+            handleRect.anchoredPosition = clampedPosition;
+        }
+    }
+    
+    // Called when pointer is released from joystick
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        // Reset handle position if configured
+        if (resetHandleOnRelease)
+        {
+            handleRect.anchoredPosition = Vector2.zero;
+        }
+        
+        // Hide joystick if configured
+        if (hideJoystickUntilTouched && canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+        }
+        
+        // Reset input
+        inputVector = Vector2.zero;
+        inputMagnitude = 0f;
+    }
+    
+    // Method to get input for movement
+    public Vector2 GetMovementInput()
+    {
+        return inputVector * inputMagnitude;
+    }
+}</code></pre>
+    </div>
+
+    <h3>Best Practices for Mobile Controls</h3>
+    <p>
+        Creating effective mobile controls requires careful design:
+    </p>
+    <ul>
+        <li><strong>Keep it Simple</strong>: Mobile controls should be intuitive and minimal</li>
+        <li><strong>Provide Options</strong>: Let players customize controls and sensitivity</li>
+        <li><strong>Give Feedback</strong>: Visual and haptic feedback helps confirm input</li>
+        <li><strong>Use Native Features</strong>: Consider gyroscope, accelerometer, and other sensors</li>
+        <li><strong>Place Controls Thoughtfully</strong>: Position controls for thumbs in portrait/landscape mode</li>
+    </ul>
+</div>
+
+<!-- More sections to be added in subsequent edits -->
+
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

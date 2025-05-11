@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Movement in Unity - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Character Movement in Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Character Movement</h3>
+                        <p>Character movement is one of the most fundamental aspects of game development. Well-designed movement controls can make or break the player experience. In Unity, you can implement character movement using a combination of built-in components and custom C# scripts.</p>
+                        
+                        <p>This guide covers the following movement types:</p>
+                        <ul>
+                            <li>2D character movement (side-scrolling and top-down)</li>
+                            <li>3D character movement (first-person and third-person)</li>
+                            <li>Physics-based vs. transform-based movement</li>
+                            <li>Character controller-based movement</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Setting Up Your Character - Step by Step</h3>
+                        <p>Before coding movement, you need to properly set up your character in Unity:</p>
+                        
+                        <h4>For 2D Character:</h4>
+                        <ol>
+                            <li><strong>Create a new GameObject</strong>: Right-click in Hierarchy → 2D Object → Sprite</li>
+                            <li><strong>Add a Rigidbody2D</strong>: Select your character → Add Component → Physics 2D → Rigidbody 2D
+                                <ul>
+                                    <li>For platformers: Set Gravity Scale to 3-5</li>
+                                    <li>For top-down games: Set Gravity Scale to 0</li>
+                                    <li>Set Freeze Rotation on Z (check the Z box under Constraints → Freeze Rotation)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Add a Collider</strong>: Add Component → Physics 2D → Box Collider 2D (or Capsule Collider 2D)
+                                <ul>
+                                    <li>Adjust the collider size to fit your sprite</li>
+                                    <li>For platformers, make it slightly narrower than the visual sprite for better gameplay</li>
+                                </ul>
+                            </li>
+                            <li><strong>Create an empty C# script</strong>: In Project window → Right-click → Create → C# Script → Name it "PlayerMovement" (or similar)</li>
+                            <li><strong>Attach the script to your character</strong>: Drag the script onto your character GameObject</li>
+                        </ol>
+                        
+                        <h4>For 3D Character:</h4>
+                        <ol>
+                            <li><strong>Import a 3D model</strong> or create a primitive (GameObject → 3D Object → Capsule)</li>
+                            <li><strong>Add a Character Controller</strong> (recommended): Add Component → Physics → Character Controller
+                                <ul>
+                                    <li>Adjust the Height and Radius to match your character model</li>
+                                    <li>Set Center Y position to half your character's height</li>
+                                </ul>
+                            </li>
+                            <li><strong>Alternative</strong>: Add a Rigidbody and Collider
+                                <ul>
+                                    <li>Add Component → Physics → Rigidbody</li>
+                                    <li>Add Component → Physics → Capsule Collider</li>
+                                    <li>For character movement: Check "Freeze Rotation" on all axes</li>
+                                </ul>
+                            </li>
+                            <li><strong>Create and attach a C# script</strong> as described above</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic 2D Movement</h3>
+                        <p>For 2D games, you typically use Vector2 for movement calculations. Here's a simple example of a 2D side-scrolling character controller:</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic 2D Side-Scrolling Movement:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class SimpleCharacter2D : MonoBehaviour
+{
+    // Movement speed in units per second
+    public float moveSpeed = 5f;
+    
+    // Component references
+    private Rigidbody2D rb;        // Reference to the physics component
+    private SpriteRenderer spriteRenderer;  // Reference to control sprite appearance
+    
+    // Direction tracking
+    private float horizontalInput;  // Stores left/right input value (-1 to 1)
+    private bool isFacingRight = true;  // Tracks which way character is facing
+    
+    void Start()
+    {
+        // Get component references when the game starts
+        rb = GetComponent<Rigidbody2D>();       // Get physics component
+        spriteRenderer = GetComponent<SpriteRenderer>(); // Get sprite renderer
+    }
+    
+    void Update()
+    {
+        // Get horizontal input (-1 for left, 0 for none, 1 for right)
+        // GetAxisRaw provides immediate response without smoothing
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        
+        // Flip the sprite based on movement direction
+        if (horizontalInput > 0 && !isFacingRight)  // Moving right but facing left
+        {
+            FlipCharacter();  // Flip to face right
+        }
+        else if (horizontalInput < 0 && isFacingRight)  // Moving left but facing right
+        {
+            FlipCharacter();  // Flip to face left
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Move the character using physics (in FixedUpdate for consistent physics)
+        // We keep the current vertical velocity (y) and only change horizontal (x)
+        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+    }
+    
+    // Flip the character's facing direction
+    void FlipCharacter()
+    {
+        isFacingRight = !isFacingRight;  // Toggle facing direction flag
+        spriteRenderer.flipX = !spriteRenderer.flipX;  // Flip the sprite visually
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key concepts in this script:</p>
+                                <ul>
+                                    <li><strong>Input.GetAxisRaw("Horizontal")</strong> - Returns -1 (left), 0 (no input), or 1 (right)</li>
+                                    <li><strong>Rigidbody2D.velocity</strong> - Controls the physics-based movement</li>
+                                    <li><strong>FixedUpdate()</strong> - Used for physics calculations at fixed time intervals</li>
+                                    <li><strong>FlipCharacter()</strong> - Changes the character's facing direction based on movement</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Tip: Smoothing Movement</h4>
+                            <p>To create smoother movement, you can use Input.GetAxis() instead of Input.GetAxisRaw(). GetAxis provides built-in smoothing.</p>
+                            <p>For custom smoothing, you can use Mathf.Lerp or Mathf.SmoothDamp:</p>
+                            <pre><code>
+// Smooth horizontal movement with Lerp
+float targetVelocityX = horizontalInput * moveSpeed;  // Calculate the desired velocity
+float smoothVelocityX = Mathf.Lerp(rb.velocity.x, targetVelocityX, smoothFactor * Time.fixedDeltaTime);  // Gradually change to target velocity
+rb.velocity = new Vector2(smoothVelocityX, rb.velocity.y);  // Apply the smoothed velocity
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Top-Down 2D Movement:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class TopDown2DController : MonoBehaviour
+{
+    public float moveSpeed = 5f;  // Character movement speed
+    private Rigidbody2D rb;       // Reference to physics component
+    private Vector2 movement;     // Stores both x and y movement input
+    
+    void Start()
+    {
+        // Get the Rigidbody2D component attached to this GameObject
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // Get input from both horizontal (left/right) and vertical (up/down) axes
+        movement.x = Input.GetAxisRaw("Horizontal");  // Left/right movement
+        movement.y = Input.GetAxisRaw("Vertical");    // Up/down movement
+        
+        // Normalize for consistent speed in all directions
+        // This prevents diagonal movement from being faster (Pythagorean theorem)
+        if (movement.magnitude > 1)
+        {
+            movement.Normalize();  // Makes the vector have a magnitude of 1
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Move the character using MovePosition for more precise control
+        // rb.position is current position + movement direction * speed * time
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Implementation Steps for 2D Movement:</h4>
+                        <ol>
+                            <li><strong>Create your input handling</strong>: Decide between GetAxis (smooth) or GetAxisRaw (responsive)</li>
+                            <li><strong>Choose a movement method</strong>:
+                                <ul>
+                                    <li><code>Rigidbody2D.velocity</code> - Good for platformers and physics-based movement</li>
+                                    <li><code>Rigidbody2D.MovePosition</code> - More precise, less physics interaction</li>
+                                    <li><code>transform.Translate</code> - For non-physics movement (not recommended with Rigidbody)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Add character flipping</strong>: Either by flipping the sprite or rotating the transform</li>
+                            <li><strong>Add acceleration/deceleration</strong>: For more natural movement</li>
+                            <li><strong>Test and adjust values</strong>: Tune moveSpeed and other parameters for your game's feel</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced 2D Platform Movement</h3>
+                        <p>A more comprehensive platformer controller with jumping, better ground detection, and variable jump height:</p>
+                        
+                        <div class="example-box">
+                            <h4>Advanced Platformer Controller:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class PlatformerController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float moveSpeed = 7f;       // Base horizontal movement speed
+    public float acceleration = 60f;    // How quickly character reaches max speed
+    public float deceleration = 60f;    // How quickly character slows down
+    public float airControl = 0.5f;     // Reduced control multiplier when in air (0-1)
+    
+    [Header("Jump Settings")]
+    public float jumpForce = 16f;       // Initial upward force when jumping
+    public float fallMultiplier = 2.5f; // Gravity multiplier when falling (faster falls)
+    public float lowJumpMultiplier = 2f; // Gravity multiplier for short jumps
+    public float jumpBufferTime = 0.1f;  // Time window to queue a jump before landing
+    public float coyoteTime = 0.15f;     // Time window to jump after leaving a platform
+    
+    [Header("Ground Detection")]
+    public Transform groundCheck;        // Position to check for ground beneath player
+    public float groundCheckRadius = 0.1f; // Size of ground detection circle
+    public LayerMask groundLayer;        // Which layers count as ground
+    
+    // Private variables
+    private Rigidbody2D rb;              // Physics component reference
+    private SpriteRenderer spriteRenderer; // Visual component reference
+    private float horizontalInput;         // Left/right input value
+    private float currentSpeed = 0f;       // Current horizontal speed (with acceleration applied)
+    private bool isGrounded;               // Is the player touching ground?
+    private bool isFacingRight = true;     // Which way is player facing
+    private float lastGroundedTime;        // Time tracking for coyote time
+    private float jumpBufferCounter;       // Time tracking for jump buffer
+    
+    void Start()
+    {
+        // Get component references
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+    
+    void Update()
+    {
+        // Get input
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        
+        // Ground check using physics overlap circle at groundCheck position
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Update coyote time - track when we last touched ground
+        if (isGrounded)
+        {
+            lastGroundedTime = Time.time;  // Record current time when grounded
+        }
+        
+        // Jump buffer timing - gives player a grace period to press jump before landing
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferTime;  // Start the jump buffer timer
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;  // Count down jump buffer timer
+        }
+        
+        // Jump logic - works if jump pressed recently AND touched ground recently
+        if (jumpBufferCounter > 0 && Time.time - lastGroundedTime <= coyoteTime)
+        {
+            Jump();  // Execute jump
+            jumpBufferCounter = 0;  // Reset jump buffer to prevent double jumps
+        }
+        
+        // Variable jump height logic
+        if (rb.velocity.y < 0)
+        {
+            // Falling - apply higher gravity for faster falling
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            // Rising but jump button released - apply higher gravity for shorter jump
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+        
+        // Flip character to face movement direction
+        if (horizontalInput > 0 && !isFacingRight)
+        {
+            FlipCharacter();
+        }
+        else if (horizontalInput < 0 && isFacingRight)
+        {
+            FlipCharacter();
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Calculate target speed based on input
+        float targetSpeed = horizontalInput * moveSpeed;
+        
+        // Calculate acceleration rate based on if we're speeding up or slowing down
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;
+        
+        // Reduce acceleration in air for less control while jumping
+        if (!isGrounded)
+        {
+            accelRate *= airControl;  // Multiply by air control factor (usually less than 1)
+        }
+        
+        // Apply acceleration to current speed
+        float speedDif = targetSpeed - currentSpeed;  // Difference between current and target
+        float movement = speedDif * accelRate * Time.fixedDeltaTime;  // Calculate change amount
+        currentSpeed += movement;  // Apply the change
+        
+        // Apply the calculated movement to the rigidbody
+        rb.velocity = new Vector2(currentSpeed, rb.velocity.y);
+    }
+    
+    // Apply upward force for jumping
+    void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);  // Set upward velocity directly
+    }
+    
+    // Flip the character's facing direction
+    void FlipCharacter()
+    {
+        isFacingRight = !isFacingRight;  // Toggle direction flag
+        spriteRenderer.flipX = !spriteRenderer.flipX;  // Flip sprite visually
+    }
+    
+    // Visualize the ground check radius in the editor (for debugging)
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+        
+        // Draw green sphere if grounded, red if not
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Advanced features in this controller:</p>
+                                <ul>
+                                    <li><strong>Coyote Time</strong> - Allows the player to jump shortly after leaving a platform</li>
+                                    <li><strong>Jump Buffering</strong> - Queues a jump if the button is pressed slightly before landing</li>
+                                    <li><strong>Variable Jump Height</strong> - Shorter jumps when the button is released early</li>
+                                    <li><strong>Acceleration/Deceleration</strong> - Smooth start and stop movement</li>
+                                    <li><strong>Air Control</strong> - Configurable control while in the air</li>
+                                    <li><strong>Precise Ground Detection</strong> - Using Physics2D.OverlapCircle for better accuracy</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h4>Setting Up Ground Detection:</h4>
+                        <ol>
+                            <li>Create an empty GameObject as a child of your character</li>
+                            <li>Position it at the bottom of your character's collider</li>
+                            <li>In the Inspector, assign this Transform to the groundCheck field</li>
+                            <li>Create a new Layer called "Ground"</li>
+                            <li>Assign all your platforms/ground objects to this layer</li>
+                            <li>In the inspector, set the groundLayer to the Ground layer</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>3D Character Movement</h3>
+                        <p>For 3D games, Unity offers several options for character movement, including the Character Controller component, Rigidbody physics, or direct Transform manipulation.</p>
+                        
+                        <div class="example-box">
+                            <h4>First-Person Movement with Character Controller:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class FirstPersonController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;     // Normal walking speed
+    public float sprintSpeed = 8f;    // Running speed when holding sprint key
+    public float crouchSpeed = 2.5f;  // Slower speed when crouching
+    public float jumpHeight = 2f;     // How high the character jumps
+    
+    [Header("Ground Settings")]
+    public Transform groundCheck;     // Position to check for ground
+    public float groundDistance = 0.4f; // Distance to check for ground
+    public LayerMask groundMask;      // Which layers count as ground
+    
+    [Header("Camera Settings")]
+    public Transform cameraTransform;  // Reference to the player's camera
+    public float mouseSensitivity = 100f; // Mouse look sensitivity
+    public bool lockCursor = true;     // Whether to lock mouse to game window
+    
+    // Private variables
+    private CharacterController controller; // Unity's built-in character controller
+    private Vector3 velocity;             // Current movement velocity
+    private bool isGrounded;              // Is player touching ground?
+    private float xRotation = 0f;         // Camera up/down rotation
+    private float currentSpeed;           // Current movement speed
+    private float gravity = -9.81f;       // Gravity strength
+    
+    void Start()
+    {
+        // Get the character controller component
+        controller = GetComponent<CharacterController>();
+        currentSpeed = moveSpeed;  // Start with normal move speed
+        
+        // Lock and hide cursor for first-person look
+        if (lockCursor)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+    
+    void Update()
+    {
+        // Check if grounded using a sphere cast
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        
+        // Reset downward velocity when grounded to prevent accumulation
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f; // Small negative value instead of zero for better grounding
+        }
+        
+        // Mouse look handling
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        
+        // Calculate camera rotation - vertical rotation
+        xRotation -= mouseY;  // Subtract to invert the mouse Y axis
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Prevent looking too far up/down
+        
+        // Apply rotations - vertical to camera, horizontal to player
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);  // Rotate player horizontally
+        
+        // Movement inputs from keyboard
+        float x = Input.GetAxis("Horizontal");  // A/D or left/right arrows
+        float z = Input.GetAxis("Vertical");    // W/S or up/down arrows
+        
+        // Speed control - sprint, crouch, or normal movement
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            currentSpeed = sprintSpeed;  // Sprint when shift is held
+        }
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            currentSpeed = crouchSpeed;  // Crouch when ctrl is held
+        }
+        else
+        {
+            currentSpeed = moveSpeed;    // Normal speed otherwise
+        }
+        
+        // Calculate movement direction relative to where the player is facing
+        Vector3 move = transform.right * x + transform.forward * z;
+        
+        // Apply movement using character controller
+        controller.Move(move * currentSpeed * Time.deltaTime);
+        
+        // Jumping when grounded and jump button pressed
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            // Jump formula: v = sqrt(h * -2 * g) - physics formula for initial velocity
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+        
+        // Apply gravity to vertical velocity
+        velocity.y += gravity * Time.deltaTime;
+        
+        // Apply vertical movement (jumping/falling)
+        controller.Move(velocity * Time.deltaTime);
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Setting Up First-Person Movement:</h4>
+                        <ol>
+                            <li><strong>Create a Camera Setup</strong>:
+                                <ul>
+                                    <li>Add a Camera as a child of your character</li>
+                                    <li>Position it at eye level (typically around Y=1.6 for human-sized characters)</li>
+                                    <li>Assign this camera to the cameraTransform field</li>
+                                </ul>
+                            </li>
+                            <li><strong>Set Up Ground Check</strong>:
+                                <ul>
+                                    <li>Create an empty GameObject as a child of your character</li>
+                                    <li>Position it at the bottom of your character</li>
+                                    <li>Assign to the groundCheck field</li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure Layers</strong>:
+                                <ul>
+                                    <li>Create a "Ground" layer</li>
+                                    <li>Assign all walkable surfaces to this layer</li>
+                                    <li>Set the groundMask field to the Ground layer</li>
+                                </ul>
+                            </li>
+                            <li><strong>Adjust Character Controller Settings</strong>:
+                                <ul>
+                                    <li>Set Skin Width to 0.01-0.05</li>
+                                    <li>Set Step Offset to 0.3-0.5 for stair climbing</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Third-Person Character Movement</h3>
+                        <p>Third-person movement typically requires camera-relative movement and more complex character controls:</p>
+                        
+                        <div class="example-box">
+                            <h4>Third-Person Controller:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ThirdPersonController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;     // Normal walking speed
+    public float sprintSpeed = 8f;    // Running speed when sprinting
+    public float rotationSpeed = 10f; // How fast character turns to face movement direction
+    public float jumpForce = 8f;      // How high character jumps
+    
+    [Header("Ground Detection")]
+    public float groundCheckDistance = 0.3f; // Distance to check for ground
+    public LayerMask groundMask;            // Which layers count as ground
+    
+    [Header("Camera")]
+    public Transform cameraTransform;        // Reference to the camera
+    
+    // Private variables
+    private CharacterController controller;  // Unity's character controller
+    private Transform playerTransform;       // Reference to player's transform
+    private Vector3 moveDirection;           // Current movement direction
+    private float currentSpeed;              // Current movement speed
+    private bool isGrounded;                 // Is the character on the ground?
+    private float verticalVelocity;          // Vertical speed (for jumping/falling)
+    private float gravity = -9.81f;          // Gravity strength
+    
+    void Start()
+    {
+        // Get component references
+        controller = GetComponent<CharacterController>();
+        playerTransform = transform;
+        currentSpeed = moveSpeed;  // Start with normal speed
+    }
+    
+    void Update()
+    {
+        // Ground check using a sphere cast at player's feet
+        isGrounded = Physics.CheckSphere(
+            transform.position + Vector3.down * controller.height/2, 
+            groundCheckDistance, 
+            groundMask
+        );
+        
+        // Reset vertical velocity when grounded to prevent accumulation
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;  // Small negative value for better grounding
+        }
+        
+        // Get keyboard movement input
+        float horizontal = Input.GetAxis("Horizontal");  // A/D keys or left/right arrows
+        float vertical = Input.GetAxis("Vertical");      // W/S keys or up/down arrows
+        
+        // Set speed based on sprint input (shift key)
+        currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed;
+        
+        // Calculate movement direction relative to camera
+        Vector3 forward = cameraTransform.forward;  // Camera's forward direction
+        Vector3 right = cameraTransform.right;      // Camera's right direction
+        
+        // Project forward and right vectors on the horizontal plane (remove y component)
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();  // Ensure vector length is 1
+        right.Normalize();    // Ensure vector length is 1
+        
+        // Calculate the move direction in world space based on camera orientation
+        // This creates camera-relative movement (forward is camera forward, not world forward)
+        moveDirection = forward * vertical + right * horizontal;
+        
+        // Normalize movement vector to prevent faster diagonal movement
+        if (moveDirection.magnitude > 1f)
+        {
+            moveDirection.Normalize();  // Make vector length 1
+        }
+        
+        // Apply movement using character controller
+        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+        
+        // Rotate player to face movement direction
+        if (moveDirection != Vector3.zero)
+        {
+            // Create rotation that looks in movement direction
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            
+            // Smoothly rotate from current to target rotation
+            playerTransform.rotation = Quaternion.Slerp(
+                playerTransform.rotation, 
+                targetRotation, 
+                rotationSpeed * Time.deltaTime
+            );
+        }
+        
+        // Jump when space is pressed and grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            verticalVelocity = jumpForce;  // Set upward velocity
+        }
+        
+        // Apply gravity to vertical velocity
+        verticalVelocity += gravity * Time.deltaTime;
+        
+        // Apply vertical movement (jumping/falling)
+        controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+    }
+    
+    void OnDrawGizmosSelected()
+    {
+        // Draw ground check sphere in Scene view for debugging
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        Vector3 groundCheckPos = transform.position + Vector3.down * controller.height/2;
+        Gizmos.DrawWireSphere(groundCheckPos, groundCheckDistance);
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Implementing a Camera Follow System:</h4>
+                        <p>The following script creates a third-person camera that follows the player:</p>
+                        
+                        <pre><code>
+using UnityEngine;
+
+public class ThirdPersonCamera : MonoBehaviour
+{
+    public Transform target;               // Player character to follow
+    public float distance = 5f;            // Distance from camera to player
+    public float height = 2f;              // Height offset of camera
+    public float smoothSpeed = 10f;        // How smoothly camera follows player
+    public float rotationSmoothSpeed = 5f; // How smoothly camera rotates
+    
+    // Mouse input settings
+    public float mouseSensitivity = 100f;  // Mouse sensitivity for camera rotation
+    public bool invertY = false;           // Whether to invert vertical mouse
+    
+    // Collision settings
+    public float minDistance = 1f;         // Minimum camera distance (for collision)
+    public LayerMask collisionMask;        // Which layers block camera
+    
+    // Private variables
+    private float currentRotationX = 0f;   // Current horizontal rotation
+    private float currentRotationY = 0f;   // Current vertical rotation
+    private Vector3 currentRotation;       // Combined rotation vector
+    private Vector3 smoothVelocity = Vector3.zero; // For smooth damping
+    
+    void Start()
+    {
+        // Lock cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        // Initial rotation based on target
+        Vector3 angles = transform.eulerAngles;
+        currentRotationX = angles.y;
+        currentRotationY = angles.x;
+    }
+    
+    void LateUpdate()
+    {
+        if (target == null) return;
+        
+        // Mouse input
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        
+        // Adjust rotation based on mouse input
+        currentRotationX += mouseX;
+        currentRotationY += (invertY ? 1 : -1) * mouseY;
+        currentRotationY = Mathf.Clamp(currentRotationY, -60f, 60f);
+        
+        // Calculate desired rotation
+        currentRotation = Vector3.SmoothDamp(
+            currentRotation, 
+            new Vector3(currentRotationY, currentRotationX, 0), 
+            ref smoothVelocity, 
+            1f / rotationSmoothSpeed
+        );
+        
+        // Convert to quaternion
+        Quaternion rotation = Quaternion.Euler(currentRotation);
+        
+        // Calculate camera position
+        Vector3 targetPosition = target.position + Vector3.up * height;
+        Vector3 direction = rotation * Vector3.back;
+        float targetDistance = distance;
+        
+        // Camera collision detection
+        RaycastHit hit;
+        if (Physics.Raycast(targetPosition, direction, out hit, distance, collisionMask))
+        {
+            targetDistance = Mathf.Clamp(hit.distance, minDistance, distance);
+        }
+        
+        // Set camera position and rotation
+        transform.position = targetPosition + direction * targetDistance;
+        transform.rotation = rotation;
+    }
+}
+                        </code></pre>
+                        
+                        <h4>Setting Up a Third-Person System:</h4>
+                        <ol>
+                            <li><strong>Set up your character with a Character Controller</strong></li>
+                            <li><strong>Create a custom camera rig</strong>:
+                                <ul>
+                                    <li>Create an empty GameObject for the camera</li>
+                                    <li>Attach the ThirdPersonCamera script to it</li>
+                                    <li>Assign your player character to the target field</li>
+                                </ul>
+                            </li>
+                            <li><strong>Create animation parameters</strong> (if using Animator):
+                                <ul>
+                                    <li>Speed (float) - For controlling walk/run animations</li>
+                                    <li>IsGrounded (bool) - For jump/fall animations</li>
+                                    <li>JumpTrigger (trigger) - For initiating jump animations</li>
+                                </ul>
+                            </li>
+                            <li><strong>Refine the movement feel</strong>:
+                                <ul>
+                                    <li>Adjust moveSpeed and rotationSpeed</li>
+                                    <li>Fine-tune ground detection settings</li>
+                                    <li>Adjust camera follow parameters</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Improving Movement Feel</h3>
+                        <p>Creating "game feel" is crucial for making movement enjoyable. Here are some techniques to enhance your character movement:</p>
+                        
+                        <h4>1. Add Acceleration and Deceleration</h4>
+                        <pre><code>
+// Instead of directly setting velocity
+float targetSpeed = input * maxSpeed;  // Calculate target speed from input
+float speedDif = targetSpeed - currentSpeed;  // How far we are from target speed
+float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;  // Use acceleration or deceleration
+float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, 0.9f) * Mathf.Sign(speedDif);  // Non-linear acceleration
+currentSpeed += movement * Time.deltaTime;  // Apply to current speed
+                        </code></pre>
+                        
+                        <h4>2. Add Different Movement States</h4>
+                        <ul>
+                            <li><strong>Walking, Running, Sprinting</strong> - Different speed modifiers</li>
+                            <li><strong>Crouching</strong> - Reduced speed, lower collision height</li>
+                            <li><strong>Air Control</strong> - Limited movement while jumping/falling</li>
+                        </ul>
+                        
+                        <h4>3. Add Motion Variety</h4>
+                        <pre><code>
+// Add subtle head bobbing for first-person
+void HeadBob()
+{
+    if (!isGrounded) return;  // Don't bob in air
+    
+    if (moveDirection.magnitude > 0.1f)  // Only bob when moving
+    {
+        // Calculate bob amount based on walking speed and time
+        // Sin wave creates up/down motion based on time
+        float bobAmount = Mathf.Sin(Time.time * bobFrequency) * bobMagnitude;
+        
+        // Apply bobbing to camera position
+        cameraTransform.localPosition = new Vector3(
+            cameraTransform.localPosition.x,  // Keep x the same
+            defaultCameraY + bobAmount,       // Add bobbing to default height
+            cameraTransform.localPosition.z   // Keep z the same
+        );
+    }
+    else
+    {
+        // Smoothly return to default position when not moving
+        cameraTransform.localPosition = new Vector3(
+            cameraTransform.localPosition.x,  // Keep x the same
+            Mathf.Lerp(cameraTransform.localPosition.y, defaultCameraY, Time.deltaTime * 5f),  // Smooth return
+            cameraTransform.localPosition.z   // Keep z the same
+        );
+    }
+}
+                        </code></pre>
+                        
+                        <h4>4. Add Movement Feedback</h4>
+                        <ul>
+                            <li><strong>Audio</strong> - Footstep sounds, jump/land sounds</li>
+                            <li><strong>Visual Effects</strong> - Dust particles when running/landing</li>
+                            <li><strong>Camera Shake</strong> - Small shake on landing or impacts</li>
+                            <li><strong>Animations</strong> - Blend between different animation states</li>
+                        </ul>
+                        
+                        <h4>5. Variable Jump Height</h4>
+                        <pre><code>
+// For more responsive jumping
+if (rb.velocity.y < 0)
+{
+    // Apply higher gravity when falling for faster descent
+    rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+}
+else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+{
+    // Apply higher gravity when rising but jump button released
+    // This creates shorter jumps when button is tapped vs held
+    rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+}
+                        </code></pre>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Character Movement Problems and Solutions</h3>
+                        
+                        <div class="problem-solution">
+                            <h4>Problem: Character slides down slopes</h4>
+                            <p><strong>Solution:</strong> For Character Controller, set Slope Limit appropriately. For Rigidbody, apply counterforce:</p>
+                            <pre><code>
+// Calculate the ground normal (direction perpendicular to the surface)
+RaycastHit hit;
+if (Physics.Raycast(transform.position, Vector3.down, out hit, groundCheckDistance))
+{
+    // If on a slope
+    if (hit.normal != Vector3.up)
+    {
+        // Calculate direction along the slope (projection of down vector onto the surface)
+        Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, hit.normal);
+        
+        // Apply force in the opposite direction to prevent sliding
+        rigidbody.AddForce(-slopeDirection * slopeSlideForce);
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="problem-solution">
+                            <h4>Problem: Character gets stuck on edges</h4>
+                            <p><strong>Solution:</strong> For Character Controller, increase the Step Offset. For colliders, use a slightly narrower collider than your visual model:</p>
+                            <pre><code>
+// For a capsule character in 2D platformers
+CapsuleCollider2D collider = GetComponent<CapsuleCollider2D>();
+collider.size = new Vector2(0.8f, 1.8f); // Narrower than the sprite
+                            </code></pre>
+                        </div>
+                        
+                        <div class="problem-solution">
+                            <h4>Problem: Jittery movement</h4>
+                            <p><strong>Solution:</strong> Use FixedUpdate for physics operations and interpolation for smoother visuals:</p>
+                            <pre><code>
+// Use Vector3.Lerp or SmoothDamp for visual representations
+void Update()
+{
+    // Visual update for smooth movement
+    if (visualModel != null && rb != null)
+    {
+        // Interpolate visual position to physics position for smoother appearance
+        visualModel.position = Vector3.Lerp(
+            visualModel.position,  // Current visual position
+            rb.position,           // Target physics position
+            visualSmoothFactor * Time.deltaTime  // Smoothing factor
+        );
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="problem-solution">
+                            <h4>Problem: Bunny hopping (jump spam)</h4>
+                            <p><strong>Solution:</strong> Add a jump cooldown or use a jump buffer system:</p>
+                            <pre><code>
+// Jump cooldown
+float jumpCooldown = 0.2f;  // Time required between jumps
+float lastJumpTime = -jumpCooldown;  // Last time we jumped (negative for immediate first jump)
+
+void Update()
+{
+    // Only allow jump if:
+    // 1. Jump button pressed
+    // 2. Player is grounded
+    // 3. Enough time has passed since last jump
+    if (Input.GetButtonDown("Jump") && isGrounded && (Time.time - lastJumpTime) >= jumpCooldown)
+    {
+        Jump();  // Perform jump
+        lastJumpTime = Time.time;  // Record jump time
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-input.html" class="prev"><i class="fas fa-arrow-left"></i> Input Systems</a>
+                        <a href="unity-jump.html" class="next">Jump Mechanics <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

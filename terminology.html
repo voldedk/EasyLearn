@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Terminology - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Terminology</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction</h3>
+                        <p>This page provides a quick reference guide to common C# terminology. Understanding these terms is essential for reading C# code and documentation.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Language Elements</h3>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Term</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Namespace</strong></td>
+                                <td>Container for classes and other namespaces; organizes code and prevents name conflicts</td>
+                                <td><code>namespace MyProject { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Class</strong></td>
+                                <td>Blueprint for creating objects; contains data and methods</td>
+                                <td><code>class Person { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Method</strong></td>
+                                <td>Block of code that performs a specific task</td>
+                                <td><code>void PrintName() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Variable</strong></td>
+                                <td>Container for storing data values</td>
+                                <td><code>int age = 25;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Statement</strong></td>
+                                <td>Complete instruction that performs an action</td>
+                                <td><code>Console.WriteLine("Hello");</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Expression</strong></td>
+                                <td>Code that evaluates to a value</td>
+                                <td><code>x + 5</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parameter</strong></td>
+                                <td>Variable in a method definition</td>
+                                <td><code>void Add(int a, int b)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Argument</strong></td>
+                                <td>Value passed to a method parameter</td>
+                                <td><code>Add(5, 10);</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Object-Oriented Terminology</h3>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Term</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Object</strong></td>
+                                <td>Instance of a class</td>
+                                <td><code>Person person = new Person();</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Constructor</strong></td>
+                                <td>Special method called when an object is created</td>
+                                <td><code>public Person(string name) { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Field</strong></td>
+                                <td>Variable declared in a class</td>
+                                <td><code>private string _name;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Property</strong></td>
+                                <td>Member that provides access to a field</td>
+                                <td><code>public string Name { get; set; }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Interface</strong></td>
+                                <td>Contract that defines a set of methods a class must implement</td>
+                                <td><code>interface IDrawable { void Draw(); }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inheritance</strong></td>
+                                <td>Mechanism where a class inherits characteristics from another class</td>
+                                <td><code>class Student : Person { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Override</strong></td>
+                                <td>Providing a new implementation of a method defined in a base class</td>
+                                <td><code>override void Print() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Overload</strong></td>
+                                <td>Multiple methods with the same name but different parameters</td>
+                                <td><code>void Print(int x) { ... }<br>void Print(string s) { ... }</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Keywords & Modifiers</h3>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Term</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><strong>public</strong></td>
+                                <td>Access modifier that makes a member accessible from anywhere</td>
+                                <td><code>public void Display() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>private</strong></td>
+                                <td>Access modifier that restricts access to within the containing class</td>
+                                <td><code>private int _id;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>protected</strong></td>
+                                <td>Access modifier that allows access from the class and derived classes</td>
+                                <td><code>protected void Initialize() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>internal</strong></td>
+                                <td>Access modifier that restricts access to the current assembly</td>
+                                <td><code>internal class Helper { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>static</strong></td>
+                                <td>Modifier that makes a member belong to the type itself, not instances</td>
+                                <td><code>static void Main() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>readonly</strong></td>
+                                <td>Field that can only be assigned during declaration or in a constructor</td>
+                                <td><code>readonly int MAX_SIZE = 100;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>const</strong></td>
+                                <td>Constant value that cannot be changed</td>
+                                <td><code>const double PI = 3.14159;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>virtual</strong></td>
+                                <td>Method that can be overridden in a derived class</td>
+                                <td><code>virtual void Process() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>abstract</strong></td>
+                                <td>Class or method that must be implemented by derived classes</td>
+                                <td><code>abstract void Draw();</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>sealed</strong></td>
+                                <td>Class that cannot be inherited from</td>
+                                <td><code>sealed class FinalClass { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>async</strong></td>
+                                <td>Method that can perform asynchronous operations</td>
+                                <td><code>async Task ProcessDataAsync() { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>await</strong></td>
+                                <td>Pauses execution until an async operation completes</td>
+                                <td><code>var result = await GetDataAsync();</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Special Types</h3>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Term</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Delegate</strong></td>
+                                <td>Type that represents references to methods</td>
+                                <td><code>delegate void ProcessData(int x);</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Event</strong></td>
+                                <td>Notification sent by an object when something occurs</td>
+                                <td><code>public event EventHandler DataChanged;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Enum</strong></td>
+                                <td>Type that defines a set of named constants</td>
+                                <td><code>enum DayOfWeek { Monday, Tuesday, ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Struct</strong></td>
+                                <td>Value type that encapsulates data and related behavior</td>
+                                <td><code>struct Point { public int X; public int Y; }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Record</strong></td>
+                                <td>Type for immutable data with value-based equality (C# 9+)</td>
+                                <td><code>record Person(string Name, int Age);</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tuple</strong></td>
+                                <td>Type that groups multiple elements into a single value</td>
+                                <td><code>(string, int) person = ("John", 30);</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nullable</strong></td>
+                                <td>Value type that can also be null</td>
+                                <td><code>int? nullableInt = null;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Task</strong></td>
+                                <td>Represents an asynchronous operation</td>
+                                <td><code>Task<int> task = GetValueAsync();</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lambda</strong></td>
+                                <td>Anonymous function expression</td>
+                                <td><code>x => x * x</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Shortcuts & Symbols</h3>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><strong>{ }</strong></td>
+                                <td>Curly braces: Define code blocks</td>
+                                <td><code>if (x > 0) { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>[ ]</strong></td>
+                                <td>Square brackets: Array indexing</td>
+                                <td><code>int value = numbers[0];</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>( )</strong></td>
+                                <td>Parentheses: Method invocation, expression grouping</td>
+                                <td><code>Calculate(x, y);</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>;</strong></td>
+                                <td>Semicolon: Statement terminator</td>
+                                <td><code>int x = 5;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>.</strong></td>
+                                <td>Dot: Member access operator</td>
+                                <td><code>Console.WriteLine();</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>:</strong></td>
+                                <td>Colon: Inheritance, interface implementation</td>
+                                <td><code>class Dog : Animal</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>=></strong></td>
+                                <td>Arrow: Lambda expression, expression-bodied members</td>
+                                <td><code>public string Name => _name;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>??</strong></td>
+                                <td>Null-coalescing operator</td>
+                                <td><code>string name = value ?? "Default";</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>?.</strong></td>
+                                <td>Null-conditional operator</td>
+                                <td><code>int? length = text?.Length;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>$</strong></td>
+                                <td>String interpolation</td>
+                                <td><code>$"Hello, {name}!"</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>@</strong></td>
+                                <td>Verbatim string literal</td>
+                                <td><code>@"C:\folder\file.txt"</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="output.html" class="prev"><i class="fas fa-arrow-left"></i> C# Output</a>
+                        <a href="variables.html" class="next">Variables <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

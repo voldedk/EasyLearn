@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Up Unity - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Setting Up Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Installing Unity Hub</h3>
+                        <p>Unity Hub is the central management tool for Unity installations, projects, and updates. Setting up Unity properly begins with installing Unity Hub:</p>
+                        
+                        <div class="example-box">
+                            <h4>Installation Steps:</h4>
+                            <ol>
+                                <li>Visit the <a href="https://unity.com/download" target="_blank">Unity Download page</a></li>
+                                <li>Click "Download Unity Hub"</li>
+                                <li>Run the installer and follow the on-screen instructions</li>
+                                <li>Launch Unity Hub after installation</li>
+                                <li>Sign in with your Unity account (or create one if you don't have an account)</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Unity Licensing:</h4>
+                            <p>Unity offers different license options:</p>
+                            <ul>
+                                <li><strong>Personal</strong> - Free for beginners, hobbyists, and small studios (with revenue/funding below $100K)</li>
+                                <li><strong>Plus</strong> - Paid subscription with more features and higher revenue threshold</li>
+                                <li><strong>Pro</strong> - Full-featured version for professional developers and larger teams</li>
+                                <li><strong>Enterprise</strong> - Custom solutions for large organizations</li>
+                            </ul>
+                            <p>For learning purposes, the Personal license is perfectly suitable and provides full access to the engine features.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Installing Unity Editor</h3>
+                        <p>After setting up Unity Hub, you'll need to install the Unity Editor itself. Unity allows you to have multiple versions installed simultaneously:</p>
+                        
+                        <div class="example-box">
+                            <h4>Installing Unity Editor:</h4>
+                            <ol>
+                                <li>Open Unity Hub</li>
+                                <li>Navigate to the "Installs" tab</li>
+                                <li>Click "Add" to install a new Unity version</li>
+                                <li>Select the latest LTS (Long Term Support) version for the most stable experience</li>
+                                <li>Select modules to install with Unity:
+                                    <ul>
+                                        <li><strong>Microsoft Visual Studio</strong> - Recommended IDE for C# development</li>
+                                        <li><strong>Build Support modules</strong> - Select platforms you want to build for (Windows, Mac, Android, etc.)</li>
+                                        <li><strong>Documentation</strong> - Helpful for offline reference</li>
+                                        <li><strong>Standard Assets</strong> - Useful starter assets</li>
+                                    </ul>
+                                </li>
+                                <li>Click "Continue" and accept the license agreement</li>
+                                <li>Wait for the installation to complete (may take some time depending on your internet speed)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Setting Up Visual Studio for Unity</h3>
+                        <p>Visual Studio is the recommended IDE for Unity C# development. It provides excellent debugging capabilities and tight integration with Unity:</p>
+                        
+                        <div class="example-box">
+                            <h4>Configuring Visual Studio:</h4>
+                            <ol>
+                                <li>If you installed Visual Studio with Unity, it should be automatically configured</li>
+                                <li>If you have an existing Visual Studio installation:
+                                    <ul>
+                                        <li>Make sure the "Game Development with Unity" workload is installed</li>
+                                        <li>In Unity, go to Edit > Preferences > External Tools</li>
+                                        <li>Set "External Script Editor" to Visual Studio</li>
+                                    </ul>
+                                </li>
+                                <li>For Visual Studio Code users:
+                                    <ul>
+                                        <li>Install the C# extension</li>
+                                        <li>Install the Unity Debugger extension</li>
+                                        <li>In Unity, set "External Script Editor" to Visual Studio Code</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Your First Unity Project</h3>
+                        <p>Now that you have Unity Hub and the Unity Editor installed, you can create your first project:</p>
+                        
+                        <div class="example-box">
+                            <h4>Project Creation Steps:</h4>
+                            <ol>
+                                <li>Open Unity Hub</li>
+                                <li>Click the "New" button in the Projects tab</li>
+                                <li>Select a template:
+                                    <ul>
+                                        <li><strong>2D</strong> - For 2D games (sprites, 2D physics)</li>
+                                        <li><strong>3D</strong> - For 3D games (standard rendering)</li>
+                                        <li><strong>URP (Universal Render Pipeline)</strong> - For optimized graphics across multiple platforms</li>
+                                        <li><strong>HDRP (High Definition Render Pipeline)</strong> - For high-end visuals (PC/console)</li>
+                                    </ul>
+                                </li>
+                                <li>If you're a beginner, start with a "3D" or "2D" template</li>
+                                <li>Name your project and select a location</li>
+                                <li>Click "Create" to generate the project</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Project Structure:</h4>
+                            <p>Unity creates a standard folder structure for your project:</p>
+                            <ul>
+                                <li><strong>Assets</strong> - Contains all project files including scripts, models, textures, etc.</li>
+                                <li><strong>Packages</strong> - Contains Unity packages (modular features)</li>
+                                <li><strong>ProjectSettings</strong> - Contains project-specific settings files</li>
+                                <li><strong>Library</strong> - Contains cached data (don't modify directly)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity Interface Overview</h3>
+                        <p>Once your project is created, you'll be presented with the Unity Editor interface. Here's a quick overview of the main windows:</p>
+                        
+                        <div class="example-box">
+                            <h4>Main Unity Windows:</h4>
+                            <ul>
+                                <li><strong>Scene View</strong> - Where you build and edit your game environment</li>
+                                <li><strong>Game View</strong> - Shows how your game will look when played</li>
+                                <li><strong>Hierarchy</strong> - Shows all GameObjects in the current scene</li>
+                                <li><strong>Project Window</strong> - Shows all assets in your project</li>
+                                <li><strong>Inspector</strong> - Shows properties of the selected GameObject or asset</li>
+                                <li><strong>Console</strong> - Shows logs, warnings, and errors</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-intro.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Introduction</a>
+                        <a href="unity-scripting.html" class="next">C# Scripting in Unity <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

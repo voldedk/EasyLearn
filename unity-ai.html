@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity AI Systems - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity AI Systems</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity AI</h3>
+                        <p>Artificial Intelligence (AI) is a crucial component in modern games, creating engaging and responsive non-player characters (NPCs) and enemies. Unity provides several tools and frameworks to implement various AI behaviors, from simple movement patterns to complex decision-making systems.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Basic AI movement and navigation</li>
+                            <li>Decision-making systems including finite state machines</li>
+                            <li>Pathfinding with Unity's NavMesh system</li>
+                            <li>Implementing behavior trees</li>
+                            <li>Sensory systems for AI perception</li>
+                            <li>Advanced techniques for realistic behavior</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity's NavMesh System</h3>
+                        <p>The Navigation Mesh (NavMesh) system is Unity's built-in solution for pathfinding and spatial reasoning for AI characters. It creates a simplified representation of the walkable areas in your game world, allowing characters to intelligently navigate around obstacles.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up a NavMesh:</h4>
+                            <ol>
+                                <li>First, ensure your scene contains static obstacles and a floor/terrain</li>
+                                <li>Mark obstacles as "Navigation Static" in the Inspector (Object → Static dropdown)</li>
+                                <li>Open the Navigation window (Window → AI → Navigation)</li>
+                                <li>In the "Bake" tab, configure settings like agent radius, height, and max slope</li>
+                                <li>Click "Bake" to generate the NavMesh</li>
+                            </ol>
+                            
+                            <div class="explanation">
+                                <p>Key NavMesh Components:</p>
+                                <ul>
+                                    <li><strong>NavMesh</strong>: The walkable surface map</li>
+                                    <li><strong>NavMesh Agent</strong>: Component added to characters that move on the NavMesh</li>
+                                    <li><strong>NavMesh Obstacle</strong>: Component for dynamic obstacles that modify the NavMesh at runtime</li>
+                                    <li><strong>Off-Mesh Link</strong>: Connections between separate NavMesh areas (doors, jumps, etc.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Basic NavMesh Agent Movement:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.AI;
+
+public class SimpleAIController : MonoBehaviour
+{
+    // Reference to the NavMeshAgent component
+    private NavMeshAgent agent;
+    
+    // Destination to move to
+    public Transform destination;
+    
+    // Optional patrol points
+    public Transform[] patrolPoints;
+    private int currentPatrolIndex = 0;
+    
+    // Movement speed settings
+    public float walkSpeed = 2.0f;
+    public float runSpeed = 4.0f;
+    
+    // Reference to the animator (if any)
+    private Animator animator;
+    
+    // Distance at which to consider a point reached
+    public float reachDistance = 1.0f;
+    
+    void Start()
+    {
+        // Get the NavMeshAgent component attached to this GameObject
+        agent = GetComponent<NavMeshAgent>();
+        
+        // Make sure we have a NavMeshAgent
+        if (agent == null)
+        {
+            Debug.LogError("NavMeshAgent component missing! Add it to the GameObject.");
+            return;
+        }
+        
+        // Get animator if present
+        animator = GetComponent<Animator>();
+        
+        // Set initial speed
+        agent.speed = walkSpeed;
+        
+        // Start with a destination if one is specified
+        if (destination != null)
+        {
+            MoveToDestination(destination.position);
+        }
+        else if (patrolPoints.Length > 0)
+        {
+            // Start patrolling
+            StartPatrolling();
+        }
+    }
+    
+    void Update()
+    {
+        // Check if we've reached the destination (if we're moving)
+        if (!agent.pathPending && agent.remainingDistance < reachDistance)
+        {
+            // We've reached the destination
+            OnDestinationReached();
+        }
+        
+        // Update animator if it exists
+        if (animator != null)
+        {
+            // Set the speed parameter in the animator based on agent's velocity
+            animator.SetFloat("Speed", agent.velocity.magnitude);
+        }
+    }
+    
+    // Called when the agent reaches its current destination
+    void OnDestinationReached()
+    {
+        // If we're patrolling, move to the next point
+        if (patrolPoints.Length > 0)
+        {
+            // Move to next patrol point
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            MoveToDestination(patrolPoints[currentPatrolIndex].position);
+            
+            // Debug info
+            Debug.Log("Moving to patrol point " + (currentPatrolIndex + 1));
+        }
+        else
+        {
+            // We're not patrolling, so just stop
+            agent.isStopped = true;
+            
+            // Inform the animator if it exists
+            if (animator != null)
+            {
+                animator.SetBool("Idle", true);
+            }
+        }
+    }
+    
+    // Start patrolling between points
+    public void StartPatrolling()
+    {
+        if (patrolPoints.Length == 0)
+        {
+            Debug.LogWarning("No patrol points assigned!");
+            return;
+        }
+        
+        // Set speed to walk speed
+        agent.speed = walkSpeed;
+        
+        // Start moving to the first patrol point
+        MoveToDestination(patrolPoints[currentPatrolIndex].position);
+    }
+    
+    // Move to a specific position
+    public void MoveToDestination(Vector3 targetPosition)
+    {
+        // Ensure agent is not stopped
+        agent.isStopped = false;
+        
+        // Set the destination
+        agent.SetDestination(targetPosition);
+        
+        // Update animator
+        if (animator != null)
+        {
+            animator.SetBool("Idle", false);
+        }
+    }
+    
+    // Chase a target (moves faster)
+    public void ChaseTarget(Transform target)
+    {
+        // Set to run speed
+        agent.speed = runSpeed;
+        
+        // Start following the target
+        destination = target;
+        
+        // Set destination
+        MoveToDestination(target.position);
+        
+        // Update this every frame in Update() for dynamic targets
+    }
+    
+    // Stop moving
+    public void StopMoving()
+    {
+        agent.isStopped = true;
+        
+        if (animator != null)
+        {
+            animator.SetBool("Idle", true);
+        }
+    }
+    
+    // Manually adjust speed
+    public void SetSpeed(float newSpeed)
+    {
+        agent.speed = newSpeed;
+    }
+    
+    // Visualize the path in the editor
+    void OnDrawGizmos()
+    {
+        if (agent == null || !Application.isPlaying)
+            return;
+            
+        // Draw the current path
+        Gizmos.color = Color.green;
+        var agentPath = agent.path;
+        Vector3 previousCorner = transform.position;
+        
+        // Iterate through each corner in the path
+        foreach (var corner in agentPath.corners)
+        {
+            Gizmos.DrawLine(previousCorner, corner);
+            Gizmos.DrawSphere(corner, 0.1f);
+            previousCorner = corner;
+        }
+        
+        // Draw patrol points
+        Gizmos.color = Color.blue;
+        foreach (var point in patrolPoints)
+        {
+            if (point != null)
+                Gizmos.DrawSphere(point.position, 0.5f);
+        }
+    }
+}</code></pre>
+                            <div class="explanation">
+                                <p>NavMeshAgent key properties:</p>
+                                <ul>
+                                    <li><strong>Speed</strong>: How fast the agent moves</li>
+                                    <li><strong>Stopping Distance</strong>: How close the agent gets to destinations</li>
+                                    <li><strong>Angular Speed</strong>: How quickly the agent rotates</li>
+                                    <li><strong>Avoidance</strong>: How the agent avoids other agents</li>
+                                    <li><strong>Auto Braking</strong>: Whether the agent slows down as it nears the destination</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>NavMesh Tips</h4>
+                            <ul>
+                                <li>Rebake the NavMesh whenever you change your level geometry</li>
+                                <li>Use NavMesh Obstacles for moving obstacles</li>
+                                <li>Create different agent types for different character sizes</li>
+                                <li>Use Off-Mesh Links for jumps or special movements</li>
+                                <li>For runtime-generated environments, use the NavMesh Components package from GitHub</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Finite State Machines for AI</h3>
+                        <p>A Finite State Machine (FSM) is a behavioral design pattern that organizes AI behavior into discrete states with clear transitions between them. It's one of the most common and flexible approaches for creating game AI.</p>
+                        
+                        <div class="example-box">
+                            <h4>Implementing a Simple FSM:</h4>
+                            <pre><code>using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+
+public class EnemyFSM : MonoBehaviour
+{
+    // State enumeration
+    public enum EnemyState
+    {
+        Idle,       // Standing still, looking around
+        Patrol,     // Moving between patrol points
+        Chase,      // Pursuing the player
+        Attack,     // Attacking the player
+        Flee,       // Running away from the player
+        Dead        // Death state
+    }
+    
+    // Current state
+    public EnemyState currentState = EnemyState.Idle;
+    
+    // References
+    private NavMeshAgent agent;
+    private Animator animator;
+    private Transform player;
+    
+    // Patrol settings
+    public Transform[] patrolPoints;
+    private int currentPatrolIndex = 0;
+    
+    // Detection settings
+    public float detectionRadius = 10f;
+    public float attackRange = 2f;
+    public float safeDistance = 15f;
+    public LayerMask playerLayer;
+    
+    // Combat settings
+    public int health = 100;
+    public int damage = 10;
+    public float attackCooldown = 2f;
+    private float lastAttackTime = 0f;
+    
+    // Other settings
+    public float patrolWaitTime = 2f;
+    private float stateEnterTime;
+    
+    void Start()
+    {
+        // Get components
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        
+        // Find player
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        
+        // Initial state setup
+        EnterState(EnemyState.Idle);
+    }
+    
+    void Update()
+    {
+        // Check for state-independent transitions
+        if (health <= 0 && currentState != EnemyState.Dead)
+        {
+            EnterState(EnemyState.Dead);
+            return;
+        }
+        
+        // Run the current state's behavior
+        switch (currentState)
+        {
+            case EnemyState.Idle:
+                UpdateIdleState();
+                break;
+                
+            case EnemyState.Patrol:
+                UpdatePatrolState();
+                break;
+                
+            case EnemyState.Chase:
+                UpdateChaseState();
+                break;
+                
+            case EnemyState.Attack:
+                UpdateAttackState();
+                break;
+                
+            case EnemyState.Flee:
+                UpdateFleeState();
+                break;
+                
+            case EnemyState.Dead:
+                // No updates needed for dead state
+                break;
+        }
+    }
+    
+    // Change to a new state
+    void EnterState(EnemyState newState)
+    {
+        // Exit the current state
+        ExitState(currentState);
+        
+        // Remember when we entered this state
+        stateEnterTime = Time.time;
+        
+        // Set and enter the new state
+        currentState = newState;
+        
+        // Debug info
+        Debug.Log($"Enemy entered {newState} state");
+        
+        // State-specific enter logic
+        switch (newState)
+        {
+            case EnemyState.Idle:
+                EnterIdleState();
+                break;
+                
+            case EnemyState.Patrol:
+                EnterPatrolState();
+                break;
+                
+            case EnemyState.Chase:
+                EnterChaseState();
+                break;
+                
+            case EnemyState.Attack:
+                EnterAttackState();
+                break;
+                
+            case EnemyState.Flee:
+                EnterFleeState();
+                break;
+                
+            case EnemyState.Dead:
+                EnterDeadState();
+                break;
+        }
+    }
+    
+    // Logic for exiting a state
+    void ExitState(EnemyState oldState)
+    {
+        // State-specific exit logic
+        switch (oldState)
+        {
+            case EnemyState.Attack:
+                // Stop attack animation
+                if (animator != null)
+                {
+                    animator.SetBool("Attacking", false);
+                }
+                break;
+                
+            // Other state-specific exit code...
+        }
+    }
+    
+    #region State Enter Methods
+    
+    void EnterIdleState()
+    {
+        // Stop the agent
+        agent.isStopped = true;
+        
+        // Play idle animation
+        if (animator != null)
+        {
+            animator.SetBool("Idle", true);
+            animator.SetFloat("Speed", 0);
+        }
+        
+        // Start a timer to eventually switch to patrol
+        StartCoroutine(IdleTimer());
+    }
+    
+    void EnterPatrolState()
+    {
+        // Set movement speed for patrolling
+        agent.speed = 2f;
+        agent.isStopped = false;
+        
+        // Play walk animation
+        if (animator != null)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetFloat("Speed", 0.5f);
+        }
+        
+        // Start moving to patrol point
+        if (patrolPoints.Length > 0)
+        {
+            agent.SetDestination(patrolPoints[currentPatrolIndex].position);
+        }
+        else
+        {
+            // No patrol points, revert to idle
+            EnterState(EnemyState.Idle);
+        }
+    }
+    
+    void EnterChaseState()
+    {
+        // Set movement speed for chasing
+        agent.speed = 4f;
+        agent.isStopped = false;
+        
+        // Play run animation
+        if (animator != null)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetFloat("Speed", 1.0f);
+        }
+    }
+    
+    void EnterAttackState()
+    {
+        // Stop moving during attack
+        agent.isStopped = true;
+        
+        // Play attack animation
+        if (animator != null)
+        {
+            animator.SetBool("Attacking", true);
+        }
+        
+        // Face the player
+        if (player != null)
+        {
+            Vector3 lookDirection = player.position - transform.position;
+            lookDirection.y = 0;
+            if (lookDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
+        }
+    }
+    
+    void EnterFleeState()
+    {
+        // Set speed for fleeing
+        agent.speed = 5f;
+        agent.isStopped = false;
+        
+        // Play flee animation
+        if (animator != null)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetFloat("Speed", 1.0f);
+            animator.SetBool("Fleeing", true);
+        }
+    }
+    
+    void EnterDeadState()
+    {
+        // Stop all movement
+        agent.isStopped = true;
+        
+        // Play death animation
+        if (animator != null)
+        {
+            animator.SetTrigger("Die");
+        }
+        
+        // Disable colliders
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
+        
+        // Schedule destruction (or object pooling return)
+        StartCoroutine(DestroyAfterDelay(5f));
+    }
+    
+    #endregion
+    
+    #region State Update Methods
+    
+    void UpdateIdleState()
+    {
+        // Check for player in detection radius
+        if (player != null && IsPlayerDetected())
+        {
+            if (health < 30 && IsHealthLow())
+            {
+                // Low health, run away!
+                EnterState(EnemyState.Flee);
+            }
+            else
+            {
+                // Player detected, start chase
+                EnterState(EnemyState.Chase);
+            }
+        }
+    }
+    
+    void UpdatePatrolState()
+    {
+        // Check for player detection first
+        if (player != null && IsPlayerDetected())
+        {
+            if (health < 30 && IsHealthLow())
+            {
+                // Low health, run away!
+                EnterState(EnemyState.Flee);
+            }
+            else
+            {
+                // Player detected, start chase
+                EnterState(EnemyState.Chase);
+            }
+            return;
+        }
+        
+        // Check if we've reached the current patrol point
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            // Reached the waypoint, wait and then move to next
+            StartCoroutine(WaitAtPatrolPoint());
+        }
+    }
+    
+    void UpdateChaseState()
+    {
+        // Check if we should flee
+        if (health < 30 && IsHealthLow())
+        {
+            EnterState(EnemyState.Flee);
+            return;
+        }
+        
+        // If player is null or destroyed, go back to patrolling
+        if (player == null)
+        {
+            EnterState(EnemyState.Patrol);
+            return;
+        }
+        
+        // Check if player is still in detection range
+        if (!IsPlayerDetected())
+        {
+            // Lost the player, go back to patrolling
+            EnterState(EnemyState.Patrol);
+            return;
+        }
+        
+        // Update destination to follow player
+        agent.SetDestination(player.position);
+        
+        // Check if close enough to attack
+        if (IsInAttackRange())
+        {
+            EnterState(EnemyState.Attack);
+        }
+    }
+    
+    void UpdateAttackState()
+    {
+        // If player is null or destroyed, go back to patrolling
+        if (player == null)
+        {
+            EnterState(EnemyState.Patrol);
+            return;
+        }
+        
+        // Check if we should flee
+        if (health < 30 && IsHealthLow())
+        {
+            EnterState(EnemyState.Flee);
+            return;
+        }
+        
+        // Check if player is still in attack range
+        if (!IsInAttackRange())
+        {
+            // Player moved away, chase again
+            EnterState(EnemyState.Chase);
+            return;
+        }
+        
+        // Face the player
+        Vector3 lookDirection = player.position - transform.position;
+        lookDirection.y = 0;
+        if (lookDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, 
+                Quaternion.LookRotation(lookDirection), Time.deltaTime * 5f);
+        }
+        
+        // Attack logic with cooldown
+        if (Time.time >= lastAttackTime + attackCooldown)
+        {
+            PerformAttack();
+            lastAttackTime = Time.time;
+        }
+    }
+    
+    void UpdateFleeState()
+    {
+        // If player is null or destroyed, go back to patrolling
+        if (player == null)
+        {
+            EnterState(EnemyState.Patrol);
+            return;
+        }
+        
+        // Check if we've reached a safe distance
+        if (Vector3.Distance(transform.position, player.position) > safeDistance)
+        {
+            // We're safe, go back to idle/patrol
+            EnterState(EnemyState.Idle);
+            return;
+        }
+        
+        // Keep running away from the player
+        Vector3 fleeDirection = transform.position - player.position;
+        fleeDirection.y = 0;
+        fleeDirection.Normalize();
+        
+        // Find a point to flee towards
+        Vector3 fleeTarget = transform.position + fleeDirection * 10f;
+        
+        // Create a path to the flee target
+        NavMeshPath path = new NavMeshPath();
+        if (agent.CalculatePath(fleeTarget, path))
+        {
+            agent.SetPath(path);
+        }
+        else
+        {
+            // Can't flee in that direction, try a random direction
+            Vector3 randomDirection = Random.insideUnitSphere * 10f;
+            randomDirection.y = 0;
+            agent.SetDestination(transform.position + randomDirection);
+        }
+    }
+    
+    #endregion
+    
+    #region Helper Methods
+    
+    // Check if player is within detection radius
+    bool IsPlayerDetected()
+    {
+        if (player == null) return false;
+        
+        // Check distance
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance > detectionRadius) return false;
+        
+        // Line of sight check
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        if (Physics.Raycast(transform.position + Vector3.up, dirToPlayer, out RaycastHit hit, detectionRadius))
+        {
+            // If we hit the player, they're visible
+            if (hit.transform == player)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    // Check if player is within attack range
+    bool IsInAttackRange()
+    {
+        if (player == null) return false;
+        
+        return Vector3.Distance(transform.position, player.position) <= attackRange;
+    }
+    
+    // Check if health is low (as a percentage)
+    bool IsHealthLow()
+    {
+        return (health / 100f) < 0.3f; // Less than 30% health
+    }
+    
+    // Perform an attack against the player
+    void PerformAttack()
+    {
+        // Trigger attack animation
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+        
+        // Damage the player if in range
+        if (IsInAttackRange() && player != null)
+        {
+            // Get player health component
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+            }
+            
+            Debug.Log("Enemy attacked player for " + damage + " damage!");
+        }
+    }
+    
+    // Take damage from player
+    public void TakeDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        Debug.Log("Enemy took " + damageAmount + " damage. Health: " + health);
+        
+        // Visual feedback
+        // You could implement a flash effect or play a hurt animation here
+        
+        // Flee if health gets low
+        if (health < 30 && IsHealthLow() && currentState != EnemyState.Flee)
+        {
+            EnterState(EnemyState.Flee);
+        }
+    }
+    
+    // Coroutine for waiting at patrol points
+    IEnumerator WaitAtPatrolPoint()
+    {
+        // Stop and play idle
+        agent.isStopped = true;
+        if (animator != null)
+        {
+            animator.SetBool("Idle", true);
+            animator.SetFloat("Speed", 0);
+        }
+        
+        // Wait for the patrol wait time
+        yield return new WaitForSeconds(patrolWaitTime);
+        
+        // Continue to next patrol point
+        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        agent.isStopped = false;
+        agent.SetDestination(patrolPoints[currentPatrolIndex].position);
+        
+        // Resume animation
+        if (animator != null)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetFloat("Speed", 0.5f);
+        }
+    }
+    
+    // Idle timer coroutine
+    IEnumerator IdleTimer()
+    {
+        // Wait for a random time
+        yield return new WaitForSeconds(Random.Range(3f, 6f));
+        
+        // Switch to patrol if we're still in idle state
+        if (currentState == EnemyState.Idle)
+        {
+            EnterState(EnemyState.Patrol);
+        }
+    }
+    
+    // Destroy after delay
+    IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
+    }
+    
+    #endregion
+    
+    // Visualization for debugging
+    void OnDrawGizmosSelected()
+    {
+        // Detection radius
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        
+        // Attack range
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        
+        // Safe distance
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, safeDistance);
+        
+        // Patrol points
+        Gizmos.color = Color.blue;
+        if (patrolPoints != null)
+        {
+            foreach (Transform point in patrolPoints)
+            {
+                if (point != null)
+                {
+                    Gizmos.DrawSphere(point.position, 0.5f);
+                }
+            }
+        }
+    }
+
+                    <div class="topic-nav">
+                        <a href="unity-networking.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Networking</a>
+                        <a href="unity-saving.html" class="next">Unity Saving Systems <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

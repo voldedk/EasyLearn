@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating a 2D Platformer in Unity - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Creating a 2D Platformer in Unity</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            2D platformers are among the most popular and accessible game genres to develop in Unity. 
+                            This tutorial will guide you through the essential components and techniques needed to create 
+                            a polished 2D platformer game, from character movement and animation to level design and game mechanics.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Setting Up Your 2D Project</h2>
+                        <p>
+                            Before diving into coding, we need to set up a proper 2D project in Unity with the correct configuration.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Project</strong>: Open Unity Hub and click "New Project". Select the "2D" template, name your project, and click "Create Project".</li>
+                            <li><strong>Configure Physics</strong>: Go to Edit → Project Settings → Physics 2D and adjust the gravity to match your game style (lower value for floaty jumps, higher for more responsive controls).</li>
+                            <li><strong>Set Up Input System</strong>: In Edit → Project Settings → Input Manager, ensure you have mappings for horizontal movement (A/D or arrow keys) and jump action (typically Space).</li>
+                            <li><strong>Create Basic Folders</strong>: Create folders in your Project panel for Scripts, Sprites, Prefabs, Scenes, and Audio to keep your project organized.</li>
+                        </ol>
+                        
+                        <h3>Configuring Your Project Settings</h3>
+                        <p>
+                            For optimal 2D platformer development, adjust these settings:
+                        </p>
+                        <ul>
+                            <li>Set Physics2D gravity to match your game's requirements (Edit → Project Settings → Physics 2D)</li>
+                            <li>Configure your input system for platformer controls</li>
+                            <li>Set up layers for proper collision handling</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h4>Example: Custom Gravity Settings</h4>
+                            <pre><code class="language-csharp">// In a MonoBehaviour script - This would typically go in a GameManager or LevelManager class
+void Start()
+{
+    // You can override the project's Physics2D gravity at runtime if needed
+    // Higher negative Y value = stronger gravity = faster falling and lower jumps
+    // Lower negative Y value = weaker gravity = slower falling and higher jumps
+    Physics2D.gravity = new Vector2(0, -20f); // Stronger gravity than default (-9.81)
+    
+    // You could also modify gravity for specific game sections
+    // Example: Low-gravity zone
+    // Physics2D.gravity = new Vector2(0, -3f);
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Player Character Controller</h2>
+                        <p>
+                            The heart of any platformer is a responsive player character. Let's create a character controller
+                            that handles movement, jumping, and collision detection.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Player GameObject</strong>: Create an empty GameObject named "Player" and position it in your scene.</li>
+                            <li><strong>Add Components</strong>: Add a Sprite Renderer, Rigidbody2D (set to Dynamic), BoxCollider2D (sized to match your sprite), and your controller script.</li>
+                            <li><strong>Configure Rigidbody</strong>: Set Collision Detection to Continuous, Freeze Rotation Z to prevent spinning, and adjust mass if needed.</li>
+                            <li><strong>Create Ground Check</strong>: Add a small empty GameObject as a child at the bottom of your player to serve as the ground check point.</li>
+                            <li><strong>Create Animations</strong>: Set up Idle, Run, Jump, and Fall animations in the Animator and link parameters in the controller script.</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Complete 2D Platformer Character Controller</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+public class PlatformerController : MonoBehaviour
+{
+    // Movement variables - These can be adjusted in the Inspector for fine-tuning
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;     // How fast the character moves horizontally
+    public float jumpForce = 12f;    // How high the character jumps
+    public float fallMultiplier = 2.5f;  // Makes falling faster than rising (feels more responsive)
+    public float lowJumpMultiplier = 2f; // Makes short jumps feel better when button is released early
+    
+    // Ground checking - Used to determine if player can jump
+    [Header("Ground Detection")]
+    public Transform groundCheck;     // Reference to the ground check empty GameObject
+    public float groundCheckRadius = 0.1f;  // Size of the circle used for ground detection
+    public LayerMask groundLayer;     // Which layers count as ground (set in Inspector)
+    
+    // Component references - Will be initialized in Awake()
+    private Rigidbody2D rb;           // Handles physics
+    private Animator animator;        // Handles sprite animations
+    private SpriteRenderer spriteRenderer;  // Used for flipping the sprite
+    
+    // State tracking
+    private bool isGrounded;          // True when touching ground
+    private bool isFacingRight = true;  // Tracks which way player is facing
+    private float moveInput;          // Stores horizontal input value (-1 to 1)
+    
+    private void Awake()
+    {
+        // Get component references - more efficient than using GetComponent in Update
+        rb = GetComponent&lt;Rigidbody2D&gt;();
+        animator = GetComponent&lt;Animator&gt;();
+        spriteRenderer = GetComponent&lt;SpriteRenderer&gt;();
+    }
+    
+    private void Update()
+    {
+        // Check for ground - Creates a circle at groundCheck position and detects overlaps with groundLayer
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Get horizontal input - returns -1 (left), 0 (no input), or 1 (right)
+        moveInput = Input.GetAxisRaw("Horizontal");
+        
+        // Handle jumping - Only allow jumping when on the ground
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            // Apply vertical force for jumping
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            // Trigger jump animation
+            animator.SetTrigger("Jump");
+        }
+        
+        // Better jump physics - Makes jumping feel more responsive
+        // When falling, apply extra gravity for faster falls
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        // When rising but jump button released, apply extra gravity for shorter jumps
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+        
+        // Update animations based on current state
+        animator.SetFloat("Speed", Mathf.Abs(moveInput));  // Speed parameter for run animation
+        animator.SetBool("IsGrounded", isGrounded);        // Grounded parameter for jump/fall animations
+        animator.SetFloat("VerticalSpeed", rb.velocity.y); // Used for rising/falling animations
+        
+        // Handle sprite flipping based on movement direction
+        if (moveInput > 0 && !isFacingRight)
+        {
+            Flip();  // Flip to face right
+        }
+        else if (moveInput < 0 && isFacingRight)
+        {
+            Flip();  // Flip to face left
+        }
+    }
+    
+    private void FixedUpdate()
+    {
+        // Handle character movement in FixedUpdate for consistent physics
+        // Only modify X velocity while preserving Y velocity (for jumps/falls)
+        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+    }
+    
+    private void Flip()
+    {
+        // Flip the character to face movement direction
+        isFacingRight = !isFacingRight;
+        // FlipX is more efficient than scale changes for 2D sprites
+        spriteRenderer.flipX = !isFacingRight;
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        // Visualize the ground check radius in the editor (for debugging)
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Key Components Explained</h3>
+                        <ul>
+                            <li><strong>Ground Check</strong>: Uses a small circle collider to detect when the player is touching the ground</li>
+                            <li><strong>Better Jump Physics</strong>: Applies different gravity scales for falling vs. rising to create a more satisfying jump arc</li>
+                            <li><strong>Animation Management</strong>: Updates animation parameters based on movement state</li>
+                            <li><strong>Character Flipping</strong>: Changes the character's facing direction based on movement</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Camera Follow System</h2>
+                        <p>
+                            A good camera system is essential for platformers. This simple camera follower provides smooth player tracking.
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Smooth Camera Follow Script</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+public class CameraFollow : MonoBehaviour
+{
+    [Header("Target Settings")]
+    public Transform target;
+    public Vector3 offset = new Vector3(0, 1, -10);
+    
+    [Header("Movement Settings")]
+    [Range(0, 10)]
+    public float smoothSpeed = 3f;
+    public Vector2 minPosition;
+    public Vector2 maxPosition;
+    
+    [Header("Look Ahead Settings")]
+    public bool enableLookAhead = true;
+    public float lookAheadFactor = 3f;
+    public float lookAheadReturnSpeed = 0.5f;
+    public float lookAheadMoveThreshold = 0.1f;
+    
+    private Vector3 currentVelocity;
+    private float targetLookAheadX;
+    private float currentLookAheadX;
+    private float lastTargetX;
+    
+    private void LateUpdate()
+    {
+        if (target == null)
+            return;
+            
+        // Get target position with offset
+        Vector3 desiredPosition = target.position + offset;
+        
+        // Handle look ahead effect
+        if (enableLookAhead)
+        {
+            // Calculate look ahead based on player movement direction
+            float directionX = (target.position - new Vector3(lastTargetX, 0, 0)).x;
+            
+            if (Mathf.Abs(directionX) > lookAheadMoveThreshold)
+            {
+                targetLookAheadX = lookAheadFactor * Mathf.Sign(directionX);
+            }
+            else
+            {
+                targetLookAheadX = Mathf.MoveTowards(targetLookAheadX, 0, lookAheadReturnSpeed * Time.deltaTime);
+            }
+            
+            currentLookAheadX = Mathf.MoveTowards(currentLookAheadX, targetLookAheadX, 
+                                                 Time.deltaTime * lookAheadReturnSpeed);
+                                                 
+            lastTargetX = target.position.x;
+            
+            // Apply look ahead to desired position
+            desiredPosition += Vector3.right * currentLookAheadX;
+        }
+        
+        // Clamp position within bounds
+        desiredPosition.x = Mathf.Clamp(desiredPosition.x, minPosition.x, maxPosition.x);
+        desiredPosition.y = Mathf.Clamp(desiredPosition.y, minPosition.y, maxPosition.y);
+        
+        // Apply smooth damping
+        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, 
+                                              ref currentVelocity, 1 / smoothSpeed);
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Camera Features</h3>
+                        <p>
+                            This camera system includes:
+                        </p>
+                        <ul>
+                            <li>Look-ahead functionality that anticipates player movement direction</li>
+                            <li>Smooth transitions using SmoothDamp</li>
+                            <li>Position clamping to prevent the camera from showing areas outside your level</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>Creating Platformer Levels</h2>
+                        <p>
+                            Effective level design is crucial for a good platformer experience. Unity's Tilemap system makes this process efficient.
+                        </p>
+                        
+                        <h3>Setting Up Tilemaps</h3>
+                        <p>
+                            To create a tilemap-based level:
+                        </p>
+                        <ol>
+                            <li>Create a new Tilemap by right-clicking in the Hierarchy → 2D Object → Tilemap</li>
+                            <li>Import your sprite sheet or individual tiles</li>
+                            <li>Create a Tile Palette (Window → 2D → Tile Palette)</li>
+                            <li>Add sprites to your palette by dragging them in</li>
+                            <li>Use the Tile Palette window to paint your level</li>
+                        </ol>
+                        
+                        <h3>Creating Composite Colliders</h3>
+                        <p>
+                            Efficient collision handling is important for performance:
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Setting Up Tilemap Colliders through Script</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class TilemapSetup : MonoBehaviour
+{
+    public Tilemap groundTilemap;
+    
+    void Awake()
+    {
+        if (groundTilemap != null)
+        {
+            // Add collider components if not present
+            if (!groundTilemap.gameObject.TryGetComponent&lt;TilemapCollider2D&gt;(out var _))
+            {
+                groundTilemap.gameObject.AddComponent&lt;TilemapCollider2D&gt;();
+            }
+            
+            if (!groundTilemap.gameObject.TryGetComponent&lt;Rigidbody2D&gt;(out var _))
+            {
+                var rb = groundTilemap.gameObject.AddComponent&lt;Rigidbody2D&gt;();
+                rb.bodyType = RigidbodyType2D.Static;
+            }
+            
+            if (!groundTilemap.gameObject.TryGetComponent&lt;CompositeCollider2D&gt;(out var _))
+            {
+                var compositeCollider = groundTilemap.gameObject.AddComponent&lt;CompositeCollider2D&gt;();
+                compositeCollider.geometryType = CompositeCollider2D.GeometryType.Polygons;
+                
+                // Get the TilemapCollider2D and connect it to the composite collider
+                var tilemapCollider = groundTilemap.GetComponent&lt;TilemapCollider2D&gt;();
+                tilemapCollider.usedByComposite = true;
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Collectible System</h2>
+                        <p>
+                            Collectibles like coins, power-ups or gems are staples of platformer games.
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Collectible Item Implementation</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System;
+
+public class Collectible : MonoBehaviour
+{
+    public enum CollectibleType
+    {
+        Coin,
+        Gem,
+        PowerUp,
+        Health
+    }
+    
+    [Header("Collectible Settings")]
+    public CollectibleType type = CollectibleType.Coin;
+    public int value = 1;
+    public bool destroyOnCollect = true;
+    
+    [Header("Animation")]
+    public bool animateItem = true;
+    public float bobHeight = 0.5f;
+    public float bobSpeed = 2f;
+    public float rotationSpeed = 90f;
+    
+    [Header("Effects")]
+    public GameObject collectEffect;
+    public AudioClip collectSound;
+    
+    private Vector3 startPosition;
+    
+    // Event that other scripts can subscribe to
+    public static event Action&lt;CollectibleType, int&gt; OnCollectibleCollected;
+    
+    private void Start()
+    {
+        startPosition = transform.position;
+    }
+    
+    private void Update()
+    {
+        if (animateItem)
+        {
+            // Bob up and down
+            float newY = startPosition.y + (Mathf.Sin(Time.time * bobSpeed) * bobHeight);
+            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+            
+            // Rotate
+            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // Trigger the event with type and value
+            OnCollectibleCollected?.Invoke(type, value);
+            
+            // Play effects
+            if (collectEffect != null)
+            {
+                Instantiate(collectEffect, transform.position, Quaternion.identity);
+            }
+            
+            if (collectSound != null)
+            {
+                AudioSource.PlayClipAtPoint(collectSound, transform.position);
+            }
+            
+            // Destroy the collectible if configured to do so
+            if (destroyOnCollect)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                // Disable it for potential reuse
+                gameObject.SetActive(false);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Handling Collectibles</h3>
+                        <p>
+                            You'll also need a manager to track collected items:
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Collectible Manager</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using TMPro;
+
+public class CollectibleManager : MonoBehaviour
+{
+    [Header("UI References")]
+    public TextMeshProUGUI coinText;
+    public TextMeshProUGUI gemText;
+    
+    // Tracking variables
+    private int coinCount = 0;
+    private int gemCount = 0;
+    
+    private void OnEnable()
+    {
+        // Subscribe to the collection event
+        Collectible.OnCollectibleCollected += HandleCollectible;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe to prevent memory leaks
+        Collectible.OnCollectibleCollected -= HandleCollectible;
+    }
+    
+    private void HandleCollectible(Collectible.CollectibleType type, int value)
+    {
+        switch (type)
+        {
+            case Collectible.CollectibleType.Coin:
+                coinCount += value;
+                UpdateUI();
+                break;
+                
+            case Collectible.CollectibleType.Gem:
+                gemCount += value;
+                UpdateUI();
+                break;
+                
+            case Collectible.CollectibleType.PowerUp:
+                // Handle power-up logic
+                ApplyPowerUp(value);
+                break;
+                
+            case Collectible.CollectibleType.Health:
+                // Handle health pickup
+                IncreasePlayerHealth(value);
+                break;
+        }
+    }
+    
+    private void UpdateUI()
+    {
+        if (coinText != null)
+            coinText.text = coinCount.ToString();
+            
+        if (gemText != null)
+            gemText.text = gemCount.ToString();
+    }
+    
+    private void ApplyPowerUp(int powerUpId)
+    {
+        // Find player and apply power-up effect
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            var powerUpHandler = player.GetComponent&lt;PowerUpHandler&gt;();
+            if (powerUpHandler != null)
+            {
+                powerUpHandler.ActivatePowerUp(powerUpId);
+            }
+        }
+    }
+    
+    private void IncreasePlayerHealth(int amount)
+    {
+        // Find player and increase health
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            var healthSystem = player.GetComponent&lt;HealthSystem&gt;();
+            if (healthSystem != null)
+            {
+                healthSystem.AddHealth(amount);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Platformer Hazards and Obstacles</h2>
+                        <p>
+                            What's a platformer without challenges? Let's create some common hazards.
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Moving Platform Script</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+
+public class MovingPlatform : MonoBehaviour
+{
+    [Header("Movement Path")]
+    public List&lt;Transform&gt; waypoints = new List&lt;Transform&gt;();
+    
+    [Header("Movement Settings")]
+    public float moveSpeed = 2f;
+    public bool cyclic = true;
+    public float waitTime = 0.5f;
+    
+    [Header("Platform Settings")]
+    public bool affectPlayer = true;
+    
+    private int currentWaypointIndex = 0;
+    private float waitCounter = 0;
+    private bool isWaiting = false;
+    private Transform playerTransform = null;
+    
+    private void OnEnable()
+    {
+        if (waypoints.Count == 0)
+        {
+            Debug.LogWarning("Moving platform has no waypoints assigned!");
+            enabled = false;
+        }
+    }
+    
+    private void Update()
+    {
+        if (isWaiting)
+        {
+            waitCounter += Time.deltaTime;
+            if (waitCounter >= waitTime)
+            {
+                isWaiting = false;
+            }
+            return;
+        }
+        
+        if (waypoints.Count == 0) return;
+        
+        // Move towards the current waypoint
+        Transform currentWaypoint = waypoints[currentWaypointIndex];
+        transform.position = Vector3.MoveTowards(
+            transform.position, 
+            currentWaypoint.position, 
+            moveSpeed * Time.deltaTime
+        );
+        
+        // Check if we've reached the waypoint
+        if (Vector3.Distance(transform.position, currentWaypoint.position) < 0.05f)
+        {
+            // Start waiting
+            isWaiting = true;
+            waitCounter = 0;
+            
+            // Move to next waypoint
+            currentWaypointIndex++;
+            
+            // Handle cycling or reversing at the end
+            if (currentWaypointIndex >= waypoints.Count)
+            {
+                if (cyclic)
+                {
+                    currentWaypointIndex = 0;
+                }
+                else
+                {
+                    waypoints.Reverse();
+                    currentWaypointIndex = 0;
+                }
+            }
+        }
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (affectPlayer && collision.gameObject.CompareTag("Player"))
+        {
+            // Make the player a child of the platform so it moves with it
+            playerTransform = collision.transform;
+            playerTransform.SetParent(transform);
+        }
+    }
+    
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (affectPlayer && collision.gameObject.CompareTag("Player") && playerTransform != null)
+        {
+            // Detach the player when they leave the platform
+            playerTransform.SetParent(null);
+            playerTransform = null;
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        // Visualize the path in the editor
+        if (waypoints.Count > 0)
+        {
+            Gizmos.color = Color.blue;
+            
+            // Draw lines between waypoints
+            for (int i = 0; i < waypoints.Count; i++)
+            {
+                if (waypoints[i] != null)
+                {
+                    Vector3 currentPos = waypoints[i].position;
+                    
+                    if (i < waypoints.Count - 1 && waypoints[i+1] != null)
+                    {
+                        Gizmos.DrawLine(currentPos, waypoints[i+1].position);
+                    }
+                    else if (cyclic && waypoints[0] != null)
+                    {
+                        Gizmos.DrawLine(currentPos, waypoints[0].position);
+                    }
+                    
+                    // Draw sphere at waypoint
+                    Gizmos.DrawSphere(currentPos, 0.25f);
+                }
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Spike Trap Hazard</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+public class SpikeTrap : MonoBehaviour
+{
+    [Header("Damage Settings")]
+    public int damageAmount = 1;
+    public float knockbackForce = 5f;
+    public bool destroyOnContact = false;
+    
+    [Header("Animation")]
+    public bool isAnimated = false;
+    public Animator animator;
+    public string triggerParameter = "Activate";
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            // If animated, trigger the animation
+            if (isAnimated && animator != null)
+            {
+                animator.SetTrigger(triggerParameter);
+            }
+            
+            // Get player health component
+            var healthSystem = collision.GetComponent&lt;HealthSystem&gt;();
+            if (healthSystem != null)
+            {
+                healthSystem.TakeDamage(damageAmount);
+            }
+            
+            // Apply knockback
+            var playerRb = collision.GetComponent&lt;Rigidbody2D&gt;();
+            if (playerRb != null)
+            {
+                // Calculate direction away from trap
+                Vector2 direction = (collision.transform.position - transform.position).normalized;
+                playerRb.velocity = Vector2.zero; // Reset velocity before knockback
+                playerRb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+            }
+            
+            // Destroy the trap if configured to do so
+            if (destroyOnContact)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Game Manager and Level Transitions</h2>
+                        <p>
+                            A well-structured game manager is essential for handling level transitions, game state, and checkpoints.
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Game Manager Implementation</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance { get; private set; }
+    
+    [Header("Level Management")]
+    public float levelLoadDelay = 1.5f;
+    public GameObject loadingScreen;
+    
+    [Header("Checkpoint System")]
+    public bool useCheckpoints = true;
+    private Vector3 lastCheckpointPosition;
+    private bool hasCheckpoint = false;
+    
+    // Game state variables
+    private bool isPaused = false;
+    private bool isGameOver = false;
+    
+    private void Awake()
+    {
+        // Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+    
+    // Public methods for game state management
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0f;
+    }
+    
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+    }
+    
+    public void GameOver()
+    {
+        isGameOver = true;
+        // Show game over UI
+    }
+    
+    public void RestartLevel()
+    {
+        isGameOver = false;
+        StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().buildIndex));
+    }
+    
+    public void LoadNextLevel()
+    {
+        int nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextLevel < SceneManager.sceneCountInBuildSettings)
+        {
+            StartCoroutine(LoadSceneRoutine(nextLevel));
+        }
+        else
+        {
+            // Handle game completion
+            Debug.Log("Game completed!");
+        }
+    }
+    
+    public void SetCheckpoint(Vector3 position)
+    {
+        if (useCheckpoints)
+        {
+            lastCheckpointPosition = position;
+            hasCheckpoint = true;
+            Debug.Log("Checkpoint set at " + position);
+        }
+    }
+    
+    public void RespawnPlayerAtCheckpoint()
+    {
+        if (hasCheckpoint)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                player.transform.position = lastCheckpointPosition;
+                
+                // Reset player state
+                var healthSystem = player.GetComponent&lt;HealthSystem&gt;();
+                if (healthSystem != null)
+                {
+                    healthSystem.ResetHealth();
+                }
+                
+                var rigidbody = player.GetComponent&lt;Rigidbody2D&gt;();
+                if (rigidbody != null)
+                {
+                    rigidbody.velocity = Vector2.zero;
+                }
+            }
+        }
+        else
+        {
+            RestartLevel();
+        }
+    }
+    
+    private IEnumerator LoadSceneRoutine(int sceneIndex)
+    {
+        // Show loading screen
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(true);
+        }
+        
+        // Wait for a short delay
+        yield return new WaitForSecondsRealtime(levelLoadDelay);
+        
+        // Reset time scale in case game was paused
+        Time.timeScale = 1f;
+        
+        // Load the scene
+        SceneManager.LoadScene(sceneIndex);
+        
+        // Reset checkpoint when changing levels
+        hasCheckpoint = false;
+        
+        // Hide loading screen after scene is loaded
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(false);
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Checkpoint System</h3>
+                        <p>
+                            Complement the game manager with a checkpoint component:
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Checkpoint Component</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+public class Checkpoint : MonoBehaviour
+{
+    [Header("Checkpoint Settings")]
+    public bool activateOnTrigger = true;
+    public GameObject activeVisual;
+    public GameObject inactiveVisual;
+    public AudioClip activationSound;
+    public ParticleSystem activationEffect;
+    
+    private bool isActivated = false;
+    
+    private void Start()
+    {
+        // Set initial visuals
+        UpdateVisuals();
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (activateOnTrigger && !isActivated && collision.CompareTag("Player"))
+        {
+            Activate();
+        }
+    }
+    
+    public void Activate()
+    {
+        if (!isActivated)
+        {
+            isActivated = true;
+            
+            // Register with game manager
+            GameManager.Instance.SetCheckpoint(transform.position);
+            
+            // Update visuals
+            UpdateVisuals();
+            
+            // Play effects
+            if (activationEffect != null)
+            {
+                activationEffect.Play();
+            }
+            
+            if (activationSound != null)
+            {
+                AudioSource.PlayClipAtPoint(activationSound, transform.position);
+            }
+        }
+    }
+    
+    private void UpdateVisuals()
+    {
+        if (activeVisual != null)
+        {
+            activeVisual.SetActive(isActivated);
+        }
+        
+        if (inactiveVisual != null)
+        {
+            inactiveVisual.SetActive(!isActivated);
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Polishing Your Platformer</h2>
+                        <p>
+                            The difference between a good platformer and a great one often comes down to polish. Here are some 
+                            final additions to enhance your game.
+                        </p>
+                        
+                        <h3>Particle Effects and Juiciness</h3>
+                        <p>
+                            Add particle effects for key moments:
+                        </p>
+                        <ul>
+                            <li>Dust particles when landing or running</li>
+                            <li>Trail effects for faster movements</li>
+                            <li>Impact effects for collisions</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h4>Movement Particle Effects</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+public class PlayerEffectsHandler : MonoBehaviour
+{
+    [Header("Effect Prefabs")]
+    public ParticleSystem dustParticles;
+    public ParticleSystem jumpParticles;
+    public ParticleSystem landingParticles;
+    
+    [Header("Effect Triggers")]
+    public float minFallHeightForEffect = 4f;
+    public float runningEffectInterval = 0.3f;
+    
+    private Rigidbody2D rb;
+    private PlatformerController controller;
+    private float lastRunEffectTime;
+    private float highestY;
+    private bool wasGrounded;
+    
+    private void Awake()
+    {
+        rb = GetComponent&lt;Rigidbody2D&gt;();
+        controller = GetComponent&lt;PlatformerController&gt;();
+    }
+    
+    private void Update()
+    {
+        bool isGrounded = controller.IsGrounded;
+        
+        // Play landing effect when touching ground after a fall
+        if (isGrounded && !wasGrounded)
+        {
+            float fallDistance = highestY - transform.position.y;
+            if (fallDistance > minFallHeightForEffect)
+            {
+                PlayLandingEffect();
+            }
+        }
+        
+        // Play running dust effect when moving on ground
+        if (isGrounded && Mathf.Abs(rb.velocity.x) > 2f && 
+            Time.time > lastRunEffectTime + runningEffectInterval)
+        {
+            PlayRunningEffect();
+            lastRunEffectTime = Time.time;
+        }
+        
+        // Track highest position for fall distance calculation
+        if (!isGrounded)
+        {
+            highestY = Mathf.Max(highestY, transform.position.y);
+        }
+        else
+        {
+            highestY = transform.position.y;
+        }
+        
+        wasGrounded = isGrounded;
+    }
+    
+    public void PlayJumpEffect()
+    {
+        if (jumpParticles != null)
+        {
+            jumpParticles.Play();
+        }
+    }
+    
+    private void PlayLandingEffect()
+    {
+        if (landingParticles != null)
+        {
+            landingParticles.Play();
+        }
+    }
+    
+    private void PlayRunningEffect()
+    {
+        if (dustParticles != null)
+        {
+            dustParticles.Play();
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <h3>Screen Shake and Game Feel</h3>
+                        <p>
+                            Adding screen shake enhances impact moments in your game:
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Camera Shake Effect</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections;
+
+public class CameraShake : MonoBehaviour
+{
+    [Header("Shake Settings")]
+    public float defaultShakeAmount = 0.1f;
+    public float defaultShakeDuration = 0.2f;
+    
+    private Vector3 originalPosition;
+    private float currentShakeAmount;
+    private float currentShakeDuration;
+    private float shakeTimer;
+    private bool isShaking = false;
+    
+    public void ShakeCamera()
+    {
+        ShakeCamera(defaultShakeAmount, defaultShakeDuration);
+    }
+    
+    public void ShakeCamera(float amount, float duration)
+    {
+        if (!isShaking)
+        {
+            originalPosition = transform.localPosition;
+            currentShakeAmount = amount;
+            currentShakeDuration = duration;
+            shakeTimer = duration;
+            isShaking = true;
+            StartCoroutine(Shake());
+        }
+        else
+        {
+            // If already shaking, increase the intensity
+            currentShakeAmount = Mathf.Max(currentShakeAmount, amount);
+            currentShakeDuration = Mathf.Max(currentShakeDuration, duration);
+            shakeTimer = currentShakeDuration;
+        }
+    }
+    
+    private IEnumerator Shake()
+    {
+        while (shakeTimer > 0)
+        {
+            // Calculate shake percentage for damping effect
+            float percentComplete = 1.0f - (shakeTimer / currentShakeDuration);
+            
+            // Reduce shake amount over time
+            float damper = 1.0f - Mathf.Clamp01(4.0f * percentComplete - 3.0f);
+            
+            // Calculate random offset
+            float offsetX = Random.Range(-1f, 1f) * currentShakeAmount * damper;
+            float offsetY = Random.Range(-1f, 1f) * currentShakeAmount * damper;
+            
+            // Apply offset to camera
+            transform.localPosition = new Vector3(
+                originalPosition.x + offsetX,
+                originalPosition.y + offsetY,
+                originalPosition.z
+            );
+            
+            // Update timer
+            shakeTimer -= Time.deltaTime;
+            
+            yield return null;
+        }
+        
+        // Reset camera position and state
+        transform.localPosition = originalPosition;
+        isShaking = false;
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Conclusion</h2>
+                        <p>
+                            You now have all the essential components to create a compelling 2D platformer in Unity. 
+                            The scripts provided cover character movement, camera control, level design, collectibles, 
+                            hazards, game management, and visual polish.
+                        </p>
+                        <p>
+                            To further enhance your platformer, consider adding:
+                        </p>
+                        <ul>
+                            <li>Enemy AI with different behavior patterns</li>
+                            <li>More advanced jumping mechanics (wall jumps, double jumps)</li>
+                            <li>Power-ups that temporarily modify player abilities</li>
+                            <li>Story elements through dialogue or cutscenes</li>
+                            <li>Saving/loading system</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="next-prev">
+                        <a href="unity-publishing.html" class="prev">← Unity Publishing Guide</a>
+                        <a href="unity-fps.html" class="next">First-Person Shooter in Unity →</a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

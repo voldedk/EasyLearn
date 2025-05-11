@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating an RPG in Unity - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Creating an RPG in Unity</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            Role-playing games (RPGs) offer rich, immersive worlds where players can develop characters, 
+                            embark on quests, and experience engaging storylines. This tutorial will guide you through
+                            creating your own RPG in Unity, covering essential systems like character stats, inventory,
+                            quest management, dialogue, and combat.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Setting Up Your RPG Project</h2>
+                        <p>
+                            A well-structured foundation is crucial for an RPG, which typically has many interconnected systems.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Project</strong>: Open Unity Hub and create a new 3D project. For a 2D RPG, select the 2D template instead.</li>
+                            <li><strong>Configure Project Settings</strong>: 
+                                <ul>
+                                    <li>Set up appropriate physics layers for players, NPCs, interactable objects, and environment</li>
+                                    <li>Configure input system for your control scheme</li>
+                                    <li>Set up quality settings based on your target platforms</li>
+                                </ul>
+                            </li>
+                            <li><strong>Establish Folder Structure</strong>: Create a clear organization for your assets:
+                                <ul>
+                                    <li>_Scripts (with subfolders for Core, UI, Characters, Items, etc.)</li>
+                                    <li>Prefabs</li>
+                                    <li>Models/Sprites</li>
+                                    <li>Animations</li>
+                                    <li>Materials</li>
+                                    <li>ScriptableObjects (for items, quests, dialogue, etc.)</li>
+                                    <li>Scenes</li>
+                                </ul>
+                            </li>
+                            <li><strong>Setup Version Control</strong>: Initialize Git or another VCS to track changes to your project</li>
+                        </ol>
+                        
+                        <h3>Creating Core RPG Managers</h3>
+                        <p>
+                            RPGs benefit from a modular architecture with manager classes for different systems. Let's create a basic GameManager to start:
+                        </p>
+                        
+                        <div class="code-example">
+                            <h4>Game Manager</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+
+// Central manager class that coordinates game systems and state
+public class GameManager : MonoBehaviour
+{
+    // Singleton pattern implementation for easy access
+    public static GameManager Instance { get; private set; }
+    
+    [Header("Core Systems")]
+    public PlayerManager playerManager;    // Handles player state and progression
+    public QuestManager questManager;      // Manages active and completed quests
+    public DialogueManager dialogueManager; // Controls NPC conversations
+    public InventoryManager inventoryManager; // Manages player's items
+    
+    [Header("Game State")]
+    public bool isGamePaused = false;      // Track if game is paused
+    public bool isInCombat = false;        // Track if player is in combat
+    public bool isInDialogue = false;      // Track if player is in dialogue
+    
+    // References to essential UI elements
+    [Header("UI References")]
+    public GameObject mainMenuUI;
+    public GameObject gameplayUI;
+    public GameObject pauseMenuUI;
+    
+    // List of registered systems for updates and initialization
+    private List<IGameSystem> gameSystems = new List<IGameSystem>();
+    
+    private void Awake()
+    {
+        // Singleton pattern setup
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Persist between scene loads
+        }
+        else
+        {
+            Destroy(gameObject); // Avoid duplicates
+            return;
+        }
+        
+        // Initialize all systems
+        InitializeSystems();
+    }
+    
+    private void InitializeSystems()
+    {
+        // Find and initialize required components if not assigned in inspector
+        if (playerManager == null)
+            playerManager = FindObjectOfType<PlayerManager>();
+            
+        if (questManager == null)
+            questManager = FindObjectOfType<QuestManager>();
+            
+        if (dialogueManager == null)
+            dialogueManager = FindObjectOfType<DialogueManager>();
+            
+        if (inventoryManager == null)
+            inventoryManager = FindObjectOfType<InventoryManager>();
+            
+        // Register systems for management
+        RegisterSystem(playerManager);
+        RegisterSystem(questManager);
+        RegisterSystem(dialogueManager);
+        RegisterSystem(inventoryManager);
+        
+        // Initialize each registered system
+        foreach (var system in gameSystems)
+        {
+            system.Initialize();
+        }
+    }
+    
+    private void RegisterSystem(MonoBehaviour system)
+    {
+        // Only register valid systems that implement IGameSystem
+        if (system != null && system is IGameSystem gameSystem)
+        {
+            gameSystems.Add(gameSystem);
+        }
+    }
+    
+    public void PauseGame()
+    {
+        isGamePaused = true;
+        Time.timeScale = 0f; // Freeze game time
+        
+        // Show pause menu
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
+    }
+    
+    public void ResumeGame()
+    {
+        isGamePaused = false;
+        Time.timeScale = 1f; // Resume normal time
+        
+        // Hide pause menu
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+    }
+    
+    public void StartNewGame()
+    {
+        // Initialize player data for new game
+        playerManager.ResetPlayerData();
+        
+        // Reset quest progress
+        questManager.ResetQuests();
+        
+        // Start in the first game scene
+        SceneManager.LoadScene("GameStart");
+    }
+    
+    public void SaveGame()
+    {
+        // Trigger each system to save its data
+        foreach (var system in gameSystems)
+        {
+            system.SaveData();
+        }
+        
+        // Implement your actual save system here
+        Debug.Log("Game saved!");
+    }
+    
+    public void LoadGame()
+    {
+        // Trigger each system to load its data
+        foreach (var system in gameSystems)
+        {
+            system.LoadData();
+        }
+        
+        // Implement your actual load system here
+        Debug.Log("Game loaded!");
+    }
+</code></pre>
+                        </div>
+                        
+                        <div class="code-example">
+                            <h4>Game System Interface</h4>
+                            <pre><code class="language-csharp">// Interface for all major game systems to standardize management
+public interface IGameSystem
+{
+    // Called when the system is first initialized
+    void Initialize();
+    
+    // Called to save system-specific data
+    void SaveData();
+    
+    // Called to load system-specific data
+    void LoadData();
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="category-section">
+                    <h2>Character Stat System</h2>
+                    <p>
+                        A robust character stat system is the foundation of any RPG. Let's implement a flexible system
+                        that supports different character types with modifiable stats.
+                    </p>
+                    
+                    <h3>Implementation Guidelines</h3>
+                    <ol>
+                        <li><strong>Define Core Stats</strong>: Identify the primary attributes for your game (Strength, Dexterity, Intelligence, etc.)</li>
+                        <li><strong>Create Derived Stats</strong>: Implement stats that are calculated from core stats (Health, Mana, Damage, etc.)</li>
+                        <li><strong>Build Stat Modification System</strong>: Design a system for temporary and permanent stat changes (buffs, equipment, etc.)</li>
+                        <li><strong>Implement Leveling System</strong>: Create mechanics for experience gain and level progression</li>
+                        <li><strong>Connect to UI</strong>: Display character stats in character sheets and during gameplay</li>
+                    </ol>
+                    
+                    <div class="code-example">
+                        <h4>Character Stats Base Class</h4>
+                        <pre><code class="language-csharp">using UnityEngine;
+using System;
+using System.Collections.Generic;
+
+// Base class for any entity that has stats (players, enemies, NPCs)
+public class CharacterStats : MonoBehaviour
+{
+    [Header("Character Information")]
+    public string characterName;        // Display name of the character
+    public int level = 1;               // Current character level
+    public int experiencePoints = 0;    // Current XP amount
+    public int experienceToNextLevel = 100; // XP needed for next level
+    
+    [Header("Core Stats")]
+    public Stat strength;       // Affects physical damage and carrying capacity
+    public Stat dexterity;      // Affects accuracy, evasion, and attack speed
+    public Stat constitution;   // Affects health and physical resistance
+    public Stat intelligence;   // Affects magical ability and mana
+    public Stat wisdom;         // Affects magical resistance and mana regeneration
+    public Stat charisma;       // Affects dialogue options and prices
+    
+    [Header("Derived Stats")]
+    public Stat maxHealth;      // Maximum health points
+    public Stat maxMana;        // Maximum mana points
+    public Stat physicalDamage; // Base physical damage
+    public Stat magicalDamage;  // Base magical damage
+    public Stat armor;          // Physical damage reduction
+    public Stat magicResistance; // Magical damage reduction
+    
+    // Current values for resources
+    [Header("Current Values")]
+    public float currentHealth;
+    public float currentMana;
+    
+    // List of active stat modifiers
+    private List<StatModifier> activeModifiers = new List<StatModifier>();
+    
+    // Events
+    public event Action OnStatsChanged;
+    public event Action<float, float> OnHealthChanged; // (newValue, maxValue)
+    public event Action<float, float> OnManaChanged;   // (newValue, maxValue)
+    public event Action OnLevelUp;
+    
+    private void Awake()
+    {
+        // Initialize stats with default values
+        InitializeStats();
+    }
+    
+    private void Start()
+    {
+        // Set current values to maximum
+        currentHealth = maxHealth.GetValue();
+        currentMana = maxMana.GetValue();
+        
+        // Calculate derived stats based on core stats
+        CalculateDerivedStats();
+    }
+    
+    private void InitializeStats()
+    {
+        // Create stat objects with base values
+        strength = new Stat(10);        // Default strength of 10
+        dexterity = new Stat(10);       // Default dexterity of 10
+        constitution = new Stat(10);    // Default constitution of 10
+        intelligence = new Stat(10);    // Default intelligence of 10
+        wisdom = new Stat(10);          // Default wisdom of 10
+        charisma = new Stat(10);        // Default charisma of 10
+        
+        // Initialize derived stats
+        maxHealth = new Stat(50);       // Base health of 50
+        maxMana = new Stat(30);         // Base mana of 30
+        physicalDamage = new Stat(5);   // Base physical damage of 5
+        magicalDamage = new Stat(5);    // Base magical damage of 5
+        armor = new Stat(0);            // Base armor of 0
+        magicResistance = new Stat(0);  // Base magic resistance of 0
+    }
+    
+    public void CalculateDerivedStats()
+    {
+        // Update derived stats based on core stats
+        
+        // Health scales with constitution
+        float healthFromCon = constitution.GetValue() * 5; // Each point of CON adds 5 health
+        maxHealth.SetBaseValue(50 + healthFromCon);
+        
+        // Mana scales with intelligence
+        float manaFromInt = intelligence.GetValue() * 3; // Each point of INT adds 3 mana
+        maxMana.SetBaseValue(30 + manaFromInt);
+        
+        // Physical damage scales with strength
+        float damageFromStr = strength.GetValue() * 0.5f; // Each point of STR adds 0.5 damage
+        physicalDamage.SetBaseValue(5 + damageFromStr);
+        
+        // Magical damage scales with intelligence
+        float magicFromInt = intelligence.GetValue() * 0.8f; // Each point of INT adds 0.8 magic damage
+        magicalDamage.SetBaseValue(5 + magicFromInt);
+        
+        // Armor scales slightly with constitution
+        float armorFromCon = constitution.GetValue() * 0.2f; // Each point of CON adds 0.2 armor
+        armor.SetBaseValue(armorFromCon);
+        
+        // Magic resistance scales with wisdom
+        float resistFromWis = wisdom.GetValue() * 0.3f; // Each point of WIS adds 0.3 magic resist
+        magicResistance.SetBaseValue(resistFromWis);
+        
+        // Ensure current values don't exceed maximums
+        currentHealth = Mathf.Min(currentHealth, maxHealth.GetValue());
+        currentMana = Mathf.Min(currentMana, maxMana.GetValue());
+        
+        // Notify listeners of stat changes
+        OnStatsChanged?.Invoke();
+    }
+    
+    public void TakeDamage(float damage, DamageType damageType)
+    {
+        float damageTaken = CalculateDamageTaken(damage, damageType);
+        
+        // Apply damage
+        currentHealth -= damageTaken;
+        
+        // Clamp health to valid range
+        currentHealth = Mathf.Max(currentHealth, 0);
+        
+        // Notify listeners of health change
+        OnHealthChanged?.Invoke(currentHealth, maxHealth.GetValue());
+        
+        // Check for death
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    
+    public void HealHealth(float amount)
+    {
+        // Apply healing
+        currentHealth += amount;
+        
+        // Clamp health to valid range
+        currentHealth = Mathf.Min(currentHealth, maxHealth.GetValue());
+        
+        // Notify listeners of health change
+        OnHealthChanged?.Invoke(currentHealth, maxHealth.GetValue());
+    }
+    
+    public void UseMana(float amount)
+    {
+        // Check if enough mana is available
+        if (currentMana >= amount)
+        {
+            currentMana -= amount;
+            
+            // Notify listeners of mana change
+            OnManaChanged?.Invoke(currentMana, maxMana.GetValue());
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public void RestoreMana(float amount)
+    {
+        // Apply mana restoration
+        currentMana += amount;
+        
+        // Clamp mana to valid range
+        currentMana = Mathf.Min(currentMana, maxMana.GetValue());
+        
+        // Notify listeners of mana change
+        OnManaChanged?.Invoke(currentMana, maxMana.GetValue());
+    }
+    
+    public void AddExperience(int amount)
+    {
+        // Add XP
+        experiencePoints += amount;
+        
+        // Check for level up
+        CheckLevelUp();
+    }
+    
+    private void CheckLevelUp()
+    {
+        // While player has enough XP to level up
+        while (experiencePoints >= experienceToNextLevel)
+        {
+            // Deduct XP needed for the level up
+            experiencePoints -= experienceToNextLevel;
+            
+            // Increase level
+            level++;
+            
+            // Increase XP requirement for next level (can use different formulas)
+            experienceToNextLevel = (int)(experienceToNextLevel * 1.5f);
+            
+            // You could automatically increase stats here
+            // For example: strength.AddModifier(new StatModifier(1, StatModifierType.Flat));
+            
+            // Recalculate stats
+            CalculateDerivedStats();
+            
+            // Notify listeners of level up
+            OnLevelUp?.Invoke();
+        }
+    }
+    
+    public void AddModifier(Stat stat, StatModifier modifier)
+    {
+        // Add modifier to the stat
+        stat.AddModifier(modifier);
+        
+        // Add to active modifiers list if temporary
+        if (modifier.duration > 0)
+        {
+            activeModifiers.Add(modifier);
+        }
+        
+        // Recalculate derived stats as they might have changed
+        CalculateDerivedStats();
+    }
+    
+    public void RemoveModifier(Stat stat, StatModifier modifier)
+    {
+        // Remove modifier from the stat
+        stat.RemoveModifier(modifier);
+        
+        // Remove from active modifiers list
+        activeModifiers.Remove(modifier);
+        
+        // Recalculate derived stats as they might have changed
+        CalculateDerivedStats();
+    }
+    
+    private float CalculateDamageTaken(float incomingDamage, DamageType damageType)
+    {
+        float damageReduction = 0;
+        
+        // Apply different damage reductions based on damage type
+        switch (damageType)
+        {
+            case DamageType.Physical:
+                // Convert armor to damage reduction percentage
+                damageReduction = armor.GetValue() / (armor.GetValue() + 50); // Formula gives diminishing returns
+                break;
+                
+            case DamageType.Magical:
+                // Convert magic resistance to damage reduction percentage
+                damageReduction = magicResistance.GetValue() / (magicResistance.GetValue() + 50);
+                break;
+                
+            case DamageType.True:
+                // True damage ignores armor and resistance
+                damageReduction = 0;
+                break;
+        }
+        
+        // Calculate actual damage (clamped to ensure positive value)
+        float actualDamage = incomingDamage * (1 - Mathf.Clamp01(damageReduction));
+        return actualDamage;
+    }
+    
+    protected virtual void Die()
+    {
+        // Override in derived classes for specific death behavior
+        Debug.Log(characterName + " has died.");
+    }
+</div>
+
+<div class="code-example">
+    <h4>Stat Class</h4>
+    <pre><code class="language-csharp">using System.Collections.Generic;
+using System.Linq;
+
+// Class representing a single character statistic with modifiers
+public class Stat
+{
+    private float baseValue;                     // The base value of the stat before modifiers
+    private List<StatModifier> modifiers;        // List of all modifiers affecting this stat
+    private bool isDirty = true;                 // Flag indicating if value needs recalculation
+    private float lastCalculatedValue;           // Cached value from last calculation
+    
+    public Stat(float baseValue)
+    {
+        this.baseValue = baseValue;
+        modifiers = new List<StatModifier>();
+    }
+    
+    // Get the final value of the stat with all modifiers applied
+    public float GetValue()
+    {
+        // Only recalculate if needed
+        if (isDirty)
+        {
+            lastCalculatedValue = CalculateFinalValue();
+            isDirty = false;
+        }
+        
+        return lastCalculatedValue;
+    }
+    
+    // Change the base value of the stat
+    public void SetBaseValue(float value)
+    {
+        baseValue = value;
+        isDirty = true; // Mark for recalculation
+    }
+    
+    // Add a modifier to this stat
+    public void AddModifier(StatModifier modifier)
+    {
+        modifiers.Add(modifier);
+        isDirty = true; // Mark for recalculation
+    }
+    
+    // Remove a specific modifier from this stat
+    public void RemoveModifier(StatModifier modifier)
+    {
+        modifiers.Remove(modifier);
+        isDirty = true; // Mark for recalculation
+    }
+    
+    // Remove all modifiers from a specific source
+    public void RemoveModifiersFromSource(object source)
+    {
+        modifiers.RemoveAll(m => m.source == source);
+        isDirty = true; // Mark for recalculation
+    }
+    
+    // Calculate the final value with all modifiers applied
+    private float CalculateFinalValue()
+    {
+        float finalValue = baseValue;
+        float sumPercentAdd = 0; // For additive percentage modifiers
+        
+        // Sort modifiers by order to ensure consistent application
+        var orderedModifiers = modifiers.OrderBy(m => (int)m.type).ToList();
+        
+        // Apply modifiers in order
+        foreach (var modifier in orderedModifiers)
+        {
+            switch (modifier.type)
+            {
+                case StatModifierType.Flat:
+                    // Flat modifiers add or subtract a fixed value
+                    finalValue += modifier.value;
+                    break;
+                    
+                case StatModifierType.PercentAdd:
+                    // Additive percentage modifiers are grouped together
+                    sumPercentAdd += modifier.value;
+                    break;
+                    
+                case StatModifierType.PercentMult:
+                    // Multiplicative percentage modifiers apply individually
+                    finalValue *= 1 + modifier.value;
+                    break;
+            }
+        }
+        
+        // Apply accumulated additive percentage modifiers
+        if (sumPercentAdd != 0)
+        {
+            finalValue *= 1 + sumPercentAdd;
+        }
+        
+        return finalValue;
+    }
+}</code></pre>
+</div>
+
+<div class="code-example">
+    <h4>Stat Modifier</h4>
+    <pre><code class="language-csharp">using UnityEngine;
+
+// Types of stat modifiers
+public enum StatModifierType
+{
+    Flat = 0,       // Adds a fixed value (e.g., +5 Strength)
+    PercentAdd = 1, // Adds percentage additively (e.g., +10% Damage, +15% Damage = +25% Damage)
+    PercentMult = 2 // Multiplies percentage (e.g., +10% Damage, +15% Damage = +26.5% Damage)
+}
+
+// Types of damage
+public enum DamageType
+{
+    Physical,
+    Magical,
+    True // Ignores armor/resistance
+}
+
+// Class representing a modifier that can be applied to character stats
+public class StatModifier
+{
+    public float value;              // The value of the modification
+    public StatModifierType type;    // The type of modification
+    public object source;            // What created this modifier (item, skill, etc.)
+    public float duration;           // How long the modifier lasts (0 = permanent)
+    public float timeRemaining;      // Time left on temporary modifiers
+    
+    public StatModifier(float value, StatModifierType type, object source = null, float duration = 0)
+    {
+        this.value = value;
+        this.type = type;
+        this.source = source;
+        this.duration = duration;
+        this.timeRemaining = duration;
+    }
+    
+    // Update remaining time for temporary modifiers
+    public bool UpdateDuration(float deltaTime)
+    {
+        // Only update if this is a temporary modifier
+        if (duration <= 0)
+            return false;
+            
+        timeRemaining -= deltaTime;
+        
+        // Return true if the modifier has expired
+        return timeRemaining <= 0;
+    }
+}</code></pre>
+</div>
+
+<h3>Using the Stat System</h3>
+<p>
+    The above system provides a flexible foundation for RPG characters. Here's how to use it:
+</p>
+<ul>
+    <li>Extend <code>CharacterStats</code> for specific character types (Player, Enemy, NPC)</li>
+    <li>Add modifiers for equipment: <code>playerStats.AddModifier(playerStats.strength, new StatModifier(5, StatModifierType.Flat, sword));</code></li>
+    <li>Add temporary buffs: <code>playerStats.AddModifier(playerStats.dexterity, new StatModifier(0.2f, StatModifierType.PercentAdd, spell, 30f));</code></li>
+    <li>Subscribe to events: <code>playerStats.OnHealthChanged += UpdateHealthBar;</code></li>
+</ul>
+                </section>
+
+                <section class="category-section">
+                    <h2>Inventory System</h2>
+                    <p>
+                        A flexible inventory system is essential for any RPG. Let's create one that supports different item types,
+                        equipment, stacking, and categorization.
+                    </p>
+                    
+                    <h3>Implementation Guidelines</h3>
+                    <ol>
+                        <li><strong>Define Item Database</strong>: Create a ScriptableObject database to store all item definitions</li>
+                        <li><strong>Implement Item Classes</strong>: Create base and derived classes for different item types</li>
+                        <li><strong>Build Inventory Container</strong>: Design a class to store and manage items</li>
+                        <li><strong>Create UI Representation</strong>: Develop UI components to display and interact with inventory</li>
+                        <li><strong>Add Item Interactions</strong>: Implement use, equip, drop, and trade functionality</li>
+                    </ol>
+                    
+                    <div class="code-example">
+                        <h4>Item Base Class</h4>
+                        <pre><code class="language-csharp">using UnityEngine;
+
+// Base ScriptableObject for all items
+[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
+public class Item : ScriptableObject
+{
+    [Header("Basic Information")]
+    public string itemName;           // Display name of the item
+    public string itemDescription;    // Detailed description
+    public Sprite itemIcon;           // UI icon
+    public GameObject itemPrefab;     // 3D model/prefab in game world
+    
+    [Header("Properties")]
+    public ItemType itemType;         // Type of item (enum defined below)
+    public ItemRarity rarity;         // Rarity level (common, rare, etc.)
+    public int buyPrice;              // Base price to buy from vendors
+    public int sellPrice;             // Base price when selling to vendors
+    public float weight = 0.1f;       // Weight affecting inventory capacity
+    public bool isStackable = false;  // Whether items can stack
+    public int maxStackSize = 1;      // Maximum items in one stack (if stackable)
+    public bool isQuestItem = false;  // Special flag for quest items
+    
+    [Header("Usage")]
+    public bool isConsumable = false; // Whether the item is consumed on use
+    public bool isEquippable = false; // Whether the item can be equipped
+    public EquipmentSlot equipSlot;   // Where the item can be equipped (if equippable)
+    
+    // Virtual methods for extending functionality in derived classes
+    
+    // What happens when the item is used
+    public virtual bool Use(Character user)
+    {
+        // Base implementation just prints a message
+        Debug.Log($"{user.name} uses {itemName}");
+        return true; // Return true if successfully used
+    }
+    
+    // What happens when the item is equipped
+    public virtual bool Equip(Character character)
+    {
+        // Only equippable items should override this
+        if (!isEquippable)
+        {
+            Debug.LogWarning($"{itemName} is not equippable!");
+            return false;
+        }
+        
+        Debug.Log($"{character.name} equips {itemName}");
+        return true;
+    }
+    
+    // What happens when the item is unequipped
+    public virtual bool Unequip(Character character)
+    {
+        // Only equippable items should override this
+        if (!isEquippable)
+        {
+            Debug.LogWarning($"{itemName} is not equippable!");
+            return false;
+        }
+        
+        Debug.Log($"{character.name} unequips {itemName}");
+        return true;
+    }
+    
+    // Compare two items to check if they can stack
+    public virtual bool CanStackWith(Item other)
+    {
+        // Items can stack if they're the same type, stackable, and the same item
+        return isStackable && other.isStackable && itemName == other.itemName;
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="code-example">
+                        <h4>Equipment Item Class</h4>
+                        <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+
+// Specialized item class for equipment
+[CreateAssetMenu(fileName = "New Equipment", menuName = "Inventory/Equipment")]
+public class EquipmentItem : Item
+{
+    [Header("Equipment Stats")]
+    public List<StatModifier> statModifiers = new List<StatModifier>(); // Stats modified when equipped
+    
+    [Header("Visual")]
+    public SkinnedMeshRenderer meshRenderer; // For clothing/armor visualization
+    
+    public EquipmentItem()
+    {
+        // Equipment is equippable by default
+        isEquippable = true;
+        isStackable = false; // Equipment typically doesn't stack
+    }
+    
+    public override bool Equip(Character character)
+    {
+        if (!base.Equip(character))
+            return false;
+            
+        // Apply all stat modifiers
+        CharacterStats stats = character.GetComponent<CharacterStats>();
+        if (stats != null)
+        {
+            // Apply each stat modifier to the appropriate stat
+            foreach (var modifier in statModifiers)
+            {
+                // Determine which stat to modify based on modifier's statType
+                Stat targetStat = GetTargetStat(stats, modifier.statType);
+                if (targetStat != null)
+                {
+                    // Create a copy of the modifier with this item as the source
+                    StatModifier newModifier = new StatModifier(
+                        modifier.value, 
+                        modifier.type, 
+                        this, // This item is the source
+                        0     // Permanent while equipped
+                    );
+                    
+                    // Add the modifier to the stat
+                    stats.AddModifier(targetStat, newModifier);
+                }
+            }
+        }
+        
+        // Apply visual changes if needed
+        ApplyVisualChanges(character);
+        
+        return true;
+    }
+    
+    public override bool Unequip(Character character)
+    {
+        if (!base.Unequip(character))
+            return false;
+            
+        // Remove all stat modifiers from this equipment
+        CharacterStats stats = character.GetComponent<CharacterStats>();
+        if (stats != null)
+        {
+            // Remove all stat modifiers that have this item as the source
+            stats.RemoveAllModifiersFromSource(this);
+        }
+        
+        // Remove visual changes
+        RemoveVisualChanges(character);
+        
+        return true;
+    }
+    
+    // Helper method to get the target stat based on type
+    private Stat GetTargetStat(CharacterStats stats, StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType.Strength: return stats.strength;
+            case StatType.Dexterity: return stats.dexterity;
+            case StatType.Constitution: return stats.constitution;
+            case StatType.Intelligence: return stats.intelligence;
+            case StatType.Wisdom: return stats.wisdom;
+            case StatType.Charisma: return stats.charisma;
+            case StatType.MaxHealth: return stats.maxHealth;
+            case StatType.MaxMana: return stats.maxMana;
+            case StatType.PhysicalDamage: return stats.physicalDamage;
+            case StatType.MagicalDamage: return stats.magicalDamage;
+            case StatType.Armor: return stats.armor;
+            case StatType.MagicResistance: return stats.magicResistance;
+            default: return null;
+        }
+    }
+    
+    private void ApplyVisualChanges(Character character)
+    {
+        // Implementation depends on your character customization system
+        // For example, you might enable a specific mesh on the character
+        if (meshRenderer != null && character.equipmentVisualManager != null)
+        {
+            character.equipmentVisualManager.ApplyEquipmentVisual(equipSlot, meshRenderer);
+        }
+    }
+    
+    private void RemoveVisualChanges(Character character)
+    {
+        // Remove visual changes when unequipped
+        if (character.equipmentVisualManager != null)
+        {
+            character.equipmentVisualManager.RemoveEquipmentVisual(equipSlot);
+        }
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="code-example">
+                        <h4>Consumable Item Class</h4>
+                        <pre><code class="language-csharp">using UnityEngine;
+
+// Specialized item class for consumables (potions, food, etc.)
+[CreateAssetMenu(fileName = "New Consumable", menuName = "Inventory/Consumable")]
+public class ConsumableItem : Item
+{
+    [Header("Consumable Effects")]
+    public float healthRestoration;  // Amount of health restored
+    public float manaRestoration;    // Amount of mana restored
+    public StatModifier[] temporaryEffects; // Temporary stat buffs
+    public float effectDuration = 30f; // Duration of temporary effects in seconds
+    
+    public ConsumableItem()
+    {
+        // Consumables have these properties by default
+        isConsumable = true;
+        isStackable = true;
+        maxStackSize = 99;
+    }
+    
+    public override bool Use(Character user)
+    {
+        if (!base.Use(user))
+            return false;
+            
+        // Apply consumable effects
+        CharacterStats stats = user.GetComponent<CharacterStats>();
+        if (stats != null)
+        {
+            // Apply healing
+            if (healthRestoration > 0)
+            {
+                stats.HealHealth(healthRestoration);
+            }
+            
+            // Apply mana restoration
+            if (manaRestoration > 0)
+            {
+                stats.RestoreMana(manaRestoration);
+            }
+            
+            // Apply temporary stat modifiers
+            foreach (var effect in temporaryEffects)
+            {
+                // Determine which stat to modify
+                Stat targetStat = GetTargetStat(stats, effect.statType);
+                if (targetStat != null)
+                {
+                    // Create a temporary modifier
+                    StatModifier tempModifier = new StatModifier(
+                        effect.value,
+                        effect.type,
+                        this,
+                        effectDuration
+                    );
+                    
+                    // Apply the modifier
+                    stats.AddModifier(targetStat, tempModifier);
+                }
+            }
+            
+            // Play effect
+            PlayUseEffect(user);
+            
+            // Return true since the item was consumed
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // Helper method to get the target stat (same as in EquipmentItem)
+    private Stat GetTargetStat(CharacterStats stats, StatType statType)
+    {
+        // Implementation same as in EquipmentItem
+        switch (statType)
+        {
+            case StatType.Strength: return stats.strength;
+            // ... other cases
+            default: return null;
+        }
+    }
+    
+    private void PlayUseEffect(Character user)
+    {
+        // Play particle effect, sound, etc. when consumed
+        // This implementation depends on your game's feedback systems
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="code-example">
+                        <h4>Inventory Manager</h4>
+                        <pre><code class="language-csharp">using UnityEngine;
+using System.Collections.Generic;
+using System;
+
+// Class that manages player inventory
+public class InventoryManager : MonoBehaviour, IGameSystem
+{
+    [Header("Inventory Settings")]
+    public int inventorySlots = 20;       // Total inventory capacity
+    public float maxWeight = 50f;         // Maximum weight the player can carry
+    
+    [Header("References")]
+    public InventoryUI inventoryUI;        // UI for displaying inventory
+    
+    // Inventory data
+    private List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    private Dictionary<EquipmentSlot, EquipmentItem> equippedItems = new Dictionary<EquipmentSlot, EquipmentItem>();
+    
+    // Events
+    public event Action<InventorySlot> OnItemAdded;
+    public event Action<InventorySlot> OnItemRemoved;
+    public event Action<EquipmentItem, EquipmentSlot> OnItemEquipped;
+    public event Action<EquipmentItem, EquipmentSlot> OnItemUnequipped;
+    public event Action OnInventoryChanged;
+    
+    public void Initialize()
+    {
+        // Create empty inventory slots
+        for (int i = 0; i < inventorySlots; i++)
+        {
+            inventorySlots.Add(new InventorySlot());
+        }
+        
+        // Initialize equipment slots dictionary
+        foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
+        {
+            equippedItems[slot] = null;
+        }
+        
+        // Register for UI events if UI is assigned
+        if (inventoryUI != null)
+        {
+            inventoryUI.Initialize(this);
+        }
+    }
+    
+    public bool AddItem(Item item, int quantity = 1)
+    {
+        if (item == null || quantity <= 0)
+            return false;
+            
+        // Check weight constraints
+        float totalAddedWeight = item.weight * quantity;
+        if (GetCurrentWeight() + totalAddedWeight > maxWeight)
+        {
+            Debug.Log("Inventory is too heavy to add this item.");
+            return false;
+        }
+        
+        // Try to stack with existing items if stackable
+        if (item.isStackable)
+        {
+            // Find existing stack with room
+            foreach (var slot in inventorySlots)
+            {
+                if (slot.item != null && slot.item.CanStackWith(item) && slot.quantity < slot.item.maxStackSize)
+                {
+                    // Calculate how many can be added to this stack
+                    int roomInStack = slot.item.maxStackSize - slot.quantity;
+                    int amountToAdd = Mathf.Min(roomInStack, quantity);
+                    
+                    // Add to existing stack
+                    slot.quantity += amountToAdd;
+                    
+                    // Reduce remaining quantity
+                    quantity -= amountToAdd;
+                    
+                    // Notify listeners
+                    OnItemAdded?.Invoke(slot);
+                    OnInventoryChanged?.Invoke();
+                    
+                    // If all items were added, return success
+                    if (quantity <= 0)
+                        return true;
+                }
+            }
+        }
+        
+        // If we get here, we need to add to empty slots (either non-stackable or remaining quantity)
+        while (quantity > 0)
+        {
+            // Find an empty slot
+            InventorySlot emptySlot = inventorySlots.Find(slot => slot.isEmpty);
+            
+            if (emptySlot != null)
+            {
+                // Calculate amount to add to this slot
+                int amountToAdd = Mathf.Min(quantity, item.isStackable ? item.maxStackSize : 1);
+                
+                // Add item to slot
+                emptySlot.item = item;
+                emptySlot.quantity = amountToAdd;
+                
+                // Reduce remaining quantity
+                quantity -= amountToAdd;
+                
+                // Notify listeners
+                OnItemAdded?.Invoke(emptySlot);
+            }
+            else
+            {
+                // No empty slots left
+                Debug.Log("Inventory is full!");
+                OnInventoryChanged?.Invoke();
+                return false;
+            }
+        }
+        
+        // Notify that inventory has changed
+        OnInventoryChanged?.Invoke();
+        return true;
+    }
+    
+    public bool RemoveItem(Item item, int quantity = 1)
+    {
+        if (item == null || quantity <= 0)
+            return false;
+            
+        int remainingToRemove = quantity;
+        
+        // Find slots with this item, removing from smallest stacks first
+        var slotsWithItem = inventorySlots
+            .Where(slot => slot.item != null && slot.item == item)
+            .OrderBy(slot => slot.quantity)
+            .ToList();
+            
+        if (slotsWithItem.Count == 0)
+            return false;
+            
+        // Check if we have enough of the item
+        int totalQuantity = slotsWithItem.Sum(slot => slot.quantity);
+        if (totalQuantity < quantity)
+        {
+            Debug.Log($"Not enough {item.itemName} in inventory. Have {totalQuantity}, need {quantity}.");
+            return false;
+        }
+        
+        // Remove items
+        foreach (var slot in slotsWithItem)
+        {
+            int amountToRemove = Mathf.Min(remainingToRemove, slot.quantity);
+            
+            slot.quantity -= amountToRemove;
+            remainingToRemove -= amountToRemove;
+            
+            // Clear slot if empty
+            if (slot.quantity <= 0)
+            {
+                slot.Clear();
+            }
+            
+            // Notify listeners
+            OnItemRemoved?.Invoke(slot);
+            
+            // If we've removed all we need, stop
+            if (remainingToRemove <= 0)
+                break;
+        }
+        
+        // Notify that inventory has changed
+        OnInventoryChanged?.Invoke();
+        return true;
+    }
+    
+    public bool UseItem(int slotIndex)
+    {
+        // Validate slot index
+        if (slotIndex < 0 || slotIndex >= inventorySlots.Count)
+            return false;
+            
+        InventorySlot slot = inventorySlots[slotIndex];
+        
+        // Check if slot has an item
+        if (slot.isEmpty)
+            return false;
+            
+        // Get the player character
+        Character player = GameManager.Instance.playerManager.activePlayer;
+        if (player == null)
+            return false;
+            
+        // Use the item
+        bool used = slot.item.Use(player);
+        
+        // If used and consumable, reduce quantity
+        if (used && slot.item.isConsumable)
+        {
+            slot.quantity--;
+            
+            // Clear slot if empty
+            if (slot.quantity <= 0)
+            {
+                slot.Clear();
+            }
+            
+            // Notify listeners
+            OnItemRemoved?.Invoke(slot);
+            OnInventoryChanged?.Invoke();
+        }
+        
+        return used;
+    }
+    
+    public bool EquipItem(int slotIndex)
+    {
+        // Validate slot index
+        if (slotIndex < 0 || slotIndex >= inventorySlots.Count)
+            return false;
+            
+        InventorySlot slot = inventorySlots[slotIndex];
+        
+        // Check if slot has an equippable item
+        if (slot.isEmpty || !slot.item.isEquippable)
+            return false;
+            
+        EquipmentItem equipItem = slot.item as EquipmentItem;
+        if (equipItem == null)
+            return false;
+            
+        // Get the player character
+        Character player = GameManager.Instance.playerManager.activePlayer;
+        if (player == null)
+            return false;
+            
+        // Check if something is already equipped in that slot
+        if (equippedItems[equipItem.equipSlot] != null)
+        {
+            // Unequip current item
+            EquipmentItem currentItem = equippedItems[equipItem.equipSlot];
+            currentItem.Unequip(player);
+            
+            // Add it back to inventory
+            AddItem(currentItem);
+            
+            // Notify listeners of unequip
+            OnItemUnequipped?.Invoke(currentItem, equipItem.equipSlot);
+        }
+        
+        // Equip the new item
+        bool equipped = equipItem.Equip(player);
+        
+        if (equipped)
+        {
+            // Store equipped item reference
+            equippedItems[equipItem.equipSlot] = equipItem;
+            
+            // Remove from inventory
+            RemoveItem(equipItem);
+            
+            // Notify listeners
+            OnItemEquipped?.Invoke(equipItem, equipItem.equipSlot);
+            OnInventoryChanged?.Invoke();
+        }
+        
+        return equipped;
+    }
+    
+    public bool UnequipItem(EquipmentSlot slot)
+    {
+        // Check if something is equipped in that slot
+        if (equippedItems[slot] == null)
+            return false;
+            
+        EquipmentItem item = equippedItems[slot];
+        
+        // Check if we have room in inventory
+        if (GetEmptySlotsCount() <= 0)
+        {
+            Debug.Log("Inventory is full, cannot unequip item.");
+            return false;
+        }
+        
+        // Get the player character
+        Character player = GameManager.Instance.playerManager.activePlayer;
+        if (player == null)
+            return false;
+            
+        // Unequip the item
+        bool unequipped = item.Unequip(player);
+        
+        if (unequipped)
+        {
+            // Clear equipped item reference
+            equippedItems[slot] = null;
+            
+            // Add back to inventory
+            AddItem(item);
+            
+            // Notify listeners
+            OnItemUnequipped?.Invoke(item, slot);
+            OnInventoryChanged?.Invoke();
+        }
+        
+        return unequipped;
+    }
+    
+    // Helper methods
+    public float GetCurrentWeight()
+    {
+        return inventorySlots.Sum(slot => 
+            slot.isEmpty ? 0 : slot.item.weight * slot.quantity);
+    }
+    
+    public int GetEmptySlotsCount()
+    {
+        return inventorySlots.Count(slot => slot.isEmpty);
+    }
+    
+    // Save/Load methods
+    public void SaveData()
+    {
+        // Implementation depends on your save system
+        // Typically would serialize inventory slots and equipped items
+    }
+    
+    public void LoadData()
+    {
+        // Implementation depends on your save system
+        // Typically would deserialize inventory slots and equipped items
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="code-example">
+                        <h4>Inventory Slot</h4>
+                        <pre><code class="language-csharp">// Class representing a single inventory slot
+[System.Serializable]
+public class InventorySlot
+{
+    public Item item;       // The item in this slot
+    public int quantity;    // How many of the item
+    
+    // Constructor for empty slot
+    public InventorySlot()
+    {
+        Clear();
+    }
+    
+    // Constructor for slot with item
+    public InventorySlot(Item item, int quantity)
+    {
+        this.item = item;
+        this.quantity = quantity;
+    }
+    
+    // Property to check if slot is empty
+    public bool isEmpty => item == null || quantity <= 0;
+    
+    // Clear the slot
+    public void Clear()
+    {
+        item = null;
+        quantity = 0;
+    }
+}</code></pre>
+                    </div>
+                    
+                    <h3>Supporting Enums</h3>
+                    <div class="code-example">
+                        <pre><code class="language-csharp">// Types of items
+public enum ItemType
+{
+    Weapon,
+    Armor,
+    Accessory,
+    Consumable,
+    Material,
+    QuestItem,
+    Miscellaneous
+}
+
+// Rarity levels
+public enum ItemRarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary,
+    Unique
+}
+
+// Equipment slots
+public enum EquipmentSlot
+{
+    Head,
+    Chest,
+    Legs,
+    Feet,
+    Hands,
+    MainHand,
+    OffHand,
+    Necklace,
+    Ring1,
+    Ring2
+}
+
+// Types of stats
+public enum StatType
+{
+    Strength,
+    Dexterity,
+    Constitution,
+    Intelligence,
+    Wisdom,
+    Charisma,
+    MaxHealth,
+    MaxMana,
+    PhysicalDamage,
+    MagicalDamage,
+    Armor,
+    MagicResistance
+}</code></pre>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with GameObjects - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Working with GameObjects</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to GameObjects</h3>
+                        <p>GameObjects are the fundamental objects in Unity that represent characters, props, scenery, cameras, lights, and more. Every object in your game is a GameObject. Understanding how to work with GameObjects is essential for Unity development.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>What GameObjects are and how they work</li>
+                            <li>Creating and manipulating GameObjects in code</li>
+                            <li>Working with parent-child relationships</li>
+                            <li>Finding and referencing GameObjects</li>
+                            <li>Enabling, disabling, and destroying GameObjects</li>
+                            <li>Best practices for GameObject management</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Understanding GameObjects</h3>
+                        <p>A GameObject is a container that can hold Components. By itself, a GameObject doesn't do anything—it needs Components to define its behavior and appearance.</p>
+                        
+                        <div class="example-box">
+                            <h4>Key Concepts:</h4>
+                            <ul>
+                                <li><strong>Empty GameObject</strong>: A container with just a Transform component</li>
+                                <li><strong>Components</strong>: Add functionality to GameObjects (e.g., Renderer, Collider, Script)</li>
+                                <li><strong>Transform</strong>: Every GameObject has a Transform component for position, rotation, and scale</li>
+                                <li><strong>Hierarchy</strong>: GameObjects can have parent-child relationships</li>
+                                <li><strong>Prefabs</strong>: Reusable GameObject templates</li>
+                                <li><strong>Tags and Layers</strong>: Used to identify and categorize GameObjects</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating GameObjects in Code</h3>
+                        <p>While you can create GameObjects in the Unity Editor, sometimes you need to create them programmatically during gameplay.</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating GameObjects:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class GameObjectCreator : MonoBehaviour
+{
+    // Reference to a prefab that will be instantiated
+    public GameObject prefabToSpawn;
+    
+    void Start()
+    {
+        // Method 1: Create an empty GameObject
+        GameObject emptyObject = new GameObject("Empty Object");
+        // Add a comment to explain what this code does
+        // This creates a new, empty GameObject with just a Transform component
+        
+        // Method 2: Create a GameObject with components
+        GameObject cubeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cubeObject.name = "Programmatic Cube";
+        cubeObject.transform.position = new Vector3(0, 2, 0);
+        // This creates a cube primitive at position (0,2,0) with mesh, collider, and renderer components
+        
+        // Method 3: Instantiate from a prefab
+        if (prefabToSpawn != null)
+        {
+            // Instantiate at position (2,0,0) with default rotation
+            GameObject newInstance = Instantiate(prefabToSpawn, new Vector3(2, 0, 0), Quaternion.identity);
+            newInstance.name = "Prefab Instance";
+            // This creates a copy of the prefab at position (2,0,0)
+        }
+        
+        // Add a custom component to our empty object
+        emptyObject.AddComponent<Rigidbody>();
+        // This adds physics behavior to the empty object
+        
+        // Add a custom script component
+        ExampleBehavior behavior = emptyObject.AddComponent<ExampleBehavior>();
+        behavior.someValue = 42;
+        // This adds our custom script and sets a value on it
+    }
+}
+
+// Example custom component
+public class ExampleBehavior : MonoBehaviour
+{
+    public int someValue;
+    
+    void Start()
+    {
+        Debug.Log($"ExampleBehavior started with value: {someValue}");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Ways to create GameObjects:</p>
+                                <ul>
+                                    <li><strong>new GameObject()</strong> - Creates an empty GameObject with just a Transform</li>
+                                    <li><strong>GameObject.CreatePrimitive()</strong> - Creates basic shapes with renderers and colliders</li>
+                                    <li><strong>Instantiate()</strong> - Creates a copy of an existing GameObject or prefab</li>
+                                    <li><strong>AddComponent&lt;T&gt;()</strong> - Adds components to GameObjects after creation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with GameObject Transform</h3>
+                        <p>The Transform component determines the position, rotation, and scale of a GameObject in the scene. Every GameObject has a Transform component.</p>
+                        
+                        <div class="example-box">
+                            <h4>Manipulating Transforms:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class TransformManipulator : MonoBehaviour
+{
+    // Reference to another GameObject
+    public GameObject targetObject;
+    
+    void Start()
+    {
+        if (targetObject == null)
+            return;
+            
+        // POSITION MANIPULATION
+        
+        // Set absolute position
+        targetObject.transform.position = new Vector3(5, 0, 0);
+        // This teleports the object to position (5,0,0) in world space
+        
+        // Change position relative to current position
+        targetObject.transform.position += new Vector3(0, 1, 0);
+        // This moves the object up 1 unit from its current position
+        
+        // Use Translate for relative movement
+        targetObject.transform.Translate(new Vector3(0, 0, 2));
+        // This moves the object forward 2 units in its local Z-axis
+        
+        // ROTATION MANIPULATION
+        
+        // Set absolute rotation (using Euler angles for readability)
+        targetObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+        // This rotates the object to face 90 degrees on the Y-axis
+        
+        // Rotate relative to current rotation
+        targetObject.transform.Rotate(0, 45, 0);
+        // This rotates the object 45 more degrees around the Y-axis
+        
+        // Look at another position
+        targetObject.transform.LookAt(transform.position);
+        // This makes the target object face this script's GameObject
+        
+        // SCALE MANIPULATION
+        
+        // Set absolute scale
+        targetObject.transform.localScale = new Vector3(2, 2, 2);
+        // This makes the object twice as large in all dimensions
+        
+        // Scale relative to current scale
+        targetObject.transform.localScale *= 1.5f;
+        // This makes the object 1.5 times larger than its current scale
+    }
+    
+    void Update()
+    {
+        if (targetObject == null)
+            return;
+            
+        // Smoothly rotate the target over time
+        targetObject.transform.Rotate(0, 30 * Time.deltaTime, 0);
+        // This continuously rotates the object at 30 degrees per second
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Transform operations:</p>
+                                <ul>
+                                    <li><strong>transform.position</strong> - Sets/gets world position</li>
+                                    <li><strong>transform.localPosition</strong> - Sets/gets position relative to parent</li>
+                                    <li><strong>transform.Translate()</strong> - Moves relative to current orientation</li>
+                                    <li><strong>transform.rotation</strong> - Sets/gets world rotation as Quaternion</li>
+                                    <li><strong>transform.Rotate()</strong> - Rotates relative to current orientation</li>
+                                    <li><strong>transform.LookAt()</strong> - Rotates to face a target</li>
+                                    <li><strong>transform.localScale</strong> - Sets/gets scale relative to parent</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Local vs. World Space</h4>
+                            <p>Unity uses two coordinate systems:</p>
+                            <ul>
+                                <li><strong>World Space</strong>: Global coordinates relative to the scene origin</li>
+                                <li><strong>Local Space</strong>: Coordinates relative to a GameObject's parent</li>
+                            </ul>
+                            <p>Use <code>transform.position</code> for world space and <code>transform.localPosition</code> for local space.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Parent-Child Relationships</h3>
+                        <p>GameObjects can be organized in hierarchies with parent-child relationships. When a parent moves, rotates, or scales, all its children follow.</p>
+                        
+                        <div class="example-box">
+                            <h4>Working with Parent-Child Hierarchies:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ParentChildDemo : MonoBehaviour
+{
+    public GameObject childPrefab;
+    
+    void Start()
+    {
+        // Create a parent object
+        GameObject parent = new GameObject("Parent");
+        // This creates an empty GameObject that will serve as a parent
+        
+        // Create three child objects
+        for (int i = 0; i < 3; i++)
+        {
+            // Create a cube
+            GameObject child = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            
+            // Name the child
+            child.name = $"Child_{i}";
+            
+            // Set the parent relationship
+            child.transform.SetParent(parent.transform);
+            // This makes the cube a child of the parent object
+            
+            // Position the child relative to the parent (using local coordinates)
+            child.transform.localPosition = new Vector3(i * 2, 0, 0);
+            // This positions the cubes in a row, each 2 units apart from each other
+            
+            // Scale the child
+            child.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            // Makes each child cube half the default size
+        }
+        
+        // Alternative way to set a parent
+        if (childPrefab != null)
+        {
+            GameObject specialChild = Instantiate(childPrefab, parent.transform);
+            // This instantiates the prefab and sets the parent in one step
+            
+            specialChild.transform.localPosition = new Vector3(0, 2, 0);
+            // Position the special child above the other children
+        }
+        
+        // Accessing children
+        int childCount = parent.transform.childCount;
+        Debug.Log($"Parent has {childCount} children");
+        
+        // Get a specific child by index
+        if (childCount > 0)
+        {
+            Transform firstChild = parent.transform.GetChild(0);
+            Debug.Log($"First child is {firstChild.name}");
+            
+            // Remove a child from the parent (without destroying the child)
+            firstChild.SetParent(null);
+            // This makes the first child independent (no parent)
+            
+            // Add it back with a different method
+            firstChild.parent = parent.transform;
+            // This reattaches the child to the parent
+        }
+    }
+    
+    void Update()
+    {
+        // Find the parent we created
+        GameObject parent = GameObject.Find("Parent");
+        if (parent != null)
+        {
+            // Rotate the parent - all children will rotate with it
+            parent.transform.Rotate(0, 30 * Time.deltaTime, 0);
+            // This rotates the parent and all its children together
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Parent-child relationships:</p>
+                                <ul>
+                                    <li><strong>transform.SetParent()</strong> - Sets the parent of a GameObject</li>
+                                    <li><strong>transform.parent</strong> - Gets/sets the parent Transform</li>
+                                    <li><strong>transform.childCount</strong> - Number of children</li>
+                                    <li><strong>transform.GetChild(index)</strong> - Gets a child at specific index</li>
+                                    <li><strong>Instantiate(prefab, parent)</strong> - Creates with parent</li>
+                                    <li><strong>localPosition/localRotation/localScale</strong> - Relative to parent</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Finding and Referencing GameObjects</h3>
+                        <p>To interact with GameObjects, you first need to reference them. Unity provides several ways to find GameObjects in your scene:</p>
+                        
+                        <div class="example-box">
+                            <h4>Finding GameObjects:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class GameObjectFinder : MonoBehaviour
+{
+    // Inspector references - most efficient way to reference
+    public GameObject directReference;
+    
+    void Start()
+    {
+        // METHOD 1: Find by name (expensive, avoid in Update)
+        GameObject player = GameObject.Find("Player");
+        // This searches the entire scene for a GameObject named "Player"
+        
+        if (player != null)
+        {
+            Debug.Log("Found player at position: " + player.transform.position);
+        }
+        
+        // METHOD 2: Find by tag (more efficient than Find)
+        GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+        // This finds the first GameObject with the "MainCamera" tag
+        
+        // METHOD 3: Find all GameObjects with a tag
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Debug.Log($"Found {enemies.Length} enemies in the scene");
+        // This returns an array of all GameObjects tagged "Enemy"
+        
+        // METHOD 4: Find object of a specific type
+        Light mainLight = FindObjectOfType<Light>();
+        // This finds the first active Light component in the scene
+        
+        // METHOD 5: Find all objects of a specific type
+        Collider[] allColliders = FindObjectsOfType<Collider>();
+        Debug.Log($"Found {allColliders.Length} colliders in the scene");
+        // This returns an array of all active Collider components
+        
+        // METHOD 6: Find a child by name
+        Transform childTransform = transform.Find("ChildName");
+        // This searches only the direct children of this GameObject
+        
+        if (childTransform != null)
+        {
+            GameObject child = childTransform.gameObject;
+            Debug.Log("Found child: " + child.name);
+        }
+        
+        // METHOD 7: Get component from GameObject
+        if (player != null)
+        {
+            // Get a component attached to the player
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            
+            if (rb != null)
+            {
+                // Modify the component
+                rb.mass = 2.0f;
+            }
+            
+            // Get all components of a type
+            Collider[] playerColliders = player.GetComponents<Collider>();
+            Debug.Log($"Player has {playerColliders.Length} colliders");
+        }
+    }
+    
+    // BEST PRACTICE: Cache references rather than finding every frame
+    private GameObject player;
+    
+    void Awake()
+    {
+        // Cache references during initialization
+        player = GameObject.FindWithTag("Player");
+    }
+    
+    void Update()
+    {
+        // Use the cached reference in Update
+        if (player != null)
+        {
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+            // No need to search for the player every frame
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Finding methods by efficiency (best to worst):</p>
+                                <ol>
+                                    <li><strong>Direct inspector reference</strong> - Most efficient</li>
+                                    <li><strong>GetComponent&lt;T&gt;()</strong> - Fast, searches only the current GameObject</li>
+                                    <li><strong>transform.Find()</strong> - Fast, searches only direct children</li>
+                                    <li><strong>GameObject.FindWithTag()</strong> - Moderate, searches by tag</li>
+                                    <li><strong>FindObjectOfType&lt;T&gt;()</strong> - Slow, searches all GameObjects by component</li>
+                                    <li><strong>GameObject.Find()</strong> - Slowest, searches all GameObjects by name</li>
+                                </ol>
+                                <p><strong>Important:</strong> Cache references whenever possible rather than finding objects repeatedly.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enabling, Disabling, and Destroying GameObjects</h3>
+                        <p>Managing the lifecycle of GameObjects is important for performance and gameplay.</p>
+                        
+                        <div class="example-box">
+                            <h4>GameObject Lifecycle Management:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class GameObjectLifecycle : MonoBehaviour
+{
+    public GameObject objectToManage;
+    
+    void Start()
+    {
+        if (objectToManage == null)
+            return;
+            
+        // Check if a GameObject is active
+        bool isActive = objectToManage.activeInHierarchy;
+        Debug.Log($"Object active in hierarchy: {isActive}");
+        
+        // Check if the GameObject itself is active (ignoring parents)
+        bool isSelfActive = objectToManage.activeSelf;
+        Debug.Log($"Object active self: {isSelfActive}");
+        
+        // Disable a GameObject (makes it invisible and inactive)
+        objectToManage.SetActive(false);
+        // This deactivates the GameObject, stopping rendering and components
+        
+        // Wait 2 seconds, then enable it
+        Invoke("EnableObject", 2.0f);
+    }
+    
+    void EnableObject()
+    {
+        if (objectToManage != null)
+        {
+            // Enable a GameObject
+            objectToManage.SetActive(true);
+            // This activates the GameObject, resuming rendering and components
+            
+            // Schedule destruction after 5 seconds
+            Destroy(objectToManage, 5.0f);
+            // This will destroy the object after 5 seconds
+        }
+    }
+    
+    void Update()
+    {
+        // Example: Destroy the GameObject when a key is pressed
+        if (Input.GetKeyDown(KeyCode.X) && objectToManage != null)
+        {
+            // Destroy immediately
+            Destroy(objectToManage);
+            // This removes the GameObject from the scene permanently
+            
+            // Clear the reference to avoid null reference exceptions
+            objectToManage = null;
+        }
+        
+        // Example: Instantiate a new object when a key is pressed
+        if (Input.GetKeyDown(KeyCode.C) && objectToManage == null)
+        {
+            // Create a new sphere
+            GameObject newSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            newSphere.transform.position = new Vector3(0, 2, 0);
+            
+            // Assign it to our reference
+            objectToManage = newSphere;
+        }
+    }
+    
+    // Destroy a component rather than the whole GameObject
+    void RemoveComponent()
+    {
+        if (objectToManage != null)
+        {
+            // Get the component
+            Renderer renderer = objectToManage.GetComponent<Renderer>();
+            
+            if (renderer != null)
+            {
+                // Destroy just the renderer component
+                Destroy(renderer);
+                // This removes just the Renderer component, making the object invisible
+                // but the GameObject still exists with its other components
+            }
+        }
+    }
+    
+    // DontDestroyOnLoad keeps a GameObject when changing scenes
+    void KeepObjectBetweenScenes()
+    {
+        if (objectToManage != null)
+        {
+            // This prevents the object from being destroyed when loading a new scene
+            DontDestroyOnLoad(objectToManage);
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>GameObject lifecycle methods:</p>
+                                <ul>
+                                    <li><strong>gameObject.SetActive(bool)</strong> - Enables/disables a GameObject</li>
+                                    <li><strong>activeInHierarchy</strong> - Is the GameObject active in the scene</li>
+                                    <li><strong>activeSelf</strong> - Is this GameObject itself active</li>
+                                    <li><strong>Destroy(object)</strong> - Destroys a GameObject or component</li>
+                                    <li><strong>Destroy(object, time)</strong> - Destroys after time delay</li>
+                                    <li><strong>DontDestroyOnLoad()</strong> - Preserves GameObject between scenes</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>SetActive vs. Destroy</h4>
+                            <p>When deciding whether to disable or destroy GameObjects:</p>
+                            <ul>
+                                <li><strong>Use SetActive(false)</strong> for objects you'll reuse soon (better performance)</li>
+                                <li><strong>Use Destroy()</strong> for objects you won't need again (frees memory)</li>
+                                <li>Consider <strong>Object Pooling</strong> for objects created and destroyed frequently (bullets, enemies)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>GameObject Tags and Layers</h3>
+                        <p>Tags and layers help organize and filter GameObjects in your scene.</p>
+                        
+                        <div class="example-box">
+                            <h4>Working with Tags and Layers:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class TagsAndLayers : MonoBehaviour
+{
+    void Start()
+    {
+        // TAGS
+        
+        // Set a tag
+        gameObject.tag = "Player";
+        // This sets the tag of the current GameObject to "Player"
+        
+        // Check a GameObject's tag
+        if (gameObject.CompareTag("Player"))
+        {
+            Debug.Log("This is the player!");
+        }
+        
+        // Find all GameObjects with a tag
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Debug.Log($"Found enemy: {enemy.name}");
+        }
+        
+        // LAYERS
+        
+        // Set a layer
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        // This sets the layer of the current GameObject to the "Player" layer
+        
+        // Create a layer mask (for filtering in raycasts, etc.)
+        int layerMask = LayerMask.GetMask("Enemy", "Obstacle");
+        // This creates a mask that includes the "Enemy" and "Obstacle" layers
+        
+        // Example: Raycast that only hits certain layers
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 100f, layerMask))
+        {
+            Debug.Log($"Hit {hit.collider.gameObject.name} on layer {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+            // This raycast only detects objects on the Enemy or Obstacle layers
+        }
+        
+        // Invert a layer mask (hit everything EXCEPT these layers)
+        int invertedMask = ~LayerMask.GetMask("Player", "Ignore Raycast");
+        // The ~ operator inverts the mask, so it includes all layers EXCEPT Player and Ignore Raycast
+        
+        // Set layer for all children too
+        SetLayerRecursively(gameObject, LayerMask.NameToLayer("Player"));
+    }
+    
+    // Helper method to set layer for GameObject and all its children
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        // Set layer of the current object
+        obj.layer = newLayer;
+        
+        // Loop through all children and set their layers too
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
+    
+    void OnTriggerEnter(Collider other)
+    {
+        // Using tags in collision detection
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Collided with an enemy!");
+        }
+        
+        // Check which layer the colliding object is on
+        int objectLayer = other.gameObject.layer;
+        if (objectLayer == LayerMask.NameToLayer("Pickup"))
+        {
+            Debug.Log("Collided with a pickup!");
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Tags:</p>
+                                <ul>
+                                    <li><strong>gameObject.tag</strong> - Get/set the GameObject's tag</li>
+                                    <li><strong>GameObject.FindGameObjectsWithTag()</strong> - Find objects with tag</li>
+                                    <li><strong>gameObject.CompareTag()</strong> - More efficient than comparing string tags</li>
+                                </ul>
+                                <p>Layers:</p>
+                                <ul>
+                                    <li><strong>gameObject.layer</strong> - Get/set the GameObject's layer</li>
+                                    <li><strong>LayerMask.GetMask()</strong> - Create a layer mask for filtering</li>
+                                    <li><strong>Physics.Raycast(..., layerMask)</strong> - Only hit specific layers</li>
+                                    <li><strong>~layerMask</strong> - Invert a layer mask</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>When to Use Tags vs. Layers</h4>
+                            <ul>
+                                <li><strong>Tags</strong>: For identifying the purpose/type of GameObjects</li>
+                                <li><strong>Layers</strong>: For controlling physics interactions, raycasting, and rendering</li>
+                            </ul>
+                            <p>You can define tags and layers in the Unity Editor (Edit → Project Settings → Tags and Layers)</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Working with GameObjects</h3>
+                        <ol>
+                            <li><strong>Use prefabs</strong> for reusable GameObjects to maintain consistency</li>
+                            <li><strong>Cache references</strong> to GameObjects instead of finding them repeatedly</li>
+                            <li><strong>Organize hierarchies</strong> with empty parent GameObjects for logical grouping</li>
+                            <li><strong>Use tags and layers</strong> appropriately for identification and filtering</li>
+                            <li><strong>Recycle GameObjects</strong> with object pooling for better performance</li>
+                            <li><strong>Use SetActive()</strong> rather than destroying/recreating frequently used objects</li>
+                            <li><strong>Keep hierarchies shallow</strong> when possible for better performance</li>
+                            <li><strong>Use descriptive names</strong> for GameObjects in the hierarchy</li>
+                            <li><strong>Favor direct references</strong> over Find methods when possible</li>
+                            <li><strong>Consider scene organization</strong> when working with many GameObjects</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="csharp-scripting-unity.html" class="prev"><i class="fas fa-arrow-left"></i> C# Scripting in Unity</a>
+                        <a href="unity-component-system.html" class="next">Unity Component System <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

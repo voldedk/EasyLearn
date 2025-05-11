@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating a First-Person Shooter in Unity - C# Learning</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h1>Creating a First-Person Shooter in Unity</h1>
+                    
+                    <div class="introduction">
+                        <p>
+                            First-person shooters (FPS) are among the most popular game genres, offering immersive gameplay
+                            from the player's perspective. This tutorial will guide you through creating an FPS game in Unity,
+                            covering everything from player movement and weapon systems to AI enemies and gameplay mechanics.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Setting Up Your FPS Project</h2>
+                        <p>
+                            Let's start by setting up a proper foundation for your FPS game in Unity.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Project</strong>: Open Unity Hub and click "New Project". Select the "3D" template, name your project (e.g., "MyFPSGame"), and click "Create Project".</li>
+                            <li><strong>Configure Layers</strong>: In Edit → Project Settings → Tags and Layers, set up layers for Player, Enemy, Weapon, Environment, and Interactable objects.</li>
+                            <li><strong>Set Up Input</strong>: In Edit → Project Settings → Input Manager, ensure you have mappings for movement (WASD), jumping (Space), shooting (Mouse 0), and weapon switching.</li>
+                            <li><strong>Create Base Scene</strong>: Create a basic scene with a ground plane, some obstacles, lighting, and a skybox to test player movement.</li>
+                            <li><strong>Organize Project</strong>: Create folders in your Project panel for Scripts, Prefabs, Materials, Models, Textures, Sounds, and Scenes.</li>
+                        </ol>
+                        
+                        <h3>Project Configuration</h3>
+                        <p>
+                            Create a new 3D project in Unity and configure the following settings:
+                        </p>
+                        <ul>
+                            <li>Set up appropriate physics layers for players, enemies, projectiles, and environment</li>
+                            <li>Configure input settings for mouse and keyboard controls</li>
+                            <li>Import or create basic 3D assets for testing</li>
+                        </ul>
+                        
+                        <h3>First-Person Camera Setup</h3>
+                        <p>
+                            A proper camera setup is essential for an FPS game. Let's create a basic structure:
+                        </p>
+                        <ol>
+                            <li>Create a Player GameObject with a Character Controller component</li>
+                            <li>Add a Camera as a child of the Player at eye level</li>
+                            <li>Create an empty GameObject called "WeaponHolder" as a child of the Camera</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Player Hierarchy Structure</h4>
+                            <pre><code class="language-csharp">// Your scene hierarchy should look like this:
+// Player (with CharacterController, FPSController scripts)
+// ├── Camera (with Audio Listener)
+// │   └── WeaponHolder
+// │       ├── Weapon1
+// │       ├── Weapon2
+// │       └── etc.
+// 
+// This structure allows the camera to follow the player's movement,
+// and weapons to follow the camera's rotation for aiming.</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>First-Person Controller</h2>
+                        <p>
+                            A responsive and smooth first-person controller is the foundation of any good FPS game.
+                        </p>
+                        
+                        <h3>Implementation Guidelines</h3>
+                        <ol>
+                            <li><strong>Create Player GameObject</strong>: Create an empty GameObject named "Player" and position it in your scene.</li>
+                            <li><strong>Add CharacterController</strong>: Add a Character Controller component and adjust its height (typically 2 units) and radius (typically 0.5 units).</li>
+                            <li><strong>Add Main Camera</strong>: Create a camera as a child object of the Player, position it at the "head" level (e.g., Y = 1.6).</li>
+                            <li><strong>Create Script</strong>: Create a new C# script named "FPSController" and attach it to the Player GameObject.</li>
+                            <li><strong>Configure Inputs</strong>: Ensure your Input Manager has proper mappings for Mouse X, Mouse Y, Horizontal, Vertical, and Jump.</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h4>Complete First-Person Controller</h4>
+                            <pre><code class="language-csharp">using UnityEngine;
+
+[RequireComponent(typeof(CharacterController))]
+public class FPSController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float walkSpeed = 5.0f;       // Base movement speed when walking
+    public float runSpeed = 8.0f;        // Faster movement speed when holding shift
+    public float jumpForce = 5.0f;       // How high the player jumps
+    public float gravity = 20.0f;        // Gravity force applied to player (higher than default for better feel)
+    
+    [Header("Look Settings")]
+    public float lookSensitivity = 2.0f;  // Mouse look sensitivity multiplier
+    public float maxLookAngle = 80.0f;    // Maximum angle player can look up/down
+    
+    [Header("Audio")]
+    public AudioClip[] footstepSounds;    // Array of different footstep sounds for variety
+    public float footstepInterval = 0.5f; // Time between footstep sounds when walking
+    
+    // Component references - Initialized in Awake()
+    private CharacterController characterController;  // Handles movement and collision
+    private Camera playerCamera;                      // Main camera for player view
+    private AudioSource audioSource;                  // For playing footstep and other sounds
+    
+    // Movement variables - Tracked during gameplay
+    private Vector3 moveDirection = Vector3.zero;     // Current movement direction vector
+    private float currentSpeed;                       // Current movement speed (walk or run)
+    private float lastFootstepTime;                   // Tracks when last footstep sound played
+    
+    // Look variables
+    private float rotationX = 0;                      // Current camera pitch (up/down rotation)
+    
+    private void Awake()
+    {
+        // Get component references - more efficient than GetComponent in Update
+        characterController = GetComponent<CharacterController>();
+        playerCamera = GetComponentInChildren<Camera>();
+        audioSource = GetComponent<AudioSource>();
+        
+        // If no audio source, add one for footstep sounds
+        if (audioSource == null && footstepSounds.Length > 0)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        // Lock and hide cursor for FPS controls
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
+    private void Update()
+    {
+        // Handle player input and movement
+        HandleMovement();
+        HandleMouseLook();
+        
+        // Play footstep sounds when moving
+        PlayFootsteps();
+    }
+    
+    private void HandleMovement()
+    {
+        // Get input axes - values between -1 and 1
+        float horizontal = Input.GetAxis("Horizontal");  // A/D or Left/Right arrows
+        float vertical = Input.GetAxis("Vertical");      // W/S or Up/Down arrows
+        
+        // Determine speed - run when holding Left Shift, otherwise walk
+        currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        
+        // Calculate movement direction in local space (relative to player orientation)
+        Vector3 moveInput = new Vector3(horizontal, 0, vertical);
+        
+        // Normalize input if it exceeds magnitude of 1 (diagonal movement)
+        if (moveInput.magnitude > 1f)
+        {
+            moveInput.Normalize();
+        }
+        
+        // Convert local direction to world space based on player rotation
+        Vector3 moveLocal = transform.TransformDirection(moveInput) * currentSpeed;
+        
+        // Preserve Y velocity for gravity and jumping
+        moveDirection.x = moveLocal.x;
+        moveDirection.z = moveLocal.z;
+        
+        // Handle jump
+        if (characterController.isGrounded)
+        {
+            moveDirection.y = -0.5f; // Small downward force when grounded to ensure isGrounded works reliably
+            
+            if (Input.GetButtonDown("Jump"))
+            {
+                moveDirection.y = jumpForce;  // Apply upward force for jumping
+            }
+        }
+        
+        // Apply gravity - multiplied by deltaTime for frame-rate independence
+        moveDirection.y -= gravity * Time.deltaTime;
+        
+        // Move the character - multiplied by deltaTime for frame-rate independence
+        characterController.Move(moveDirection * Time.deltaTime);
+    }
+    
+    private void HandleMouseLook()
+    {
+        // Get mouse input values
+        float mouseX = Input.GetAxis("Mouse X") * lookSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * lookSensitivity;
+        
+        // Calculate camera pitch (up/down) and clamp to prevent over-rotation
+        rotationX -= mouseY;  // Subtract because mouse Y is inverted
+        rotationX = Mathf.Clamp(rotationX, -maxLookAngle, maxLookAngle);
+        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        
+        // Rotate player for yaw (left/right) - entire player rotates, not just camera
+        transform.Rotate(0, mouseX, 0);
+    }
+    
+    private void PlayFootsteps()
+    {
+        // Play footstep sounds when moving on ground
+        // Conditions: player is grounded, has some velocity, and enough time passed since last footstep
+        if (characterController.isGrounded && 
+            characterController.velocity.magnitude > 0.1f && 
+            Time.time > lastFootstepTime + (footstepInterval / (currentSpeed / walkSpeed)))
+        {
+            lastFootstepTime = Time.time;
+            
+            if (footstepSounds.Length > 0 && audioSource != null)
+            {
+                // Play random footstep sound for variety
+                int randomIndex = Random.Range(0, footstepSounds.Length);
+                audioSource.PlayOneShot(footstepSounds[randomIndex]);
+            }
+        }
+    }
+    
+    // Method to toggle cursor lock/visibility - useful for menus and UI interaction
+    public void ToggleCursorLock(bool lockCursor)
+    {
+        Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !lockCursor;
+    }
+</div>
+
+<div class="section">
+    <h2>Implementing Head Bob for Realism</h2>
+    <p>
+        Add a head bob effect to increase immersion. This simulates the natural up and down motion when walking or running.
+    </p>
+    
+    <div class="code-example">
+        <h4>Head Bob Component</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+
+public class HeadBob : MonoBehaviour
+{
+    [Header("Bob Parameters")]
+    public float bobFrequency = 5f;             // How fast the head bobs
+    public float bobHorizontalAmplitude = 0.1f;  // How far the head bobs side to side
+    public float bobVerticalAmplitude = 0.1f;    // How far the head bobs up and down
+    public float headBobSmoothing = 0.1f;        // How smoothly the bob transitions
+    
+    [Header("References")]
+    public CharacterController controller;       // Reference to player's CharacterController
+    public Transform headTransform;              // Reference to the camera transform
+    
+    // Internal tracking variables
+    private float walkingTime = 0;               // Accumulates while walking to drive bob cycle
+    private Vector3 targetCameraPosition;        // Position the camera is moving towards
+    private Vector3 originalLocalPosition;       // Default camera position
+    
+    private void Start()
+    {
+        // If no transform specified, use this object's transform (usually the camera)
+        if (headTransform == null)
+            headTransform = transform;
+            
+        // Store the original position to return to when not moving
+        originalLocalPosition = headTransform.localPosition;
+        targetCameraPosition = headTransform.localPosition;
+    }
+    
+    private void Update()
+    {
+        if (controller == null) return;
+        
+        // Only bob when moving on the ground
+        if (!controller.isGrounded || controller.velocity.magnitude < 0.1f)
+        {
+            // Return to original position when not moving - gradual reset looks more natural
+            targetCameraPosition = originalLocalPosition;
+            headTransform.localPosition = Vector3.Lerp(
+                headTransform.localPosition, 
+                targetCameraPosition, 
+                headBobSmoothing * Time.deltaTime * 10f  // Multiply by 10 for faster reset
+            );
+            return;
+        }
+        
+        // Increment time when moving - scale by velocity for speed-dependent bobbing
+        walkingTime += Time.deltaTime * controller.velocity.magnitude;
+        
+        // Calculate bob offset based on sin waves for natural bobbing motion
+        targetCameraPosition = originalLocalPosition + CalculateHeadBobOffset(walkingTime);
+        
+        // Apply smoothed head bob - lerping prevents jarring movements
+        headTransform.localPosition = Vector3.Lerp(
+            headTransform.localPosition, 
+            targetCameraPosition, 
+            headBobSmoothing * Time.deltaTime * 10f
+        );
+    }
+    
+    private Vector3 CalculateHeadBobOffset(float time)
+    {
+        // Horizontal bob uses a sin wave
+        float horizontalOffset = Mathf.Sin(time * bobFrequency) * bobHorizontalAmplitude;
+        
+        // Vertical bob uses a faster sin wave (double frequency) for more natural motion
+        // People typically bob up and down twice per step cycle
+        float verticalOffset = Mathf.Sin(time * bobFrequency * 2f) * bobVerticalAmplitude;
+        
+        return new Vector3(horizontalOffset, verticalOffset, 0f);
+    }
+}</code></pre>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Weapon System</h2>
+    <p>
+        A flexible weapon system is crucial for an FPS game. Let's implement a modular system that 
+        can handle different types of weapons.
+    </p>
+    
+    <h3>Implementation Guidelines</h3>
+    <ol>
+        <li><strong>Create Weapon Base Class</strong>: Create an abstract Weapon class that defines common functionality.</li>
+        <li><strong>Create Weapon Manager</strong>: Implement a WeaponManager script to handle switching between weapons.</li>
+        <li><strong>Create Weapon Models</strong>: Import or create 3D models for your weapons with textures and materials.</li>
+        <li><strong>Setup Weapon Prefabs</strong>: Create prefabs for each weapon with appropriate scripts and components.</li>
+        <li><strong>Configure Raycasting</strong>: Implement raycast-based shooting from the camera for accurate aiming.</li>
+        <li><strong>Add Visual Effects</strong>: Create muzzle flash, impact effects, and shell casing ejection effects.</li>
+    </ol>
+    
+    <div class="code-example">
+        <h4>Base Weapon Class</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+using System.Collections;
+
+public abstract class Weapon : MonoBehaviour
+{
+    [Header("Weapon Properties")]
+    public string weaponName = "Default Weapon";  // Descriptive name for the weapon
+    public int damage = 10;                       // Damage per shot/hit
+    public float range = 100f;                    // Maximum distance the weapon can hit
+    public float fireRate = 10f;                  // Rounds per second (higher = faster firing)
+    public int maxAmmo = 30;                      // Maximum ammo in a magazine
+    public int currentAmmo;                       // Current ammo in the magazine
+    public float reloadTime = 1.5f;               // Time to reload in seconds
+    
+    [Header("Weapon State")]
+    public bool isReloading = false;              // Whether the weapon is currently reloading
+    public bool isEquipped = false;               // Whether the weapon is currently equipped
+    
+    [Header("Effects")]
+    public ParticleSystem muzzleFlash;            // Particle effect for muzzle flash
+    public GameObject impactEffect;               // Effect spawned at hit point
+    public AudioClip fireSound;                   // Sound played when firing
+    public AudioClip reloadSound;                 // Sound played when reloading
+    public AudioClip emptySound;                  // Sound played when out of ammo
+    
+    [Header("Animation")]
+    public Animator weaponAnimator;               // Animator for weapon model animations
+    public string fireAnimationTrigger = "Fire";  // Trigger parameter for firing animation
+    public string reloadAnimationTrigger = "Reload"; // Trigger parameter for reload animation
+    
+    // Component references - Cached for efficiency
+    protected Camera fpsCam;                     // Main camera for raycasting from
+    protected AudioSource audioSource;           // For playing weapon sounds
+    protected WeaponManager weaponManager;       // Reference to the weapon manager
+    
+    // Timers
+    protected float nextTimeToFire = 0f;         // When the weapon can fire next (for fire rate)
+    
+    protected virtual void Awake()
+    {
+        // Get component references - do this once in Awake for efficiency
+        fpsCam = Camera.main;
+        audioSource = GetComponent<AudioSource>();
+        
+        // If no audio source, add one for sounds
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        // Start with full ammo
+        currentAmmo = maxAmmo;
+    }
+    
+    protected virtual void OnEnable()
+    {
+        // Reset state when weapon is equipped
+        isReloading = false;
+        
+        // Cancel any pending reloads when switching weapons
+        StopAllCoroutines();
+        
+        // Play equip animation if available
+        if (weaponAnimator != null)
+        {
+            weaponAnimator.SetBool("Equipped", true);
+        }
+    }
+    
+    protected virtual void OnDisable()
+    {
+        // Update state when weapon is unequipped
+        isEquipped = false;
+        
+        // Update animation state
+        if (weaponAnimator != null)
+        {
+            weaponAnimator.SetBool("Equipped", false);
+        }
+    }
+    
+    public virtual void Initialize(WeaponManager manager)
+    {
+        // Store reference to weapon manager
+        this.weaponManager = manager;
+    }
+    
+    public virtual bool TryFire()
+    {
+        // Check if weapon can fire based on state and timing
+        if (isReloading || Time.time < nextTimeToFire)
+            return false;
+            
+        // Check if ammo is available
+        if (currentAmmo <= 0)
+        {
+            // Play empty sound if out of ammo
+            if (emptySound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(emptySound);
+            }
+            
+            // Automatically try to reload if out of ammo
+            StartCoroutine(Reload());
+            return false;
+        }
+        
+        // Calculate next time to fire based on fire rate
+        // (1 / fireRate) is the delay between shots in seconds
+        nextTimeToFire = Time.time + 1f / fireRate;
+        
+        // Fire the weapon - implemented by derived classes
+        Fire();
+        return true;
+    }
+    
+    // Abstract method to be implemented by specific weapon types
+    protected abstract void Fire();
+    
+    public virtual IEnumerator Reload()
+    {
+        // Only reload if not already reloading and not full ammo
+        if (currentAmmo < maxAmmo && !isReloading)
+        {
+            isReloading = true;
+            
+            // Play reload sound
+            if (reloadSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(reloadSound);
+            }
+            
+            // Trigger reload animation
+            if (weaponAnimator != null)
+            {
+                weaponAnimator.SetTrigger(reloadAnimationTrigger);
+            }
+            
+            // Wait for reload time to complete
+            yield return new WaitForSeconds(reloadTime);
+            
+            // Refill ammo
+            currentAmmo = maxAmmo;
+            
+            isReloading = false;
+        }
+    }
+    
+    protected virtual void PlayFireEffects()
+    {
+        // Play muzzle flash particle effect
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.Play();
+        }
+        
+        // Play fire sound
+        if (fireSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(fireSound);
+        }
+        
+        // Trigger fire animation
+        if (weaponAnimator != null)
+        {
+            weaponAnimator.SetTrigger(fireAnimationTrigger);
+        }
+    }
+}</code></pre>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Implementing Different Weapon Types</h2>
+    <p>
+        Let's create concrete implementations of different weapon types by extending our base Weapon class.
+    </p>
+    
+    <div class="code-example">
+        <h4>Hitscan Weapon (Pistol, Rifle, etc.)</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+
+// Hitscan weapons use raycasts for immediate hit detection (pistols, rifles, etc.)
+public class HitscanWeapon : Weapon
+{
+    [Header("Hitscan Settings")]
+    public float bulletSpread = 0.02f;        // Accuracy spread (0 = perfect accuracy)
+    public int bulletsPerShot = 1;            // For shotguns, this would be higher
+    public float headshotMultiplier = 2.0f;   // Damage multiplier for headshots
+    
+    [Header("Effects")]
+    public TrailRenderer bulletTrailPrefab;   // Optional visual bullet trail
+    public float trailDuration = 0.05f;       // How long bullet trails last
+    
+    protected override void Fire()
+    {
+        // Reduce ammo
+        currentAmmo--;
+        
+        // Play effects (muzzle flash, sound, animation)
+        PlayFireEffects();
+        
+        // Fire the appropriate number of bullets (1 for rifles, multiple for shotguns)
+        for (int i = 0; i < bulletsPerShot; i++)
+        {
+            // Calculate bullet direction with spread
+            Vector3 bulletDirection = CalculateBulletDirection();
+            
+            // Perform raycast from camera
+            if (Physics.Raycast(fpsCam.transform.position, bulletDirection, out RaycastHit hit, range))
+            {
+                // Draw bullet trail if enabled
+                if (bulletTrailPrefab != null)
+                {
+                    CreateBulletTrail(hit.point);
+                }
+                
+                // Check what was hit
+                HandleHit(hit);
+            }
+        }
+    }
+    
+    private Vector3 CalculateBulletDirection()
+    {
+        // Start with forward direction of camera
+        Vector3 direction = fpsCam.transform.forward;
+        
+        // Add random spread if specified
+        if (bulletSpread > 0)
+        {
+            // Random circle spread pattern
+            float spreadX = Random.Range(-bulletSpread, bulletSpread);
+            float spreadY = Random.Range(-bulletSpread, bulletSpread);
+            
+            // Add spread to direction
+            direction += fpsCam.transform.right * spreadX;
+            direction += fpsCam.transform.up * spreadY;
+            
+            // Normalize to ensure consistent range
+            direction.Normalize();
+        }
+        
+        return direction;
+    }
+    
+    private void CreateBulletTrail(Vector3 hitPoint)
+    {
+        // Instantiate bullet trail
+        TrailRenderer trail = Instantiate(bulletTrailPrefab, 
+                                         transform.position, 
+                                         Quaternion.identity);
+        
+        // Set trail start and end points
+        StartCoroutine(SpawnTrail(trail, hitPoint));
+    }
+    
+    private System.Collections.IEnumerator SpawnTrail(TrailRenderer trail, Vector3 hitPoint)
+    {
+        // Get start point
+        Vector3 startPosition = trail.transform.position;
+        
+        // Set initial position
+        trail.transform.position = startPosition;
+        
+        // Set trail time to 0 to avoid initial stretched look
+        float time = 0;
+        
+        // Move trail to hit point over time
+        while (time < trailDuration)
+        {
+            trail.transform.position = Vector3.Lerp(startPosition, hitPoint, time / trailDuration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Ensure endpoint is reached
+        trail.transform.position = hitPoint;
+        
+        // Allow trail to fade out based on trail's time setting
+        yield return new WaitForSeconds(trail.time);
+        
+        // Destroy trail object
+        Destroy(trail.gameObject);
+    }
+    
+    private void HandleHit(RaycastHit hit)
+    {
+        // Spawn impact effect at hit point
+        if (impactEffect != null)
+        {
+            GameObject impact = Instantiate(impactEffect, hit.point, 
+                                         Quaternion.LookRotation(hit.normal));
+            Destroy(impact, 2f); // Destroy after 2 seconds
+        }
+        
+        // Check if hit something with health
+        HealthSystem healthSystem = hit.transform.GetComponent<HealthSystem>();
+        if (healthSystem != null)
+        {
+            // Check for headshot
+            bool isHeadshot = IsHeadshot(hit);
+            
+            // Apply damage (with headshot multiplier if applicable)
+            int damageToApply = isHeadshot 
+                ? Mathf.RoundToInt(damage * headshotMultiplier) 
+                : damage;
+                
+            healthSystem.TakeDamage(damageToApply);
+        }
+    }
+    
+    private bool IsHeadshot(RaycastHit hit)
+    {
+        // Check if hit a designated headshot collider or tag
+        // This implementation will vary based on your character setup
+        return hit.transform.CompareTag("Head");
+    }
+}</code></pre>
+    </div>
+    
+    <div class="code-example">
+        <h4>Projectile Weapon (Rocket Launcher, Grenade Launcher)</h4>
+        <pre><code class="language-csharp">using UnityEngine;
+
+// Projectile weapons fire physical projectiles instead of raycasts
+public class ProjectileWeapon : Weapon
+{
+    [Header("Projectile Settings")]
+    public GameObject projectilePrefab;     // The projectile to spawn
+    public Transform projectileSpawnPoint;  // Where to spawn the projectile
+    public float projectileSpeed = 30f;     // How fast the projectile moves
+    public float projectileGravity = 1f;    // Gravity multiplier (0 = no drop)
+    
+    [Header("Advanced Settings")]
+    public bool usePooling = false;         // Whether to use object pooling for projectiles
+    
+    protected override void Fire()
+    {
+        // Reduce ammo
+        currentAmmo--;
+        
+        // Play effects (muzzle flash, sound, animation)
+        PlayFireEffects();
+        
+        // Spawn projectile
+        SpawnProjectile();
+    }
+    
+    private void SpawnProjectile()
+    {
+        if (projectilePrefab != null && projectileSpawnPoint != null)
+        {
+            // Create projectile at spawn point
+            GameObject projectileObj = Instantiate(projectilePrefab, 
+                                               projectileSpawnPoint.position, 
+                                               projectileSpawnPoint.rotation);
+            
+            // Get projectile component
+            Projectile projectile = projectileObj.GetComponent<Projectile>();
+            
+            // Initialize projectile if component exists
+            if (projectile != null)
+            {
+                projectile.Initialize(damage, projectileSpeed, projectileGravity);
+                projectile.SetOwner(gameObject);
+            }
+            else
+            {
+                // If no Projectile component, just add force to Rigidbody
+                Rigidbody rb = projectileObj.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.velocity = projectileSpawnPoint.forward * projectileSpeed;
+                }
+                
+                // Destroy after 10 seconds to avoid cluttering the scene
+                Destroy(projectileObj, 10f);
+            }
+        }
+    }
+}</code></pre>
+    </div>
+</div>
+</section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/load-sidebar.js" defer></script>
+</body>
+</html> 

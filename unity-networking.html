@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Networking - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Unity Networking</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Unity Networking</h3>
+                        <p>Networking is a crucial component of multiplayer games, allowing players to connect and interact in shared virtual environments. Unity provides robust networking solutions that enable developers to create networked games ranging from simple two-player experiences to massive multiplayer online games.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>Unity's networking architecture and options</li>
+                            <li>Setting up a basic multiplayer game</li>
+                            <li>Synchronizing game state across clients</li>
+                            <li>Managing networked objects and player instances</li>
+                            <li>Implementing network messages and RPCs</li>
+                            <li>Handling network events and failures</li>
+                            <li>Optimizing network performance</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Unity Networking Options</h3>
+                        <p>Unity offers several networking solutions, each with its own advantages and best use cases:</p>
+                        
+                        <div class="example-box">
+                            <h4>Available Networking Solutions:</h4>
+                            <ul>
+                                <li><strong>Unity Netcode for GameObjects (Recommended)</strong>: Unity's newest networking solution, designed for ease of use and scalability</li>
+                                <li><strong>Unity Transport Package</strong>: Low-level networking API that provides direct access to UDP socket communication</li>
+                                <li><strong>Mirror</strong>: A popular third-party networking solution, based on the deprecated UNET</li>
+                                <li><strong>Photon</strong>: A commercial third-party solution with free tier options, using a cloud infrastructure</li>
+                                <li><strong>Custom Solutions</strong>: Using low-level socket programming with C#</li>
+                            </ul>
+                            
+                            <div class="explanation">
+                                <p>Choosing a networking solution:</p>
+                                <ul>
+                                    <li><strong>Netcode for GameObjects</strong>: Best for most new Unity multiplayer projects</li>
+                                    <li><strong>Photon</strong>: Easy setup without requiring your own server infrastructure</li>
+                                    <li><strong>Mirror</strong>: Good for projects migrating from UNET</li>
+                                    <li><strong>Custom solutions</strong>: For specialized requirements or maximum control</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Networking Architectures</h4>
+                            <p>Common multiplayer architectures include:</p>
+                            <ul>
+                                <li><strong>Client-Server</strong>: A dedicated server manages the game state and clients connect to it (most common for games)</li>
+                                <li><strong>Peer-to-Peer</strong>: Players connect directly to each other without a central server</li>
+                                <li><strong>Host Migration</strong>: One client acts as both server and client, with ability to transfer host role</li>
+                                <li><strong>Authoritative Server</strong>: Server has final say on game state to prevent cheating</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Getting Started with Netcode for GameObjects</h3>
+                        <p>Netcode for GameObjects (NGO) is Unity's latest networking solution. Let's explore how to set up a basic multiplayer game using NGO.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up the Project:</h4>
+                            <ol>
+                                <li>Open the Package Manager (Window → Package Manager)</li>
+                                <li>Click the "+" button and select "Add package from git URL..."</li>
+                                <li>Enter "com.unity.netcode.gameobjects" and click "Add"</li>
+                                <li>Wait for the package to install</li>
+                            </ol>
+                            
+                            <h4>Basic Network Setup:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class NetworkManagerUI : MonoBehaviour
+{
+    // UI Buttons for network actions
+    public Button serverBtn;
+    public Button hostBtn;
+    public Button clientBtn;
+    
+    void Start()
+    {
+        // Add click listeners to the buttons
+        serverBtn.onClick.AddListener(() => {
+            // Start as a dedicated server
+            NetworkManager.Singleton.StartServer();
+            Debug.Log("Server started!");
+        });
+        
+        hostBtn.onClick.AddListener(() => {
+            // Start as host (server + client)
+            NetworkManager.Singleton.StartHost();
+            Debug.Log("Host started!");
+        });
+        
+        clientBtn.onClick.AddListener(() => {
+            // Connect as client to a host
+            NetworkManager.Singleton.StartClient();
+            Debug.Log("Client started, connecting to host...");
+        });
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key NGO concepts:</p>
+                                <ul>
+                                    <li><strong>NetworkManager</strong>: Central component managing network state and connections</li>
+                                    <li><strong>NetworkObject</strong>: Component that makes a GameObject networkable</li>
+                                    <li><strong>NetworkBehaviour</strong>: Base class for scripts that need networking functionality</li>
+                                    <li><strong>RPCs</strong>: Remote Procedure Calls to execute code on other clients</li>
+                                    <li><strong>NetworkVariables</strong>: Variables automatically synchronized across the network</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Network Objects</h3>
+                        <p>To make a GameObject synchronize across the network, it needs a NetworkObject component and should contain NetworkBehaviour scripts.</p>
+                        
+                        <div class="example-box">
+                            <h4>Setting Up a Network Player:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+
+// Inherit from NetworkBehaviour for networking functionality
+public class NetworkPlayer : NetworkBehaviour
+{
+    // This variable will be synchronized automatically
+    public NetworkVariable&lt;Vector3&gt; Position = new NetworkVariable&lt;Vector3&gt;();
+    
+    // Movement speed
+    public float moveSpeed = 5f;
+    
+    // Called when the object is spawned on the network
+    public override void OnNetworkSpawn()
+    {
+        // If we're the client that owns this player
+        if (IsOwner)
+        {
+            Debug.Log("This is my player!");
+        }
+        else
+        {
+            Debug.Log("This is another player!");
+        }
+    }
+    
+    void Update()
+    {
+        // Only let the owner control this player
+        if (IsOwner)
+        {
+            // Get input
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            
+            // Calculate movement
+            Vector3 movement = new Vector3(horizontal, 0, vertical) * moveSpeed * Time.deltaTime;
+            
+            // Move the player
+            transform.position += movement;
+            
+            // Update the network variable so other clients see the new position
+            Position.Value = transform.position;
+        }
+        else
+        {
+            // For non-owners, smoothly update position based on network variable
+            transform.position = Vector3.Lerp(transform.position, Position.Value, Time.deltaTime * 10f);
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Important NetworkObject settings:</p>
+                                <ul>
+                                    <li><strong>Spawn with Default Player Prefab</strong>: Automatically spawns this prefab for each player</li>
+                                    <li><strong>Destroy with Scene</strong>: Whether to destroy the object during scene transitions</li>
+                                    <li><strong>Network Object ID</strong>: Unique identifier for this networked object</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Network Variables</h3>
+                        <p>NetworkVariables are special variables that automatically synchronize their values across the network from server to clients.</p>
+                        
+                        <div class="example-box">
+                            <h4>Working with Network Variables:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+
+public class PlayerHealth : NetworkBehaviour
+{
+    // Health that syncs across the network
+    // The WritePermission determines who can modify this value
+    public NetworkVariable&lt;int&gt; Health = new NetworkVariable&lt;int&gt;(
+        100, // Initial value
+        NetworkVariableReadPermission.Everyone, // Who can read
+        NetworkVariableWritePermission.Server // Who can write
+    );
+    
+    // UI Text to display health
+    private TMPro.TextMeshProUGUI healthText;
+    
+    // Callback when health changes
+    private void OnHealthChanged(int oldValue, int newValue)
+    {
+        Debug.Log($"Health changed from {oldValue} to {newValue}");
+        
+        // Update UI
+        if (healthText != null)
+        {
+            healthText.text = $"Health: {newValue}";
+        }
+        
+        // Check for death
+        if (newValue <= 0)
+        {
+            Die();
+        }
+    }
+    
+    public override void OnNetworkSpawn()
+    {
+        // Find health text UI
+        healthText = GetComponentInChildren&lt;TMPro.TextMeshProUGUI&gt;();
+        
+        // Subscribe to value change event
+        Health.OnValueChanged += OnHealthChanged;
+        
+        // Initialize the UI
+        if (healthText != null)
+        {
+            healthText.text = $"Health: {Health.Value}";
+        }
+    }
+    
+    // When this object is despawned/destroyed
+    public override void OnNetworkDespawn()
+    {
+        // Unsubscribe to prevent memory leaks
+        Health.OnValueChanged -= OnHealthChanged;
+    }
+    
+    // Server-side method to take damage
+    [ServerRpc] // This can only be called by the client that owns this object
+    public void TakeDamageServerRpc(int damage)
+    {
+        // Only the server can modify the NetworkVariable
+        Health.Value -= damage;
+    }
+    
+    // Client-side method to apply visual effects
+    [ClientRpc] // This will be called on all clients
+    public void ApplyDamageEffectClientRpc()
+    {
+        // Play damage effect visible to all clients
+        // This is just a visual effect, not game logic
+        Debug.Log("Playing damage effect");
+        // Implement damage visual effects here
+    }
+    
+    private void Die()
+    {
+        if (IsServer)
+        {
+            // Server-side death logic
+            Debug.Log("Player died!");
+            
+            // Notify all clients to play death animation
+            PlayDeathAnimationClientRpc();
+            
+            // Respawn or destroy after a delay
+            Invoke("RespawnPlayer", 3.0f);
+        }
+    }
+    
+    [ClientRpc]
+    private void PlayDeathAnimationClientRpc()
+    {
+        // Play death animation on all clients
+        Debug.Log("Playing death animation");
+        // Implement death animation here
+    }
+    
+    private void RespawnPlayer()
+    {
+        if (IsServer)
+        {
+            // Reset health
+            Health.Value = 100;
+            
+            // Teleport to spawn point
+            transform.position = GetRandomSpawnPoint();
+            
+            // Notify clients about respawn
+            OnRespawnClientRpc();
+        }
+    }
+    
+    [ClientRpc]
+    private void OnRespawnClientRpc()
+    {
+        Debug.Log("Player respawned");
+        // Implement respawn effects here
+    }
+    
+    private Vector3 GetRandomSpawnPoint()
+    {
+        // Simple example - in a real game, you'd have designated spawn points
+        return new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>NetworkVariable features:</p>
+                                <ul>
+                                    <li><strong>Type Support</strong>: Primitives, structs, arrays, etc.</li>
+                                    <li><strong>Permissions</strong>: Control who can read or write the variable</li>
+                                    <li><strong>Change Events</strong>: Execute code when the value changes</li>
+                                    <li><strong>Initialization</strong>: Set default values</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Remote Procedure Calls (RPCs)</h3>
+                        <p>RPCs allow you to execute code on other instances of your game across the network.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using RPCs:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+
+public class WeaponController : NetworkBehaviour
+{
+    // References
+    public ParticleSystem muzzleFlash;
+    public AudioSource fireSound;
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+    
+    // Weapon properties
+    public float fireRate = 0.25f;
+    private float nextFireTime = 0f;
+    
+    void Update()
+    {
+        // Only process input for the local player
+        if (!IsOwner) return;
+        
+        // Check for fire input
+        if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
+        {
+            // Set next fire time
+            nextFireTime = Time.time + fireRate;
+            
+            // Tell the server we want to fire
+            FireWeaponServerRpc();
+        }
+    }
+    
+    // This runs on the server when a client calls it
+    [ServerRpc]
+    private void FireWeaponServerRpc()
+    {
+        // Server-side validation could be added here
+        // For example, check if player has ammo, weapon is not broken, etc.
+        
+        // Spawn a bullet (server authoritative)
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        
+        // Get the network object component
+        NetworkObject netObj = bullet.GetComponent&lt;NetworkObject&gt;();
+        
+        // Spawn the bullet on the network so all clients can see it
+        netObj.Spawn();
+        
+        // Set bullet velocity
+        Rigidbody rb = bullet.GetComponent&lt;Rigidbody&gt;();
+        rb.velocity = firePoint.forward * 20f;
+        
+        // Tell all clients to play effects
+        PlayWeaponEffectsClientRpc();
+        
+        // Destroy bullet after 5 seconds
+        Destroy(bullet, 5f);
+    }
+    
+    // This runs on all clients when the server calls it
+    [ClientRpc]
+    private void PlayWeaponEffectsClientRpc()
+    {
+        // Play visual and audio effects on all clients
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.Play();
+        }
+        
+        if (fireSound != null)
+        {
+            fireSound.Play();
+        }
+    }
+    
+    // Send a message to a specific client (the one who got hit by the bullet)
+    [ClientRpc]
+    private void HitFeedbackClientRpc(ClientRpcParams clientRpcParams)
+    {
+        Debug.Log("You've been hit!");
+        // Show hit marker or play hit sound
+    }
+    
+    // Example of sending to specific client
+    public void SendHitFeedback(ulong clientId)
+    {
+        // Create params targeting specific client
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        
+        // Send the RPC only to the specified client
+        HitFeedbackClientRpc(clientRpcParams);
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Types of RPCs:</p>
+                                <ul>
+                                    <li><strong>ServerRpc</strong>: Called by clients, executed on the server</li>
+                                    <li><strong>ClientRpc</strong>: Called by the server, executed on clients</li>
+                                </ul>
+                                <p>RPC attributes options:</p>
+                                <ul>
+                                    <li><strong>RequireOwnership</strong>: Whether the caller must own the object</li>
+                                    <li><strong>Delivery</strong>: Reliable (guaranteed) or Unreliable (faster but may drop)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Network Object Spawning</h3>
+                        <p>Objects need to be properly spawned on the network to be visible and synchronized across clients.</p>
+                        
+                        <div class="example-box">
+                            <h4>Spawning Network Objects:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+
+public class ObjectSpawner : NetworkBehaviour
+{
+    // Prefab to spawn
+    public GameObject prefabToSpawn;
+    
+    // Keep track of spawned objects
+    private List&lt;NetworkObject&gt; spawnedObjects = new List&lt;NetworkObject&gt;();
+    
+    // This method is called when a button is pressed in the UI
+    public void OnSpawnButtonClicked()
+    {
+        // Only the server can spawn objects
+        if (IsServer || IsHost)
+        {
+            SpawnObject();
+        }
+        else if (IsClient)
+        {
+            // If we're a client, ask the server to spawn via RPC
+            RequestSpawnServerRpc();
+        }
+    }
+    
+    // Spawn an object at a random position
+    private void SpawnObject()
+    {
+        // Only the server should execute this
+        if (!IsServer && !IsHost) return;
+        
+        // Random position within a certain range
+        Vector3 spawnPos = new Vector3(
+            Random.Range(-10f, 10f),
+            0.5f,
+            Random.Range(-10f, 10f)
+        );
+        
+        // Instantiate the prefab
+        GameObject obj = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+        
+        // Get the NetworkObject component
+        NetworkObject netObj = obj.GetComponent&lt;NetworkObject&gt;();
+        
+        // Make sure it has a NetworkObject
+        if (netObj == null)
+        {
+            Debug.LogError("Prefab is missing NetworkObject component!");
+            Destroy(obj);
+            return;
+        }
+        
+        // Spawn it on the network so clients can see it
+        netObj.Spawn();
+        
+        // Add to our list
+        spawnedObjects.Add(netObj);
+        
+        Debug.Log($"Object spawned! Total: {spawnedObjects.Count}");
+    }
+    
+    // Client requests the server to spawn an object
+    [ServerRpc(RequireOwnership = false)] // Allow any client to call this
+    private void RequestSpawnServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        // Get the client ID that requested the spawn
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+        Debug.Log($"Client {clientId} requested object spawn");
+        
+        // Optional: Validate if this client is allowed to spawn
+        // E.g., check cooldown, permissions, etc.
+        
+        // Spawn the object
+        SpawnObject();
+    }
+    
+    // Despawn all objects (called from a UI button)
+    public void OnDespawnAllButtonClicked()
+    {
+        if (IsServer || IsHost)
+        {
+            DespawnAllObjects();
+        }
+        else if (IsClient)
+        {
+            RequestDespawnAllServerRpc();
+        }
+    }
+    
+    private void DespawnAllObjects()
+    {
+        if (!IsServer && !IsHost) return;
+        
+        // Go through all spawned objects
+        foreach (NetworkObject netObj in spawnedObjects)
+        {
+            if (netObj != null && netObj.IsSpawned)
+            {
+                // Despawn it from the network
+                netObj.Despawn();
+                // Note: Depending on settings, this might also destroy the GameObject
+            }
+        }
+        
+        // Clear our list
+        spawnedObjects.Clear();
+        Debug.Log("All objects despawned");
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestDespawnAllServerRpc()
+    {
+        DespawnAllObjects();
+    }
+    
+    // Example of spawning with ownership assigned to a specific client
+    public void SpawnForClient(ulong clientId)
+    {
+        if (!IsServer && !IsHost) return;
+        
+        Vector3 spawnPos = new Vector3(
+            Random.Range(-10f, 10f),
+            0.5f,
+            Random.Range(-10f, 10f)
+        );
+        
+        GameObject obj = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+        NetworkObject netObj = obj.GetComponent&lt;NetworkObject&gt;();
+        
+        // Spawn with specific ownership
+        netObj.SpawnWithOwnership(clientId);
+        
+        spawnedObjects.Add(netObj);
+        Debug.Log($"Object spawned for client {clientId}");
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Spawning methods:</p>
+                                <ul>
+                                    <li><strong>Spawn()</strong>: Spawn object with server ownership</li>
+                                    <li><strong>SpawnWithOwnership()</strong>: Spawn with specified client ownership</li>
+                                    <li><strong>SpawnAsPlayerObject()</strong>: Spawn as a player object for specific client</li>
+                                </ul>
+                                <p>Spawn considerations:</p>
+                                <ul>
+                                    <li>Only the server can spawn network objects</li>
+                                    <li>Prefabs must be registered with the NetworkManager</li>
+                                    <li>Objects need a NetworkObject component</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Network Messaging and Events</h3>
+                        <p>Unity Netcode provides various events and messaging systems to handle different network scenarios.</p>
+                        
+                        <div class="example-box">
+                            <h4>Managing Network Events:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+
+public class NetworkEventsHandler : MonoBehaviour
+{
+    private NetworkManager netManager;
+    
+    void Start()
+    {
+        // Get reference to NetworkManager
+        netManager = NetworkManager.Singleton;
+        
+        if (netManager == null)
+        {
+            Debug.LogError("NetworkManager not found in scene!");
+            return;
+        }
+        
+        // Subscribe to network events
+        SubscribeToNetworkEvents();
+    }
+    
+    void OnDestroy()
+    {
+        // Unsubscribe when destroyed to prevent memory leaks
+        UnsubscribeFromNetworkEvents();
+    }
+    
+    private void SubscribeToNetworkEvents()
+    {
+        // Connection events
+        netManager.OnClientConnectedCallback += OnClientConnected;
+        netManager.OnClientDisconnectCallback += OnClientDisconnected;
+        
+        // Transport events
+        netManager.NetworkConfig.NetworkTransport.OnTransportEvent += OnTransportEvent;
+        
+        // Server/Host/Client start events
+        netManager.OnServerStarted += OnServerStarted;
+        netManager.OnHostStarted += OnHostStarted;
+        netManager.OnClientStarted += OnClientStarted;
+        
+        // Server/Host/Client stop events
+        netManager.OnServerStopped += OnServerStopped;
+    }
+    
+    private void UnsubscribeFromNetworkEvents()
+    {
+        if (netManager == null) return;
+        
+        // Connection events
+        netManager.OnClientConnectedCallback -= OnClientConnected;
+        netManager.OnClientDisconnectCallback -= OnClientDisconnected;
+        
+        // Transport events
+        netManager.NetworkConfig.NetworkTransport.OnTransportEvent -= OnTransportEvent;
+        
+        // Server/Host/Client start events
+        netManager.OnServerStarted -= OnServerStarted;
+        netManager.OnHostStarted -= OnHostStarted;
+        netManager.OnClientStarted -= OnClientStarted;
+        
+        // Server/Host/Client stop events
+        netManager.OnServerStopped -= OnServerStopped;
+    }
+    
+    // Event Handlers
+    
+    private void OnClientConnected(ulong clientId)
+    {
+        Debug.Log($"Client connected with ID: {clientId}");
+        
+        // Example: Notify all clients about new player
+        if (netManager.IsServer)
+        {
+            // Find player name (example - in real implementation, you would get this from that client)
+            string playerName = $"Player_{clientId}";
+            
+            // Find a NetworkBehaviour to call the RPC from
+            PlayerManager playerManager = FindObjectOfType&lt;PlayerManager&gt;();
+            if (playerManager != null)
+            {
+                playerManager.AnnounceNewPlayerClientRpc(playerName);
+            }
+        }
+    }
+    
+    private void OnClientDisconnected(ulong clientId)
+    {
+        Debug.Log($"Client disconnected with ID: {clientId}");
+        
+        // Example: Log player left message
+        if (netManager.IsServer)
+        {
+            Debug.Log($"Player with ID {clientId} left the game");
+            
+            // Cleanup player resources, etc.
+        }
+    }
+    
+    private void OnTransportEvent(NetworkEvent eventType, ulong clientId, ArraySegment&lt;byte&gt; payload, float receiveTime)
+    {
+        switch (eventType)
+        {
+            case NetworkEvent.Data:
+                Debug.Log($"Received data from client {clientId}");
+                break;
+                
+            case NetworkEvent.Connect:
+                Debug.Log($"Transport connect event from client {clientId}");
+                break;
+                
+            case NetworkEvent.Disconnect:
+                Debug.Log($"Transport disconnect event from client {clientId}");
+                break;
+        }
+    }
+    
+    private void OnServerStarted()
+    {
+        Debug.Log("Server started successfully");
+    }
+    
+    private void OnHostStarted()
+    {
+        Debug.Log("Host started successfully");
+    }
+    
+    private void OnClientStarted()
+    {
+        Debug.Log("Client started connecting to server");
+    }
+    
+    private void OnServerStopped(bool wasSuccessful)
+    {
+        Debug.Log($"Server stopped, was successful: {wasSuccessful}");
+    }
+}
+
+// Example network behavior for announcements
+public class PlayerManager : NetworkBehaviour
+{
+    [ClientRpc]
+    public void AnnounceNewPlayerClientRpc(string playerName)
+    {
+        // Display in game UI
+        Debug.Log($"New player joined: {playerName}");
+        
+        // Add to player list UI, etc.
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Important network events:</p>
+                                <ul>
+                                    <li><strong>OnClientConnectedCallback</strong>: When a client connects to the server</li>
+                                    <li><strong>OnClientDisconnectCallback</strong>: When a client disconnects</li>
+                                    <li><strong>OnServerStarted/OnHostStarted/OnClientStarted</strong>: When respective network modes start</li>
+                                    <li><strong>OnServerStopped</strong>: When the server stops</li>
+                                    <li><strong>OnTransportEvent</strong>: Low-level transport events</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Network Optimization</h3>
+                        <p>Efficient network usage is crucial for a smooth multiplayer experience. Here are some optimization techniques:</p>
+                        
+                        <ol>
+                            <li><strong>Network Culling</strong>: Only send updates for objects relevant to each client</li>
+                            <li><strong>Serialization Optimization</strong>: Minimize data size with appropriate serialization methods</li>
+                            <li><strong>Update Rate Management</strong>: Adjust update frequency based on importance</li>
+                            <li><strong>Bandwidth Control</strong>: Monitor and limit network usage</li>
+                            <li><strong>Prediction and Interpolation</strong>: Smooth out network gameplay with client-side predictions</li>
+                        </ol>
+                        
+                        <div class="example-box">
+                            <h4>Implementing Client-Side Prediction and Reconciliation:</h4>
+                            <pre><code>using Unity.Netcode;
+using UnityEngine;
+using System.Collections.Generic;
+
+public class PredictiveMovement : NetworkBehaviour
+{
+    // Movement parameters
+    public float moveSpeed = 5f;
+    
+    // For server reconciliation
+    private Queue&lt;PredictedInput&gt; pendingInputs = new Queue&lt;PredictedInput&gt;();
+    private int lastProcessedInputId = 0;
+    
+    // Struct to store input and prediction info
+    struct PredictedInput
+    {
+        public int InputId;
+        public Vector2 Movement;
+        public Vector3 PredictedPosition;
+    }
+    
+    // Network variable for server position
+    public NetworkVariable&lt;Vector3&gt; ServerPosition = new NetworkVariable&lt;Vector3&gt;();
+    
+    public override void OnNetworkSpawn()
+    {
+        // Initialize server position to current transform position
+        if (IsServer)
+        {
+            ServerPosition.Value = transform.position;
+        }
+    }
+    
+    void Update()
+    {
+        if (IsOwner)
+        {
+            // Process local player input
+            ProcessLocalInput();
+        }
+        else
+        {
+            // For non-owners, smoothly interpolate to server position
+            transform.position = Vector3.Lerp(transform.position, ServerPosition.Value, Time.deltaTime * 10f);
+        }
+    }
+    
+    void ProcessLocalInput()
+    {
+        // Get player input
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        Vector2 movement = new Vector2(horizontal, vertical).normalized;
+        
+        // Process the input locally first (client-side prediction)
+        Vector3 newPosition = transform.position + new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.deltaTime;
+        transform.position = newPosition;
+        
+        // Keep track of the input
+        int inputId = lastProcessedInputId + pendingInputs.Count + 1;
+        
+        // Store this input and predicted position for reconciliation
+        PredictedInput input = new PredictedInput
+        {
+            InputId = inputId,
+            Movement = movement,
+            PredictedPosition = newPosition
+        };
+        
+        pendingInputs.Enqueue(input);
+        
+        // Send to server for processing
+        SendInputToServerServerRpc(inputId, movement);
+    }
+    
+    [ServerRpc]
+    void SendInputToServerServerRpc(int inputId, Vector2 movement)
+    {
+        // Server-side simulation of the input
+        Vector3 newPosition = transform.position + new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.deltaTime;
+        
+        // Update the position on the server
+        transform.position = newPosition;
+        ServerPosition.Value = newPosition;
+        
+        // Send back the processed input ID for reconciliation
+        ProcessedInputClientRpc(inputId, newPosition);
+    }
+    
+    [ClientRpc]
+    void ProcessedInputClientRpc(int inputId, Vector3 serverPosition)
+    {
+        // Only the owner needs to reconcile
+        if (!IsOwner) return;
+        
+        // Remember last processed input
+        lastProcessedInputId = inputId;
+        
+        // Reconcile with server state
+        ReconcileWithServer(inputId, serverPosition);
+    }
+    
+    private void ReconcileWithServer(int inputId, Vector3 serverPosition)
+    {
+        // Remove inputs that have been processed by the server
+        while (pendingInputs.Count > 0)
+        {
+            PredictedInput input = pendingInputs.Peek();
+            
+            if (input.InputId <= inputId)
+            {
+                pendingInputs.Dequeue();
+            }
+            else
+            {
+                break;
+            }
+        }
+        
+        // Check if there's a significant discrepancy between client prediction and server state
+        if (Vector3.Distance(transform.position, serverPosition) > 0.1f)
+        {
+            // There's a mismatch, so we start from the server position and re-apply pending inputs
+            transform.position = serverPosition;
+            
+            // Re-apply all pending inputs
+            foreach (PredictedInput input in pendingInputs)
+            {
+                // Recompute movement with the input
+                transform.position += new Vector3(input.Movement.x, 0, input.Movement.y) * moveSpeed * Time.deltaTime;
+            }
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key optimization techniques:</p>
+                                <ul>
+                                    <li><strong>Client-side prediction</strong>: Apply input locally first for responsiveness</li>
+                                    <li><strong>Server reconciliation</strong>: Correct client prediction with authoritative server state</li>
+                                    <li><strong>Input buffering</strong>: Store and replay inputs to handle network issues</li>
+                                    <li><strong>Interpolation</strong>: Smooth movement between network updates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity Networking</h3>
+                        <ol>
+                            <li><strong>Design with networking in mind</strong> from the beginning</li>
+                            <li><strong>Maintain server authority</strong> for important game state</li>
+                            <li><strong>Minimize network traffic</strong> by only sending necessary data</li>
+                            <li><strong>Use tick-based systems</strong> for consistent simulation</li>
+                            <li><strong>Implement client-side prediction</strong> for responsive gameplay</li>
+                            <li><strong>Plan for disconnections and reconnections</strong></li>
+                            <li><strong>Add proper validation</strong> to prevent cheating</li>
+                            <li><strong>Use appropriate serialization</strong> for different data types</li>
+                            <li><strong>Understand and handle latency</strong> in gameplay design</li>
+                            <li><strong>Test with realistic network conditions</strong> including packet loss and high latency</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-audio.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Audio</a>
+                        <a href="unity-ai.html" class="next">Unity AI <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 
