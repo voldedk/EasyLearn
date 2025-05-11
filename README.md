@@ -1,11 +1,12 @@
 # Easy Learn C#
 
-A comprehensive client-side C# learning platform built for GitHub Pages. This website provides both reference materials and interactive exercises for learning C# programming.
-
 if you want to learn C# fast and in a nice way, see the website right here and learn to code in c#, also code unity things to your game.
 https://voldedk.github.io/EasyLearn/
 ALL THIS IS AT NO COST FOR YOU ! :-) You are welcome.
 alle the content is AI generated..
+
+
+A comprehensive client-side C# learning platform built for GitHub Pages. This website provides both reference materials and interactive exercises for learning C# programming.
 
 
 ## Features
