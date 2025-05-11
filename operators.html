@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Operators - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Removing duplicate sidebar toggle button -->
+            
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Operators</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to C# Operators</h3>
+                        <p>Operators in C# are symbols that perform operations on operands (variables or values). C# provides a rich set of operators that allow you to perform arithmetic, comparison, logical, bitwise, and other operations.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Arithmetic Operators</h3>
+                        <p>Arithmetic operators are used to perform common mathematical operations.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td>+</td>
+                                <td>Addition</td>
+                                <td>Adds two operands</td>
+                                <td><code>5 + 3</code></td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>-</td>
+                                <td>Subtraction</td>
+                                <td>Subtracts right operand from left operand</td>
+                                <td><code>5 - 3</code></td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>*</td>
+                                <td>Multiplication</td>
+                                <td>Multiplies two operands</td>
+                                <td><code>5 * 3</code></td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <td>/</td>
+                                <td>Division</td>
+                                <td>Divides the left operand by the right operand</td>
+                                <td><code>15 / 3</code></td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>%</td>
+                                <td>Modulus</td>
+                                <td>Returns the remainder after division</td>
+                                <td><code>10 % 3</code></td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>++</td>
+                                <td>Increment</td>
+                                <td>Increases the value by 1</td>
+                                <td><code>int a = 5; a++;</code></td>
+                                <td>a becomes 6</td>
+                            </tr>
+                            <tr>
+                                <td>--</td>
+                                <td>Decrement</td>
+                                <td>Decreases the value by 1</td>
+                                <td><code>int a = 5; a--;</code></td>
+                                <td>a becomes 4</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Arithmetic Operators Example:</h4>
+                            <pre><code>
+int a = 10;
+int b = 3;
+
+int sum = a + b;        // 13
+int difference = a - b; // 7
+int product = a * b;    // 30
+int quotient = a / b;   // 3 (integer division truncates decimal part)
+int remainder = a % b;  // 1
+
+int c = 5;
+int d = c++;  // d = 5, c = 6 (postfix: assign then increment)
+int e = 5;
+int f = ++e;  // f = 6, e = 6 (prefix: increment then assign)
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Note that when using integer division, the result is always an integer, and any fractional part is truncated (not rounded). If you need to preserve the fractional part, use floating-point types.</p>
+                                <p>The increment and decrement operators can be used in prefix form (++x, --x) or postfix form (x++, x--). In prefix form, the value is incremented or decremented before it's used in the expression, while in postfix form, the original value is used in the expression and then incremented or decremented.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Assignment Operators</h3>
+                        <p>Assignment operators are used to assign values to variables.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Equivalent to</th>
+                            </tr>
+                            <tr>
+                                <td>=</td>
+                                <td>Simple assignment</td>
+                                <td><code>x = 5</code></td>
+                                <td><code>x = 5</code></td>
+                            </tr>
+                            <tr>
+                                <td>+=</td>
+                                <td>Add and assign</td>
+                                <td><code>x += 3</code></td>
+                                <td><code>x = x + 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>-=</td>
+                                <td>Subtract and assign</td>
+                                <td><code>x -= 3</code></td>
+                                <td><code>x = x - 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>*=</td>
+                                <td>Multiply and assign</td>
+                                <td><code>x *= 3</code></td>
+                                <td><code>x = x * 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>/=</td>
+                                <td>Divide and assign</td>
+                                <td><code>x /= 3</code></td>
+                                <td><code>x = x / 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>%=</td>
+                                <td>Modulus and assign</td>
+                                <td><code>x %= 3</code></td>
+                                <td><code>x = x % 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>&=</td>
+                                <td>Bitwise AND and assign</td>
+                                <td><code>x &= 3</code></td>
+                                <td><code>x = x & 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>|=</td>
+                                <td>Bitwise OR and assign</td>
+                                <td><code>x |= 3</code></td>
+                                <td><code>x = x | 3</code></td>
+                            </tr>
+                            <tr>
+                                <td>^=</td>
+                                <td>Bitwise XOR and assign</td>
+                                <td><code>x ^= 3</code></td>
+                                <td><code>x = x ^ 3</code></td>
+                            </tr>
+                            <tr>
+                                <td><<=</td>
+                                <td>Left shift and assign</td>
+                                <td><code>x <<= 2</code></td>
+                                <td><code>x = x << 2</code></td>
+                            </tr>
+                            <tr>
+                                <td>>>=</td>
+                                <td>Right shift and assign</td>
+                                <td><code>x >>= 2</code></td>
+                                <td><code>x = x >> 2</code></td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Assignment Operators Example:</h4>
+                            <pre><code>
+int x = 10;
+
+x += 5;  // x is now 15 (10 + 5)
+x -= 3;  // x is now 12 (15 - 3)
+x *= 2;  // x is now 24 (12 * 2)
+x /= 4;  // x is now 6 (24 / 4)
+x %= 4;  // x is now 2 (6 % 4)
+
+// Compound assignment operators are more concise and often more efficient
+// than their expanded forms
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Comparison Operators</h3>
+                        <p>Comparison operators are used to compare two values. The result of a comparison is always a boolean value (true or false).</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td>==</td>
+                                <td>Equal to</td>
+                                <td>Checks if operands are equal</td>
+                                <td><code>5 == 3</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>!=</td>
+                                <td>Not equal to</td>
+                                <td>Checks if operands are not equal</td>
+                                <td><code>5 != 3</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>></td>
+                                <td>Greater than</td>
+                                <td>Checks if left operand is greater than right</td>
+                                <td><code>5 > 3</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><</td>
+                                <td>Less than</td>
+                                <td>Checks if left operand is less than right</td>
+                                <td><code>5 < 3</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>>=</td>
+                                <td>Greater than or equal to</td>
+                                <td>Checks if left operand is greater than or equal to right</td>
+                                <td><code>5 >= 5</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><=</td>
+                                <td>Less than or equal to</td>
+                                <td>Checks if left operand is less than or equal to right</td>
+                                <td><code>5 <= 3</code></td>
+                                <td>false</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Comparison Operators Example:</h4>
+                            <pre><code>
+int a = 5, b = 10;
+
+bool isEqual = (a == b);           // false
+bool isNotEqual = (a != b);        // true
+bool isGreater = (a > b);          // false
+bool isLess = (a < b);             // true
+bool isGreaterOrEqual = (a >= b);  // false
+bool isLessOrEqual = (a <= b);     // true
+
+// Comparison operators are commonly used in conditional statements
+if (a < b)
+{
+    Console.WriteLine("a is less than b");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When comparing reference types (like objects, strings), the == operator compares references by default, not content. For content comparison of objects, you would typically use the Equals() method or override the == operator.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Logical Operators</h3>
+                        <p>Logical operators are used to determine the logic between variables or values.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td>&&</td>
+                                <td>Logical AND</td>
+                                <td>Returns true if both statements are true</td>
+                                <td><code>true && false</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>||</td>
+                                <td>Logical OR</td>
+                                <td>Returns true if one of the statements is true</td>
+                                <td><code>true || false</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>!</td>
+                                <td>Logical NOT</td>
+                                <td>Reverses the result, returns false if the result is true</td>
+                                <td><code>!true</code></td>
+                                <td>false</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Logical Operators Example:</h4>
+                            <pre><code>
+bool isAdult = true;
+bool hasLicense = false;
+
+bool canDrive = isAdult && hasLicense;  // false (both must be true)
+bool isEligible = isAdult || hasLicense;  // true (at least one is true)
+bool isMinor = !isAdult;  // false (reverse of isAdult)
+
+// Logical operators are often used in conditional statements
+if (isAdult && hasLicense)
+{
+    Console.WriteLine("You can drive");
+}
+else
+{
+    Console.WriteLine("You cannot drive");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The && and || operators in C# are short-circuit operators. This means that the second operand is only evaluated if necessary:</p>
+                                <ul>
+                                    <li>For &&, if the first operand is false, the second operand is not evaluated (since the result will be false regardless).</li>
+                                    <li>For ||, if the first operand is true, the second operand is not evaluated (since the result will be true regardless).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Bitwise Operators</h3>
+                        <p>Bitwise operators perform operations on binary representations of numeric values.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td>&</td>
+                                <td>Bitwise AND</td>
+                                <td>Sets each bit to 1 if both bits are 1</td>
+                                <td><code>5 & 3</code></td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>|</td>
+                                <td>Bitwise OR</td>
+                                <td>Sets each bit to 1 if any of the bits is 1</td>
+                                <td><code>5 | 3</code></td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>^</td>
+                                <td>Bitwise XOR</td>
+                                <td>Sets each bit to 1 if only one of the bits is 1</td>
+                                <td><code>5 ^ 3</code></td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>~</td>
+                                <td>Bitwise NOT</td>
+                                <td>Inverts all the bits</td>
+                                <td><code>~5</code></td>
+                                <td>-6</td>
+                            </tr>
+                            <tr>
+                                <td><<</td>
+                                <td>Left shift</td>
+                                <td>Shifts bits left, filling with zeros from the right</td>
+                                <td><code>5 << 1</code></td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>>></td>
+                                <td>Right shift</td>
+                                <td>Shifts bits right, filling with sign bit from the left</td>
+                                <td><code>5 >> 1</code></td>
+                                <td>2</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Bitwise Operators Example:</h4>
+                            <pre><code>
+/* Understanding binary representation:
+   5 in binary is 0101
+   3 in binary is 0011 */
+
+// Bitwise AND (&)
+int result1 = 5 & 3;   // 0101 & 0011 = 0001 (decimal: 1)
+
+// Bitwise OR (|)
+int result2 = 5 | 3;   // 0101 | 0011 = 0111 (decimal: 7)
+
+// Bitwise XOR (^)
+int result3 = 5 ^ 3;   // 0101 ^ 0011 = 0110 (decimal: 6)
+
+// Bitwise NOT (~)
+int result4 = ~5;      // ~0101 = 1010 (with sign extension: decimal: -6)
+
+// Left shift (<<)
+int result5 = 5 << 1;  // 0101 << 1 = 1010 (decimal: 10)
+
+// Right shift (>>)
+int result6 = 5 >> 1;  // 0101 >> 1 = 0010 (decimal: 2)
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Bitwise operators are often used for:</p>
+                                <ul>
+                                    <li>Flag operations (setting, clearing, checking bits)</li>
+                                    <li>Low-level optimization</li>
+                                    <li>Working with hardware interfaces</li>
+                                    <li>Efficient multiplication or division by powers of 2 (using shifts)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Ternary Operator</h3>
+                        <p>The ternary operator (? :) is a conditional operator that takes three operands. It's a shorthand for if-else statements.</p>
+                        
+                        <div class="example-box">
+                            <h4>Ternary Operator Syntax:</h4>
+                            <pre><code>
+// Syntax: condition ? expression1 : expression2
+// If condition is true, expression1 is evaluated and becomes the result
+// If condition is false, expression2 is evaluated and becomes the result
+
+int age = 20;
+string message = (age >= 18) ? "Adult" : "Minor";
+Console.WriteLine(message);  // Output: "Adult"
+
+// Equivalent if-else statement:
+string message2;
+if (age >= 18)
+{
+    message2 = "Adult";
+}
+else
+{
+    message2 = "Minor";
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The ternary operator is useful for simple conditional assignments. It makes the code more concise but can reduce readability if overused or nested.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Null-related Operators</h3>
+                        <p>C# provides special operators for working with nullable types and null values.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td>??</td>
+                                <td>Null-coalescing operator</td>
+                                <td>Returns the left-hand operand if it isn't null; otherwise returns the right operand</td>
+                                <td><code>result = value ?? defaultValue;</code></td>
+                            </tr>
+                            <tr>
+                                <td>?.</td>
+                                <td>Null-conditional operator</td>
+                                <td>Returns null if the operand is null; otherwise performs the operation</td>
+                                <td><code>result = object?.Property;</code></td>
+                            </tr>
+                            <tr>
+                                <td>??=</td>
+                                <td>Null-coalescing assignment</td>
+                                <td>Assigns the right operand only if the left operand is null</td>
+                                <td><code>target ??= defaultValue;</code></td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Null-related Operators Example:</h4>
+                            <pre><code>
+// Null-coalescing operator (??)
+string name = null;
+string displayName = name ?? "Guest";  // If name is null, use "Guest"
+Console.WriteLine(displayName);  // Output: "Guest"
+
+// Null-conditional operator (?.)
+Person person = null;
+int? age = person?.Age;  // No NullReferenceException, age will be null
+Console.WriteLine(age);  // Output: nothing (null)
+
+// With actual object
+Person john = new Person { Name = "John", Age = 30 };
+int? johnsAge = john?.Age;  // johnsAge will be 30
+Console.WriteLine(johnsAge);  // Output: 30
+
+// Null-coalescing assignment (??=)
+string message = null;
+message ??= "Default message";  // Assigns only if message is null
+Console.WriteLine(message);  // Output: "Default message"
+
+// Already has a value, won't change
+message ??= "New message";
+Console.WriteLine(message);  // Output: "Default message" (unchanged)
+
+class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Null-related operators help write more concise and safer code when dealing with potentially null values. They help prevent NullReferenceExceptions and reduce the need for repetitive null checks.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Type Testing Operators</h3>
+                        <p>Type testing operators help determine the type of an object at runtime.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td>is</td>
+                                <td>Checks if an object is of a specific type</td>
+                                <td><code>if (obj is string)</code></td>
+                            </tr>
+                            <tr>
+                                <td>as</td>
+                                <td>Converts an object to a specified type, returns null if conversion fails</td>
+                                <td><code>string str = obj as string;</code></td>
+                            </tr>
+                            <tr>
+                                <td>typeof</td>
+                                <td>Gets the Type object for a type</td>
+                                <td><code>Type stringType = typeof(string);</code></td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Type Testing Operators Example:</h4>
+                            <pre><code>
+// is operator
+object obj = "Hello";
+if (obj is string)
+{
+    Console.WriteLine("obj is a string");
+    
+    // Pattern matching with is (C# 7.0+)
+    if (obj is string str)
+    {
+        Console.WriteLine($"String length: {str.Length}");
+    }
+}
+
+// as operator
+object obj2 = "World";
+string str2 = obj2 as string;  // If obj2 is not a string, str2 will be null
+if (str2 != null)
+{
+    Console.WriteLine($"String: {str2}");
+}
+
+// Instead of using cast which throws an exception if fails:
+// string str3 = (string)obj2;  // Would throw InvalidCastException if obj2 is not a string
+
+// typeof operator
+Type stringType = typeof(string);
+Console.WriteLine($"Type name: {stringType.Name}");  // Output: "String"
+Console.WriteLine($"Is value type: {stringType.IsValueType}");  // Output: "False"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Type testing operators are essential for robust type checking and conversion in C#. They help avoid runtime exceptions by providing safe ways to check and convert types.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Operator Precedence and Associativity</h3>
+                        <p>Operators in C# follow a precedence order that determines the order of operations in expressions. When operators have the same precedence, their associativity determines the order of evaluation.</p>
+                        
+                        <div class="example-box">
+                            <h4>Operator Precedence (from highest to lowest):</h4>
+                            <ol>
+                                <li>Primary operators: <code>x.y</code>, <code>f(x)</code>, <code>a[i]</code>, <code>x++</code>, <code>x--</code>, <code>new</code>, <code>typeof</code>, <code>checked</code>, <code>unchecked</code></li>
+                                <li>Unary operators: <code>+</code>, <code>-</code>, <code>!</code>, <code>~</code>, <code>++x</code>, <code>--x</code>, <code>(T)x</code></li>
+                                <li>Multiplicative operators: <code>*</code>, <code>/</code>, <code>%</code></li>
+                                <li>Additive operators: <code>+</code>, <code>-</code></li>
+                                <li>Shift operators: <code><<</code>, <code>>></code></li>
+                                <li>Relational operators: <code><</code>, <code>></code>, <code><=</code>, <code>>=</code>, <code>is</code>, <code>as</code></li>
+                                <li>Equality operators: <code>==</code>, <code>!=</code></li>
+                                <li>Bitwise AND: <code>&</code></li>
+                                <li>Bitwise XOR: <code>^</code></li>
+                                <li>Bitwise OR: <code>|</code></li>
+                                <li>Logical AND: <code>&&</code></li>
+                                <li>Logical OR: <code>||</code></li>
+                                <li>Conditional operator: <code>?:</code></li>
+                                <li>Assignment operators: <code>=</code>, <code>+=</code>, <code>-=</code>, etc.</li>
+                            </ol>
+                            
+                            <h4>Examples of Precedence:</h4>
+                            <pre><code>
+// Arithmetic precedence
+int result = 5 + 3 * 2;  // 3 * 2 is evaluated first, then added to 5
+Console.WriteLine(result);  // Output: 11
+
+// Using parentheses to change precedence
+int result2 = (5 + 3) * 2;  // 5 + 3 is evaluated first, then multiplied by 2
+Console.WriteLine(result2);  // Output: 16
+
+// Complex expression
+bool result3 = 10 > 5 && 3 < 7 || 4 == 4;  // Evaluated as: (10 > 5 && 3 < 7) || 4 == 4
+Console.WriteLine(result3);  // Output: True
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When in doubt about operator precedence, it's a good practice to use parentheses to make your intentions explicit. This improves code readability and prevents unintended behaviors.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Using Operators</h3>
+                        <ul>
+                            <li>Use parentheses to make complex expressions more readable and to explicitly define precedence</li>
+                            <li>Be cautious with integer division (/) which truncates the result</li>
+                            <li>Avoid overly complex expressions; break them down into simpler parts</li>
+                            <li>Be careful with side effects in operators like ++ and --</li>
+                            <li>Use the null-conditional and null-coalescing operators to write more concise code when dealing with null values</li>
+                            <li>Consider potential overflow when working with arithmetic operations on values close to the limits of their data types</li>
+                            <li>Use the is operator with pattern matching for more readable type checks</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="type-casting.html" class="prev"><i class="fas fa-arrow-left"></i> Type Casting</a>
+                        <a href="math.html" class="next">Math Functions <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

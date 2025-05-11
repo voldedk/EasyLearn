@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Introduction to C#</h2>
+                    
+                    <div class="topic">
+                        <h3>What is C#?</h3>
+                        <p>C# (pronounced "C-sharp") is a modern, object-oriented programming language developed by Microsoft as part of its .NET initiative. It was designed by Anders Hejlsberg and his team and first released in 2000.</p>
+                        
+                        <p>C# is designed to be:</p>
+                        <ul>
+                            <li><strong>Simple</strong> - C# removes complexities and provides a clean syntax</li>
+                            <li><strong>Modern</strong> - Includes features for contemporary software development</li>
+                            <li><strong>Object-Oriented</strong> - Based on the principles of encapsulation, inheritance, and polymorphism</li>
+                            <li><strong>Type-Safe</strong> - Helps you avoid errors by checking types at compile time</li>
+                            <li><strong>Versatile</strong> - Can be used for desktop applications, web services, mobile apps, games, and more</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Why Learn C#?</h3>
+                        <p>C# offers numerous advantages for developers:</p>
+                        <ul>
+                            <li><strong>Industry Demand</strong> - C# developers are in high demand globally</li>
+                            <li><strong>Microsoft Support</strong> - Regularly updated with new features and improvements</li>
+                            <li><strong>Versatility</strong> - Used in web development (ASP.NET), desktop applications (WPF, WinForms), game development (Unity), mobile apps (Xamarin), and more</li>
+                            <li><strong>Rich Libraries</strong> - Access to the extensive .NET Framework and .NET Core libraries</li>
+                            <li><strong>Community</strong> - Large community with abundant learning resources and support</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="index.html" class="prev"><i class="fas fa-arrow-left"></i> Home</a>
+                        <a href="environment.html" class="next">Setting Up Environment <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

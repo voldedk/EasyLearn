@@ -1,0 +1,3632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Learn C# - Learn C# Programming</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="#home" class="logo-link" data-section="home">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Removing duplicate sidebar toggle button -->
+            
+            <main>
+                <!-- Home/Introduction Section -->
+                <section id="home" class="category-section active-section">
+                    <h2>Welcome to Easy Learn C#</h2>
+                    <p>Your journey to mastering C# programming starts here! Whether you're a complete beginner or looking to enhance your skills, our platform provides clear, concise, and beginner-friendly tutorials.</p>
+                    
+                    <div class="feature-boxes">
+                        <div class="feature-box">
+                            <h3>Basic C#</h3>
+                            <p>Learn the fundamentals of C# programming including variables, data types, control structures, and more.</p>
+                            <a href="#" class="button" data-section="beginner-course">Start Beginner Course</a>
+                        </div>
+                        <div class="feature-box">
+                            <h3>Object-Oriented Programming</h3>
+                            <p>Master object-oriented programming principles with C# classes, inheritance, polymorphism, and more.</p>
+                            <a href="#" class="button" data-section="oop-intro">Learn OOP</a>
+                        </div>
+                    </div>
+
+                    <div class="quick-start">
+                        <h3>Quick Start: Your First C# Program</h3>
+                        <div class="example-box">
+                            <h4>Hello World Example:</h4>
+                            <pre><code>
+using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");    
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>This simple program displays "Hello World!" to the console when executed.</p>
+                                <ul>
+                                    <li><code>using System;</code> - Imports the System namespace for basic functionality</li>
+                                    <li><code>namespace HelloWorld</code> - Creates a container for your code</li>
+                                    <li><code>class Program</code> - Defines a class to hold your methods</li>
+                                    <li><code>static void Main(string[] args)</code> - The entry point of your program</li>
+                                    <li><code>Console.WriteLine("Hello World!");</code> - Outputs text to the console</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Introduction to C# Section -->
+                <section id="intro" class="category-section">
+                    <h2>Introduction to C#</h2>
+                    
+                    <div class="topic">
+                        <h3>What is C#?</h3>
+                        <p>C# (pronounced "C-sharp") is a modern, object-oriented programming language developed by Microsoft as part of its .NET initiative. It was designed by Anders Hejlsberg and his team and first released in 2000.</p>
+                        
+                        <p>C# is designed to be:</p>
+                        <ul>
+                            <li><strong>Simple</strong> - C# removes complexities and provides a clean syntax</li>
+                            <li><strong>Modern</strong> - Includes features for contemporary software development</li>
+                            <li><strong>Object-Oriented</strong> - Based on the principles of encapsulation, inheritance, and polymorphism</li>
+                            <li><strong>Type-Safe</strong> - Helps you avoid errors by checking types at compile time</li>
+                            <li><strong>Versatile</strong> - Can be used for desktop applications, web services, mobile apps, games, and more</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Why Learn C#?</h3>
+                        <p>C# offers numerous advantages for developers:</p>
+                        <ul>
+                            <li><strong>Industry Demand</strong> - C# developers are in high demand globally</li>
+                            <li><strong>Microsoft Support</strong> - Regularly updated with new features and improvements</li>
+                            <li><strong>Versatility</strong> - Used in web development (ASP.NET), desktop applications (WPF, WinForms), game development (Unity), mobile apps (Xamarin), and more</li>
+                            <li><strong>Rich Libraries</strong> - Access to the extensive .NET Framework and .NET Core libraries</li>
+                            <li><strong>Community</strong> - Large community with abundant learning resources and support</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="home"><i class="fas fa-arrow-left"></i> Home</a>
+                        <a href="#" class="next" data-section="environment">Setting Up Environment <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- Setting Up Environment Section -->
+                <section id="environment" class="category-section">
+                    <h2>Setting Up C# Development Environment</h2>
+                    
+                    <div class="topic">
+                        <h3>Visual Studio</h3>
+                        <p>Visual Studio is Microsoft's primary IDE for C# development. It offers a complete development environment with advanced debugging, IntelliSense, and integrated tools.</p>
+                        
+                        <h4>Installation Steps:</h4>
+                        <ol>
+                            <li>Visit <a href="https://visualstudio.microsoft.com/" target="_blank">Visual Studio website</a></li>
+                            <li>Download Visual Studio Community (free) or other editions</li>
+                            <li>Run the installer and select ".NET desktop development" workload</li>
+                            <li>Follow the installation wizard to complete setup</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Visual Studio Code</h3>
+                        <p>Visual Studio Code is a lightweight, cross-platform code editor that can be configured for C# development.</p>
+                        
+                        <h4>Setup for C# Development:</h4>
+                        <ol>
+                            <li>Download and install <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a></li>
+                            <li>Install the C# extension from the marketplace</li>
+                            <li>Install the <a href="https://dotnet.microsoft.com/download" target="_blank">.NET SDK</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Your First Project</h3>
+                        <p>Once you have your development environment set up, you can create your first C# project:</p>
+                        
+                        <h4>Using Visual Studio:</h4>
+                        <ol>
+                            <li>Open Visual Studio</li>
+                            <li>Click "Create a new project"</li>
+                            <li>Select "Console App (.NET Core)" or "Console App (.NET Framework)"</li>
+                            <li>Name your project and click "Create"</li>
+                        </ol>
+                        
+                        <h4>Using Command Line:</h4>
+                        <pre><code>
+# Create a new console application
+dotnet new console -n MyFirstApp
+
+# Navigate to the project directory
+cd MyFirstApp
+
+# Run the application
+dotnet run
+                        </code></pre>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="intro"><i class="fas fa-arrow-left"></i> Introduction to C#</a>
+                        <a href="#" class="next" data-section="syntax">C# Syntax <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- C# Syntax Section -->
+                <section id="syntax" class="category-section">
+                    <h2>C# Syntax</h2>
+                    
+                    <div class="topic">
+                        <h3>Basic Syntax</h3>
+                        <p>C# syntax is similar to other C-style languages like C, C++, and Java. If you know any of these languages, C# syntax will look familiar.</p>
+                        
+                        <div class="example-box">
+                            <h4>Example:</h4>
+                            <pre><code>
+using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Let's break down this code:</p>
+                                <ul>
+                                    <li><code>using System;</code> - This line imports the System namespace which contains the Console class</li>
+                                    <li><code>namespace HelloWorld { ... }</code> - Groups your code into a namespace called "HelloWorld"</li>
+                                    <li><code>class Program { ... }</code> - Defines a class called "Program"</li>
+                                    <li><code>static void Main(string[] args) { ... }</code> - The Main method is the entry point of your program</li>
+                                    <li><code>Console.WriteLine("Hello World!");</code> - Prints text to the console</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Statement Structure</h3>
+                        <p>In C#, statements end with a semicolon (;) and code blocks are enclosed in curly braces { }.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Single statements end with semicolons
+int x = 10;
+Console.WriteLine(x);
+
+// Code blocks use curly braces
+if (x > 5) 
+{
+    Console.WriteLine("x is greater than 5");
+    x = 5;  // This is also within the block
+}
+
+// Single statement blocks can omit braces (not recommended)
+if (x == 5)
+    Console.WriteLine("x equals 5");  // Only this line is in the if block
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes:</p>
+                                <ul>
+                                    <li>Every statement must end with a semicolon</li>
+                                    <li>Code blocks define the scope of variables declared within them</li>
+                                    <li>While you can omit braces for single-statement blocks, it's generally not recommended for readability and to prevent bugs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Case Sensitivity</h3>
+                        <p>C# is a case-sensitive language. This means that <code>myVariable</code> and <code>MyVariable</code> are considered different identifiers.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// These are three different variables
+int value = 10;
+int Value = 20;
+int VALUE = 30;
+
+// This works
+Console.WriteLine(value);  // Outputs: 10
+Console.WriteLine(Value);  // Outputs: 20
+Console.WriteLine(VALUE);  // Outputs: 30
+
+// This would cause an error
+// Console.WriteLine(vAlUe);  // Variable 'vAlUe' doesn't exist
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Comments</h3>
+                        <p>Comments are used to explain code and are ignored by the compiler.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// This is a single-line comment
+
+/* This is a 
+   multi-line comment */
+
+/// &lt;summary&gt;
+/// XML documentation comments are used to generate documentation
+/// &lt;/summary&gt;
+public void DocumentedMethod()
+{
+    // Method implementation
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>C# supports three types of comments:</p>
+                                <ul>
+                                    <li><code>// Single-line comments</code> - Everything after // on that line is a comment</li>
+                                    <li><code>/* Multi-line comments */</code> - Everything between /* and */ is a comment, even across multiple lines</li>
+                                    <li><code>/// XML documentation comments</code> - Special comments that can be used to generate documentation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Coding Conventions</h3>
+                        <p>Following are some common C# coding conventions:</p>
+                        <ul>
+                            <li><strong>PascalCase</strong>: Used for class names, method names, and public members (e.g., <code>ClassName</code>, <code>MethodName</code>)</li>
+                            <li><strong>camelCase</strong>: Used for local variables and parameters (e.g., <code>localVariable</code>, <code>parameterName</code>)</li>
+                            <li><strong>_camelCase</strong>: Often used for private fields (e.g., <code>_privateField</code>)</li>
+                            <li><strong>ALL_CAPS</strong>: Sometimes used for constants (e.g., <code>MAX_SIZE</code>)</li>
+                            <li>Braces on their own line (typically) for methods and classes</li>
+                            <li>Use four spaces for indentation (or a tab set to four spaces)</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="environment"><i class="fas fa-arrow-left"></i> Setting Up Environment</a>
+                        <a href="#" class="next" data-section="output">C# Output <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- C# Output Section -->
+                <section id="output" class="category-section">
+                    <h2>C# Output</h2>
+                    
+                    <div class="topic">
+                        <h3>Console Output</h3>
+                        <p>To output text to the console in C#, you use the <code>Console.WriteLine()</code> and <code>Console.Write()</code> methods.</p>
+                        
+                        <div class="example-box">
+                            <h4>Example:</h4>
+                            <pre><code>
+// WriteLine adds a new line after the output
+Console.WriteLine("Hello World!");
+Console.WriteLine("I am learning C#");
+
+// Write doesn't add a new line
+Console.Write("Hello ");
+Console.Write("World");  // Output: Hello World (on the same line)
+                            </code></pre>
+                            <div class="explanation">
+                                <ul>
+                                    <li><code>Console.WriteLine()</code> prints the specified text followed by a new line</li>
+                                    <li><code>Console.Write()</code> prints the specified text without a new line</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Formatting Output</h3>
+                        <p>You can format your output in different ways:</p>
+                        
+                        <div class="example-box">
+                            <h4>String Concatenation:</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine("Name: " + name + ", Age: " + age);
+                            </code></pre>
+
+                            <h4>String Formatting (composite formatting):</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine("Name: {0}, Age: {1}", name, age);
+                            </code></pre>
+
+                            <h4>String Interpolation (recommended, C# 6.0 and later):</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine($"Name: {name}, Age: {age}");
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Formatting Numbers and Dates</h3>
+                        <p>You can format numbers and dates using format specifiers:</p>
+                        
+                        <div class="example-box">
+                            <h4>Currency Formatting:</h4>
+                            <pre><code>
+double price = 123.45;
+Console.WriteLine($"Price: {price:C}");  // Outputs: Price: $123.45 (in US culture)
+                            </code></pre>
+
+                            <h4>Number Formatting:</h4>
+                            <pre><code>
+double number = 12345.6789;
+Console.WriteLine($"Number: {number:N2}");  // Outputs: Number: 12,345.68 (formatted with commas and 2 decimal places)
+Console.WriteLine($"Percentage: {0.75:P0}");  // Outputs: Percentage: 75%
+                            </code></pre>
+
+                            <h4>Date Formatting:</h4>
+                            <pre><code>
+DateTime now = DateTime.Now;
+Console.WriteLine($"Date: {now:d}");  // Outputs: Date: 5/10/2023 (short date format)
+Console.WriteLine($"Time: {now:t}");  // Outputs: Time: 10:30 AM (short time format)
+Console.WriteLine($"Full: {now:F}");  // Outputs: Full: Friday, May 10, 2023 10:30:45 AM
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Special Characters</h3>
+                        <p>You can include special characters in your output using escape sequences:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Using escape sequences
+Console.WriteLine("Hello\nWorld");  // Outputs Hello and World on separate lines
+Console.WriteLine("I am learning \"C#\"");  // Outputs: I am learning "C#"
+Console.WriteLine("Path: C:\\Program Files\\App");  // Outputs: Path: C:\Program Files\App
+
+// Using verbatim strings (preceded by @)
+Console.WriteLine(@"Path: C:\Program Files\App");  // No need to escape backslashes
+Console.WriteLine(@"This is a
+multi-line
+string");  // Preserves line breaks
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Common escape sequences:</p>
+                                <ul>
+                                    <li><code>\n</code> - New line</li>
+                                    <li><code>\t</code> - Tab</li>
+                                    <li><code>\"</code> - Double quote</li>
+                                    <li><code>\'</code> - Single quote</li>
+                                    <li><code>\\</code> - Backslash</li>
+                                    <li><code>\r</code> - Carriage return</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="syntax"><i class="fas fa-arrow-left"></i> C# Syntax</a>
+                        <a href="#" class="next" data-section="variables">C# Variables <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- Variables Section -->
+                <section id="variables" class="category-section">
+                    <h2>C# Variables</h2>
+                    
+                    <div class="topic">
+                        <h3>What is a Variable?</h3>
+                        <p>In C#, a variable is a container for storing data values. Variables serve as named memory locations where data can be stored and manipulated during program execution. Each variable has a specific data type that determines what kind of information it can hold.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Variable Declaration:</h4>
+                            <pre><code>
+// Type variableName = value;
+int myNum = 5;               // Integer (whole number)
+double myDoubleNum = 5.99D;  // Floating point number
+char myLetter = 'D';         // Character
+bool myBool = true;          // Boolean
+string myText = "Hello";     // String
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Naming Rules</h3>
+                        <p>When naming variables in C#, you must follow these rules:</p>
+                        
+                        <ul>
+                            <li><strong>Must start with a letter or underscore (_)</strong></li>
+                            <li><strong>Cannot start with a number</strong></li>
+                            <li><strong>Cannot contain spaces or special characters like !, @, #, etc.</strong></li>
+                            <li><strong>Cannot be a C# keyword (like int, string, class, etc.)</strong></li>
+                            <li><strong>Are case-sensitive (age and Age are different variables)</strong></li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Valid and Invalid Variable Names:</h4>
+                            <pre><code>
+// Valid variable names
+int age;
+string userName;
+double _temperature;
+bool isActive;
+int totalItems123;
+
+// Invalid variable names
+// int 1stNumber;      // Cannot start with a number
+// string user-name;   // Cannot contain hyphen
+// double class;       // Cannot use C# keywords
+// bool my variable;   // Cannot contain spaces
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>C# Naming Conventions</h3>
+                        <p>While not required by the compiler, following these conventions makes your code more readable and maintainable:</p>
+                        
+                        <ul>
+                            <li><strong>camelCase</strong> for local variables and method parameters (e.g., <code>firstName</code>, <code>totalAmount</code>)</li>
+                            <li><strong>PascalCase</strong> for class names, method names, and properties (e.g., <code>Customer</code>, <code>CalculateTotal</code>)</li>
+                            <li><strong>_camelCase</strong> for private fields (e.g., <code>_firstName</code>)</li>
+                            <li><strong>ALL_UPPERCASE</strong> for constants (e.g., <code>MAX_SIZE</code>, <code>PI</code>)</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Declaration and Initialization</h3>
+                        <p>In C#, you have several ways to declare and initialize variables:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Declaration without initialization (default values are assigned)
+int count;          // Default value: 0
+bool flag;          // Default value: false
+string name;        // Default value: null
+
+// Declaration with initialization
+int age = 25;
+string firstName = "John";
+
+// Multiple declarations of the same type
+int x = 10, y = 20, z = 30;
+
+// Using var (type inference) - compiler determines the type based on the value
+var total = 100;        // Inferred as int
+var message = "Hello";  // Inferred as string
+var price = 29.99;      // Inferred as double
+var today = DateTime.Now;  // Inferred as DateTime
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Note on var:</h4>
+                            <p>When using <code>var</code>, the variable must be initialized at the time of declaration, as the compiler needs the initial value to determine the type. Once the type is inferred, it cannot be changed later.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variable Scope</h3>
+                        <p>The scope of a variable determines where in the code the variable is accessible. C# has several levels of scope:</p>
+                        
+                        <div class="example-box">
+                            <h4>Block Scope:</h4>
+                            <pre><code>
+void ExampleMethod()
+{
+    // Method-level scope
+    int outerVariable = 10;
+    
+    if (outerVariable > 5)
+    {
+        // Block-level scope
+        int innerVariable = 20;
+        Console.WriteLine(outerVariable);    // Can access outerVariable
+        Console.WriteLine(innerVariable);    // Can access innerVariable
+    }
+    
+    Console.WriteLine(outerVariable);    // Can access outerVariable
+    // Console.WriteLine(innerVariable); // ERROR: Cannot access innerVariable here
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Class Scope:</h4>
+                            <pre><code>
+class Person
+{
+    // Class-level fields (accessible throughout the class)
+    private string _name;
+    private int _age;
+    
+    // Constructor
+    public Person(string name, int age)
+    {
+        // Constructor parameters (method scope)
+        _name = name;  // Assign parameter to field
+        _age = age;    // Assign parameter to field
+    }
+    
+    public void DisplayInfo()
+    {
+        // Local variable (method scope)
+        string message = $"Name: {_name}, Age: {_age}";
+        Console.WriteLine(message);
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Constants</h3>
+                        <p>Constants are values that cannot be modified after they are declared. They must be initialized at the time of declaration:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Constants must be assigned a value when declared
+const double PI = 3.14159;
+const int MAX_USERS = 100;
+const string CONNECTION_STRING = "Server=myServerAddress;Database=myDataBase;";
+
+// This will cause a compilation error:
+// PI = 3.14; // Constants cannot be changed
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>When to Use Constants:</h4>
+                            <p>Use constants for values that are truly fixed and will never change, such as mathematical constants, fixed configuration values, or fixed business rules. Constants are evaluated at compile time, so they're very efficient.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Read-only Fields</h3>
+                        <p>For class-level variables that should be immutable but can be set at runtime (usually in a constructor), use the <code>readonly</code> keyword:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+public class Configuration
+{
+    // Read-only fields - can only be assigned in declaration or constructor
+    private readonly string _serverName;
+    private readonly int _timeoutSeconds;
+    public readonly DateTime CreationTime = DateTime.Now;
+    
+    public Configuration(string serverName)
+    {
+        _serverName = serverName;
+        _timeoutSeconds = 30; // Can set in constructor
+    }
+    
+    public void ChangeSettings()
+    {
+        // This would cause a compilation error:
+        // _serverName = "newServer"; // Cannot modify readonly fields
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Variables</h3>
+                        <p>Once declared, variables can be manipulated in various ways:</p>
+                        
+                        <div class="example-box">
+                            <h4>Variable Operations:</h4>
+                            <pre><code>
+// Arithmetic operations
+int a = 10;
+int b = 3;
+int sum = a + b;        // Addition: 13
+int difference = a - b; // Subtraction: 7
+int product = a * b;    // Multiplication: 30
+int quotient = a / b;   // Division: 3 (integer division)
+int remainder = a % b;  // Modulus (remainder): 1
+
+// Compound assignment operators
+int count = 5;
+count += 2;  // Equivalent to: count = count + 2; (count becomes 7)
+count -= 1;  // Equivalent to: count = count - 1; (count becomes 6)
+count *= 3;  // Equivalent to: count = count * 3; (count becomes 18)
+count /= 2;  // Equivalent to: count = count / 2; (count becomes 9)
+
+// Increment and decrement
+int x = 10;
+x++;  // Increment by 1 (x becomes 11)
+x--;  // Decrement by 1 (x becomes 10)
+
+// Pre-increment and post-increment
+int y = 5;
+int z1 = ++y;  // Pre-increment: y becomes 6, then z1 is assigned 6
+int z2 = y++;  // Post-increment: z2 is assigned 6, then y becomes 7
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Displaying Variables</h3>
+                        <p>There are multiple ways to display variables in C#:</p>
+                        
+                        <div class="example-box">
+                            <h4>Output Methods:</h4>
+                            <pre><code>
+// String concatenation (using + operator)
+string name = "Alice";
+int age = 28;
+Console.WriteLine("Name: " + name + ", Age: " + age);
+
+// String interpolation (recommended, C# 6.0+)
+Console.WriteLine($"Name: {name}, Age: {age}");
+
+// String.Format method
+Console.WriteLine(String.Format("Name: {0}, Age: {1}", name, age));
+
+// Composite formatting
+Console.WriteLine("Name: {0}, Age: {1}", name, age);
+
+// With formatting options
+double price = 123.45;
+Console.WriteLine($"Price: {price:C}");  // Currency format: $123.45 (locale-dependent)
+Console.WriteLine($"Price: {price:F1}"); // Fixed-point: 123.5 (1 decimal place)
+Console.WriteLine($"Tax rate: {0.0825:P}"); // Percentage: 8.25%
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Pitfalls</h3>
+                        <ul>
+                            <li><strong>Uninitialized Variables</strong> - Local variables must be initialized before use</li>
+                            <li><strong>Variable Shadowing</strong> - Declaring a variable inside a block with the same name as a variable in an outer block</li>
+                            <li><strong>Confusing Value vs. Reference Types</strong> - Understanding how variables store data (by value or by reference)</li>
+                            <li><strong>Var Misuse</strong> - Using var excessively can make code harder to understand</li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Variable Shadowing Example:</h4>
+                            <pre><code>
+int x = 10;  // Outer variable
+
+if (true)
+{
+    int x = 20;  // Inner variable (shadows the outer one)
+    Console.WriteLine(x);  // Outputs: 20 (refers to the inner variable)
+}
+
+Console.WriteLine(x);  // Outputs: 10 (refers to the outer variable)
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Practice with Variables</h3>
+                        <p>To practice using variables, try the <a href="#" data-section="beginner-course">Beginner C# Course</a> which includes hands-on exercises where you can write and run code.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Test Your Knowledge: Variables</h3>
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                <p><strong>Question 1:</strong> Which of the following correctly declares an integer variable named 'count' with a value of 10?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="a">
+                                        <span>var count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="b">
+                                        <span>int count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="c">
+                                        <span>count = 10;</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q1" value="d">
+                                        <span>integer count = 10;</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="b"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 2:</strong> What will be the output of the following code?</p>
+                                <pre><code>int x = 5;
+int y = 2;
+int z = x + y;
+Console.WriteLine(z);</code></pre>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="a">
+                                        <span>5 + 2</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="b">
+                                        <span>x + y</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="c">
+                                        <span>7</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q2" value="d">
+                                        <span>Error</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 3:</strong> Which statement about the <code>const</code> keyword is true?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="a">
+                                        <span>Const variables can be changed at runtime.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="b">
+                                        <span>Const variables can be declared without an initial value.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="c">
+                                        <span>Const variables must be initialized when declared and cannot be changed.</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="q3" value="d">
+                                        <span>Const is used for reference types only.</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <button class="check-answers-btn">Check Answers</button>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="syntax"><i class="fas fa-arrow-left"></i> C# Syntax</a>
+                        <a href="#" class="next" data-section="data-types">Data Types <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- Data Types Section -->
+                <section id="data-types" class="category-section">
+                    <h2>C# Data Types</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to C# Data Types</h3>
+                        <p>C# is a strongly-typed language, which means every variable and constant has a specific data type that determines the size and layout of the variable's memory, the range of values that can be stored within that memory, and the set of operations that can be performed on the variable.</p>
+                        
+                        <p>C# data types are divided into two main categories:</p>
+                        <ul>
+                            <li><strong>Value Types</strong> - Directly contain their data and are stored on the stack</li>
+                            <li><strong>Reference Types</strong> - Store a reference to their data, which is stored on the heap</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Value Types</h3>
+                        <p>Value types hold the actual data within their own memory allocation. When you assign one value type to another, a copy of the value is created.</p>
+                        
+                        <div class="example-box">
+                            <h4>Value Type Behavior:</h4>
+                            <pre><code>
+int a = 10;
+int b = a;    // Value is copied, b now has its own copy of 10
+a = 20;       // Changing a does not affect b
+Console.WriteLine(b);  // Outputs: 10
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Common Value Types:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Range</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td rowspan="5">Integer Types</td>
+                                <td><code>sbyte</code></td>
+                                <td>8 bits</td>
+                                <td>-128 to 127</td>
+                                <td><code>sbyte temperature = -10;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>byte</code></td>
+                                <td>8 bits</td>
+                                <td>0 to 255</td>
+                                <td><code>byte colorValue = 255;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>short</code></td>
+                                <td>16 bits</td>
+                                <td>-32,768 to 32,767</td>
+                                <td><code>short elevation = -1500;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>int</code></td>
+                                <td>32 bits</td>
+                                <td>-2.1 billion to 2.1 billion</td>
+                                <td><code>int population = 37500000;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>long</code></td>
+                                <td>64 bits</td>
+                                <td>-9.2 quintillion to 9.2 quintillion</td>
+                                <td><code>long nationalDebt = 21000000000000L;</code></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">Unsigned Integers</td>
+                                <td><code>ushort</code></td>
+                                <td>16 bits</td>
+                                <td>0 to 65,535</td>
+                                <td><code>ushort portNumber = 8080;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>uint</code></td>
+                                <td>32 bits</td>
+                                <td>0 to 4.2 billion</td>
+                                <td><code>uint viewCount = 3000000000U;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>ulong</code></td>
+                                <td>64 bits</td>
+                                <td>0 to 18.4 quintillion</td>
+                                <td><code>ulong distance = 18446744073709551615UL;</code></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Floating Point</td>
+                                <td><code>float</code></td>
+                                <td>32 bits</td>
+                                <td>±1.5 × 10<sup>−45</sup> to ±3.4 × 10<sup>38</sup>, 7-digit precision</td>
+                                <td><code>float pi = 3.14159F;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>double</code></td>
+                                <td>64 bits</td>
+                                <td>±5.0 × 10<sup>−324</sup> to ±1.7 × 10<sup>308</sup>, 15-16 digit precision</td>
+                                <td><code>double atomRadius = 0.000000001;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Decimal</td>
+                                <td><code>decimal</code></td>
+                                <td>128 bits</td>
+                                <td>±1.0 × 10<sup>-28</sup> to ±7.9 × 10<sup>28</sup>, 28-29 significant digits</td>
+                                <td><code>decimal accountBalance = 3456.78M;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td><code>bool</code></td>
+                                <td>8 bits*</td>
+                                <td>true or false</td>
+                                <td><code>bool isActive = true;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Character</td>
+                                <td><code>char</code></td>
+                                <td>16 bits</td>
+                                <td>U+0000 to U+FFFF (Unicode characters)</td>
+                                <td><code>char grade = 'A';</code></td>
+                            </tr>
+                        </table>
+                        <p class="note">* While a boolean logically only needs 1 bit, it typically uses 8 bits (1 byte) of storage due to memory alignment requirements.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Struct Types</h3>
+                        <p>Structs are value types that can contain multiple variables (fields), methods, and other members. They are useful for representing lightweight objects.</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Struct Example:</h4>
+                            <pre><code>
+// Defining a struct
+struct Point
+{
+    public int X;
+    public int Y;
+    
+    // Constructor
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+    
+    // Method
+    public double DistanceFromOrigin()
+    {
+        return Math.Sqrt(X * X + Y * Y);
+    }
+}
+
+// Using the struct
+Point p1 = new Point(3, 4);
+Console.WriteLine($"Distance from origin: {p1.DistanceFromOrigin()}");  // Outputs: 5
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enum Types</h3>
+                        <p>Enumerations (enums) are distinct value types consisting of a set of named constants. They are useful for representing a fixed set of options or states.</p>
+                        
+                        <div class="example-box">
+                            <h4>Enum Example:</h4>
+                            <pre><code>
+// Defining an enum
+enum DaysOfWeek
+{
+    Monday,     // 0 by default
+    Tuesday,    // 1
+    Wednesday,  // 2
+    Thursday,   // 3
+    Friday,     // 4
+    Saturday,   // 5
+    Sunday      // 6
+}
+
+// Using an enum
+DaysOfWeek today = DaysOfWeek.Wednesday;
+Console.WriteLine(today);         // Outputs: Wednesday
+Console.WriteLine((int)today);    // Outputs: 2
+
+// Enum with explicit values
+enum HttpStatusCode
+{
+    OK = 200,
+    NotFound = 404,
+    InternalServerError = 500
+}
+
+HttpStatusCode status = HttpStatusCode.NotFound;
+Console.WriteLine($"Status: {status}, Code: {(int)status}");  // Outputs: Status: NotFound, Code: 404
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Reference Types</h3>
+                        <p>Reference types store a reference (or pointer) to the actual data in memory. When you assign one reference type to another, both variables refer to the same data.</p>
+                        
+                        <div class="example-box">
+                            <h4>Reference Type Behavior:</h4>
+                            <pre><code>
+string a = "Hello";
+string b = a;       // Both a and b reference the same string
+a = "World";        // a now references a new string
+Console.WriteLine(b);  // Outputs: Hello (unchanged)
+
+// For objects (classes), changing properties affects all references
+Person person1 = new Person { Name = "Alice" };
+Person person2 = person1;   // Both reference the same object
+person1.Name = "Bob";       // Change affects both references
+Console.WriteLine(person2.Name);  // Outputs: Bob
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Common Reference Types:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><code>string</code></td>
+                                <td>Text (sequence of characters)</td>
+                                <td><code>string name = "John Smith";</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>class</code></td>
+                                <td>User-defined type with members</td>
+                                <td><code>Person employee = new Person();</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>object</code></td>
+                                <td>Base class for all types</td>
+                                <td><code>object data = 42;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>dynamic</code></td>
+                                <td>Type resolved at runtime</td>
+                                <td><code>dynamic value = "test";</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>interface</code></td>
+                                <td>Contract defining members</td>
+                                <td><code>IEnumerable<int> numbers;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>delegate</code></td>
+                                <td>Reference to a method</td>
+                                <td><code>Action<string> log;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>array</code></td>
+                                <td>Collection of items</td>
+                                <td><code>int[] numbers = {1, 2, 3};</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Type</h3>
+                        <p>The <code>string</code> type represents a sequence of Unicode characters. Strings in C# are immutable, meaning once a string is created, its value cannot be changed.</p>
+                        
+                        <div class="example-box">
+                            <h4>String Examples:</h4>
+                            <pre><code>
+// String declaration and initialization
+string firstName = "John";
+string lastName = "Smith";
+string emptyString = string.Empty;  // Preferred way to create an empty string
+
+// String concatenation
+string fullName = firstName + " " + lastName;  // "John Smith"
+
+// String interpolation (C# 6.0+)
+string greeting = $"Hello, {firstName}!";  // "Hello, John!"
+
+// String methods
+string message = "   Learn C# Programming   ";
+string trimmed = message.Trim();                  // "Learn C# Programming"
+string uppercase = message.ToUpper();             // "   LEARN C# PROGRAMMING   "
+string replaced = message.Replace("C#", "C++");   // "   Learn C++ Programming   "
+bool contains = message.Contains("C#");           // true
+int length = message.Length;                      // 27
+int index = message.IndexOf("C#");                // 9
+
+// String comparison
+bool isEqual = firstName == "John";               // true
+bool startsWithJ = firstName.StartsWith("J");     // true
+bool ignoreCase = firstName.Equals("john", StringComparison.OrdinalIgnoreCase);  // true
+
+// Verbatim string literal (preserves whitespace and newlines)
+string path = @"C:\Program Files\Microsoft\Windows";  // No need to escape backslashes
+
+// String with multiple lines
+string multiline = @"This is a
+multi-line
+string";
+
+// String interpolation with verbatim strings (C# 8.0+)
+string combinedPath = $@"C:\Users\{userName}\Documents";
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Default Values</h3>
+                        <p>When a variable is declared but not initialized, it is assigned a default value based on its data type:</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Type</th>
+                                <th>Default Value</th>
+                            </tr>
+                            <tr>
+                                <td>Numeric types (<code>int</code>, <code>float</code>, etc.)</td>
+                                <td><code>0</code> (appropriate for the type)</td>
+                            </tr>
+                            <tr>
+                                <td><code>bool</code></td>
+                                <td><code>false</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>char</code></td>
+                                <td><code>'\0'</code> (null character)</td>
+                            </tr>
+                            <tr>
+                                <td>Reference types (<code>string</code>, class types)</td>
+                                <td><code>null</code></td>
+                            </tr>
+                            <tr>
+                                <td>Struct types</td>
+                                <td>Each field set to its default value</td>
+                            </tr>
+                            <tr>
+                                <td><code>enum</code> types</td>
+                                <td>0 (the value of the first enumerator)</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="example-box">
+                            <h4>Default Value Example:</h4>
+                            <pre><code>
+// Explicit default values
+int number = default;           // 0
+bool flag = default;            // false
+string text = default;          // null
+double price = default;         // 0.0
+
+// Using default expression (C# 7.1+)
+DateTime date = default;        // 01/01/0001 00:00:00
+int[] array = default;          // null
+
+// Using default operator
+var defaultInt = default(int);    // 0
+var defaultBool = default(bool);  // false
+var defaultString = default(string);  // null
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Special Types</h3>
+                        
+                        <h4>Nullable Value Types</h4>
+                        <p>Value types normally cannot be assigned <code>null</code>. However, by using the nullable type decorator (<code>?</code>), value types can be made nullable.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Regular value type cannot be null
+// int regularInt = null;  // Error!
+
+// Nullable value type can be null
+int? nullableInt = null;
+double? nullableDouble = null;
+
+// Checking for null before using
+if (nullableInt.HasValue)
+{
+    Console.WriteLine(nullableInt.Value);  // Safe to access value
+}
+
+// Null coalescing operator to provide a default value
+int result = nullableInt ?? 0;  // If nullableInt is null, use 0
+                            </code></pre>
+                        </div>
+                        
+                        <h4>var Keyword</h4>
+                        <p>The <code>var</code> keyword enables type inference, allowing the compiler to determine the type from the initialization expression.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Type inference with var
+var count = 10;              // Inferred as int
+var name = "Alice";          // Inferred as string
+var items = new List<int>(); // Inferred as List<int>
+var today = DateTime.Now;    // Inferred as DateTime
+
+// Restrictions:
+// var must be initialized
+// var price;  // Error! Must be initialized
+
+// Type is fixed at compile-time
+var number = 5;  // Type is int
+// number = "string";  // Error! Cannot assign string to int
+                            </code></pre>
+                        </div>
+                        
+                        <h4>dynamic Type</h4>
+                        <p>The <code>dynamic</code> type bypasses compile-time type checking. The type checking happens at runtime:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Dynamic typing
+dynamic value = 10;
+Console.WriteLine(value);  // 10
+
+value = "Hello";           // Can change type at runtime
+Console.WriteLine(value);  // Hello
+
+value = new List<int> { 1, 2, 3 };
+Console.WriteLine(value.Count);  // 3
+
+// No compile-time checking
+// Only runtime checking for methods/properties
+dynamic obj = new { Name = "Test" };
+Console.WriteLine(obj.Name);       // Works
+// Console.WriteLine(obj.Missing);  // Runtime error!
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Type Checking</h3>
+                        <p>C# provides several ways to check the type of a variable:</p>
+                        
+                        <div class="example-box">
+                            <h4>Type Checking Examples:</h4>
+                            <pre><code>
+object obj = "This is a string";
+
+// Using is operator
+if (obj is string)
+{
+    Console.WriteLine("obj is a string");
+}
+
+// Using GetType() and typeof
+if (obj.GetType() == typeof(string))
+{
+    Console.WriteLine("obj is of type string");
+}
+
+// Using is with pattern matching (C# 7.0+)
+if (obj is string message)
+{
+    // message is now a string variable containing the value of obj
+    Console.WriteLine($"Message: {message}");
+}
+
+// Using switch expression with pattern matching (C# 8.0+)
+string result = obj switch
+{
+    string s => $"String of length {s.Length}",
+    int i => $"Integer: {i}",
+    _ => "Unknown type"
+};
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Working with Types</h3>
+                        <ul>
+                            <li><strong>Choose the right type</strong> for your data to ensure memory efficiency and prevent overflow/underflow.</li>
+                            <li><strong>Use <code>decimal</code> for money</strong> calculations to avoid floating-point precision issues.</li>
+                            <li><strong>Avoid excessive type casting</strong> as it can lead to potential data loss and reduces code readability.</li>
+                            <li><strong>Use <code>var</code> when the type is obvious</strong> from initialization, but avoid it when clarity is important.</li>
+                            <li><strong>Use <code>dynamic</code> sparingly</strong>, as it bypasses compile-time type checking and can lead to runtime errors.</li>
+                            <li><strong>Consider using <code>nullable</code> types</strong> for database interactions where null values may be present.</li>
+                            <li><strong>Prefer string interpolation</strong> (<code>$"..."</code>) over string concatenation for readability.</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Test Your Knowledge: Data Types</h3>
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                <p><strong>Question 1:</strong> Which of the following is NOT a value type in C#?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="a">
+                                        <span>int</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="b">
+                                        <span>float</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="c">
+                                        <span>string</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="d">
+                                        <span>char</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 2:</strong> What is the default value of a boolean variable that has not been initialized?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="a">
+                                        <span>true</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="b">
+                                        <span>false</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="c">
+                                        <span>null</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="d">
+                                        <span>0</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="b"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 3:</strong> Which data type would be best for storing the precise monetary value $1,234.56?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="a">
+                                        <span>float</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="b">
+                                        <span>double</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="c">
+                                        <span>decimal</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="d">
+                                        <span>int</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <button class="check-answers-btn">Check Answers</button>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="variables"><i class="fas fa-arrow-left"></i> Variables</a>
+                        <a href="#" class="next" data-section="type-casting">Type Casting <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- LINQ Section -->
+                <section id="linq" class="category-section">
+                    <h2>LINQ (Language Integrated Query)</h2>
+                    
+                    <div class="topic">
+                        <h3>What is LINQ?</h3>
+                        <p>LINQ (Language Integrated Query) allows you to query data from different sources like arrays, collections, XML, and databases using a uniform syntax. It brings the power of SQL-like querying capabilities directly into C#.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic LINQ Query:</h4>
+                            <pre><code>
+// Data source
+int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+// Query syntax
+var evenNumbers = from num in numbers
+                 where num % 2 == 0
+                 select num;
+
+// Method syntax (alternative)
+var evenNumbersMethod = numbers.Where(n => n % 2 == 0);
+
+// Display results
+foreach (var num in evenNumbers)
+{
+    Console.WriteLine(num);  // Outputs: 2, 4, 6, 8, 10
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>This example:</p>
+                                <ul>
+                                    <li>Creates an array of integers</li>
+                                    <li>Uses LINQ Query Syntax to filter even numbers</li>
+                                    <li>Shows the equivalent Method Syntax (alternative)</li>
+                                    <li>Displays the filtered results</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>LINQ Operations</h3>
+                        <p>LINQ provides numerous operations for data manipulation:</p>
+                        
+                        <div class="example-box">
+                            <h4>Common LINQ Operations:</h4>
+                            <pre><code>
+List&lt;string&gt; names = new List&lt;string&gt; { "Alice", "Bob", "Charlie", "David", "Emma" };
+
+// Filtering - Get names with length > 4
+var longNames = names.Where(name => name.Length > 4);
+
+// Ordering - Sort names alphabetically
+var orderedNames = names.OrderBy(name => name);
+
+// Projection - Get lengths of all names
+var nameLengths = names.Select(name => name.Length);
+
+// Aggregation - Count, Sum, Average, etc.
+int totalChars = names.Sum(name => name.Length);
+double averageLength = names.Average(name => name.Length);
+int maxLength = names.Max(name => name.Length);
+
+// Grouping - Group by first letter
+var nameGroups = names.GroupBy(name => name[0]);
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>LINQ to Objects</h3>
+                        <p>LINQ to Objects is used to query collections that implement IEnumerable&lt;T&gt; like List&lt;T&gt;, Array, Dictionary&lt;TKey, TValue&gt;, etc.</p>
+                        
+                        <div class="example-box">
+                            <h4>LINQ with Complex Objects:</h4>
+                            <pre><code>
+// Define a class
+class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Category { get; set; }
+}
+
+// Create a list of products
+List&lt;Product&gt; products = new List&lt;Product&gt;
+{
+    new Product { Id = 1, Name = "Laptop", Price = 1200, Category = "Electronics" },
+    new Product { Id = 2, Name = "Desk Chair", Price = 250, Category = "Furniture" },
+    new Product { Id = 3, Name = "Smartphone", Price = 800, Category = "Electronics" },
+    new Product { Id = 4, Name = "Bookshelf", Price = 150, Category = "Furniture" },
+    new Product { Id = 5, Name = "Headphones", Price = 100, Category = "Electronics" }
+};
+
+// Query for electronics under $1000
+var affordableElectronics = products
+    .Where(p => p.Category == "Electronics" && p.Price < 1000)
+    .OrderBy(p => p.Price);
+
+// Group products by category with average price
+var productsByCategory = products
+    .GroupBy(p => p.Category)
+    .Select(g => new {
+        Category = g.Key,
+        Count = g.Count(),
+        AveragePrice = g.Average(p => p.Price)
+    });
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Test Your Knowledge: LINQ</h3>
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                <p><strong>Question 1:</strong> Which LINQ operator is used to filter elements based on a condition?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q1" value="a">
+                                        <span>Select()</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q1" value="b">
+                                        <span>Where()</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q1" value="c">
+                                        <span>OrderBy()</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q1" value="d">
+                                        <span>GroupBy()</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="b"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 2:</strong> What will the following LINQ query return?</p>
+                                <pre><code>var numbers = new[] { 1, 2, 3, 4, 5 };
+var result = numbers.FirstOrDefault(n => n > 10);</code></pre>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q2" value="a">
+                                        <span>1</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q2" value="b">
+                                        <span>An empty collection</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q2" value="c">
+                                        <span>null</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="linq-q2" value="d">
+                                        <span>0</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="d"></div>
+                            </div>
+                            
+                            <button class="check-answers-btn">Check Answers</button>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="#" class="prev" data-section="collections"><i class="fas fa-arrow-left"></i> Collections</a>
+                        <a href="#" class="next" data-section="async">Asynchronous Programming <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- Beginner Course Section -->
+                <section id="beginner-course" class="category-section">
+                    <h2>Beginner C# Course</h2>
+                    <p>Welcome to our interactive C# course for beginners! This course contains 30 progressive exercises that will teach you C# programming from the ground up. Complete the exercises in order to unlock more advanced topics.</p>
+                    
+                    <div class="course-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">0% Complete (0/30)</div>
+                    </div>
+                    
+                    <div class="course-exercises">
+                        <h3>Module 1: Getting Started with C#</h3>
+                        
+                        <!-- Exercise 1 -->
+                        <div class="exercise-card" data-exercise="1">
+                            <div class="exercise-header">
+                                <h4>Exercise 1: Hello World</h4>
+                                <span class="status">Not Started</span>
+                            </div>
+                            
+                            <div class="exercise-content">
+                                <div class="exercise-description">
+                                    <p>Let's start with the classic "Hello World" program. This is often the first program written when learning a new language.</p>
+                                    <p><strong>Task:</strong> Complete the code below by adding the missing line to display "Hello, World!" to the console.</p>
+                                    <p><strong>Hint:</strong> Look for the TODO comment and use <code>Console.WriteLine()</code> to output text to the console.</p>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // TODO: Add a line of code here to display "Hello, World!" to the console
+            
+        }
+    }
+}
+                            </code></pre>
+                                    <textarea class="code-input"></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Replace the TODO comment with this line:</p>
+                                        <pre><code>Console.WriteLine("Hello, World!");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 2 -->
+                        <div class="exercise-card locked" data-exercise="2">
+                            <div class="exercise-header">
+                                <h4>Exercise 2: Variables and Output</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Variables are used to store data values. In C#, variables must be declared with a specific data type.</p>
+                                    <p><strong>Task:</strong> Complete the code by filling in the TODOs:</p>
+                                    <ol>
+                                        <li>Create a string variable named <code>name</code> and assign your name to it</li>
+                                        <li>Create an integer variable named <code>age</code> and assign your age (or any number) to it</li>
+                                        <li>Complete the Console.WriteLine statement to display your name and age</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace VariablesAndOutput
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // TODO 1: Create a string variable named 'name' and assign your name to it
+            
+            
+            // TODO 2: Create an integer variable named 'age' and assign your age to it
+            
+            
+            // TODO 3: Complete the WriteLine statement to display both variables
+            Console.WriteLine($"My name is {/* Your code here */} and I am {/* Your code here */} years old.");
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input"></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's how to complete each TODO:</p>
+                                        <pre><code>// TODO 1: Create a string variable named 'name' and assign your name to it
+string name = "John";
+
+// TODO 2: Create an integer variable named 'age' and assign your age to it
+int age = 25;
+
+// TODO 3: Complete the WriteLine statement to display both variables
+Console.WriteLine($"My name is {name} and I am {age} years old.");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 3 -->
+                        <div class="exercise-card locked" data-exercise="3">
+                            <div class="exercise-header">
+                                <h4>Exercise 3: Basic Math Operations</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>C# supports various arithmetic operations such as addition (+), subtraction (-), multiplication (*), division (/), and modulus (%).</p>
+                                    <p><strong>Task:</strong> Complete the code by filling in the TODOs to perform basic math operations and display the results.</p>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace MathOperations
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Variables are already declared for you
+            int a = 10;
+            int b = 3;
+            
+            // TODO 1: Calculate the sum of a and b and store in a variable named 'sum'
+            int sum = // Your code here
+            
+            // TODO 2: Calculate the difference between a and b (a - b) and store in a variable named 'difference'
+            int difference = // Your code here
+            
+            // TODO 3: Calculate the product of a and b and store in a variable named 'product'
+            int product = // Your code here
+            
+            // TODO 4: Calculate the quotient of a divided by b and store in a variable named 'quotient'
+            int quotient = // Your code here
+            
+            // TODO 5: Calculate the remainder when a is divided by b using the modulus operator and store in a variable named 'remainder'
+            int remainder = // Your code here
+            
+            // The code to display the results is already written for you
+            Console.WriteLine($"a = {a}, b = {b}");
+            Console.WriteLine($"Sum: {sum}");
+            Console.WriteLine($"Difference: {difference}");
+            Console.WriteLine($"Product: {product}");
+            Console.WriteLine($"Quotient: {quotient}");
+            Console.WriteLine($"Remainder: {remainder}");
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input"></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's how to perform each math operation:</p>
+                                        <pre><code>// TODO 1: Calculate the sum of a and b and store in a variable named 'sum'
+int sum = a + b;
+
+// TODO 2: Calculate the difference between a and b (a - b) and store in a variable named 'difference'
+int difference = a - b;
+
+// TODO 3: Calculate the product of a and b and store in a variable named 'product'
+int product = a * b;
+
+// TODO 4: Calculate the quotient of a divided by b and store in a variable named 'quotient'
+int quotient = a / b;
+
+// TODO 5: Calculate the remainder when a is divided by b using the modulus operator and store in a variable named 'remainder'
+int remainder = a % b;</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 4 -->
+                        <div class="exercise-card locked" data-exercise="4">
+                            <div class="exercise-header">
+                                <h4>Exercise 4: User Input</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Programs often need to get input from users. In C#, we can use <code>Console.ReadLine()</code> to read user input from the console.</p>
+                                    <p><strong>Task:</strong> Create a program that:</p>
+                                    <ol>
+                                        <li>Asks the user to enter their name</li>
+                                        <li>Reads the input using <code>Console.ReadLine()</code></li>
+                                        <li>Asks the user to enter their age</li>
+                                        <li>Reads the age input and converts it to an integer using <code>int.Parse()</code></li>
+                                        <li>Calculates what year they were born (roughly) by subtracting their age from the current year</li>
+                                        <li>Outputs a personalized message with their name and birth year</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace UserInput
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Get the current year (for simplicity, we'll hardcode it)
+            int currentYear = 2023;
+            
+            // Ask for user's name
+            
+            // Read the name input
+            
+            // Ask for user's age
+            
+            // Read and convert the age input
+            
+            // Calculate birth year
+            
+            // Output personalized message
+            
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's how to get user input and convert it:</p>
+                                        <pre><code>Console.Write("Enter your name: ");
+string name = Console.ReadLine();
+
+Console.Write("Enter your age: ");
+int age = int.Parse(Console.ReadLine());
+
+int birthYear = currentYear - age;
+Console.WriteLine($"Hello {name}, you were born around {birthYear}.");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Module 2: Control Flow</h3>
+                        
+                        <!-- Exercise 5 -->
+                        <div class="exercise-card locked" data-exercise="5">
+                            <div class="exercise-header">
+                                <h4>Exercise 5: If-Else Statements</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Conditional statements allow your program to make decisions based on conditions. The if-else statement is one of the most common control structures.</p>
+                                    <p><strong>Task:</strong> Create a program that:</p>
+                                    <ol>
+                                        <li>Asks the user to enter a number</li>
+                                        <li>Checks if the number is positive, negative, or zero</li>
+                                        <li>Outputs an appropriate message based on the check</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace IfElseDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Ask for a number
+            Console.Write("Enter a number: ");
+            
+            // Read and convert the input
+            int number = int.Parse(Console.ReadLine());
+            
+            // Check if positive, negative, or zero and output message
+            
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Use if-else if-else structure to check multiple conditions:</p>
+                                        <pre><code>if (number > 0)
+{
+    Console.WriteLine("The number is positive.");
+}
+else if (number < 0)
+{
+    Console.WriteLine("The number is negative.");
+}
+else
+{
+    Console.WriteLine("The number is zero.");
+}</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 6 -->
+                        <div class="exercise-card locked" data-exercise="6">
+                            <div class="exercise-header">
+                                <h4>Exercise 6: For Loops</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Loops allow you to execute a block of code repeatedly. The for loop is useful when you know how many times you need to iterate.</p>
+                                    <p><strong>Task:</strong> Create a program that:</p>
+                                    <ol>
+                                        <li>Asks the user to enter a positive number</li>
+                                        <li>Calculates and prints the factorial of that number</li>
+                                    </ol>
+                                    <p>Remember: The factorial of a number n (written as n!) is the product of all positive integers less than or equal to n. For example, 5! = 5 × 4 × 3 × 2 × 1 = 120.</p>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace ForLoopFactorial
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Ask for a positive number
+            Console.Write("Enter a positive number: ");
+            int number = int.Parse(Console.ReadLine());
+            
+            // Initialize factorial
+            long factorial = 1;
+            
+            // Calculate factorial using a for loop
+            
+            
+            // Output the result
+            
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Use a for loop to multiply the factorial by each number:</p>
+                                        <pre><code>for (int i = 1; i <= number; i++)
+{
+    factorial *= i;  // This is shorthand for: factorial = factorial * i;
+}
+
+Console.WriteLine($"The factorial of {number} is {factorial}");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 7 -->
+                        <div class="exercise-card locked" data-exercise="7">
+                            <div class="exercise-header">
+                                <h4>Exercise 7: While Loops</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>The while loop executes a block of code as long as a specified condition is true. It's useful when you don't know exactly how many times the loop needs to execute.</p>
+                                    <p><strong>Task:</strong> Create a program that:</p>
+                                    <ol>
+                                        <li>Generates a random number between 1 and 100</li>
+                                        <li>Asks the user to guess the number</li>
+                                        <li>Tells the user if their guess is too high or too low</li>
+                                        <li>Continues until the user guesses correctly</li>
+                                        <li>Keeps track of and displays the number of guesses it took</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace GuessingGame
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a random number generator
+            Random random = new Random();
+            
+            // Generate a random number between 1 and 100
+            int targetNumber = random.Next(1, 101);
+            
+            // Initialize variables
+            int guess = 0;
+            int attempts = 0;
+            
+            // Print welcome message
+            Console.WriteLine("I'm thinking of a number between 1 and 100.");
+            
+            // Main game loop
+            
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Use a while loop that continues until the guess matches the target:</p>
+                                        <pre><code>while (guess != targetNumber)
+{
+    attempts++;
+    Console.Write("Take a guess: ");
+    guess = int.Parse(Console.ReadLine());
+    
+    if (guess < targetNumber)
+    {
+        Console.WriteLine("Too low!");
+    }
+    else if (guess > targetNumber)
+    {
+        Console.WriteLine("Too high!");
+    }
+}
+
+Console.WriteLine($"Congratulations! You guessed the number in {attempts} attempts.");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 8 -->
+                        <div class="exercise-card locked" data-exercise="8">
+                            <div class="exercise-header">
+                                <h4>Exercise 8: Arrays</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Arrays are used to store multiple values in a single variable. They are a fundamental data structure in C#.</p>
+                                    <p><strong>Task:</strong> Create a program that:</p>
+                                    <ol>
+                                        <li>Creates an array of 5 integers</li>
+                                        <li>Asks the user to input 5 numbers and stores them in the array</li>
+                                        <li>Calculates and displays the sum, average, minimum, and maximum of the numbers</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace ArraysDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create an array to store 5 integers
+            int[] numbers = new int[5];
+            
+            // Ask user to input 5 numbers
+            Console.WriteLine("Please enter 5 numbers:");
+            
+            // Store user input in the array
+            
+            
+            // Calculate sum
+            
+            
+            // Calculate average
+            
+            
+            // Find minimum and maximum
+            
+            
+            // Display results
+            
+        }
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's how to work with arrays:</p>
+                                        <pre><code>// Get user input
+for (int i = 0; i < numbers.Length; i++)
+{
+    Console.Write($"Enter number {i+1}: ");
+    numbers[i] = int.Parse(Console.ReadLine());
+}
+
+// Calculate sum
+int sum = 0;
+for (int i = 0; i < numbers.Length; i++)
+{
+    sum += numbers[i];
+}
+
+// Calculate average
+double average = (double)sum / numbers.Length;
+
+// Find min and max
+int min = numbers[0];
+int max = numbers[0];
+
+for (int i = 1; i < numbers.Length; i++)
+{
+    if (numbers[i] < min)
+        min = numbers[i];
+    
+    if (numbers[i] > max)
+        max = numbers[i];
+}
+
+// Display results
+Console.WriteLine($"Sum: {sum}");
+Console.WriteLine($"Average: {average}");
+Console.WriteLine($"Minimum: {min}");
+Console.WriteLine($"Maximum: {max}");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 9 -->
+                        <div class="exercise-card locked" data-exercise="9">
+                            <div class="exercise-header">
+                                <h4>Exercise 9: Methods</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Methods (or functions) allow you to reuse code and organize your program into logical blocks. They are essential for writing clean, maintainable code.</p>
+                                    <p><strong>Task:</strong> Create a program that includes the following methods:</p>
+                                    <ol>
+                                        <li>A method called <code>Add</code> that takes two integers as parameters and returns their sum</li>
+                                        <li>A method called <code>Subtract</code> that takes two integers and returns their difference</li>
+                                        <li>A method called <code>Multiply</code> that takes two integers and returns their product</li>
+                                        <li>A method called <code>Divide</code> that takes two integers and returns their quotient as a double</li>
+                                        <li>Call each method with test values and display the results</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace MethodsDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Test values
+            int a = 10;
+            int b = 5;
+            
+            // Call methods and display results
+            
+        }
+        
+        // Define the Add method
+        
+        
+        // Define the Subtract method
+        
+        
+        // Define the Multiply method
+        
+        
+        // Define the Divide method
+        
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's how to define and call methods:</p>
+                                        <pre><code>// In Main method
+Console.WriteLine($"{a} + {b} = {Add(a, b)}");
+Console.WriteLine($"{a} - {b} = {Subtract(a, b)}");
+Console.WriteLine($"{a} * {b} = {Multiply(a, b)}");
+Console.WriteLine($"{a} / {b} = {Divide(a, b)}");
+
+// Method definitions
+static int Add(int x, int y)
+{
+    return x + y;
+}
+
+static int Subtract(int x, int y)
+{
+    return x - y;
+}
+
+static int Multiply(int x, int y)
+{
+    return x * y;
+}
+
+static double Divide(int x, int y)
+{
+    return (double)x / y;
+}</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise 10 -->
+                        <div class="exercise-card locked" data-exercise="10">
+                            <div class="exercise-header">
+                                <h4>Exercise 10: Simple Calculator</h4>
+                                <span class="status">Locked</span>
+                            </div>
+                            <div class="exercise-content">
+                                <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                                <div class="exercise-description">
+                                    <p>Let's combine what we've learned to build a simple calculator application.</p>
+                                    <p><strong>Task:</strong> Create a console calculator that:</p>
+                                    <ol>
+                                        <li>Asks the user to enter two numbers</li>
+                                        <li>Asks the user to choose an operation (addition, subtraction, multiplication, division)</li>
+                                        <li>Performs the selected operation using methods</li>
+                                        <li>Displays the result</li>
+                                        <li>Asks if the user wants to perform another calculation</li>
+                                        <li>Continues until the user chooses to exit</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="code-editor">
+                                    <pre><code class="starter-code">using System;
+
+namespace SimpleCalculator
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool continueCalculating = true;
+            
+            Console.WriteLine("Welcome to Simple Calculator!");
+            
+            while (continueCalculating)
+            {
+                // Get first number
+                
+                
+                // Get second number
+                
+                
+                // Get operation choice
+                
+                
+                // Perform calculation
+                
+                
+                // Ask if the user wants to continue
+                
+            }
+            
+            Console.WriteLine("Thank you for using Simple Calculator!");
+        }
+        
+        // Addition method
+        
+        
+        // Subtraction method
+        
+        
+        // Multiplication method
+        
+        
+        // Division method
+        
+    }
+}</code></pre>
+                                    <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                    <div class="editor-buttons">
+                                        <button class="run-code-btn">Run Code</button>
+                                        <button class="reset-code-btn">Reset</button>
+                                        <button class="submit-code-btn">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="code-output">
+                                    <h5>Output:</h5>
+                                    <pre class="output-display">Code not run yet...</pre>
+                                </div>
+                                
+                                <div class="exercise-hint">
+                                    <details>
+                                        <summary>Need a hint?</summary>
+                                        <p>Here's an example of a simple calculator implementation:</p>
+                                        <pre><code>// Get first number
+Console.Write("Enter first number: ");
+double num1 = double.Parse(Console.ReadLine());
+
+// Get second number
+Console.Write("Enter second number: ");
+double num2 = double.Parse(Console.ReadLine());
+
+// Get operation choice
+Console.WriteLine("Choose an operation:");
+Console.WriteLine("1. Addition (+)");
+Console.WriteLine("2. Subtraction (-)");
+Console.WriteLine("3. Multiplication (*)");
+Console.WriteLine("4. Division (/)");
+Console.Write("Enter your choice (1-4): ");
+int choice = int.Parse(Console.ReadLine());
+
+// Perform calculation
+double result = 0;
+switch (choice)
+{
+    case 1:
+        result = Add(num1, num2);
+        Console.WriteLine($"{num1} + {num2} = {result}");
+        break;
+    case 2:
+        result = Subtract(num1, num2);
+        Console.WriteLine($"{num1} - {num2} = {result}");
+        break;
+    case 3:
+        result = Multiply(num1, num2);
+        Console.WriteLine($"{num1} * {num2} = {result}");
+        break;
+    case 4:
+        if (num2 != 0)
+        {
+            result = Divide(num1, num2);
+            Console.WriteLine($"{num1} / {num2} = {result}");
+        }
+        else
+        {
+            Console.WriteLine("Error: Cannot divide by zero!");
+        }
+        break;
+    default:
+        Console.WriteLine("Invalid choice!");
+        break;
+}
+
+// Ask if the user wants to continue
+Console.Write("Do you want to perform another calculation? (yes/no): ");
+string answer = Console.ReadLine().ToLower();
+continueCalculating = (answer == "yes" || answer == "y");</code></pre>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- More exercises will be added here -->
+                    </div>
+
+                <h3>Module 3: Object-Oriented Programming</h3>
+                
+                <!-- Exercise 11 -->
+                <div class="exercise-card locked" data-exercise="11">
+                    <div class="exercise-header">
+                        <h4>Exercise 11: Classes and Objects</h4>
+                        <span class="status">Locked</span>
+                    </div>
+                    <div class="exercise-content">
+                            <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                        <div class="exercise-description">
+                            <p>Object-oriented programming (OOP) is a programming paradigm based on the concept of "objects". In C#, classes are used to define objects.</p>
+                            <p><strong>Task:</strong> Create a program that:</p>
+                            <ol>
+                                <li>Defines a <code>Person</code> class with properties for name, age, and email</li>
+                                <li>Includes a constructor to initialize these properties</li>
+                                <li>Adds a method called <code>DisplayInfo</code> that prints the person's information</li>
+                                <li>Creates at least two Person objects with different values</li>
+                                <li>Calls the <code>DisplayInfo</code> method on each object</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+
+namespace ClassesAndObjects
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create Person objects
+            
+            
+            // Display their information
+            
+        }
+    }
+    
+    // Define the Person class
+    
+}</code></pre>
+                            <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                            <div class="editor-buttons">
+                                <button class="run-code-btn">Run Code</button>
+                                <button class="reset-code-btn">Reset</button>
+                                <button class="submit-code-btn">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="code-output">
+                            <h5>Output:</h5>
+                            <pre class="output-display">Code not run yet...</pre>
+                        </div>
+                        
+                        <div class="exercise-hint">
+                            <details>
+                                <summary>Need a hint?</summary>
+                                <p>Here's how to define a class with properties, a constructor, and methods:</p>
+                                <pre><code>// In Main method
+Person person1 = new Person("John Doe", 30, "john@example.com");
+Person person2 = new Person("Jane Smith", 25, "jane@example.com");
+
+person1.DisplayInfo();
+person2.DisplayInfo();
+
+// Person class definition
+class Person
+{
+    // Properties
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public string Email { get; set; }
+    
+    // Constructor
+    public Person(string name, int age, string email)
+    {
+        Name = name;
+        Age = age;
+        Email = email;
+    }
+    
+    // Method to display information
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Name: {Name}");
+        Console.WriteLine($"Age: {Age}");
+        Console.WriteLine($"Email: {Email}");
+        Console.WriteLine(); // Empty line for spacing
+    }
+}</code></pre>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Exercise 12 -->
+                <div class="exercise-card locked" data-exercise="12">
+                    <div class="exercise-header">
+                        <h4>Exercise 12: Lists and LINQ</h4>
+                        <span class="status">Locked</span>
+                    </div>
+                    <div class="exercise-content">
+                            <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                        <div class="exercise-description">
+                            <p>Lists are dynamic collections that can grow or shrink in size. LINQ (Language Integrated Query) provides a convenient way to query and manipulate collections.</p>
+                            <p><strong>Task:</strong> Create a program that:</p>
+                            <ol>
+                                <li>Creates a <code>List&lt;int&gt;</code> and adds at least 10 random numbers between 1 and 100</li>
+                                <li>Uses LINQ to find and display all even numbers from the list</li>
+                                <li>Uses LINQ to sort the list in descending order and display it</li>
+                                <li>Uses LINQ to find and display the top 3 largest numbers</li>
+                                <li>Uses LINQ to calculate and display the average of all numbers</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ListsAndLinq
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a list to store random numbers
+            List<int> numbers = new List<int>();
+            
+            // Create a random number generator
+            Random random = new Random();
+            
+            // Add 10 random numbers between 1 and 100
+            for (int i = 0; i < 10; i++)
+            {
+                numbers.Add(random.Next(1, 101));
+            }
+            
+            // Display the original list
+            Console.WriteLine("Original list of numbers:");
+            foreach (int num in numbers)
+            {
+                Console.Write($"{num} ");
+            }
+            Console.WriteLine("\n");
+            
+            // Find and display even numbers
+            
+            
+            // Sort and display in descending order
+            
+            
+            // Find and display top 3 largest numbers
+            
+            
+            // Calculate and display the average
+            
+        }
+    }
+}</code></pre>
+                            <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                            <div class="editor-buttons">
+                                <button class="run-code-btn">Run Code</button>
+                                <button class="reset-code-btn">Reset</button>
+                                <button class="submit-code-btn">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="code-output">
+                            <h5>Output:</h5>
+                            <pre class="output-display">Code not run yet...</pre>
+                        </div>
+                        
+                        <div class="exercise-hint">
+                            <details>
+                                <summary>Need a hint?</summary>
+                                <p>Here's how to use LINQ for different operations:</p>
+                                <pre><code>// Find and display even numbers
+var evenNumbers = numbers.Where(n => n % 2 == 0);
+Console.WriteLine("Even numbers:");
+foreach (int num in evenNumbers)
+{
+    Console.Write($"{num} ");
+}
+Console.WriteLine("\n");
+
+// Sort and display in descending order
+var descendingOrder = numbers.OrderByDescending(n => n);
+Console.WriteLine("Numbers in descending order:");
+foreach (int num in descendingOrder)
+{
+    Console.Write($"{num} ");
+}
+Console.WriteLine("\n");
+
+// Find and display top 3 largest numbers
+var top3 = numbers.OrderByDescending(n => n).Take(3);
+Console.WriteLine("Top 3 largest numbers:");
+foreach (int num in top3)
+{
+    Console.Write($"{num} ");
+}
+Console.WriteLine("\n");
+
+// Calculate and display the average
+double average = numbers.Average();
+Console.WriteLine($"Average of all numbers: {average:F2}");</code></pre>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Exercise 13 -->
+                <div class="exercise-card locked" data-exercise="13">
+                    <div class="exercise-header">
+                        <h4>Exercise 13: Exception Handling</h4>
+                        <span class="status">Locked</span>
+                    </div>
+                    <div class="exercise-content">
+                            <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                        <div class="exercise-description">
+                            <p>Exception handling allows your program to gracefully handle errors instead of crashing. It's a crucial aspect of writing robust code.</p>
+                            <p><strong>Task:</strong> Create a program that:</p>
+                            <ol>
+                                <li>Asks the user to enter a number</li>
+                                <li>Uses try-catch blocks to handle potential exceptions</li>
+                                <li>Catches and displays appropriate messages for different exception types</li>
+                                <li>Continues asking until the user enters a valid number</li>
+                                <li>Calculates and displays the square root of the number</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+
+namespace ExceptionHandling
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool validInput = false;
+            double number = 0;
+            
+            Console.WriteLine("Exception Handling Example");
+            
+            while (!validInput)
+            {
+                Console.Write("Enter a positive number: ");
+                string input = Console.ReadLine();
+                
+                // Try to parse the input and calculate square root
+                // Handle exceptions appropriately
+                
+            }
+            
+            // Calculate and display square root
+            
+        }
+    }
+}</code></pre>
+                            <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                            <div class="editor-buttons">
+                                <button class="run-code-btn">Run Code</button>
+                                <button class="reset-code-btn">Reset</button>
+                                <button class="submit-code-btn">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="code-output">
+                            <h5>Output:</h5>
+                            <pre class="output-display">Code not run yet...</pre>
+                        </div>
+                        
+                        <div class="exercise-hint">
+                            <details>
+                                <summary>Need a hint?</summary>
+                                <p>Here's how to implement exception handling:</p>
+                                <pre><code>try
+{
+    number = double.Parse(input);
+    
+    if (number < 0)
+    {
+        Console.WriteLine("Error: Please enter a positive number.");
+        continue;
+    }
+    
+    validInput = true;
+}
+catch (FormatException)
+{
+    Console.WriteLine("Error: Please enter a valid numeric value.");
+}
+catch (OverflowException)
+{
+    Console.WriteLine("Error: The number is too large or too small.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+}
+
+// Calculate and display square root (outside the while loop)
+double squareRoot = Math.Sqrt(number);
+Console.WriteLine($"The square root of {number} is {squareRoot:F4}");</code></pre>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Exercise 14 -->
+                <div class="exercise-card locked" data-exercise="14">
+                    <div class="exercise-header">
+                        <h4>Exercise 14: File Handling</h4>
+                        <span class="status">Locked</span>
+                    </div>
+                    <div class="exercise-content">
+                            <p class="locked-message"><i class="fas fa-lock"></i> Complete previous exercises to unlock this exercise.</p>
+                        <div class="exercise-description">
+                            <p>C# provides various ways to work with files and directories. File handling is essential for many real-world applications.</p>
+                            <p><strong>Task:</strong> Create a program that:</p>
+                            <ol>
+                                <li>Creates a text file named "notes.txt"</li>
+                                <li>Asks the user to enter some text</li>
+                                <li>Writes the user's input to the file</li>
+                                <li>Reads and displays the contents of the file</li>
+                                <li>Appends additional text to the file</li>
+                                <li>Reads and displays the updated contents</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+using System.IO;
+
+namespace FileHandling
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string fileName = "notes.txt";
+            
+            Console.WriteLine("File Handling Example");
+            
+            // Ask the user for input
+            Console.WriteLine("Enter some text to write to the file:");
+            string userInput = Console.ReadLine();
+            
+            // Create and write to the file
+            
+            
+            // Read and display the file contents
+            
+            
+            // Append additional text
+            Console.WriteLine("\nEnter additional text to append to the file:");
+            string additionalText = Console.ReadLine();
+            
+            
+            // Read and display the updated content
+            
+        }
+    }
+}</code></pre>
+                            <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                            <div class="editor-buttons">
+                                <button class="run-code-btn">Run Code</button>
+                                <button class="reset-code-btn">Reset</button>
+                                <button class="submit-code-btn">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="code-output">
+                            <h5>Output:</h5>
+                            <pre class="output-display">Code not run yet...</pre>
+                        </div>
+                        
+                        <div class="exercise-hint">
+                            <details>
+                                <summary>Need a hint?</summary>
+                                <p>Here's how to handle files in C#:</p>
+                                <pre><code>// Create and write to the file
+try
+{
+    // Write text to the file (overwrites any existing content)
+    File.WriteAllText(fileName, userInput);
+    Console.WriteLine("File created and text written successfully!");
+    
+    // Read and display the file contents
+    Console.WriteLine("\nFile contents:");
+    string fileContent = File.ReadAllText(fileName);
+    Console.WriteLine(fileContent);
+    
+    // Append additional text
+    File.AppendAllText(fileName, "\n" + additionalText);
+    Console.WriteLine("\nAdditional text appended successfully!");
+    
+    // Read and display the updated content
+    Console.WriteLine("\nUpdated file contents:");
+    string updatedContent = File.ReadAllText(fileName);
+    Console.WriteLine(updatedContent);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"An error occurred: {ex.Message}");
+}</code></pre>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                    
+                    <h3>Module 4: Advanced C# Programming</h3>
+                
+                <!-- Exercise 15 -->
+                <div class="exercise-card locked" data-exercise="15">
+                    <div class="exercise-header">
+                            <h4>Exercise 15: Inheritance</h4>
+                        <span class="status">Locked</span>
+                    </div>
+                    <div class="exercise-content">
+                        <div class="exercise-description">
+                                <p>Inheritance is a fundamental concept in object-oriented programming that allows a class to inherit properties and methods from another class.</p>
+                            <p><strong>Task:</strong> Create a program that:</p>
+                            <ol>
+                                    <li>Defines a base class called <code>Shape</code> with properties for name and color</li>
+                                    <li>Adds a virtual method called <code>CalculateArea</code> that returns 0.0</li>
+                                    <li>Creates two derived classes: <code>Circle</code> and <code>Rectangle</code></li>
+                                    <li>Overrides the <code>CalculateArea</code> method in each derived class</li>
+                                    <li>Creates instances of both classes and calculates their areas</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+
+namespace InheritanceDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create instances of Circle and Rectangle
+            
+            
+            // Display information about the shapes
+            
+        }
+    }
+    
+    // Define the Shape base class
+    
+    
+    // Define the Circle class
+    
+    
+    // Define the Rectangle class
+    
+}</code></pre>
+                                <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                <div class="editor-buttons">
+                                    <button class="run-code-btn">Run Code</button>
+                                    <button class="reset-code-btn">Reset</button>
+                                    <button class="submit-code-btn">Submit</button>
+                                </div>
+                            </div>
+                            
+                            <div class="code-output">
+                                <h5>Output:</h5>
+                                <pre class="output-display">Code not run yet...</pre>
+                            </div>
+                            
+                            <div class="exercise-hint">
+                                <details>
+                                    <summary>Need a hint?</summary>
+                                    <p>Here's how to implement inheritance:</p>
+                                    <pre><code>// In Main method
+Circle circle = new Circle("My Circle", "Red", 5.0);
+Rectangle rectangle = new Rectangle("My Rectangle", "Blue", 4.0, 6.0);
+
+Console.WriteLine($"Shape: {circle.Name}, Color: {circle.Color}");
+Console.WriteLine($"Area: {circle.CalculateArea()}");
+Console.WriteLine();
+
+Console.WriteLine($"Shape: {rectangle.Name}, Color: {rectangle.Color}");
+Console.WriteLine($"Area: {rectangle.CalculateArea()}");
+
+// Shape base class
+class Shape
+{
+    public string Name { get; set; }
+    public string Color { get; set; }
+    
+    public Shape(string name, string color)
+    {
+        Name = name;
+        Color = color;
+    }
+    
+    public virtual double CalculateArea()
+    {
+        return 0.0;
+    }
+}
+
+// Circle class
+class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(string name, string color, double radius) : base(name, color)
+    {
+        Radius = radius;
+    }
+    
+    public override double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+}
+
+// Rectangle class
+class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(string name, string color, double width, double height) : base(name, color)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    public override double CalculateArea()
+    {
+        return Width * Height;
+    }
+}</code></pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 16 -->
+                    <div class="exercise-card locked" data-exercise="16">
+                        <div class="exercise-header">
+                            <h4>Exercise 16: Interfaces</h4>
+                            <span class="status">Locked</span>
+                        </div>
+                        <div class="exercise-content">
+                            <div class="exercise-description">
+                                <p>Interfaces define a contract that classes can implement. They allow for polymorphism and are a key component of object-oriented design.</p>
+                                <p><strong>Task:</strong> Create a program that:</p>
+                                <ol>
+                                    <li>Defines an interface called <code>IDrawable</code> with a method <code>Draw()</code></li>
+                                    <li>Creates three classes that implement the interface: <code>Circle</code>, <code>Rectangle</code>, and <code>Triangle</code></li>
+                                    <li>Implements the <code>Draw()</code> method differently in each class</li>
+                                    <li>Creates a list of <code>IDrawable</code> objects with instances of each class</li>
+                                    <li>Iterates through the list and calls <code>Draw()</code> on each object</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="code-editor">
+                                <pre><code class="starter-code">using System;
+using System.Collections.Generic;
+
+namespace InterfacesDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a list of IDrawable objects
+            
+            
+            // Add instances of each shape to the list
+            
+            
+            // Draw all shapes
+            
+        }
+    }
+    
+    // Define the IDrawable interface
+    
+    
+    // Implement Circle class
+    
+    
+    // Implement Rectangle class
+    
+    
+    // Implement Triangle class
+    
+}</code></pre>
+                            <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                            <div class="editor-buttons">
+                                <button class="run-code-btn">Run Code</button>
+                                <button class="reset-code-btn">Reset</button>
+                                <button class="submit-code-btn">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="code-output">
+                            <h5>Output:</h5>
+                            <pre class="output-display">Code not run yet...</pre>
+                        </div>
+                        
+                        <div class="exercise-hint">
+                            <details>
+                                <summary>Need a hint?</summary>
+                                    <p>Here's how to implement interfaces:</p>
+                                    <pre><code>// In Main method
+List<IDrawable> shapes = new List<IDrawable>();
+
+shapes.Add(new Circle());
+shapes.Add(new Rectangle());
+shapes.Add(new Triangle());
+
+Console.WriteLine("Drawing all shapes:");
+foreach (IDrawable shape in shapes)
+{
+    shape.Draw();
+}
+
+// Define the interface
+interface IDrawable
+{
+    void Draw();
+}
+
+// Circle class
+class Circle : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Drawing a circle: O");
+    }
+}
+
+// Rectangle class
+class Rectangle : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Drawing a rectangle: □");
+    }
+}
+
+// Triangle class
+class Triangle : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Drawing a triangle: △");
+    }
+}</code></pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 17 -->
+                    <div class="exercise-card locked" data-exercise="17">
+                        <div class="exercise-header">
+                            <h4>Exercise 17: Generics</h4>
+                            <span class="status">Locked</span>
+                        </div>
+                        <div class="exercise-content">
+                            <div class="exercise-description">
+                                <p>Generics allow you to write type-safe code without committing to specific data types. They increase code reusability and type safety.</p>
+                                <p><strong>Task:</strong> Create a program that:</p>
+                                <ol>
+                                    <li>Defines a generic class called <code>Stack&lt;T&gt;</code> that represents a simple stack data structure</li>
+                                    <li>Implements methods: <code>Push(T item)</code>, <code>Pop()</code>, <code>Peek()</code>, and <code>IsEmpty()</code></li>
+                                    <li>Creates two stacks: one for integers and one for strings</li>
+                                    <li>Demonstrates each method on both stacks</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="code-editor">
+                                <pre><code class="starter-code">using System;
+using System.Collections.Generic;
+
+namespace GenericsDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a stack of integers
+            
+            
+            // Push items onto the integer stack
+            
+            
+            // Create a stack of strings
+            
+            
+            // Push items onto the string stack
+            
+            
+            // Demonstrate operations on both stacks
+            
+        }
+    }
+    
+    // Define the generic Stack<T> class
+    
+}</code></pre>
+                                <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                <div class="editor-buttons">
+                                    <button class="run-code-btn">Run Code</button>
+                                    <button class="reset-code-btn">Reset</button>
+                                    <button class="submit-code-btn">Submit</button>
+                                </div>
+                            </div>
+                            
+                            <div class="code-output">
+                                <h5>Output:</h5>
+                                <pre class="output-display">Code not run yet...</pre>
+                            </div>
+                            
+                            <div class="exercise-hint">
+                                <details>
+                                    <summary>Need a hint?</summary>
+                                    <p>Here's how to implement a generic Stack class:</p>
+                                    <pre><code>// In Main method
+Stack<int> intStack = new Stack<int>();
+Console.WriteLine("Integer Stack Demo:");
+Console.WriteLine($"Is empty: {intStack.IsEmpty()}");
+
+intStack.Push(10);
+intStack.Push(20);
+intStack.Push(30);
+
+Console.WriteLine($"Peek: {intStack.Peek()}");
+Console.WriteLine($"Pop: {intStack.Pop()}");
+Console.WriteLine($"Peek after pop: {intStack.Peek()}");
+Console.WriteLine($"Is empty: {intStack.IsEmpty()}");
+
+Console.WriteLine();
+
+Stack<string> stringStack = new Stack<string>();
+Console.WriteLine("String Stack Demo:");
+
+stringStack.Push("Hello");
+stringStack.Push("World");
+stringStack.Push("C#");
+
+Console.WriteLine($"Peek: {stringStack.Peek()}");
+Console.WriteLine($"Pop: {stringStack.Pop()}");
+Console.WriteLine($"Peek after pop: {stringStack.Peek()}");
+
+// Generic Stack class
+class Stack<T>
+{
+    private List<T> items = new List<T>();
+    
+    public void Push(T item)
+    {
+        items.Add(item);
+    }
+    
+    public T Pop()
+    {
+        if (IsEmpty())
+        {
+            throw new InvalidOperationException("Stack is empty");
+        }
+        
+        T item = items[items.Count - 1];
+        items.RemoveAt(items.Count - 1);
+        return item;
+    }
+    
+    public T Peek()
+    {
+        if (IsEmpty())
+        {
+            throw new InvalidOperationException("Stack is empty");
+        }
+        
+        return items[items.Count - 1];
+    }
+    
+    public bool IsEmpty()
+    {
+        return items.Count == 0;
+    }
+}</code></pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 18 -->
+                    <div class="exercise-card locked" data-exercise="18">
+                        <div class="exercise-header">
+                            <h4>Exercise 18: Delegates and Events</h4>
+                            <span class="status">Locked</span>
+                        </div>
+                        <div class="exercise-content">
+                            <div class="exercise-description">
+                                <p>Delegates enable event-driven programming in C#. They're type-safe function pointers that allow methods to be passed as parameters.</p>
+                                <p><strong>Task:</strong> Create a program that:</p>
+                                <ol>
+                                    <li>Defines a delegate called <code>MathOperation</code> that takes two integers and returns an integer</li>
+                                    <li>Creates several methods that match the delegate signature (Add, Subtract, Multiply, Divide)</li>
+                                    <li>Defines a class <code>Calculator</code> with an event that triggers when an operation is performed</li>
+                                    <li>Subscribes to the event and displays messages when operations are performed</li>
+                                    <li>Demonstrates using the delegate and event with different operations</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="code-editor">
+                                <pre><code class="starter-code">using System;
+
+namespace DelegatesAndEvents
+{
+    // Define the delegate
+    
+    
+    // Define an event args class to pass operation information
+    
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a calculator
+            
+            
+            // Subscribe to the calculator's event
+            
+            
+            // Perform different operations
+            
+        }
+        
+        // Define math operation methods
+        
+    }
+    
+    // Calculator class with an event
+    
+}</code></pre>
+                                <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                <div class="editor-buttons">
+                                    <button class="run-code-btn">Run Code</button>
+                                    <button class="reset-code-btn">Reset</button>
+                                    <button class="submit-code-btn">Submit</button>
+                                </div>
+                            </div>
+                            
+                            <div class="code-output">
+                                <h5>Output:</h5>
+                                <pre class="output-display">Code not run yet...</pre>
+                            </div>
+                            
+                            <div class="exercise-hint">
+                                <details>
+                                    <summary>Need a hint?</summary>
+                                    <p>Here's how to implement delegates and events:</p>
+                                    <pre><code>// Define the delegate
+delegate int MathOperation(int x, int y);
+
+// Define an event args class to pass operation information
+class CalculatorEventArgs : EventArgs
+{
+    public string OperationName { get; set; }
+    public int Result { get; set; }
+    
+    public CalculatorEventArgs(string operationName, int result)
+    {
+        OperationName = operationName;
+        Result = result;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a calculator
+        Calculator calculator = new Calculator();
+        
+        // Subscribe to the calculator's event
+        calculator.OperationPerformed += Calculator_OperationPerformed;
+        
+        // Perform different operations
+        Console.WriteLine("Addition: " + calculator.PerformOperation(Add, 10, 5, "Addition"));
+        Console.WriteLine("Subtraction: " + calculator.PerformOperation(Subtract, 10, 5, "Subtraction"));
+        Console.WriteLine("Multiplication: " + calculator.PerformOperation(Multiply, 10, 5, "Multiplication"));
+        Console.WriteLine("Division: " + calculator.PerformOperation(Divide, 10, 5, "Division"));
+    }
+    
+    // Event handler method
+    static void Calculator_OperationPerformed(object sender, CalculatorEventArgs e)
+    {
+        Console.WriteLine($"[Event] {e.OperationName} operation performed. Result: {e.Result}");
+    }
+    
+    // Define math operation methods
+    static int Add(int x, int y) => x + y;
+    static int Subtract(int x, int y) => x - y;
+    static int Multiply(int x, int y) => x * y;
+    static int Divide(int x, int y) => x / y;
+}
+
+// Calculator class with an event
+class Calculator
+{
+    // Define the event
+    public event EventHandler<CalculatorEventArgs> OperationPerformed;
+    
+    // Method to perform operation and raise the event
+    public int PerformOperation(MathOperation operation, int x, int y, string operationName)
+    {
+        int result = operation(x, y);
+        
+        // Raise the event
+        OnOperationPerformed(new CalculatorEventArgs(operationName, result));
+        
+        return result;
+    }
+    
+    // Method to raise the event
+    protected virtual void OnOperationPerformed(CalculatorEventArgs e)
+    {
+        OperationPerformed?.Invoke(this, e);
+    }
+}</code></pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 19 -->
+                    <div class="exercise-card locked" data-exercise="19">
+                        <div class="exercise-header">
+                            <h4>Exercise 19: LINQ Basics</h4>
+                            <span class="status">Locked</span>
+                        </div>
+                        <div class="exercise-content">
+                            <div class="exercise-description">
+                                <p>LINQ (Language Integrated Query) allows you to query data from different sources using a consistent syntax. It's a powerful feature for data manipulation.</p>
+                                <p><strong>Task:</strong> Create a program that:</p>
+                                <ol>
+                                    <li>Creates a list of <code>Person</code> objects with various attributes (name, age, city)</li>
+                                    <li>Uses LINQ queries to filter, sort, and project data from the list</li>
+                                    <li>Demonstrates both query syntax and method syntax</li>
+                                    <li>Includes at least 5 different LINQ operations (Where, OrderBy, Select, GroupBy, etc.)</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="code-editor">
+                            <pre><code class="starter-code">using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LinqBasics
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a list of Person objects
+            
+            
+            // LINQ Query 1: Filter people by age (older than 30)
+            
+            
+            // LINQ Query 2: Sort people by name
+            
+            
+            // LINQ Query 3: Project data to a new format
+            
+            
+            // LINQ Query 4: Group people by city
+            
+            
+            // LINQ Query 5: Aggregate data to get statistics
+            
+        }
+    }
+    
+    // Define the Person class
+    
+}</code></pre>
+                                <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                <div class="editor-buttons">
+                                    <button class="run-code-btn">Run Code</button>
+                                    <button class="reset-code-btn">Reset</button>
+                                    <button class="submit-code-btn">Submit</button>
+                                </div>
+                            </div>
+                            
+                            <div class="code-output">
+                                <h5>Output:</h5>
+                                <pre class="output-display">Code not run yet...</pre>
+                            </div>
+                            
+                            <div class="exercise-hint">
+                                <details>
+                                    <summary>Need a hint?</summary>
+                                    <p>Here's how to use LINQ for different operations:</p>
+                                    <pre><code>// Person class
+class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public string City { get; set; }
+    
+    public Person(string name, int age, string city)
+    {
+        Name = name;
+        Age = age;
+        City = city;
+    }
+}
+
+// In Main method
+List<Person> people = new List<Person>
+{
+    new Person("Alice", 25, "New York"),
+    new Person("Bob", 32, "Chicago"),
+    new Person("Charlie", 35, "New York"),
+    new Person("David", 28, "Boston"),
+    new Person("Eva", 41, "Chicago"),
+    new Person("Frank", 22, "Boston"),
+    new Person("Grace", 38, "New York")
+};
+
+// LINQ Query 1: Filter people by age (older than 30) - Query syntax
+Console.WriteLine("People older than 30 (Query syntax):");
+var olderPeople = from person in people
+                 where person.Age > 30
+                 select person;
+
+foreach (var person in olderPeople)
+{
+    Console.WriteLine($"{person.Name}, {person.Age}");
+}
+Console.WriteLine();
+
+// LINQ Query 2: Sort people by name - Method syntax
+Console.WriteLine("People sorted by name (Method syntax):");
+var sortedPeople = people.OrderBy(p => p.Name);
+
+foreach (var person in sortedPeople)
+{
+    Console.WriteLine($"{person.Name}, {person.Age}");
+}
+Console.WriteLine();
+
+// LINQ Query 3: Project data to a new format
+Console.WriteLine("Name and city only:");
+var nameAndCity = people.Select(p => new { p.Name, p.City });
+
+foreach (var item in nameAndCity)
+{
+    Console.WriteLine($"{item.Name} - {item.City}");
+}
+Console.WriteLine();
+
+// LINQ Query 4: Group people by city
+Console.WriteLine("People grouped by city:");
+var groupedByCity = people.GroupBy(p => p.City);
+
+foreach (var cityGroup in groupedByCity)
+{
+    Console.WriteLine($"City: {cityGroup.Key}");
+    foreach (var person in cityGroup)
+    {
+        Console.WriteLine($"  {person.Name}, {person.Age}");
+    }
+}
+Console.WriteLine();
+
+// LINQ Query 5: Aggregate data to get statistics
+Console.WriteLine("Statistics:");
+double averageAge = people.Average(p => p.Age);
+int minAge = people.Min(p => p.Age);
+int maxAge = people.Max(p => p.Age);
+var cityCounts = people.GroupBy(p => p.City)
+                       .Select(g => new { City = g.Key, Count = g.Count() });
+
+Console.WriteLine($"Average Age: {averageAge:F1}");
+Console.WriteLine($"Minimum Age: {minAge}");
+Console.WriteLine($"Maximum Age: {maxAge}");
+Console.WriteLine("People per city:");
+foreach (var city in cityCounts)
+{
+    Console.WriteLine($"  {city.City}: {city.Count}");
+}</code></pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 20 -->
+                    <div class="exercise-card locked" data-exercise="20">
+                        <div class="exercise-header">
+                            <h4>Exercise 20: Asynchronous Programming</h4>
+                            <span class="status">Locked</span>
+            </div>
+                        <div class="exercise-content">
+                            <div class="exercise-description">
+                                <p>Asynchronous programming allows operations to run in the background without blocking the main thread. It's essential for creating responsive applications.</p>
+                                <p><strong>Task:</strong> Create a program that:</p>
+                                <ol>
+                                    <li>Defines several async methods that simulate long-running operations</li>
+                                    <li>Uses the <code>async</code> and <code>await</code> keywords to call these methods</li>
+                                    <li>Demonstrates both sequential and parallel execution of async operations</li>
+                                    <li>Shows how to handle exceptions in async code</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="code-editor">
+                                <pre><code class="starter-code">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace AsyncDemo
+{
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            Console.WriteLine("Asynchronous Programming Demo");
+            Console.WriteLine("Starting at: " + DateTime.Now);
+            
+            // Call async method sequentially
+            
+            
+            // Call async methods in parallel
+            
+            
+            // Demonstrate exception handling in async code
+            
+        }
+        
+        // Define async methods
+        
+    }
+}</code></pre>
+                                <textarea class="code-input" placeholder="Write your code here..."></textarea>
+                                <div class="editor-buttons">
+                                    <button class="run-code-btn">Run Code</button>
+                                    <button class="reset-code-btn">Reset</button>
+                                    <button class="submit-code-btn">Submit</button>
+                                </div>
+                    
+<div class="course-completion">
+                        <h3>Congratulations!</h3>
+                        <p>You've completed all 20 exercises in the Beginner C# Course! You should now have a solid foundation in C# programming concepts and be ready to tackle more advanced topics.</p>
+                        <p>Consider moving on to the Intermediate C# Course to further enhance your skills.</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html>
+
+
+
+

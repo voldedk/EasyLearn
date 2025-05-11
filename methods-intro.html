@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Methods Overview - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Methods Overview</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Methods</h3>
+                        <p>Methods are blocks of code that perform a specific task. They help organize code into reusable, modular components, making programs easier to understand, maintain, and debug. Methods are a fundamental building block of object-oriented programming in C#.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Method Concepts:</h4>
+                            <ul>
+                                <li>Methods encapsulate a sequence of statements that perform a specific task</li>
+                                <li>They can accept input through parameters and return output through return values</li>
+                                <li>Methods help avoid code duplication and improve code organization</li>
+                                <li>In C#, methods must be declared within a class or struct</li>
+                                <li>Methods can have different access modifiers to control their visibility</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Declaration and Syntax</h3>
+                        <p>In C#, a method declaration consists of several parts that define its behavior and usage.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Method Syntax:</h4>
+                            <pre><code>
+[access_modifier] [modifiers] return_type MethodName([parameters])
+{
+    // Method body
+    // Statements to execute
+    
+    [return statement];
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Method components:</p>
+                                <ul>
+                                    <li><strong>Access modifier:</strong> Controls method visibility (public, private, protected, internal)</li>
+                                    <li><strong>Modifiers:</strong> Optional keywords like static, virtual, abstract, override, etc.</li>
+                                    <li><strong>Return type:</strong> The data type of the value the method returns (or void if it doesn't return a value)</li>
+                                    <li><strong>Method name:</strong> Identifier that follows C# naming conventions (usually PascalCase)</li>
+                                    <li><strong>Parameters:</strong> Input values the method can work with (optional)</li>
+                                    <li><strong>Method body:</strong> Statements enclosed in curly braces that perform the method's work</li>
+                                    <li><strong>Return statement:</strong> Specifies the value to return to the caller (if not void)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Method Examples:</h4>
+                            <pre><code>
+// Simple method with no parameters or return value
+public void ShowMessage()
+{
+    Console.WriteLine("Hello, World!");
+}
+
+// Method with parameters
+public void DisplaySum(int a, int b)
+{
+    int sum = a + b;
+    Console.WriteLine($"The sum of {a} and {b} is {sum}");
+}
+
+// Method with return value
+public int Add(int a, int b)
+{
+    return a + b;
+}
+
+// Method with both parameters and return value
+public bool IsEven(int number)
+{
+    return number % 2 == 0;
+}
+
+// Static method
+public static double CalculateCircleArea(double radius)
+{
+    return Math.PI * radius * radius;
+}
+
+// Private method
+private void LogError(string message)
+{
+    Console.WriteLine($"ERROR: {message}");
+    // Save to log file, etc.
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Calling Methods</h3>
+                        <p>Methods are executed (or "called") by specifying the method name followed by parentheses, including any required argument values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Method Call Syntax:</h4>
+                            <pre><code>
+// For non-static methods, you call them on an instance of the class
+ClassName objectName = new ClassName();
+objectName.MethodName(arguments);
+
+// For static methods, you call them directly on the class
+ClassName.StaticMethodName(arguments);
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Method Call Examples:</h4>
+                            <pre><code>
+public class Calculator
+{
+    // Instance method
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+    
+    // Static method
+    public static int Multiply(int a, int b)
+    {
+        return a * b;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Calling instance methods
+        Calculator calc = new Calculator();
+        int sum = calc.Add(5, 3);  // sum = 8
+        Console.WriteLine($"5 + 3 = {sum}");
+        
+        // Calling method and using result directly
+        Console.WriteLine($"7 + 2 = {calc.Add(7, 2)}");  // 7 + 2 = 9
+        
+        // Calling static methods
+        int product = Calculator.Multiply(4, 6);  // product = 24
+        Console.WriteLine($"4 × 6 = {product}");
+        
+        // Calling method in control flow
+        if (calc.Add(10, 5) > 10)
+        {
+            Console.WriteLine("The sum is greater than 10");
+        }
+        
+        // Calling a method from another method
+        DisplayResult(calc.Add(8, 4));
+    }
+    
+    public static void DisplayResult(int result)
+    {
+        Console.WriteLine($"The result is: {result}");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important points about method calls:</p>
+                                <ul>
+                                    <li>Instance methods require an object instance to be called</li>
+                                    <li>Static methods are called on the class itself</li>
+                                    <li>Arguments must match the parameter types and order</li>
+                                    <li>When a method returns a value, you can use it directly in expressions</li>
+                                    <li>Method calls can be nested (one method calling another)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Return Values and void</h3>
+                        <p>Methods can return a value to the caller using the <code>return</code> statement, or they can be declared as <code>void</code> if they don't need to return anything.</p>
+                        
+                        <div class="example-box">
+                            <h4>Return Type Examples:</h4>
+                            <pre><code>
+// Method with no return value (void)
+public void PrintMessage(string message)
+{
+    Console.WriteLine(message);
+    // No return statement needed
+}
+
+// Method returning an integer
+public int CalculateSum(int[] numbers)
+{
+    int sum = 0;
+    foreach (int num in numbers)
+    {
+        sum += num;
+    }
+    return sum;  // Returns the result to the caller
+}
+
+// Method returning a boolean
+public bool IsValidPassword(string password)
+{
+    if (string.IsNullOrEmpty(password))
+    {
+        return false;
+    }
+    
+    if (password.Length < 8)
+    {
+        return false;
+    }
+    
+    // More validation checks
+    return true;  // Password passed all checks
+}
+
+// Method returning a string
+public string FormatName(string firstName, string lastName)
+{
+    return $"{lastName}, {firstName}";
+}
+
+// Method returning an object
+public Person GetPersonById(int id)
+{
+    // Database lookup logic
+    Person person = database.Find(id);
+    return person;
+}
+
+// Method returning an array
+public int[] GetEvenNumbers(int max)
+{
+    List<int> result = new List<int>();
+    for (int i = 2; i <= max; i += 2)
+    {
+        result.Add(i);
+    }
+    return result.ToArray();
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about return values:</p>
+                                <ul>
+                                    <li>The <code>return</code> statement immediately exits the method</li>
+                                    <li>Multiple return statements are allowed (but use with caution for readability)</li>
+                                    <li>The return type must match the declared method return type</li>
+                                    <li>Methods declared as <code>void</code> can use <code>return;</code> to exit early</li>
+                                    <li>You can return complex types like arrays, collections, and custom objects</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Early Returns and Multiple Return Statements:</h4>
+                            <pre><code>
+// Using multiple return statements for cleaner code (guard clauses)
+public double CalculateDiscount(double price, int customerYears)
+{
+    // Input validation (guard clauses)
+    if (price <= 0)
+    {
+        return 0;  // Early return for invalid price
+    }
+    
+    if (customerYears < 0)
+    {
+        return 0;  // Early return for invalid customer years
+    }
+    
+    // Business logic
+    if (customerYears > 5)
+    {
+        return price * 0.2;  // 20% discount for loyal customers
+    }
+    else if (customerYears > 2)
+    {
+        return price * 0.1;  // 10% discount for regular customers
+    }
+    
+    return price * 0.05;  // 5% discount for new customers
+}
+
+// Early return from a void method
+public void ProcessOrder(Order order)
+{
+    if (order == null)
+    {
+        Console.WriteLine("Error: Order is null");
+        return;  // Exit the method early
+    }
+    
+    if (!order.IsValid)
+    {
+        Console.WriteLine("Error: Order is invalid");
+        return;  // Exit the method early
+    }
+    
+    // Process the valid order
+    Console.WriteLine("Processing order...");
+    // More processing logic
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Access Modifiers</h3>
+                        <p>Access modifiers control the visibility and accessibility of methods in your code.</p>
+                        
+                        <div class="example-box">
+                            <h4>Access Modifier Types:</h4>
+                            <pre><code>
+// Public: accessible from anywhere
+public void PublicMethod()
+{
+    Console.WriteLine("This method can be called from anywhere.");
+}
+
+// Private: accessible only within the containing class
+private void PrivateMethod()
+{
+    Console.WriteLine("This method can only be called from within the same class.");
+}
+
+// Protected: accessible within the containing class and derived classes
+protected void ProtectedMethod()
+{
+    Console.WriteLine("This method can be called from the same class or derived classes.");
+}
+
+// Internal: accessible within the same assembly
+internal void InternalMethod()
+{
+    Console.WriteLine("This method can be called from anywhere in the same assembly.");
+}
+
+// Protected Internal: accessible within the same assembly or derived classes
+protected internal void ProtectedInternalMethod()
+{
+    Console.WriteLine("This method can be called from the same assembly or derived classes.");
+}
+
+// Private Protected (C# 7.2+): accessible within the same class or derived classes in the same assembly
+private protected void PrivateProtectedMethod()
+{
+    Console.WriteLine("This method can be called from the same class or derived classes in the same assembly.");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Choosing the right access modifier:</p>
+                                <table>
+                                    <tr>
+                                        <th>Access Modifier</th>
+                                        <th>Visibility</th>
+                                        <th>Best Used For</th>
+                                    </tr>
+                                    <tr>
+                                        <td>public</td>
+                                        <td>No restrictions</td>
+                                        <td>APIs and methods that need to be called from outside the class</td>
+                                    </tr>
+                                    <tr>
+                                        <td>private</td>
+                                        <td>Only within the class</td>
+                                        <td>Internal helper methods and implementation details</td>
+                                    </tr>
+                                    <tr>
+                                        <td>protected</td>
+                                        <td>Class and derived classes</td>
+                                        <td>Methods that should be available to subclasses</td>
+                                    </tr>
+                                    <tr>
+                                        <td>internal</td>
+                                        <td>Within the assembly</td>
+                                        <td>Methods used across the project but not externally</td>
+                                    </tr>
+                                    <tr>
+                                        <td>protected internal</td>
+                                        <td>Within assembly or derived classes</td>
+                                        <td>Methods used by derived classes across assemblies</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Static vs. Instance Methods</h3>
+                        <p>C# methods can be either static (class-level) or instance (object-level), with different usage patterns and purposes.</p>
+                        
+                        <div class="example-box">
+                            <h4>Static vs. Instance Methods:</h4>
+                            <pre><code>
+public class Calculator
+{
+    // Instance fields
+    private int operationCount;
+    
+    // Instance method - requires an instance of the class
+    public int Add(int a, int b)
+    {
+        operationCount++;  // Can access instance fields
+        return a + b;
+    }
+    
+    // Instance method that uses the object's state
+    public int GetOperationCount()
+    {
+        return operationCount;
+    }
+    
+    // Static method - belongs to the class itself
+    public static int Multiply(int a, int b)
+    {
+        // Cannot access instance fields or call instance methods directly
+        // operationCount++;  // This would cause a compiler error
+        return a * b;
+    }
+    
+    // Static utility method
+    public static bool IsPositive(int number)
+    {
+        return number > 0;
+    }
+}
+
+// Usage:
+public static void Main()
+{
+    // Instance methods require an object instance
+    Calculator calc = new Calculator();
+    int sum = calc.Add(5, 3);         // sum = 8
+    int count = calc.GetOperationCount(); // count = 1
+    
+    // Static methods are called on the class itself
+    int product = Calculator.Multiply(4, 5);  // product = 20
+    bool isPos = Calculator.IsPositive(10);   // isPos = true
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Differences between static and instance methods:</p>
+                                <table>
+                                    <tr>
+                                        <th>Static Methods</th>
+                                        <th>Instance Methods</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Called on the class itself</td>
+                                        <td>Called on an instance (object) of the class</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cannot access instance fields/methods</td>
+                                        <td>Can access both instance and static members</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cannot use 'this' keyword</td>
+                                        <td>Can use 'this' to refer to the current instance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Do not have access to object state</td>
+                                        <td>Can work with object-specific data</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Good for utility functions</td>
+                                        <td>Good for operations that depend on object state</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Organization and Best Practices</h3>
+                        <p>Well-organized methods lead to cleaner, more maintainable code. Following best practices helps improve code quality and readability.</p>
+                        
+                        <div class="example-box">
+                            <h4>Method Organization Best Practices:</h4>
+                            <pre><code>
+// DO: Keep methods focused on a single task
+public bool ValidateEmail(string email)
+{
+    if (string.IsNullOrEmpty(email))
+        return false;
+    
+    // Check for @ symbol and proper domain format
+    // ...
+    
+    return true;
+}
+
+// DON'T: Create methods that do too many things
+public void ProcessUserInputDoTooMuch(string input)
+{
+    // Validate input
+    // Parse input
+    // Update database
+    // Send notification email
+    // Log activity
+    // Update UI
+    // ...
+}
+
+// DO: Break complex methods into smaller, focused methods
+public void ProcessUserInput(string input)
+{
+    if (!ValidateInput(input))
+        return;
+    
+    var data = ParseInput(input);
+    SaveToDatabase(data);
+    SendNotification(data);
+    LogActivity("ProcessUserInput", data.Id);
+}
+
+// DO: Use descriptive, action-verb method names
+public void SaveCustomer(Customer customer)
+{
+    // Implementation
+}
+
+// DON'T: Use vague method names
+public void Process(Customer customer) // Too vague
+{
+    // Implementation
+}
+
+// DO: Group related methods together in your class
+// All validation methods together, all data access methods together, etc.
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Method design principles:</p>
+                                <ul>
+                                    <li><strong>Single Responsibility Principle:</strong> Each method should do only one thing</li>
+                                    <li><strong>DRY (Don't Repeat Yourself):</strong> Extract common code into reusable methods</li>
+                                    <li><strong>Method Length:</strong> Keep methods short (typically under 20-30 lines)</li>
+                                    <li><strong>Parameter Count:</strong> Limit the number of parameters (ideally ≤ 3-4)</li>
+                                    <li><strong>Naming:</strong> Use clear, descriptive names that indicate what the method does</li>
+                                    <li><strong>Abstraction Level:</strong> Methods should operate at a single level of abstraction</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="arrays.html" class="prev"><i class="fas fa-arrow-left"></i> Arrays</a>
+                        <a href="method-parameters.html" class="next">Method Parameters <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

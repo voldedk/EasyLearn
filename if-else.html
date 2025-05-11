@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# If...Else - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# If...Else Statements</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Conditional Statements</h3>
+                        <p>Conditional statements allow your programs to make decisions based on certain conditions. They enable your code to execute different blocks of statements depending on whether a specified condition evaluates to <code>true</code> or <code>false</code>.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Conditional Statement Concepts:</h4>
+                            <ul>
+                                <li>Conditional statements control the flow of program execution</li>
+                                <li>All conditions in C# must evaluate to a boolean (<code>true</code> or <code>false</code>)</li>
+                                <li>Conditions can use comparison operators (<code>==</code>, <code>!=</code>, <code>></code>, <code><</code>, <code>>=</code>, <code><=</code>)</li>
+                                <li>Conditions can use logical operators (<code>&&</code>, <code>||</code>, <code>!</code>)</li>
+                                <li>Conditional statements can be nested inside each other</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic If Statement</h3>
+                        <p>The most basic form of a conditional statement is the <code>if</code> statement. It executes a block of code only if the specified condition evaluates to <code>true</code>.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic If Statement Syntax:</h4>
+                            <pre><code>
+if (condition)
+{
+    // Code to execute if condition is true
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When using a single statement after an <code>if</code>, braces are optional, but it's good practice to always include them:</p>
+                            </div>
+                            <pre><code>
+// With single statement, braces are optional
+if (temperature > 30)
+    Console.WriteLine("It's hot outside!");
+
+// Better practice (always use braces)
+if (temperature > 30)
+{
+    Console.WriteLine("It's hot outside!");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>If Statement Examples:</h4>
+                            <pre><code>
+// Simple if statement
+int age = 20;
+if (age >= 18)
+{
+    Console.WriteLine("You are an adult.");
+}
+
+// If statement with multiple conditions using logical AND
+bool hasLicense = true;
+if (age >= 18 && hasLicense)
+{
+    Console.WriteLine("You can legally drive.");
+}
+
+// If statement with logical OR
+bool isHoliday = false;
+bool isWeekend = true;
+if (isHoliday || isWeekend)
+{
+    Console.WriteLine("You don't have to go to work.");
+}
+
+// If statement with logical NOT
+bool isWorkDay = true;
+if (!isWorkDay)
+{
+    Console.WriteLine("You can relax today.");
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>If-Else Statement</h3>
+                        <p>The <code>if-else</code> statement executes one block of code if a condition is <code>true</code> and another block if the condition is <code>false</code>.</p>
+                        
+                        <div class="example-box">
+                            <h4>If-Else Syntax:</h4>
+                            <pre><code>
+if (condition)
+{
+    // Code to execute if condition is true
+}
+else
+{
+    // Code to execute if condition is false
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>If-Else Examples:</h4>
+                            <pre><code>
+// Basic if-else
+int age = 15;
+if (age >= 18)
+{
+    Console.WriteLine("You are an adult.");
+}
+else
+{
+    Console.WriteLine("You are a minor.");
+}
+
+// If-else with variable assignment
+bool isEligible;
+if (age >= 18)
+{
+    isEligible = true;
+}
+else
+{
+    isEligible = false;
+}
+
+// The above can be simplified using a ternary operator:
+isEligible = (age >= 18) ? true : false;
+// Even simpler:
+isEligible = age >= 18;
+
+// If-else with complex conditions
+double balance = 5000;
+bool isPremium = false;
+if (balance > 10000 || isPremium)
+{
+    Console.WriteLine("No service fee will be charged.");
+}
+else
+{
+    Console.WriteLine("A service fee will be applied.");
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>If-Else-If Ladder</h3>
+                        <p>An <code>if-else-if</code> ladder allows you to check multiple conditions in sequence, executing the block associated with the first true condition.</p>
+                        
+                        <div class="example-box">
+                            <h4>If-Else-If Syntax:</h4>
+                            <pre><code>
+if (condition1)
+{
+    // Code to execute if condition1 is true
+}
+else if (condition2)
+{
+    // Code to execute if condition1 is false and condition2 is true
+}
+else if (condition3)
+{
+    // Code to execute if condition1 and condition2 are false, and condition3 is true
+}
+else
+{
+    // Code to execute if all conditions are false
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>If-Else-If Examples:</h4>
+                            <pre><code>
+// Grading system
+int score = 85;
+string grade;
+
+if (score >= 90)
+{
+    grade = "A";
+}
+else if (score >= 80)
+{
+    grade = "B";
+}
+else if (score >= 70)
+{
+    grade = "C";
+}
+else if (score >= 60)
+{
+    grade = "D";
+}
+else
+{
+    grade = "F";
+}
+
+Console.WriteLine($"Your grade is: {grade}");
+
+// Time of day greeting
+int hour = 14; // 24-hour format
+string greeting;
+
+if (hour < 12)
+{
+    greeting = "Good morning!";
+}
+else if (hour < 18)
+{
+    greeting = "Good afternoon!";
+}
+else
+{
+    greeting = "Good evening!";
+}
+
+Console.WriteLine(greeting);
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes about if-else-if ladders:</p>
+                                <ul>
+                                    <li>Conditions are evaluated in order (top to bottom)</li>
+                                    <li>Once a condition evaluates to true, its associated code block is executed</li>
+                                    <li>After that block executes, the program jumps past the entire if-else-if ladder</li>
+                                    <li>The final else block is optional and acts as a catch-all for when no conditions are true</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Nested If Statements</h3>
+                        <p>You can place if statements inside other if or else blocks to create nested conditions. This allows you to check for conditions within conditions.</p>
+                        
+                        <div class="example-box">
+                            <h4>Nested If Statement Examples:</h4>
+                            <pre><code>
+// Authentication and authorization check
+bool isAuthenticated = true;
+bool isAdmin = false;
+bool isAuthor = true;
+
+if (isAuthenticated)
+{
+    Console.WriteLine("User is authenticated.");
+    
+    if (isAdmin)
+    {
+        Console.WriteLine("Admin access granted.");
+    }
+    else
+    {
+        Console.WriteLine("Admin access denied.");
+        
+        if (isAuthor)
+        {
+            Console.WriteLine("Author access granted.");
+        }
+        else
+        {
+            Console.WriteLine("Regular user access granted.");
+        }
+    }
+}
+else
+{
+    Console.WriteLine("User is not authenticated. Access denied.");
+}
+
+// Loan eligibility check
+int creditScore = 720;
+double income = 60000;
+double loanAmount = 200000;
+
+if (creditScore >= 700)
+{
+    if (income >= 50000)
+    {
+        if (loanAmount <= income * 5)
+        {
+            Console.WriteLine("Loan approved!");
+        }
+        else
+        {
+            Console.WriteLine("Loan denied. Amount too high relative to income.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Loan denied. Income too low.");
+    }
+}
+else
+{
+    Console.WriteLine("Loan denied. Credit score too low.");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>While nested if statements provide fine control over complex conditions, they can quickly become hard to read and maintain. Consider restructuring or using logical operators to simplify deeply nested conditional code.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Simplifying Nested Ifs with Logical Operators:</h4>
+                            <pre><code>
+// Instead of this nested approach:
+if (isAuthenticated)
+{
+    if (isAdmin)
+    {
+        Console.WriteLine("Admin access granted.");
+    }
+}
+
+// You can use logical AND:
+if (isAuthenticated && isAdmin)
+{
+    Console.WriteLine("Admin access granted.");
+}
+
+// Similarly, the loan example could be rewritten:
+if (creditScore >= 700 && income >= 50000 && loanAmount <= income * 5)
+{
+    Console.WriteLine("Loan approved!");
+}
+else
+{
+    Console.WriteLine("Loan denied. Please review eligibility criteria.");
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Conditional Operator (Ternary Operator)</h3>
+                        <p>The conditional operator <code>?:</code> provides a compact way to write simple if-else statements, especially useful for variable assignments.</p>
+                        
+                        <div class="example-box">
+                            <h4>Ternary Operator Syntax:</h4>
+                            <pre><code>
+// Syntax: condition ? expression_if_true : expression_if_false
+result = condition ? valueIfTrue : valueIfFalse;
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Ternary Operator Examples:</h4>
+                            <pre><code>
+// Simple ternary expression
+int age = 20;
+string status = (age >= 18) ? "Adult" : "Minor";
+
+// Ternary in string interpolation
+Console.WriteLine($"The person is {((age >= 18) ? "an adult" : "a minor")}.");
+
+// Chained ternary operators (use sparingly as they can reduce readability)
+int score = 85;
+string grade = (score >= 90) ? "A" : 
+               (score >= 80) ? "B" : 
+               (score >= 70) ? "C" : 
+               (score >= 60) ? "D" : "F";
+
+// Ternary with method calls
+bool hasPermission = true;
+void GrantAccess() { /* ... */ }
+void DenyAccess() { /* ... */ }
+
+// Call different methods based on condition
+(hasPermission ? GrantAccess : DenyAccess)();
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Guidelines for using the ternary operator:</p>
+                                <ul>
+                                    <li>Use it for simple, straightforward conditions</li>
+                                    <li>Avoid nesting multiple ternary operators as it reduces readability</li>
+                                    <li>Both expressions must be of compatible types</li>
+                                    <li>It's particularly useful for quick assignments or method arguments</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Null-Conditional Operator (?.) and Null-Coalescing Operator (??)</h3>
+                        <p>C# provides special operators for handling null values in conditional contexts.</p>
+                        
+                        <div class="example-box">
+                            <h4>Null-Conditional and Null-Coalescing Examples:</h4>
+                            <pre><code>
+// Null-conditional operator (?.) - safely access members of potentially null objects
+string name = null;
+int? length = name?.Length;  // Returns null instead of throwing NullReferenceException
+
+// Null-coalescing operator (??) - provides a default value if the expression is null
+string username = name ?? "Guest";  // "Guest"
+
+// Combining them
+string text = null;
+int textLength = text?.Length ?? 0;  // 0 (safe access and default if null)
+
+// Null-coalescing assignment operator (??=) (C# 8.0+)
+string message = null;
+message ??= "Default message";  // Assigns only if message is null
+Console.WriteLine(message);     // "Default message"
+                            </code></pre>
+                            <div class="explanation">
+                                <p>These operators help write more concise and robust code that gracefully handles null values without explicit if-else statements.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Conditional Statements</h3>
+                        <p>Following these practices will make your conditional code more maintainable and less prone to bugs:</p>
+                        
+                        <div class="example-box">
+                            <h4>Proper Formatting:</h4>
+                            <pre><code>
+// DO: Use consistent indentation and braces
+if (condition)
+{
+    // Code block
+}
+else
+{
+    // Code block
+}
+
+// DON'T: Inconsistent or missing braces
+if (condition)
+    Console.WriteLine("True");
+else {
+    Console.WriteLine("False");
+    DoMoreWork();
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Simplify Complex Conditions:</h4>
+                            <pre><code>
+// Instead of:
+if (age >= 18 && age <= 65 && !hasDisability && isEmployed && yearOfService > 2)
+{
+    // Eligible for standard benefits
+}
+
+// DO: Extract complex conditions into well-named methods or variables
+bool IsEligibleForStandardBenefits()
+{
+    return IsWorkingAge() && isEmployed && HasSufficientServiceYears();
+}
+
+bool IsWorkingAge()
+{
+    return age >= 18 && age <= 65 && !hasDisability;
+}
+
+bool HasSufficientServiceYears()
+{
+    return yearOfService > 2;
+}
+
+if (IsEligibleForStandardBenefits())
+{
+    // Eligible for standard benefits
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Guard Clauses for Early Returns:</h4>
+                            <pre><code>
+// Instead of deeply nested if-else blocks:
+void ProcessOrder(Order order)
+{
+    if (order != null)
+    {
+        if (order.IsValid)
+        {
+            if (order.Items.Count > 0)
+            {
+                if (order.PaymentCompleted)
+                {
+                    // Process the order
+                    // ...
+                }
+                else
+                {
+                    throw new Exception("Payment not completed");
+                }
+            }
+            else
+            {
+                throw new Exception("Order has no items");
+            }
+        }
+        else
+        {
+            throw new Exception("Order is invalid");
+        }
+    }
+    else
+    {
+        throw new Exception("Order is null");
+    }
+}
+
+// DO: Use guard clauses for early returns:
+void ProcessOrder(Order order)
+{
+    // Handle invalid cases first
+    if (order == null)
+        throw new ArgumentNullException(nameof(order));
+        
+    if (!order.IsValid)
+        throw new Exception("Order is invalid");
+        
+    if (order.Items.Count == 0)
+        throw new Exception("Order has no items");
+        
+    if (!order.PaymentCompleted)
+        throw new Exception("Payment not completed");
+    
+    // Now process the valid order
+    // ...
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Guard clauses:</p>
+                                <ul>
+                                    <li>Validate preconditions at the beginning of methods</li>
+                                    <li>Reduce nesting and improve readability</li>
+                                    <li>Make error conditions more explicit</li>
+                                    <li>Allow the main code to focus on the "happy path"</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Avoid Common Pitfalls:</h4>
+                            <pre><code>
+// DON'T: Assignment instead of comparison
+if (x = 10)  // Assigns 10 to x, then evaluates to true because 10 is non-zero
+{
+    // This will always execute!
+}
+
+// DO: Use comparison operators for conditions
+if (x == 10)  // Compares x to 10
+{
+    // Executes only if x equals 10
+}
+
+// DON'T: Always check the most specific condition first
+if (isUser)
+{
+    // User-specific code
+}
+else if (isUser && isAdmin)  // This will never execute!
+{
+    // Admin-specific code
+}
+
+// DO: Check the most specific condition first
+if (isUser && isAdmin)
+{
+    // Admin-specific code
+}
+else if (isUser)
+{
+    // Regular user-specific code
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="booleans.html" class="prev"><i class="fas fa-arrow-left"></i> Booleans</a>
+                        <a href="switch.html" class="next">Switch Statements <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

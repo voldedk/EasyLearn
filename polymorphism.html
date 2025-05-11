@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymorphism in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Polymorphism in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Polymorphism</h3>
+                        <p>Polymorphism is one of the core principles of object-oriented programming. The word "polymorphism" means "many forms," and in programming, it refers to the ability of an object to take on many forms or be treated as different types.</p>
+                        
+                        <p>In C#, polymorphism allows you to:</p>
+                        <ul>
+                            <li>Use a single interface to represent different underlying forms (data types)</li>
+                            <li>Process objects differently depending on their data type or class</li>
+                            <li>Treat a derived class as an object of its base class</li>
+                            <li>Implement the same method in multiple ways</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Types of Polymorphism in C#</h3>
+                        <p>C# supports two main types of polymorphism:</p>
+                        
+                        <div class="example-box">
+                            <h4>1. Compile-time Polymorphism (Static Binding)</h4>
+                            <p>Also known as method overloading, it allows multiple methods with the same name but different parameters in the same class.</p>
+                            
+                            <pre><code>
+public class Calculator
+{
+    // Method with two integer parameters
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+    
+    // Method with three integer parameters
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+    
+    // Method with two double parameters
+    public double Add(double a, double b)
+    {
+        return a + b;
+    }
+    
+    // Method with an array of integers
+    public int Add(params int[] numbers)
+    {
+        int sum = 0;
+        foreach (int number in numbers)
+        {
+            sum += number;
+        }
+        return sum;
+    }
+}
+
+// Usage
+Calculator calc = new Calculator();
+Console.WriteLine(calc.Add(5, 10));           // Calls Add(int, int)
+Console.WriteLine(calc.Add(5, 10, 15));       // Calls Add(int, int, int)
+Console.WriteLine(calc.Add(5.5, 10.5));       // Calls Add(double, double)
+Console.WriteLine(calc.Add(5, 10, 15, 20));   // Calls Add(params int[])
+</code></pre>
+                            <div class="explanation">
+                                <p>Characteristics of method overloading:</p>
+                                <ul>
+                                    <li>Methods must have the same name but different parameter lists</li>
+                                    <li>Parameter lists can differ by:
+                                        <ul>
+                                            <li>Number of parameters</li>
+                                            <li>Type of parameters</li>
+                                            <li>Order of parameters</li>
+                                        </ul>
+                                    </li>
+                                    <li>Return type alone is not enough to distinguish overloaded methods</li>
+                                    <li>Resolved at compile time, not at runtime</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>2. Runtime Polymorphism (Dynamic Binding)</h4>
+                            <p>Also known as method overriding, it allows a derived class to provide a specific implementation of a method that is already defined in its base class.</p>
+                            
+                            <pre><code>
+public class Animal
+{
+    public string Name { get; set; }
+    
+    public Animal(string name)
+    {
+        Name = name;
+    }
+    
+    // Virtual method that can be overridden
+    public virtual void MakeSound()
+    {
+        Console.WriteLine("The animal makes a sound");
+    }
+    
+    // Virtual method to get information
+    public virtual string GetInfo()
+    {
+        return $"This is {Name}, an animal";
+    }
+}
+
+public class Dog : Animal
+{
+    public string Breed { get; set; }
+    
+    public Dog(string name, string breed) : base(name)
+    {
+        Breed = breed;
+    }
+    
+    // Override the MakeSound method
+    public override void MakeSound()
+    {
+        Console.WriteLine($"{Name} barks: Woof! Woof!");
+    }
+    
+    // Override the GetInfo method
+    public override string GetInfo()
+    {
+        return $"This is {Name}, a {Breed} dog";
+    }
+}
+
+public class Cat : Animal
+{
+    public bool IsIndoor { get; set; }
+    
+    public Cat(string name, bool isIndoor) : base(name)
+    {
+        IsIndoor = isIndoor;
+    }
+    
+    // Override the MakeSound method
+    public override void MakeSound()
+    {
+        Console.WriteLine($"{Name} meows: Meow! Meow!");
+    }
+    
+    // Override the GetInfo method
+    public override string GetInfo()
+    {
+        string type = IsIndoor ? "an indoor" : "an outdoor";
+        return $"This is {Name}, {type} cat";
+    }
+}
+
+// Usage
+Animal[] animals = 
+{
+    new Animal("Generic Animal"),
+    new Dog("Rex", "German Shepherd"),
+    new Cat("Whiskers", true)
+};
+
+// Polymorphic behavior - the correct method is called based on the actual type
+foreach (Animal animal in animals)
+{
+    Console.WriteLine(animal.GetInfo());
+    animal.MakeSound();
+    Console.WriteLine();
+}
+
+/* Output:
+This is Generic Animal, an animal
+The animal makes a sound
+
+This is Rex, a German Shepherd dog
+Rex barks: Woof! Woof!
+
+This is Whiskers, an indoor cat
+Whiskers meows: Meow! Meow!
+*/
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about method overriding:</p>
+                                <ul>
+                                    <li>The method in the base class must be marked with the <code>virtual</code> keyword</li>
+                                    <li>The method in the derived class must use the <code>override</code> keyword</li>
+                                    <li>Both methods must have the same name, return type, and parameter list</li>
+                                    <li>Resolved at runtime, not at compile time</li>
+                                    <li>Enables objects to be treated as instances of their base class, but still use their own methods</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Polymorphism Through Interfaces</h3>
+                        <p>One of the most powerful forms of polymorphism in C# is achieved through interfaces. An interface defines a contract that classes must implement, allowing objects of different classes to be treated uniformly.</p>
+                        
+                        <div class="example-box">
+                            <h4>Implementing Interfaces for Polymorphic Behavior</h4>
+                            <pre><code>
+// Interface definition
+public interface IShape
+{
+    double CalculateArea();
+    double CalculatePerimeter();
+    void Draw();
+}
+
+// Circle class implementing IShape
+public class Circle : IShape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+    
+    public double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+    
+    public double CalculatePerimeter()
+    {
+        return 2 * Math.PI * Radius;
+    }
+    
+    public void Draw()
+    {
+        Console.WriteLine($"Drawing a circle with radius {Radius}");
+    }
+}
+
+// Rectangle class implementing IShape
+public class Rectangle : IShape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    public double CalculateArea()
+    {
+        return Width * Height;
+    }
+    
+    public double CalculatePerimeter()
+    {
+        return 2 * (Width + Height);
+    }
+    
+    public void Draw()
+    {
+        Console.WriteLine($"Drawing a rectangle with width {Width} and height {Height}");
+    }
+}
+
+// Triangle class implementing IShape
+public class Triangle : IShape
+{
+    public double SideA { get; set; }
+    public double SideB { get; set; }
+    public double SideC { get; set; }
+    
+    public Triangle(double a, double b, double c)
+    {
+        SideA = a;
+        SideB = b;
+        SideC = c;
+    }
+    
+    public double CalculateArea()
+    {
+        // Heron's formula
+        double s = (SideA + SideB + SideC) / 2;
+        return Math.Sqrt(s * (s - SideA) * (s - SideB) * (s - SideC));
+    }
+    
+    public double CalculatePerimeter()
+    {
+        return SideA + SideB + SideC;
+    }
+    
+    public void Draw()
+    {
+        Console.WriteLine($"Drawing a triangle with sides {SideA}, {SideB}, and {SideC}");
+    }
+}
+
+// Usage with polymorphism
+public class ShapeProcessor
+{
+    public void ProcessShape(IShape shape)
+    {
+        Console.WriteLine("Processing shape...");
+        shape.Draw();
+        Console.WriteLine($"Area: {shape.CalculateArea():F2}");
+        Console.WriteLine($"Perimeter: {shape.CalculatePerimeter():F2}");
+        Console.WriteLine();
+    }
+}
+
+// Client code
+public void Main()
+{
+    ShapeProcessor processor = new ShapeProcessor();
+    
+    // Process different shapes polymorphically
+    processor.ProcessShape(new Circle(5));
+    processor.ProcessShape(new Rectangle(4, 6));
+    processor.ProcessShape(new Triangle(3, 4, 5));
+    
+    // Create a collection of different shapes
+    List<IShape> shapes = new List<IShape>
+    {
+        new Circle(3),
+        new Rectangle(2, 7),
+        new Triangle(5, 7, 9)
+    };
+    
+    // Process all shapes in the collection
+    foreach (IShape shape in shapes)
+    {
+        processor.ProcessShape(shape);
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Advantages of interface-based polymorphism:</p>
+                                <ul>
+                                    <li>Classes can implement multiple interfaces (unlike inheritance, which is limited to one base class)</li>
+                                    <li>Provides a clean way to define behaviors that can be implemented by unrelated classes</li>
+                                    <li>Decouples the interface from the implementation</li>
+                                    <li>Makes it easy to add new classes that implement the same interface</li>
+                                    <li>Allows for more flexible design than inheritance alone</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Type Casting and Polymorphism</h3>
+                        <p>When working with polymorphism, you often need to cast objects from one type to another. C# provides several ways to do this.</p>
+                        
+                        <div class="example-box">
+                            <h4>Upcasting and Downcasting</h4>
+                            <pre><code>
+public class Animal
+{
+    public virtual void Eat()
+    {
+        Console.WriteLine("Animal is eating");
+    }
+}
+
+public class Dog : Animal
+{
+    public override void Eat()
+    {
+        Console.WriteLine("Dog is eating");
+    }
+    
+    public void Bark()
+    {
+        Console.WriteLine("Dog is barking");
+    }
+}
+
+public class Cat : Animal
+{
+    public override void Eat()
+    {
+        Console.WriteLine("Cat is eating");
+    }
+    
+    public void Meow()
+    {
+        Console.WriteLine("Cat is meowing");
+    }
+}
+
+// Usage
+public void Main()
+{
+    // Upcasting (implicit) - Converting a derived type to a base type
+    Dog dog = new Dog();
+    Animal animal1 = dog;  // Implicit upcasting
+    
+    animal1.Eat();  // Output: "Dog is eating" (polymorphic behavior)
+    // animal1.Bark();  // Error: Animal doesn't have Bark method
+    
+    // Downcasting (explicit) - Converting a base type to a derived type
+    Animal animal2 = new Cat();
+    
+    // Need explicit cast for downcasting
+    if (animal2 is Cat)
+    {
+        Cat cat = (Cat)animal2;  // Explicit cast
+        cat.Meow();  // Now we can call Cat-specific methods
+    }
+    
+    // Using as operator for safe casting
+    Dog dogObj = animal1 as Dog;
+    if (dogObj != null)
+    {
+        dogObj.Bark();  // Safe to call Dog-specific method
+    }
+    
+    Cat catObj = animal1 as Cat;
+    if (catObj != null)
+    {
+        catObj.Meow();  // This won't execute since animal1 is a Dog
+    }
+    else
+    {
+        Console.WriteLine("The animal is not a cat");
+    }
+    
+    // Pattern matching (C# 7.0+)
+    if (animal1 is Dog d)
+    {
+        d.Bark();  // Using the pattern variable
+    }
+    
+    // Switch expression with pattern matching (C# 8.0+)
+    string message = animal2 switch
+    {
+        Dog d => $"This is a dog that can {(d.GetType().GetMethod("Bark") != null ? "bark" : "not bark")}",
+        Cat c => $"This is a cat that can {(c.GetType().GetMethod("Meow") != null ? "meow" : "not meow")}",
+        _ => "This is some other animal"
+    };
+    
+    Console.WriteLine(message);
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key concepts for type casting in polymorphism:</p>
+                                <ul>
+                                    <li><strong>Upcasting</strong>: Converting a derived class to a base class (always safe, implicit)</li>
+                                    <li><strong>Downcasting</strong>: Converting a base class to a derived class (requires explicit cast, may throw InvalidCastException)</li>
+                                    <li><strong>is operator</strong>: Tests if an object is compatible with a given type</li>
+                                    <li><strong>as operator</strong>: Performs a safe cast that returns null if the cast fails</li>
+                                    <li><strong>Pattern matching</strong>: A modern C# feature that combines type checking and casting</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Abstract Classes vs. Interfaces</h3>
+                        <p>Both abstract classes and interfaces are used to achieve polymorphism in C#, but they have different purposes and capabilities.</p>
+                        
+                        <div class="example-box">
+                            <h4>Comparison Table</h4>
+                            <table>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Abstract Class</th>
+                                    <th>Interface</th>
+                                </tr>
+                                <tr>
+                                    <td>Instance creation</td>
+                                    <td>Cannot be instantiated</td>
+                                    <td>Cannot be instantiated</td>
+                                </tr>
+                                <tr>
+                                    <td>Implementation</td>
+                                    <td>Can have method implementations</td>
+                                    <td>Cannot have method implementations (prior to C# 8.0)</td>
+                                </tr>
+                                <tr>
+                                    <td>Fields</td>
+                                    <td>Can have fields</td>
+                                    <td>Can only have constants</td>
+                                </tr>
+                                <tr>
+                                    <td>Multiple inheritance</td>
+                                    <td>A class can inherit only one abstract class</td>
+                                    <td>A class can implement multiple interfaces</td>
+                                </tr>
+                                <tr>
+                                    <td>Access modifiers</td>
+                                    <td>Can have access modifiers</td>
+                                    <td>All members are implicitly public</td>
+                                </tr>
+                                <tr>
+                                    <td>Constructor</td>
+                                    <td>Can have constructors</td>
+                                    <td>Cannot have constructors</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>When to Use Each</h4>
+                            <p><strong>Use Abstract Classes when:</strong></p>
+                            <ul>
+                                <li>You want to share code among related classes</li>
+                                <li>The classes that will inherit from the abstract class have common behaviors or attributes</li>
+                                <li>You want to provide default implementations that subclasses can override if needed</li>
+                                <li>You need to declare non-public members</li>
+                                <li>You want to take advantage of constructor injection</li>
+                            </ul>
+                            
+                            <p><strong>Use Interfaces when:</strong></p>
+                            <ul>
+                                <li>You want to define a contract that unrelated classes can implement</li>
+                                <li>You need multiple inheritance</li>
+                                <li>You want to separate what a class does from how it does it</li>
+                                <li>You need to use polymorphism across different inheritance hierarchies</li>
+                                <li>You want to support component-based architecture</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced Polymorphism Techniques</h3>
+                        
+                        <div class="example-box">
+                            <h4>Operator Overloading</h4>
+                            <p>C# allows you to define custom behavior for standard operators when applied to your classes.</p>
+                            <pre><code>
+public class Complex
+{
+    public double Real { get; set; }
+    public double Imaginary { get; set; }
+    
+    public Complex(double real, double imaginary)
+    {
+        Real = real;
+        Imaginary = imaginary;
+    }
+    
+    // Overload the + operator
+    public static Complex operator +(Complex a, Complex b)
+    {
+        return new Complex(a.Real + b.Real, a.Imaginary + b.Imaginary);
+    }
+    
+    // Overload the - operator
+    public static Complex operator -(Complex a, Complex b)
+    {
+        return new Complex(a.Real - b.Real, a.Imaginary - b.Imaginary);
+    }
+    
+    // Overload the * operator
+    public static Complex operator *(Complex a, Complex b)
+    {
+        return new Complex(
+            a.Real * b.Real - a.Imaginary * b.Imaginary,
+            a.Real * b.Imaginary + a.Imaginary * b.Real);
+    }
+    
+    // Overload the == operator
+    public static bool operator ==(Complex a, Complex b)
+    {
+        // Need to handle null cases
+        if (ReferenceEquals(a, null))
+            return ReferenceEquals(b, null);
+            
+        if (ReferenceEquals(b, null))
+            return false;
+            
+        return a.Real == b.Real && a.Imaginary == b.Imaginary;
+    }
+    
+    // When you overload ==, you should also overload !=
+    public static bool operator !=(Complex a, Complex b)
+    {
+        return !(a == b);
+    }
+    
+    // Override Equals and GetHashCode for consistency
+    public override bool Equals(object obj)
+    {
+        if (obj is Complex complex)
+            return this == complex;
+        return false;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Real.GetHashCode() ^ (Imaginary.GetHashCode() * 17);
+    }
+    
+    // Override ToString for better representation
+    public override string ToString()
+    {
+        if (Imaginary >= 0)
+            return $"{Real} + {Imaginary}i";
+        else
+            return $"{Real} - {Math.Abs(Imaginary)}i";
+    }
+}
+
+// Usage
+public void Main()
+{
+    Complex a = new Complex(3, 4);
+    Complex b = new Complex(1, 2);
+    
+    Complex sum = a + b;
+    Complex difference = a - b;
+    Complex product = a * b;
+    
+    Console.WriteLine($"a = {a}");
+    Console.WriteLine($"b = {b}");
+    Console.WriteLine($"a + b = {sum}");
+    Console.WriteLine($"a - b = {difference}");
+    Console.WriteLine($"a * b = {product}");
+    
+    Console.WriteLine($"a == b: {a == b}");
+    Console.WriteLine($"a != b: {a != b}");
+}
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Covariance and Contravariance</h4>
+                            <p>C# supports covariance and contravariance in generics and delegates, which are advanced forms of polymorphism.</p>
+                            <pre><code>
+// Covariance example (out parameter)
+// IEnumerable<T> is covariant (notice the out keyword)
+public interface IEnumerable<out T>
+{
+    IEnumerator<T> GetEnumerator();
+}
+
+// Contravariance example (in parameter)
+// IComparer<T> is contravariant (notice the in keyword)
+public interface IComparer<in T>
+{
+    int Compare(T x, T y);
+}
+
+// Example with delegates
+class Program
+{
+    // Base class
+    public class Animal { }
+    
+    // Derived classes
+    public class Dog : Animal { }
+    public class Cat : Animal { }
+    
+    // Covariant delegate
+    public delegate T Factory<out T>();
+    
+    // Contravariant delegate
+    public delegate void Action<in T>(T obj);
+    
+    static void Main()
+    {
+        // Covariance in delegates
+        Factory<Dog> dogFactory = () => new Dog();
+        Factory<Animal> animalFactory = dogFactory;  // This works because of covariance
+        
+        // Contravariance in delegates
+        Action<Animal> feedAnimal = (animal) => Console.WriteLine("Feeding animal");
+        Action<Dog> feedDog = feedAnimal;  // This works because of contravariance
+        
+        // Covariance in collections
+        List<Dog> dogs = new List<Dog> { new Dog(), new Dog() };
+        IEnumerable<Animal> animals = dogs;  // This works because IEnumerable<T> is covariant
+        
+        foreach (Animal animal in animals)
+        {
+            Console.WriteLine("Found an animal");
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Understanding covariance and contravariance:</p>
+                                <ul>
+                                    <li><strong>Covariance (out)</strong>: Allows you to use a more derived type than originally specified</li>
+                                    <li><strong>Contravariance (in)</strong>: Allows you to use a more base type than originally specified</li>
+                                    <li>These concepts enable greater flexibility when working with generic interfaces and delegates</li>
+                                    <li>They are particularly useful in collections, LINQ, and event handlers</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Polymorphism Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Effective Polymorphism</h4>
+                            <ul>
+                                <li><strong>Follow the Liskov Substitution Principle</strong> - Objects of derived classes should be able to replace objects of their base class without affecting program correctness</li>
+                                <li><strong>Design for extension</strong> - Make classes open for extension but closed for modification (Open/Closed Principle)</li>
+                                <li><strong>Use interfaces for cross-cutting concerns</strong> - Interfaces are better for behaviors that cut across different inheritance hierarchies</li>
+                                <li><strong>Keep interfaces focused</strong> - Design small, cohesive interfaces rather than large, monolithic ones</li>
+                                <li><strong>Consider composition over inheritance</strong> - Sometimes composition provides better flexibility than inheritance</li>
+                                <li><strong>Use abstract methods only when necessary</strong> - If a base implementation makes sense, use virtual methods instead</li>
+                                <li><strong>Document expected overriding behavior</strong> - Make it clear how derived classes should implement or override methods</li>
+                                <li><strong>Test polymorphic behavior</strong> - Ensure each implementation behaves correctly in the context of the base type</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Polymorphism Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Breaking the contract</strong> - Overridden methods should honor the contract defined by the base method</li>
+                                <li><strong>Method hiding instead of overriding</strong> - Using <code>new</code> instead of <code>override</code> can lead to unexpected behavior</li>
+                                <li><strong>Excessive casting</strong> - Frequent need for casting may indicate a design flaw</li>
+                                <li><strong>Not validating type before casting</strong> - Always check types before downcasting to avoid exceptions</li>
+                                <li><strong>Overusing polymorphism</strong> - Sometimes simpler designs without polymorphism are clearer</li>
+                                <li><strong>Ignoring base implementation</strong> - Consider whether to call the base implementation in overridden methods</li>
+                                <li><strong>Deep inheritance hierarchies</strong> - More than 2-3 levels can become difficult to understand and maintain</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="inheritance.html" class="prev"><i class="fas fa-arrow-left"></i> Inheritance</a>
+                        <a href="interfaces.html" class="next">Interfaces <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

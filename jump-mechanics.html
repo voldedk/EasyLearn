@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump Mechanics - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Jump Mechanics</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Jump Mechanics</h3>
+                        <p>Jump mechanics are one of the most important elements in many games, especially platformers. Creating a satisfying jump that feels good to players requires understanding both the physics and the game design principles behind jump mechanics.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>How to implement basic jumps in Unity</li>
+                            <li>Different types of jump mechanics</li>
+                            <li>Advanced jump techniques (double jump, wall jump)</li>
+                            <li>How to fine-tune your jumps for better gameplay feel</li>
+                            <li>Common jump-related problems and solutions</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Jump Implementation</h3>
+                        <p>The most common approach to jumping in Unity is to apply an upward force or velocity to a Rigidbody when the player presses the jump button.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Jump Implementation (2D):</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class BasicJump2D : MonoBehaviour
+{
+    // Jump settings
+    public float jumpForce = 10f;          // How high the player jumps
+    public Transform groundCheck;           // GameObject checking if we're grounded
+    public float groundCheckRadius = 0.2f;  // Size of the ground check circle
+    public LayerMask groundLayer;           // Which layers count as ground
+    
+    // References
+    private Rigidbody2D rb;                 // Physics component
+    private bool isGrounded;                // Tracks grounded state
+    
+    void Start()
+    {
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
+        // This component handles the physics simulation
+    }
+    
+    void Update()
+    {
+        // Check if the player is standing on ground
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // This creates a circle at groundCheck position and sees if it overlaps with ground
+        
+        // Jump when the player presses the jump button while grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+            // Call our jump method when conditions are met
+        }
+    }
+    
+    void Jump()
+    {
+        // Apply an impulse force upward
+        rb.velocity = new Vector2(rb.velocity.x, 0f);  // Zero out current Y velocity
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        // This makes the character jump by adding an instant upward force
+    }
+    
+    // Visual debugging of the ground check radius
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null)
+            return;
+            
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        // This draws a yellow circle showing the ground detection area in the editor
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key components of the basic jump:</p>
+                                <ul>
+                                    <li><strong>Ground check</strong>: Detects if the player is standing on ground</li>
+                                    <li><strong>Jump force</strong>: Controls the height of the jump</li>
+                                    <li><strong>AddForce</strong>: Applies immediate upward force (using ForceMode.Impulse)</li>
+                                    <li><strong>Input check</strong>: Only jump when the jump button is pressed</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Basic Jump Implementation (3D):</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class BasicJump3D : MonoBehaviour
+{
+    public float jumpForce = 7f;           // How high the player jumps
+    public Transform groundCheck;           // GameObject checking if we're grounded
+    public float groundCheckDistance = 0.4f; // How far to check for ground
+    public LayerMask groundLayer;           // Which layers count as ground
+    
+    private Rigidbody rb;                   // Physics component
+    private bool isGrounded;                // Tracks grounded state
+    
+    void Start()
+    {
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
+        // This component handles 3D physics simulation
+    }
+    
+    void Update()
+    {
+        // Check if the player is standing on ground using a raycast
+        isGrounded = Physics.Raycast(
+            groundCheck.position,      // Start position of ray
+            Vector3.down,              // Direction of ray (downward)
+            groundCheckDistance,       // Length of ray
+            groundLayer                // Which layers to check against
+        );
+        // This casts a ray downward and sees if it hits ground
+        
+        // Jump when the player presses the jump button while grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+            // Call our jump method when conditions are met
+        }
+    }
+    
+    void Jump()
+    {
+        // Apply an impulse force upward
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // This makes the character jump by adding an instant upward force
+    }
+    
+    // Visual debugging of the ground check
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null)
+            return;
+            
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundCheckDistance);
+        // This draws a red line showing the ground detection in the editor
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Ground Check Methods</h4>
+                            <p>Different ways to check if the player is on the ground:</p>
+                            <ol>
+                                <li><strong>Raycast</strong>: Cast a ray downward from the player</li>
+                                <li><strong>OverlapCircle/OverlapBox</strong>: Check if a shape overlaps with ground</li>
+                                <li><strong>OnCollisionStay/OnCollisionExit</strong>: Track collision events</li>
+                                <li><strong>Character Controller's isGrounded</strong>: Use built-in property if using Character Controller</li>
+                            </ol>
+                            <p>Each method has pros and cons regarding precision and performance.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Jump Physics and Feel</h3>
+                        <p>Creating a jump that feels satisfying requires more than just applying force. Let's explore techniques to make jumps feel better.</p>
+                        
+                        <div class="example-box">
+                            <h4>Improved Jump Physics:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class ImprovedJump : MonoBehaviour
+{
+    [Header("Jump Parameters")]
+    public float jumpForce = 12f;               // Initial jump force
+    public float fallMultiplier = 2.5f;         // Increased gravity when falling
+    public float lowJumpMultiplier = 2f;        // Increased gravity when jump button released
+    
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    
+    // References
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool isJumping;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // Ground check
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // This creates a circle at groundCheck position and checks for ground
+        
+        // If we're on the ground, we're not jumping
+        if (isGrounded && rb.velocity.y <= 0)
+        {
+            isJumping = false;
+        }
+        
+        // Jump input
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+            // Initiate jump when jump button is pressed and we're grounded
+        }
+        
+        // Apply better jump physics
+        ApplyJumpPhysics();
+        // This method applies variable gravity for better jump feel
+    }
+    
+    void Jump()
+    {
+        // Reset Y velocity then apply jump force
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        
+        isJumping = true;
+        // Track that we're now in a jump
+    }
+    
+    void ApplyJumpPhysics()
+    {
+        // If we're falling, apply the fall multiplier
+        if (rb.velocity.y < 0)
+        {
+            // Apply extra gravity when falling
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            // This makes the character fall faster than it rises, creating a more satisfying arc
+        }
+        // If we're jumping but the jump button isn't held, apply the low jump multiplier
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            // Apply extra gravity when ascending but jump button released
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            // This allows for variable jump height based on how long the button is pressed
+        }
+    }
+    
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null)
+            return;
+            
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>What makes this jump feel better:</p>
+                                <ul>
+                                    <li><strong>Variable gravity</strong>: Increased gravity when falling creates a more satisfying arc</li>
+                                    <li><strong>Button sensitivity</strong>: Quick-release of jump button creates a shorter jump</li>
+                                    <li><strong>Better grounding</strong>: Proper ground detection ensures consistent jumping</li>
+                                    <li><strong>Reset Y velocity</strong>: Ensures consistent jump height regardless of previous motion</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Jump Feel Tips</h4>
+                            <ul>
+                                <li><strong>Jump Arc</strong>: The path the character follows during a jump should have a nice arc</li>
+                                <li><strong>Gravity Multipliers</strong>: Different gravity for rising/falling creates better feel</li>
+                                <li><strong>Variable Height</strong>: Allow players to control jump height by button press duration</li>
+                                <li><strong>Coyote Time</strong>: Allow jumps slightly after leaving a platform</li>
+                                <li><strong>Jump Buffering</strong>: Allow jumps slightly before landing</li>
+                                <li><strong>Visual Feedback</strong>: Add animations, particles, or sound for feedback</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced Jump Techniques</h3>
+                        <p>Let's explore more advanced jump mechanics like double jump, wall jump, and variable height jumping.</p>
+                        
+                        <div class="example-box">
+                            <h4>Double Jump Implementation:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class DoubleJumpController : MonoBehaviour
+{
+    [Header("Jump Settings")]
+    public float jumpForce = 10f;           // Initial jump force
+    public float doubleJumpForce = 8f;      // Force of the second jump
+    public int maxJumps = 2;                // Maximum number of jumps allowed
+    
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    
+    // References and state tracking
+    private Rigidbody2D rb;
+    private int jumpsRemaining;             // How many jumps we have left
+    private bool isGrounded;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        jumpsRemaining = maxJumps;  // Start with full jumps
+    }
+    
+    void Update()
+    {
+        // Check if grounded
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Reset jumps when touching ground
+        if (isGrounded && rb.velocity.y <= 0)
+        {
+            jumpsRemaining = maxJumps;
+            // When we land, restore all available jumps
+        }
+        
+        // Jump input
+        if (Input.GetButtonDown("Jump") && jumpsRemaining > 0)
+        {
+            // Choose the appropriate jump force
+            float force = (jumpsRemaining == maxJumps) ? jumpForce : doubleJumpForce;
+            // Use the primary jump force for the first jump, and double jump force for subsequent jumps
+            
+            // Reset Y velocity and apply jump force
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+            rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+            
+            // Decrement jumps remaining
+            jumpsRemaining--;
+            // Track that we've used up one of our available jumps
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key components of double jump:</p>
+                                <ul>
+                                    <li><strong>Jump counter</strong>: Track how many jumps the player has used</li>
+                                    <li><strong>Reset on ground</strong>: Restore jumps when the player touches the ground</li>
+                                    <li><strong>Different forces</strong>: Often the second jump is slightly weaker</li>
+                                    <li><strong>Separate input</strong>: Each jump requires a new button press</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Wall Jump Implementation:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class WallJumpController : MonoBehaviour
+{
+    [Header("Movement")]
+    public float moveSpeed = 7f;
+    public float jumpForce = 12f;
+    
+    [Header("Wall Jump")]
+    public float wallSlideSpeed = 2f;       // How fast player slides down walls
+    public float wallJumpForce = 16f;       // Force of wall jump
+    public float wallJumpAngle = 65f;       // Angle of wall jump (degrees)
+    public float wallJumpTime = 0.15f;      // Time player can't control movement after wall jump
+    
+    [Header("Checks")]
+    public Transform groundCheck;
+    public Transform wallCheck;
+    public float groundCheckRadius = 0.2f;
+    public float wallCheckDistance = 0.5f;
+    public LayerMask groundLayer;
+    
+    // References and state
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool isWallSliding;
+    private bool isTouchingWall;
+    private float horizontalInput;
+    private int facingDirection = 1;  // 1 for right, -1 for left
+    private float wallJumpTimer;      // Timer for wall jump input lockout
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // Process inputs and state
+        CheckInput();
+        CheckGrounded();
+        CheckWallSliding();
+        
+        // Handle wall jump timer
+        if (wallJumpTimer > 0)
+        {
+            wallJumpTimer -= Time.deltaTime;
+            // Count down the timer that prevents movement after a wall jump
+        }
+        
+        // Handle jump input
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (isGrounded)
+            {
+                NormalJump();
+                // If on ground, do a normal jump
+            }
+            else if (isWallSliding)
+            {
+                WallJump();
+                // If sliding on a wall, do a wall jump
+            }
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Move horizontally if not in wall jump recovery
+        if (wallJumpTimer <= 0)
+        {
+            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+            // Apply horizontal movement based on input
+        }
+        
+        // Apply wall slide if touching wall
+        if (isWallSliding)
+        {
+            // Limit downward velocity while wall sliding
+            if (rb.velocity.y < -wallSlideSpeed)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
+                // This creates a slower descent when sliding against a wall
+            }
+        }
+    }
+    
+    void CheckInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        
+        // Update facing direction
+        if (horizontalInput > 0 && facingDirection == -1)
+        {
+            Flip();
+        }
+        else if (horizontalInput < 0 && facingDirection == 1)
+        {
+            Flip();
+        }
+    }
+    
+    void CheckGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+    }
+    
+    void CheckWallSliding()
+    {
+        // Check if touching wall
+        isTouchingWall = Physics2D.Raycast(
+            wallCheck.position,
+            Vector2.right * facingDirection,
+            wallCheckDistance,
+            groundLayer
+        );
+        // This casts a ray in the facing direction to detect walls
+        
+        // Wall slide if touching wall, not grounded, and moving toward wall
+        isWallSliding = isTouchingWall && !isGrounded && horizontalInput * facingDirection > 0;
+        // Only wall slide when actively pushing toward the wall
+    }
+    
+    void NormalJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+    
+    void WallJump()
+    {
+        // Stop sliding
+        isWallSliding = false;
+        
+        // Calculate wall jump direction
+        float wallJumpDirectionX = -facingDirection;  // Jump away from wall
+        Vector2 wallJumpDirection = new Vector2(wallJumpDirectionX, 1f).normalized;
+        
+        // Convert angle to radians for calculation
+        float wallJumpAngleRadians = wallJumpAngle * Mathf.Deg2Rad;
+        Vector2 forceToApply = new Vector2(
+            -facingDirection * wallJumpForce * Mathf.Cos(wallJumpAngleRadians),
+            wallJumpForce * Mathf.Sin(wallJumpAngleRadians)
+        );
+        
+        // Reset velocity and apply force
+        rb.velocity = Vector2.zero;
+        rb.AddForce(forceToApply, ForceMode2D.Impulse);
+        
+        // Flip character to face jump direction
+        if (facingDirection * wallJumpDirectionX < 0)
+        {
+            Flip();
+        }
+        
+        // Set timer to prevent immediate movement control
+        wallJumpTimer = wallJumpTime;
+    }
+    
+    void Flip()
+    {
+        // Flip the character's facing direction
+        facingDirection *= -1;
+        transform.Rotate(0f, 180f, 0f);
+        // This rotates the character to face the other way
+    }
+    
+    void OnDrawGizmosSelected()
+    {
+        // Draw ground check
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+        
+        // Draw wall check
+        if (wallCheck != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(
+                wallCheck.position,
+                wallCheck.position + Vector3.right * facingDirection * wallCheckDistance
+            );
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key components of wall jump:</p>
+                                <ul>
+                                    <li><strong>Wall detection</strong>: Raycasts to check if touching a wall</li>
+                                    <li><strong>Wall sliding</strong>: Slows descent when pressed against a wall</li>
+                                    <li><strong>Jump direction</strong>: Jumps away from the wall at an angle</li>
+                                    <li><strong>Input lockout</strong>: Brief period after wall jump where player can't change direction</li>
+                                    <li><strong>Character flipping</strong>: Changes facing direction based on movement</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Coyote Time and Jump Buffering:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class AdvancedJumpController : MonoBehaviour
+{
+    [Header("Jump Parameters")]
+    public float jumpForce = 12f;
+    
+    [Header("Coyote Time")]
+    public float coyoteTime = 0.15f;         // Time player can jump after leaving ground
+    private float coyoteTimeCounter;         // Tracks remaining coyote time
+    
+    [Header("Jump Buffering")]
+    public float jumpBufferTime = 0.2f;      // Time before landing that jump input is remembered
+    private float jumpBufferCounter;         // Tracks remaining buffer time
+    
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    
+    // References
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // Check if grounded
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // COYOTE TIME LOGIC
+        if (isGrounded)
+        {
+            // Reset coyote time when grounded
+            coyoteTimeCounter = coyoteTime;
+            // This gives the player the full coyote time window when leaving a platform
+        }
+        else
+        {
+            // Count down coyote time when in air
+            coyoteTimeCounter -= Time.deltaTime;
+            // This decreases the remaining time window for jumping after leaving ground
+        }
+        
+        // JUMP BUFFER LOGIC
+        if (Input.GetButtonDown("Jump"))
+        {
+            // Start the jump buffer when jump is pressed
+            jumpBufferCounter = jumpBufferTime;
+            // This starts the window of time where a jump input is remembered
+        }
+        else
+        {
+            // Count down jump buffer time
+            jumpBufferCounter -= Time.deltaTime;
+            // This decreases the remaining time window for the buffered jump
+        }
+        
+        // JUMP EXECUTION
+        // Jump if we have a buffered jump input AND either grounded or in coyote time
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        {
+            // Execute jump
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            
+            // Reset jump buffer to prevent double jumps
+            jumpBufferCounter = 0f;
+            // Clear the buffered jump input so we don't jump again
+        }
+        
+        // Cancel coyote time if player is falling
+        if (rb.velocity.y < 0)
+        {
+            coyoteTimeCounter = 0f;
+            // If player is falling (not from a jump), don't allow coyote time
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Making jumps feel more responsive:</p>
+                                <ul>
+                                    <li><strong>Coyote Time</strong>: Allows the player to jump shortly after leaving a platform</li>
+                                    <li><strong>Jump Buffering</strong>: Remembers jump input shortly before landing</li>
+                                    <li><strong>Combined Effect</strong>: These techniques make the controls feel more responsive</li>
+                                    <li><strong>Counter Reset</strong>: Carefully resetting counters prevents unintended jumps</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Jump Variations and Game Feel</h3>
+                        <p>Different games require different jump mechanics. Here are some common variations and how to implement them.</p>
+                        
+                        <div class="note-box">
+                            <h4>Jump Variations</h4>
+                            <ul>
+                                <li><strong>Floaty Jump</strong>: Low gravity, high jump force, longer hang time</li>
+                                <li><strong>Snappy Jump</strong>: High gravity, high jump force, quick ascent and descent</li>
+                                <li><strong>Charged Jump</strong>: Hold button to increase jump power</li>
+                                <li><strong>Air Control</strong>: How much the player can influence movement while in air</li>
+                                <li><strong>Multidirectional Jump</strong>: Can jump in any direction (common in zero-gravity games)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Charged Jump Implementation:</h4>
+                            <pre><code>
+using UnityEngine;
+using UnityEngine.UI; // For the UI elements
+
+public class ChargedJumpController : MonoBehaviour
+{
+    [Header("Jump Settings")]
+    public float minJumpForce = 5f;       // Minimum jump force
+    public float maxJumpForce = 15f;      // Maximum jump force
+    public float chargeTime = 1.5f;       // Time to reach maximum charge
+    
+    [Header("Charge Indicator")]
+    public Image chargeBar;               // UI element showing charge (optional)
+    
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    
+    // References and state
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool isCharging = false;
+    private float chargeAmount = 0f;
+    
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        
+        // Initialize charge bar if assigned
+        if (chargeBar != null)
+        {
+            chargeBar.fillAmount = 0f;
+        }
+    }
+    
+    void Update()
+    {
+        // Check if grounded
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Start charging when the jump button is pressed while grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            isCharging = true;
+            chargeAmount = 0f;
+            // Start charging the jump
+        }
+        
+        // Charge while jump button is held
+        if (Input.GetButton("Jump") && isCharging)
+        {
+            // Increase charge amount over time
+            chargeAmount += Time.deltaTime / chargeTime;
+            chargeAmount = Mathf.Clamp01(chargeAmount);
+            // Increase charge but cap it at 100%
+            
+            // Update UI if assigned
+            if (chargeBar != null)
+            {
+                chargeBar.fillAmount = chargeAmount;
+                // Update the visual charge indicator
+            }
+        }
+        
+        // Release jump when button is released
+        if (Input.GetButtonUp("Jump") && isCharging)
+        {
+            // Calculate jump force based on charge amount
+            float jumpForce = Mathf.Lerp(minJumpForce, maxJumpForce, chargeAmount);
+            
+            // Apply the jump force
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            
+            // Reset charging state
+            isCharging = false;
+            chargeAmount = 0f;
+            
+            // Update UI
+            if (chargeBar != null)
+            {
+                chargeBar.fillAmount = chargeAmount;
+            }
+        }
+        
+        // Cancel charging if player leaves the ground
+        if (!isGrounded && isCharging)
+        {
+            isCharging = false;
+            chargeAmount = 0f;
+            
+            // Update UI
+            if (chargeBar != null)
+            {
+                chargeBar.fillAmount = chargeAmount;
+            }
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Charged jump components:</p>
+                                <ul>
+                                    <li><strong>Charge timer</strong>: Tracks how long the button is held</li>
+                                    <li><strong>Visual feedback</strong>: UI or animation showing charge level</li>
+                                    <li><strong>Variable force</strong>: Jump force based on charge amount</li>
+                                    <li><strong>Cancel conditions</strong>: How to handle interrupted charging</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Jump Problems and Solutions</h3>
+                        <ol>
+                            <li>
+                                <strong>Inconsistent Ground Detection</strong>
+                                <p>Solution: Use multiple raycasts or a slightly larger collision check area. Consider using a dedicated "feet" collider.</p>
+                            </li>
+                            <li>
+                                <strong>Sticking to Walls</strong>
+                                <p>Solution: Use a layer mask that excludes walls from ground checks, or implement proper wall detection for wall jumps.</p>
+                            </li>
+                            <li>
+                                <strong>Unresponsive Jump Controls</strong>
+                                <p>Solution: Implement coyote time and jump buffering as shown earlier.</p>
+                            </li>
+                            <li>
+                                <strong>Varying Jump Heights</strong>
+                                <p>Solution: Apply extra gravity when the jump button is released to cut the jump short.</p>
+                            </li>
+                            <li>
+                                <strong>Jittery Movement</strong>
+                                <p>Solution: Apply movement in FixedUpdate() and handle input in Update() for smoother physics.</p>
+                            </li>
+                            <li>
+                                <strong>Getting Stuck in Colliders</strong>
+                                <p>Solution: Adjust collider sizes and use Physics2D/Physics settings to prevent tunneling.</p>
+                            </li>
+                            <li>
+                                <strong>Poor Game Feel</strong>
+                                <p>Solution: Add animations, particles, and sound effects. Tweak gravity multipliers for better jump arcs.</p>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Jump Mechanics</h3>
+                        <ol>
+                            <li><strong>Prioritize feel over realism</strong>: Games often have exaggerated physics for better gameplay</li>
+                            <li><strong>Test extensively</strong>: What feels good to you may not feel good to players</li>
+                            <li><strong>Add visual feedback</strong>: Jump animations, dust particles, impact effects</li>
+                            <li><strong>Add audio feedback</strong>: Jump sounds, landing sounds</li>
+                            <li><strong>Consider accessibility</strong>: Options to adjust timing windows or auto-jump features</li>
+                            <li><strong>Be consistent</strong>: Maintain consistent jump behavior throughout your game</li>
+                            <li><strong>Reference existing games</strong>: Study successful platformers to understand what works</li>
+                            <li><strong>Use Unity's input system</strong>: Consider the new Input System for better cross-platform support</li>
+                            <li><strong>Separate logic</strong>: Keep ground detection, input handling, and physics application in separate methods</li>
+                            <li><strong>Document your code</strong>: Make it easy for others (or future you) to understand your jump implementation</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-component-system.html" class="prev"><i class="fas fa-arrow-left"></i> Unity Component System</a>
+                        <a href="index.html" class="next">Home <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

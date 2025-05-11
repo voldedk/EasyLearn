@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Data Types - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Data Types</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to C# Data Types</h3>
+                        <p>C# is a strongly-typed language, which means every variable and constant has a specific data type that determines the size and layout of the variable's memory, the range of values that can be stored within that memory, and the set of operations that can be performed on the variable.</p>
+                        
+                        <p>C# data types are divided into two main categories:</p>
+                        <ul>
+                            <li><strong>Value Types</strong> - Directly contain their data and are stored on the stack</li>
+                            <li><strong>Reference Types</strong> - Store a reference to their data, which is stored on the heap</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Value Types</h3>
+                        <p>Value types hold the actual data within their own memory allocation. When you assign one value type to another, a copy of the value is created.</p>
+                        
+                        <div class="example-box">
+                            <h4>Value Type Behavior:</h4>
+                            <pre><code>
+int a = 10;
+int b = a;    // Value is copied, b now has its own copy of 10
+a = 20;       // Changing a does not affect b
+Console.WriteLine(b);  // Outputs: 10
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Common Value Types:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Range</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td rowspan="5">Integer Types</td>
+                                <td><code>sbyte</code></td>
+                                <td>8 bits</td>
+                                <td>-128 to 127</td>
+                                <td><code>sbyte temperature = -10;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>byte</code></td>
+                                <td>8 bits</td>
+                                <td>0 to 255</td>
+                                <td><code>byte colorValue = 255;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>short</code></td>
+                                <td>16 bits</td>
+                                <td>-32,768 to 32,767</td>
+                                <td><code>short elevation = -1500;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>int</code></td>
+                                <td>32 bits</td>
+                                <td>-2.1 billion to 2.1 billion</td>
+                                <td><code>int population = 37500000;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>long</code></td>
+                                <td>64 bits</td>
+                                <td>-9.2 quintillion to 9.2 quintillion</td>
+                                <td><code>long nationalDebt = 21000000000000L;</code></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">Unsigned Integers</td>
+                                <td><code>ushort</code></td>
+                                <td>16 bits</td>
+                                <td>0 to 65,535</td>
+                                <td><code>ushort portNumber = 8080;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>uint</code></td>
+                                <td>32 bits</td>
+                                <td>0 to 4.2 billion</td>
+                                <td><code>uint viewCount = 3000000000U;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>ulong</code></td>
+                                <td>64 bits</td>
+                                <td>0 to 18.4 quintillion</td>
+                                <td><code>ulong distance = 18446744073709551615UL;</code></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Floating Point</td>
+                                <td><code>float</code></td>
+                                <td>32 bits</td>
+                                <td>±1.5 × 10<sup>−45</sup> to ±3.4 × 10<sup>38</sup>, 7-digit precision</td>
+                                <td><code>float pi = 3.14159F;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>double</code></td>
+                                <td>64 bits</td>
+                                <td>±5.0 × 10<sup>−324</sup> to ±1.7 × 10<sup>308</sup>, 15-16 digit precision</td>
+                                <td><code>double atomRadius = 0.000000001;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Decimal</td>
+                                <td><code>decimal</code></td>
+                                <td>128 bits</td>
+                                <td>±1.0 × 10<sup>-28</sup> to ±7.9 × 10<sup>28</sup>, 28-29 significant digits</td>
+                                <td><code>decimal accountBalance = 3456.78M;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td><code>bool</code></td>
+                                <td>8 bits*</td>
+                                <td>true or false</td>
+                                <td><code>bool isActive = true;</code></td>
+                            </tr>
+                            <tr>
+                                <td>Character</td>
+                                <td><code>char</code></td>
+                                <td>16 bits</td>
+                                <td>U+0000 to U+FFFF (Unicode characters)</td>
+                                <td><code>char grade = 'A';</code></td>
+                            </tr>
+                        </table>
+                        <p class="note">* While a boolean logically only needs 1 bit, it typically uses 8 bits (1 byte) of storage due to memory alignment requirements.</p>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Struct Types</h3>
+                        <p>Structs are value types that can contain multiple variables (fields), methods, and other members. They are useful for representing lightweight objects.</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Struct Example:</h4>
+                            <pre><code>
+// Defining a struct
+struct Point
+{
+    public int X;
+    public int Y;
+    
+    // Constructor
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+    
+    // Method
+    public double DistanceFromOrigin()
+    {
+        return Math.Sqrt(X * X + Y * Y);
+    }
+}
+
+// Using the struct
+Point p1 = new Point(3, 4);
+Console.WriteLine($"Distance from origin: {p1.DistanceFromOrigin()}");  // Outputs: 5
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enum Types</h3>
+                        <p>Enumerations (enums) are distinct value types consisting of a set of named constants. They are useful for representing a fixed set of options or states.</p>
+                        
+                        <div class="example-box">
+                            <h4>Enum Example:</h4>
+                            <pre><code>
+// Defining an enum
+enum DaysOfWeek
+{
+    Monday,     // 0 by default
+    Tuesday,    // 1
+    Wednesday,  // 2
+    Thursday,   // 3
+    Friday,     // 4
+    Saturday,   // 5
+    Sunday      // 6
+}
+
+// Using an enum
+DaysOfWeek today = DaysOfWeek.Wednesday;
+Console.WriteLine(today);         // Outputs: Wednesday
+Console.WriteLine((int)today);    // Outputs: 2
+
+// Enum with explicit values
+enum HttpStatusCode
+{
+    OK = 200,
+    NotFound = 404,
+    InternalServerError = 500
+}
+
+HttpStatusCode status = HttpStatusCode.NotFound;
+Console.WriteLine($"Status: {status}, Code: {(int)status}");  // Outputs: Status: NotFound, Code: 404
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Reference Types</h3>
+                        <p>Reference types store a reference (or pointer) to the actual data in memory. When you assign one reference type to another, both variables refer to the same data.</p>
+                        
+                        <div class="example-box">
+                            <h4>Reference Type Behavior:</h4>
+                            <pre><code>
+string a = "Hello";
+string b = a;       // Both a and b reference the same string
+a = "World";        // a now references a new string
+Console.WriteLine(b);  // Outputs: Hello (unchanged)
+
+// For objects (classes), changing properties affects all references
+Person person1 = new Person { Name = "Alice" };
+Person person2 = person1;   // Both reference the same object
+person1.Name = "Bob";       // Change affects both references
+Console.WriteLine(person2.Name);  // Outputs: Bob
+                            </code></pre>
+                        </div>
+                        
+                        <h4>Common Reference Types:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><code>string</code></td>
+                                <td>Text (sequence of characters)</td>
+                                <td><code>string name = "John Smith";</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>class</code></td>
+                                <td>User-defined type with members</td>
+                                <td><code>Person employee = new Person();</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>object</code></td>
+                                <td>Base class for all types</td>
+                                <td><code>object data = 42;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>dynamic</code></td>
+                                <td>Type resolved at runtime</td>
+                                <td><code>dynamic value = "test";</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>interface</code></td>
+                                <td>Contract defining members</td>
+                                <td><code>IEnumerable&lt;int&gt; numbers;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>delegate</code></td>
+                                <td>Reference to a method</td>
+                                <td><code>Action&lt;string&gt; log;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>array</code></td>
+                                <td>Collection of items</td>
+                                <td><code>int[] numbers = {1, 2, 3};</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topic">
+                        <h3>String Type</h3>
+                        <p>The <code>string</code> type represents a sequence of Unicode characters. Strings in C# are immutable, meaning once a string is created, its value cannot be changed.</p>
+                        
+                        <div class="example-box">
+                            <h4>String Examples:</h4>
+                            <pre><code>
+// String declaration and initialization
+string firstName = "John";
+string lastName = "Smith";
+string emptyString = string.Empty;  // Preferred way to create an empty string
+
+// String concatenation
+string fullName = firstName + " " + lastName;  // "John Smith"
+
+// String interpolation (C# 6.0+)
+string greeting = $"Hello, {firstName}!";  // "Hello, John!"
+
+// String methods
+string message = "   Learn C# Programming   ";
+string trimmed = message.Trim();                  // "Learn C# Programming"
+string uppercase = message.ToUpper();             // "   LEARN C# PROGRAMMING   "
+string replaced = message.Replace("C#", "C++");   // "   Learn C++ Programming   "
+bool contains = message.Contains("C#");           // true
+int length = message.Length;                      // 27
+int index = message.IndexOf("C#");                // 9
+
+// String comparison
+bool isEqual = firstName == "John";               // true
+bool startsWithJ = firstName.StartsWith("J");     // true
+bool ignoreCase = firstName.Equals("john", StringComparison.OrdinalIgnoreCase);  // true
+
+// Verbatim string literal (preserves whitespace and newlines)
+string path = @"C:\Program Files\Microsoft\Windows";  // No need to escape backslashes
+
+// String with multiple lines
+string multiline = @"This is a
+multi-line
+string";
+
+// String interpolation with verbatim strings (C# 8.0+)
+string combinedPath = $@"C:\Users\{userName}\Documents";
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Default Values</h3>
+                        <p>When a variable is declared but not initialized, it is assigned a default value based on its data type:</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Type</th>
+                                <th>Default Value</th>
+                            </tr>
+                            <tr>
+                                <td>Numeric types (<code>int</code>, <code>float</code>, etc.)</td>
+                                <td><code>0</code> (appropriate for the type)</td>
+                            </tr>
+                            <tr>
+                                <td><code>bool</code></td>
+                                <td><code>false</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>char</code></td>
+                                <td><code>'\0'</code> (null character)</td>
+                            </tr>
+                            <tr>
+                                <td>Reference types (<code>string</code>, class types)</td>
+                                <td><code>null</code></td>
+                            </tr>
+                            <tr>
+                                <td>Struct types</td>
+                                <td>Each field set to its default value</td>
+                            </tr>
+                            <tr>
+                                <td><code>enum</code> types</td>
+                                <td>0 (the value of the first enumerator)</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="example-box">
+                            <h4>Default Value Example:</h4>
+                            <pre><code>
+// Explicit default values
+int number = default;           // 0
+bool flag = default;            // false
+string text = default;          // null
+double price = default;         // 0.0
+
+// Using default expression (C# 7.1+)
+DateTime date = default;        // 01/01/0001 00:00:00
+int[] array = default;          // null
+
+// Using default operator
+var defaultInt = default(int);    // 0
+var defaultBool = default(bool);  // false
+var defaultString = default(string);  // null
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Special Types</h3>
+                        
+                        <h4>Nullable Value Types</h4>
+                        <p>Value types normally cannot be assigned <code>null</code>. However, by using the nullable type decorator (<code>?</code>), value types can be made nullable.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Regular value type cannot be null
+// int regularInt = null;  // Error!
+
+// Nullable value type can be null
+int? nullableInt = null;
+double? nullableDouble = null;
+
+// Checking for null before using
+if (nullableInt.HasValue)
+{
+    Console.WriteLine(nullableInt.Value);  // Safe to access value
+}
+
+// Null coalescing operator to provide a default value
+int result = nullableInt ?? 0;  // If nullableInt is null, use 0
+                            </code></pre>
+                        </div>
+                        
+                        <h4>var Keyword</h4>
+                        <p>The <code>var</code> keyword enables type inference, allowing the compiler to determine the type from the initialization expression.</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Type inference with var
+var count = 10;              // Inferred as int
+var name = "Alice";          // Inferred as string
+var items = new List<int>(); // Inferred as List<int>
+var today = DateTime.Now;    // Inferred as DateTime
+
+// Restrictions:
+// var must be initialized
+// var price;  // Error! Must be initialized
+
+// Type is fixed at compile-time
+var number = 5;  // Type is int
+// number = "string";  // Error! Cannot assign string to int
+                            </code></pre>
+                        </div>
+                        
+                        <h4>dynamic Type</h4>
+                        <p>The <code>dynamic</code> type bypasses compile-time type checking. The type checking happens at runtime:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Dynamic typing
+dynamic value = 10;
+Console.WriteLine(value);  // 10
+
+value = "Hello";           // Can change type at runtime
+Console.WriteLine(value);  // Hello
+
+value = new List<int> { 1, 2, 3 };
+Console.WriteLine(value.Count);  // 3
+
+// No compile-time checking
+// Only runtime checking for methods/properties
+dynamic obj = new { Name = "Test" };
+Console.WriteLine(obj.Name);       // Works
+// Console.WriteLine(obj.Missing);  // Runtime error!
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Type Checking</h3>
+                        <p>C# provides several ways to check the type of a variable:</p>
+                        
+                        <div class="example-box">
+                            <h4>Type Checking Examples:</h4>
+                            <pre><code>
+object obj = "This is a string";
+
+// Using is operator
+if (obj is string)
+{
+    Console.WriteLine("obj is a string");
+}
+
+// Using GetType() and typeof
+if (obj.GetType() == typeof(string))
+{
+    Console.WriteLine("obj is of type string");
+}
+
+// Using is with pattern matching (C# 7.0+)
+if (obj is string message)
+{
+    // message is now a string variable containing the value of obj
+    Console.WriteLine($"Message: {message}");
+}
+
+// Using switch expression with pattern matching (C# 8.0+)
+string result = obj switch
+{
+    string s => $"String of length {s.Length}",
+    int i => $"Integer: {i}",
+    _ => "Unknown type"
+};
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Working with Types</h3>
+                        <ul>
+                            <li><strong>Choose the right type</strong> for your data to ensure memory efficiency and prevent overflow/underflow.</li>
+                            <li><strong>Use <code>decimal</code> for money</strong> calculations to avoid floating-point precision issues.</li>
+                            <li><strong>Avoid excessive type casting</strong> as it can lead to potential data loss and reduces code readability.</li>
+                            <li><strong>Use <code>var</code> when the type is obvious</strong> from initialization, but avoid it when clarity is important.</li>
+                            <li><strong>Use <code>dynamic</code> sparingly</strong>, as it bypasses compile-time type checking and can lead to runtime errors.</li>
+                            <li><strong>Consider using <code>nullable</code> types</strong> for database interactions where null values may be present.</li>
+                            <li><strong>Prefer string interpolation</strong> (<code>$"..."</code>) over string concatenation for readability.</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Test Your Knowledge: Data Types</h3>
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                <p><strong>Question 1:</strong> Which of the following is NOT a value type in C#?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="a">
+                                        <span>int</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="b">
+                                        <span>float</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="c">
+                                        <span>string</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q1" value="d">
+                                        <span>char</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 2:</strong> What is the default value of a boolean variable that has not been initialized?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="a">
+                                        <span>true</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="b">
+                                        <span>false</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="c">
+                                        <span>null</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q2" value="d">
+                                        <span>0</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="b"></div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <p><strong>Question 3:</strong> Which data type would be best for storing the precise monetary value $1,234.56?</p>
+                                <div class="quiz-options">
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="a">
+                                        <span>float</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="b">
+                                        <span>double</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="c">
+                                        <span>decimal</span>
+                                    </label>
+                                    <label class="quiz-option">
+                                        <input type="radio" name="dt-q3" value="d">
+                                        <span>int</span>
+                                    </label>
+                                </div>
+                                <div class="quiz-feedback" data-correct="c"></div>
+                            </div>
+                            
+                            <button class="check-answers-btn">Check Answers</button>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="variables.html" class="prev"><i class="fas fa-arrow-left"></i> Variables</a>
+                        <a href="type-casting.html" class="next">Type Casting <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

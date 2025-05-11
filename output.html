@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Output - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Output</h2>
+                    
+                    <div class="topic">
+                        <h3>Console Output</h3>
+                        <p>To output text to the console in C#, you use the <code>Console.WriteLine()</code> and <code>Console.Write()</code> methods.</p>
+                        
+                        <div class="example-box">
+                            <h4>Example:</h4>
+                            <pre><code>
+// WriteLine adds a new line after the output
+Console.WriteLine("Hello World!");
+Console.WriteLine("I am learning C#");
+
+// Write doesn't add a new line
+Console.Write("Hello ");
+Console.Write("World");  // Output: Hello World (on the same line)
+                            </code></pre>
+                            <div class="explanation">
+                                <ul>
+                                    <li><code>Console.WriteLine()</code> prints the specified text followed by a new line</li>
+                                    <li><code>Console.Write()</code> prints the specified text without a new line</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Console Input</h3>
+                        <p>To receive input from users in console applications, you use the <code>Console.ReadLine()</code> method. This allows your program to wait for the user to type something and press Enter.</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Input:</h4>
+                            <pre><code>
+// Prompt the user for input
+Console.Write("Enter your name: ");
+
+// Wait for the user to type and press Enter
+string name = Console.ReadLine();
+
+// Display the input
+Console.WriteLine($"Hello, {name}!");
+                            </code></pre>
+
+                            <h4>Converting String Input to Other Types:</h4>
+                            <pre><code>
+// Get numeric input
+Console.Write("Enter your age: ");
+string ageInput = Console.ReadLine();
+
+// Convert string to integer
+int age = Convert.ToInt32(ageInput);
+// or
+int age = int.Parse(ageInput);
+
+Console.WriteLine($"Next year, you will be {age + 1} years old.");
+                            </code></pre>
+
+                            <h4>Safe Input Handling:</h4>
+                            <pre><code>
+// Handling potential invalid input
+Console.Write("Enter a number: ");
+string userInput = Console.ReadLine();
+
+// Try to parse, with graceful error handling
+if (int.TryParse(userInput, out int number)) {
+    Console.WriteLine($"You entered the number: {number}");
+} else {
+    Console.WriteLine("That's not a valid number!");
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Important notes about <code>Console.ReadLine()</code>:</p>
+                                <ul>
+                                    <li>Always returns the input as a <code>string</code>, regardless of what the user types</li>
+                                    <li>Waits for the user to press Enter before continuing execution</li>
+                                    <li>Returns an empty string if the user just presses Enter without typing anything</li>
+                                    <li>Returns <code>null</code> if the end of the input stream is reached (rare in typical applications)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Formatting Output</h3>
+                        <p>You can format your output in different ways:</p>
+                        
+                        <div class="example-box">
+                            <h4>String Concatenation:</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine("Name: " + name + ", Age: " + age);
+                            </code></pre>
+
+                            <h4>String Formatting (composite formatting):</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine("Name: {0}, Age: {1}", name, age);
+                            </code></pre>
+
+                            <h4>String Interpolation (recommended, C# 6.0 and later):</h4>
+                            <pre><code>
+string name = "John";
+int age = 25;
+Console.WriteLine($"Name: {name}, Age: {age}");
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Formatting Numbers and Dates</h3>
+                        <p>You can format numbers and dates using format specifiers:</p>
+                        
+                        <div class="example-box">
+                            <h4>Currency Formatting:</h4>
+                            <pre><code>
+double price = 123.45;
+Console.WriteLine($"Price: {price:C}");  // Outputs: Price: $123.45 (in US culture)
+                            </code></pre>
+
+                            <h4>Number Formatting:</h4>
+                            <pre><code>
+double number = 12345.6789;
+Console.WriteLine($"Number: {number:N2}");  // Outputs: Number: 12,345.68 (formatted with commas and 2 decimal places)
+Console.WriteLine($"Percentage: {0.75:P0}");  // Outputs: Percentage: 75%
+                            </code></pre>
+
+                            <h4>Date Formatting:</h4>
+                            <pre><code>
+DateTime now = DateTime.Now;
+Console.WriteLine($"Date: {now:d}");  // Outputs: Date: 5/10/2023 (short date format)
+Console.WriteLine($"Time: {now:t}");  // Outputs: Time: 10:30 AM (short time format)
+Console.WriteLine($"Full: {now:F}");  // Outputs: Full: Friday, May 10, 2023 10:30:45 AM
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Special Characters</h3>
+                        <p>You can include special characters in your output using escape sequences:</p>
+                        
+                        <div class="example-box">
+                            <pre><code>
+// Using escape sequences
+Console.WriteLine("Hello\nWorld");  // Outputs Hello and World on separate lines
+Console.WriteLine("I am learning \"C#\"");  // Outputs: I am learning "C#"
+Console.WriteLine("Path: C:\\Program Files\\App");  // Outputs: Path: C:\Program Files\App
+
+// Using verbatim strings (preceded by @)
+Console.WriteLine(@"Path: C:\Program Files\App");  // No need to escape backslashes
+Console.WriteLine(@"This is a
+multi-line
+string");  // Preserves line breaks
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Common escape sequences:</p>
+                                <ul>
+                                    <li><code>\n</code> - New line</li>
+                                    <li><code>\t</code> - Tab</li>
+                                    <li><code>\"</code> - Double quote</li>
+                                    <li><code>\'</code> - Single quote</li>
+                                    <li><code>\\</code> - Backslash</li>
+                                    <li><code>\r</code> - Carriage return</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="syntax.html" class="prev"><i class="fas fa-arrow-left"></i> C# Syntax</a>
+                        <a href="terminology.html" class="next">C# Terminology <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

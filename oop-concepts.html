@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOP Concepts in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Object-Oriented Programming Concepts in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Object-Oriented Programming (OOP)</h3>
+                        <p>Object-Oriented Programming is a programming paradigm based on the concept of "objects" that contain data and code. C# is a fully object-oriented programming language designed around the OOP principles.</p>
+                        
+                        <p>OOP helps developers to:</p>
+                        <ul>
+                            <li>Organize and structure code in a logical way</li>
+                            <li>Reuse code through inheritance</li>
+                            <li>Build modular, maintainable applications</li>
+                            <li>Model real-world entities as software objects</li>
+                            <li>Create cleaner, more readable code</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>The Four Pillars of OOP</h3>
+                        <p>Object-Oriented Programming is built on four fundamental principles, often referred to as the "four pillars of OOP":</p>
+                        
+                        <div class="example-box">
+                            <h4>1. Encapsulation</h4>
+                            <p>Encapsulation is the bundling of data (attributes) and methods (behaviors) that operate on the data into a single unit (class), and restricting access to some of the object's components.</p>
+                            
+                            <pre><code>
+// Example of encapsulation in C#
+public class BankAccount
+{
+    // Private fields - hidden from outside access
+    private double balance;
+    private string accountNumber;
+    
+    // Public property - controlled access to balance
+    public double Balance
+    {
+        get { return balance; }
+        private set { balance = value; } // Can only be set within the class
+    }
+    
+    // Public methods to interact with the private data
+    public void Deposit(double amount)
+    {
+        if (amount > 0)
+        {
+            balance += amount;
+        }
+    }
+    
+    public bool Withdraw(double amount)
+    {
+        if (amount > 0 && balance >= amount)
+        {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Benefits of encapsulation:</p>
+                                <ul>
+                                    <li><strong>Data hiding</strong> - Private fields can't be accessed directly from outside the class</li>
+                                    <li><strong>Controlled access</strong> - Public methods provide controlled ways to modify internal state</li>
+                                    <li><strong>Validation</strong> - Can validate data before allowing changes (e.g., deposit amount must be positive)</li>
+                                    <li><strong>Flexibility</strong> - Internal implementation can change without affecting code that uses the class</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>2. Inheritance</h4>
+                            <p>Inheritance allows a class (derived class) to inherit attributes and methods from another class (base class). This promotes code reuse and establishes a relationship between classes.</p>
+                            
+                            <pre><code>
+// Base class
+public class Vehicle
+{
+    public string Make { get; set; }
+    public string Model { get; set; }
+    public int Year { get; set; }
+    
+    public void StartEngine()
+    {
+        Console.WriteLine("Engine started!");
+    }
+    
+    public virtual void DisplayInfo()
+    {
+        Console.WriteLine($"{Year} {Make} {Model}");
+    }
+}
+
+// Derived class inheriting from Vehicle
+public class Car : Vehicle
+{
+    public int NumberOfDoors { get; set; }
+    public bool IsConvertible { get; set; }
+    
+    // Override base class method
+    public override void DisplayInfo()
+    {
+        // Call base class implementation
+        base.DisplayInfo();
+        
+        // Add Car-specific information
+        Console.WriteLine($"Doors: {NumberOfDoors}, Convertible: {IsConvertible}");
+    }
+    
+    // Car-specific method
+    public void OpenTrunk()
+    {
+        Console.WriteLine("Trunk opened!");
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Key concepts in inheritance:</p>
+                                <ul>
+                                    <li><strong>Base and derived classes</strong> - "Car" is derived from "Vehicle"</li>
+                                    <li><strong>Code reuse</strong> - Car inherits all Vehicle properties and methods</li>
+                                    <li><strong>Method overriding</strong> - Derived class can provide a new implementation of a base class method</li>
+                                    <li><strong>Extension</strong> - Derived class can add new functionality (OpenTrunk method)</li>
+                                    <li><strong>The "is-a" relationship</strong> - A Car "is a" Vehicle</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>3. Polymorphism</h4>
+                            <p>Polymorphism means "many forms" and allows objects to be treated as instances of their parent class rather than their actual class. This enables you to process objects differently depending on their data type or class.</p>
+                            
+                            <pre><code>
+// Using the Vehicle and Car classes from above
+public class Garage
+{
+    public void ServiceVehicle(Vehicle vehicle)
+    {
+        Console.WriteLine($"Servicing a {vehicle.Make} {vehicle.Model}");
+        
+        // vehicle.DisplayInfo() will call the appropriate version depending on the actual type
+        vehicle.DisplayInfo();
+        
+        // Check what type of vehicle we're dealing with
+        if (vehicle is Car car)
+        {
+            // Can access Car-specific properties and methods
+            Console.WriteLine($"This car has {car.NumberOfDoors} doors");
+            car.OpenTrunk();
+        }
+    }
+}
+
+// Usage example
+static void Main()
+{
+    Garage garage = new Garage();
+    
+    Vehicle genericVehicle = new Vehicle 
+    { 
+        Make = "Generic", 
+        Model = "Vehicle", 
+        Year = 2020 
+    };
+    
+    Car myCar = new Car 
+    { 
+        Make = "Toyota", 
+        Model = "Corolla", 
+        Year = 2022, 
+        NumberOfDoors = 4, 
+        IsConvertible = false 
+    };
+    
+    // Both can be passed to ServiceVehicle method
+    garage.ServiceVehicle(genericVehicle);  // Will use Vehicle.DisplayInfo()
+    garage.ServiceVehicle(myCar);           // Will use Car.DisplayInfo()
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Types of polymorphism in C#:</p>
+                                <ul>
+                                    <li><strong>Runtime polymorphism (Method Overriding)</strong> - Using virtual/override methods</li>
+                                    <li><strong>Compile-time polymorphism (Method Overloading)</strong> - Multiple methods with the same name but different parameters</li>
+                                    <li><strong>Interface implementation</strong> - Multiple classes implementing the same interface</li>
+                                    <li><strong>Abstract classes and methods</strong> - Base classes that define behavior that derived classes must implement</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>4. Abstraction</h4>
+                            <p>Abstraction means hiding complex implementation details and showing only the necessary features of an object. It helps manage complexity by hiding unnecessary details from the user.</p>
+                            
+                            <pre><code>
+// Abstract class
+public abstract class Shape
+{
+    // Abstract method - must be implemented by any non-abstract derived class
+    public abstract double CalculateArea();
+    
+    // Concrete method - available to all derived classes
+    public void Display()
+    {
+        Console.WriteLine($"This shape has an area of {CalculateArea()}");
+    }
+}
+
+// Concrete derived classes implementing the abstract method
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+    
+    public override double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+}
+
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    public override double CalculateArea()
+    {
+        return Width * Height;
+    }
+}
+
+// Usage
+static void Main()
+{
+    Shape circle = new Circle(5);
+    Shape rectangle = new Rectangle(4, 6);
+    
+    circle.Display();     // "This shape has an area of 78.54..."
+    rectangle.Display();  // "This shape has an area of 24"
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Abstraction mechanisms in C#:</p>
+                                <ul>
+                                    <li><strong>Abstract classes</strong> - Cannot be instantiated directly, may contain abstract and concrete methods</li>
+                                    <li><strong>Abstract methods</strong> - Methods without implementation that must be overridden</li>
+                                    <li><strong>Interfaces</strong> - Define a contract that implementing classes must follow</li>
+                                    <li><strong>Public vs. private members</strong> - Expose only what's necessary</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Other Important OOP Concepts</h3>
+                        
+                        <div class="example-box">
+                            <h4>Interfaces</h4>
+                            <p>Interfaces define a contract that classes must implement. Unlike abstract classes, interfaces cannot provide implementation details.</p>
+                            
+                            <pre><code>
+// Interface definition
+public interface IPayable
+{
+    decimal CalculatePayment();
+    void ProcessPayment();
+}
+
+// Classes implementing the interface
+public class Employee : IPayable
+{
+    public string Name { get; set; }
+    public decimal HourlyRate { get; set; }
+    public int HoursWorked { get; set; }
+    
+    public decimal CalculatePayment()
+    {
+        return HourlyRate * HoursWorked;
+    }
+    
+    public void ProcessPayment()
+    {
+        decimal amount = CalculatePayment();
+        Console.WriteLine($"Paid ${amount} to employee {Name}");
+    }
+}
+
+public class Invoice : IPayable
+{
+    public string Number { get; set; }
+    public decimal Amount { get; set; }
+    
+    public decimal CalculatePayment()
+    {
+        return Amount;
+    }
+    
+    public void ProcessPayment()
+    {
+        Console.WriteLine($"Paid invoice #{Number} for ${Amount}");
+    }
+}
+
+// Usage - process different types of payments
+public void ProcessPayables(List<IPayable> payables)
+{
+    foreach(var payable in payables)
+    {
+        payable.ProcessPayment();
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Composition</h4>
+                            <p>Composition is a design principle where a class contains an instance of another class. It represents a "has-a" relationship, as opposed to inheritance's "is-a" relationship.</p>
+                            
+                            <pre><code>
+// Component class
+public class Engine
+{
+    public int Horsepower { get; set; }
+    public string Type { get; set; }
+    
+    public void Start()
+    {
+        Console.WriteLine($"Starting {Type} engine with {Horsepower} HP");
+    }
+    
+    public void Stop()
+    {
+        Console.WriteLine("Engine stopped");
+    }
+}
+
+// Composite class using composition
+public class Car
+{
+    // Car "has-a" Engine - composition relationship
+    private Engine engine;
+    
+    public string Make { get; set; }
+    public string Model { get; set; }
+    
+    public Car(string make, string model, int horsepower, string engineType)
+    {
+        Make = make;
+        Model = model;
+        
+        // Create the component object
+        engine = new Engine
+        {
+            Horsepower = horsepower,
+            Type = engineType
+        };
+    }
+    
+    public void StartCar()
+    {
+        Console.WriteLine($"Starting {Make} {Model}");
+        engine.Start();  // Delegate to the component
+    }
+    
+    public void StopCar()
+    {
+        Console.WriteLine($"Stopping {Make} {Model}");
+        engine.Stop();   // Delegate to the component
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Benefits of composition over inheritance:</p>
+                                <ul>
+                                    <li><strong>Flexibility</strong> - Can change components at runtime</li>
+                                    <li><strong>Looser coupling</strong> - Components can be developed independently</li>
+                                    <li><strong>Avoid complex inheritance hierarchies</strong> - "Favor composition over inheritance" is a design principle</li>
+                                    <li><strong>Reuse without forcing "is-a" relationships</strong> - Not everything is a specialized form of something else</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>OOP Best Practices in C#</h3>
+                        
+                        <div class="example-box">
+                            <h4>Key Guidelines for OOP in C#</h4>
+                            <ul>
+                                <li><strong>Single Responsibility Principle</strong> - A class should have only one reason to change</li>
+                                <li><strong>Open/Closed Principle</strong> - Classes should be open for extension but closed for modification</li>
+                                <li><strong>Liskov Substitution Principle</strong> - Derived classes must be substitutable for their base classes</li>
+                                <li><strong>Interface Segregation Principle</strong> - Many specific interfaces are better than one general-purpose interface</li>
+                                <li><strong>Dependency Inversion Principle</strong> - Depend on abstractions, not concrete implementations</li>
+                                <li><strong>Encapsulate What Varies</strong> - Identify aspects of your application that vary and separate them from what stays the same</li>
+                                <li><strong>Favor Composition Over Inheritance</strong> - Build complex functionality by combining simple objects rather than through inheritance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common OOP Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Deep inheritance hierarchies</strong> - More than 2-3 levels can become difficult to understand and maintain</li>
+                                <li><strong>Tight coupling</strong> - Classes that are too dependent on each other</li>
+                                <li><strong>God classes</strong> - Classes that try to do too much</li>
+                                <li><strong>Leaky abstractions</strong> - When implementation details "leak" through abstraction layers</li>
+                                <li><strong>Inappropriate inheritance</strong> - Using inheritance when composition would be more appropriate</li>
+                                <li><strong>Overuse of static methods/classes</strong> - Leads to procedural rather than object-oriented code</li>
+                                <li><strong>Not using interfaces</strong> - Missing opportunities for abstraction and flexibility</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="basics.html" class="prev"><i class="fas fa-arrow-left"></i> C# Basics</a>
+                        <a href="classes-objects.html" class="next">Classes & Objects <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

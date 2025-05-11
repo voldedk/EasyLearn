@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Arrays - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Arrays</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Arrays</h3>
+                        <p>An array is a collection of elements of the same type, stored in contiguous memory locations. Arrays provide a way to store multiple values of the same data type under a single variable name, with each value accessible by its position (index) in the array.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Array Concepts:</h4>
+                            <ul>
+                                <li>Arrays store multiple values of the same type</li>
+                                <li>Array elements are accessed by their index (zero-based)</li>
+                                <li>Array size is fixed at creation time</li>
+                                <li>Arrays can be single-dimensional, multi-dimensional, or jagged</li>
+                                <li>Arrays are reference types, even when they store value types</li>
+                                <li>All arrays in C# inherit from the <code>System.Array</code> class</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Declaring and Initializing Arrays</h3>
+                        <p>C# provides several ways to declare and initialize arrays, depending on your specific needs.</p>
+                        
+                        <div class="example-box">
+                            <h4>Array Declaration and Initialization:</h4>
+                            <pre><code>
+// Declaration without initialization
+int[] numbers;            // Preferred syntax
+string[] names;           // Array of strings
+double[] prices;          // Array of doubles
+
+// Declaration with array size
+int[] scores = new int[5];  // Creates an array of 5 integers, all initialized to 0
+
+// Declaration with initialization
+int[] ages = new int[] { 25, 30, 42, 18, 50 };  // Specify values directly
+int[] years = { 2020, 2021, 2022, 2023 };       // Shorthand syntax
+
+// Declaration, creation, and initialization in separate steps
+string[] fruits;                     // Declaration
+fruits = new string[3];              // Creation with size
+fruits[0] = "Apple";                 // Initialization by index
+fruits[1] = "Banana";
+fruits[2] = "Cherry";
+
+// Alternative initialization using object initialization syntax
+int[] fibonacci = new int[6] { 1, 1, 2, 3, 5, 8 };
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When you initialize an array without explicit values:</p>
+                                <ul>
+                                    <li>Numeric types are initialized to 0</li>
+                                    <li>Boolean types are initialized to false</li>
+                                    <li>Reference types (including strings) are initialized to null</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Accessing Array Elements</h3>
+                        <p>Array elements are accessed using zero-based indices. The first element is at index 0, the second at index 1, and so on.</p>
+                        
+                        <div class="example-box">
+                            <h4>Accessing and Modifying Array Elements:</h4>
+                            <pre><code>
+// Create an array
+string[] colors = { "Red", "Green", "Blue", "Yellow", "Purple" };
+
+// Accessing elements by index
+string firstColor = colors[0];   // "Red"
+string thirdColor = colors[2];   // "Blue"
+Console.WriteLine($"The first color is {firstColor}");
+Console.WriteLine($"The third color is {thirdColor}");
+
+// Modifying elements
+colors[1] = "Emerald";           // Change "Green" to "Emerald"
+colors[4] = "Violet";            // Change "Purple" to "Violet"
+
+// Accessing array elements in a loop
+for (int i = 0; i < colors.Length; i++)
+{
+    Console.WriteLine($"Color at index {i}: {colors[i]}");
+}
+
+// Getting the array length
+int numberOfColors = colors.Length;  // 5
+Console.WriteLine($"The array contains {numberOfColors} colors");
+
+// Attempting to access an index outside the array bounds
+// colors[-1] = "Invalid";  // Runtime error: IndexOutOfRangeException
+// colors[5] = "Invalid";   // Runtime error: IndexOutOfRangeException
+
+// Safe access using bounds checking
+int index = 5;
+if (index >= 0 && index < colors.Length)
+{
+    Console.WriteLine($"Color at index {index}: {colors[index]}");
+}
+else
+{
+    Console.WriteLine($"Index {index} is out of bounds");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes about array access:</p>
+                                <ul>
+                                    <li>Always use the <code>Length</code> property to determine the size of an array</li>
+                                    <li>Array access is very fast (constant time operation)</li>
+                                    <li>Accessing an index outside the array bounds causes an <code>IndexOutOfRangeException</code></li>
+                                    <li>Always validate indices when they come from user input or external sources</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Iterating Through Arrays</h3>
+                        <p>C# offers several ways to iterate through array elements, with the for loop and foreach loop being the most common.</p>
+                        
+                        <div class="example-box">
+                            <h4>Iterating Through Arrays:</h4>
+                            <pre><code>
+// Sample array
+int[] numbers = { 10, 20, 30, 40, 50 };
+
+// Using a for loop (when you need the index)
+Console.WriteLine("Using for loop:");
+for (int i = 0; i < numbers.Length; i++)
+{
+    Console.WriteLine($"Element at index {i}: {numbers[i]}");
+}
+
+// Using a foreach loop (simpler syntax when you don't need the index)
+Console.WriteLine("\nUsing foreach loop:");
+foreach (int number in numbers)
+{
+    Console.WriteLine($"Value: {number}");
+}
+
+// Accessing in reverse order
+Console.WriteLine("\nReverse order using for loop:");
+for (int i = numbers.Length - 1; i >= 0; i--)
+{
+    Console.WriteLine($"Element at index {i}: {numbers[i]}");
+}
+
+// Using Array.ForEach method
+Console.WriteLine("\nUsing Array.ForEach method:");
+Array.ForEach(numbers, number => Console.WriteLine($"Value: {number}"));
+
+// Using LINQ methods (requires using System.Linq)
+Console.WriteLine("\nUsing LINQ:");
+numbers.ToList().ForEach(number => Console.WriteLine($"Value: {number}"));
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Choosing the right iteration method:</p>
+                                <ul>
+                                    <li>Use <code>for</code> when you need the index or need to modify array elements</li>
+                                    <li>Use <code>foreach</code> for cleaner code when you just need to read values</li>
+                                    <li>Use <code>Array.ForEach</code> or LINQ for more functional programming style</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Array Processing Patterns:</h4>
+                            <pre><code>
+// Finding the sum of array elements
+int[] values = { 5, 8, 12, 15, 3 };
+int sum = 0;
+
+foreach (int value in values)
+{
+    sum += value;
+}
+Console.WriteLine($"Sum: {sum}");  // 43
+
+// Finding the average
+double average = (double)sum / values.Length;
+Console.WriteLine($"Average: {average}");  // 8.6
+
+// Finding the maximum and minimum values
+int max = values[0];
+int min = values[0];
+
+for (int i = 1; i < values.Length; i++)
+{
+    if (values[i] > max)
+    {
+        max = values[i];
+    }
+    if (values[i] < min)
+    {
+        min = values[i];
+    }
+}
+
+Console.WriteLine($"Maximum: {max}");  // 15
+Console.WriteLine($"Minimum: {min}");  // 3
+
+// Counting elements that meet a condition
+int[] scores = { 75, 92, 83, 65, 98, 70 };
+int passingCount = 0;
+
+foreach (int score in scores)
+{
+    if (score >= 70)
+    {
+        passingCount++;
+    }
+}
+
+Console.WriteLine($"{passingCount} out of {scores.Length} students passed");  // 5 out of 6
+
+// Filtering values
+List<int> evenNumbers = new List<int>();
+
+foreach (int number in values)
+{
+    if (number % 2 == 0)
+    {
+        evenNumbers.Add(number);
+    }
+}
+
+Console.WriteLine($"Even numbers: {string.Join(", ", evenNumbers)}");  // 8, 12
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Array Methods</h3>
+                        <p>The <code>System.Array</code> class provides many useful methods for working with arrays.</p>
+                        
+                        <div class="example-box">
+                            <h4>Array Methods and Properties:</h4>
+                            <pre><code>
+// Sample array
+int[] numbers = { 5, 2, 9, 1, 7, 3 };
+
+// Sort the array (in-place)
+Array.Sort(numbers);
+Console.WriteLine("Sorted array: " + string.Join(", ", numbers));  // 1, 2, 3, 5, 7, 9
+
+// Reverse the array (in-place)
+Array.Reverse(numbers);
+Console.WriteLine("Reversed array: " + string.Join(", ", numbers));  // 9, 7, 5, 3, 2, 1
+
+// Binary search (array must be sorted first)
+Array.Sort(numbers);  // Sort again after reversing
+int index = Array.BinarySearch(numbers, 5);
+Console.WriteLine($"Found 5 at index: {index}");  // Will return the index of 5
+
+// Check if an element exists
+bool contains7 = Array.Exists(numbers, element => element == 7);
+Console.WriteLine($"Array contains 7: {contains7}");  // True
+
+// Find the first element that satisfies a condition
+int firstAbove5 = Array.Find(numbers, element => element > 5);
+Console.WriteLine($"First element above 5: {firstAbove5}");  // 7
+
+// Find all elements that satisfy a condition
+int[] allAbove3 = Array.FindAll(numbers, element => element > 3);
+Console.WriteLine("All elements above 3: " + string.Join(", ", allAbove3));  // 5, 7, 9
+
+// Convert all elements with Array.ConvertAll
+string[] numberStrings = Array.ConvertAll(numbers, element => element.ToString());
+Console.WriteLine("Converted to strings: " + string.Join(", ", numberStrings));
+
+// Fill a range with a value
+int[] filledArray = new int[10];
+Array.Fill(filledArray, 42, 3, 5);  // Fill 5 elements starting at index 3 with value 42
+Console.WriteLine("Filled array: " + string.Join(", ", filledArray));
+
+// Clear a range of elements (sets to default value)
+Array.Clear(numbers, 2, 2);  // Clear 2 elements starting at index 2
+Console.WriteLine("After clearing: " + string.Join(", ", numbers));
+
+// Copy array elements
+int[] sourceArray = { 10, 20, 30, 40, 50 };
+int[] destArray = new int[sourceArray.Length];
+Array.Copy(sourceArray, destArray, sourceArray.Length);
+Console.WriteLine("Copied array: " + string.Join(", ", destArray));
+
+// Alternative way to copy an array
+int[] clonedArray = (int[])sourceArray.Clone();
+Console.WriteLine("Cloned array: " + string.Join(", ", clonedArray));
+
+// Resize an array (creates a new array)
+Array.Resize(ref sourceArray, 7);  // Resize to 7 elements (adds default values)
+Console.WriteLine("Resized array: " + string.Join(", ", sourceArray));
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes about array methods:</p>
+                                <ul>
+                                    <li>Most array modification methods operate on the array in-place</li>
+                                    <li><code>Array.Resize</code> creates a new array and copies elements, rather than truly resizing</li>
+                                    <li>Binary search only works correctly on sorted arrays</li>
+                                    <li>Many array methods have equivalent LINQ methods that can be more expressive</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Multi-Dimensional Arrays</h3>
+                        <p>C# supports two types of multi-dimensional arrays: rectangular arrays (with fixed rows and columns) and jagged arrays (arrays of arrays).</p>
+                        
+                        <div class="example-box">
+                            <h4>Rectangular Arrays (2D):</h4>
+                            <pre><code>
+// Declaring a 2D array (3 rows, 4 columns)
+int[,] matrix = new int[3, 4];  // All elements initialized to 0
+
+// Initializing a 2D array with values
+int[,] grid = new int[,]
+{
+    { 1, 2, 3, 4 },
+    { 5, 6, 7, 8 },
+    { 9, 10, 11, 12 }
+};
+
+// Accessing elements in a 2D array
+int value = grid[1, 2];  // Row 1, Column 2: Value is 7
+grid[0, 3] = 42;         // Set Row 0, Column 3 to 42
+
+// Getting dimensions
+int rows = grid.GetLength(0);      // 3
+int columns = grid.GetLength(1);   // 4
+int totalElements = grid.Length;   // 12 (3 * 4)
+
+// Iterating through a 2D array
+for (int i = 0; i < rows; i++)
+{
+    for (int j = 0; j < columns; j++)
+    {
+        Console.Write($"{grid[i, j],4}");  // The ,4 adds padding for alignment
+    }
+    Console.WriteLine();
+}
+
+// 3D array example
+int[,,] cube = new int[3, 3, 3];  // 3x3x3 cube
+
+// Set a value in the 3D array
+cube[1, 2, 0] = 15;  // Layer 1, Row 2, Column 0
+
+// Accessing and printing all elements in a 3D array
+for (int i = 0; i < 3; i++)
+{
+    Console.WriteLine($"Layer {i}:");
+    for (int j = 0; j < 3; j++)
+    {
+        for (int k = 0; k < 3; k++)
+        {
+            Console.Write($"{cube[i, j, k],4}");
+        }
+        Console.WriteLine();
+    }
+    Console.WriteLine();
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Jagged Arrays (Arrays of Arrays):</h4>
+                            <pre><code>
+// Declaring a jagged array (an array of arrays)
+int[][] jaggedArray = new int[3][];  // Array with 3 rows, each row can have different length
+
+// Initializing the inner arrays
+jaggedArray[0] = new int[4] { 1, 2, 3, 4 };        // First row has 4 elements
+jaggedArray[1] = new int[2] { 5, 6 };              // Second row has 2 elements
+jaggedArray[2] = new int[5] { 7, 8, 9, 10, 11 };   // Third row has 5 elements
+
+// Alternative initialization syntax
+int[][] jaggedArray2 = new int[][]
+{
+    new int[] { 1, 2, 3 },
+    new int[] { 4, 5 },
+    new int[] { 6, 7, 8, 9 }
+};
+
+// Accessing elements in a jagged array
+int element = jaggedArray[1][1];  // Accessing row 1, column 1: Value is 6
+jaggedArray[2][3] = 42;           // Setting row 2, column 3 to 42
+
+// Iterating through a jagged array
+for (int i = 0; i < jaggedArray.Length; i++)
+{
+    Console.Write($"Row {i}: ");
+    
+    for (int j = 0; j < jaggedArray[i].Length; j++)
+    {
+        Console.Write($"{jaggedArray[i][j]} ");
+    }
+    
+    Console.WriteLine();
+}
+
+// Using nested foreach loops
+foreach (int[] row in jaggedArray)
+{
+    foreach (int item in row)
+    {
+        Console.Write($"{item} ");
+    }
+    Console.WriteLine();
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Comparing multi-dimensional arrays:</p>
+                                <table>
+                                    <tr>
+                                        <th>Rectangular Arrays</th>
+                                        <th>Jagged Arrays</th>
+                                    </tr>
+                                    <tr>
+                                        <td>All rows have the same length</td>
+                                        <td>Rows can have different lengths</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Use comma-separated indices: [i, j]</td>
+                                        <td>Use multiple indices: [i][j]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>More memory-efficient</td>
+                                        <td>More flexible for irregular data</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Slightly faster access</td>
+                                        <td>Can allocate inner arrays as needed</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Arrays as Parameters and Return Values</h3>
+                        <p>Arrays can be passed to methods and returned from methods, allowing for modular code that processes collections of data.</p>
+                        
+                        <div class="example-box">
+                            <h4>Arrays as Method Parameters:</h4>
+                            <pre><code>
+// Passing an array to a method
+void DisplayArray(int[] arr)
+{
+    Console.WriteLine("Array contents:");
+    foreach (int item in arr)
+    {
+        Console.Write($"{item} ");
+    }
+    Console.WriteLine();
+}
+
+int[] numbers = { 1, 2, 3, 4, 5 };
+DisplayArray(numbers);  // Pass the array to the method
+
+// Modifying array elements in a method
+void DoubleValues(int[] arr)
+{
+    for (int i = 0; i < arr.Length; i++)
+    {
+        arr[i] *= 2;  // Double each value
+    }
+}
+
+DoubleValues(numbers);
+DisplayArray(numbers);  // Numbers array is modified: 2 4 6 8 10
+
+// Passing multidimensional arrays
+void ProcessMatrix(int[,] matrix)
+{
+    int rows = matrix.GetLength(0);
+    int cols = matrix.GetLength(1);
+    
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            // Process each element
+            matrix[i, j] += 10;
+        }
+    }
+}
+
+int[,] grid = { { 1, 2 }, { 3, 4 } };
+ProcessMatrix(grid);  // Increases each element by 10
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Arrays as Return Values:</h4>
+                            <pre><code>
+// Method that returns an array
+int[] GenerateFibonacci(int count)
+{
+    if (count < 1) return new int[0];  // Return empty array for invalid input
+    
+    int[] fibonacci = new int[count];
+    fibonacci[0] = 1;
+    
+    if (count > 1)
+    {
+        fibonacci[1] = 1;
+        
+        for (int i = 2; i < count; i++)
+        {
+            fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
+        }
+    }
+    
+    return fibonacci;
+}
+
+// Call the method and use the returned array
+int[] fibSequence = GenerateFibonacci(8);
+Console.WriteLine("Fibonacci sequence: " + string.Join(", ", fibSequence));
+// Output: 1, 1, 2, 3, 5, 8, 13, 21
+
+// Method that creates and returns a 2D array
+int[,] CreateMultiplicationTable(int size)
+{
+    int[,] table = new int[size, size];
+    
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            table[i, j] = (i + 1) * (j + 1);
+        }
+    }
+    
+    return table;
+}
+
+// Use the returned 2D array
+int[,] multiTable = CreateMultiplicationTable(5);
+// Now multiTable contains a 5x5 multiplication table
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important notes about arrays and methods:</p>
+                                <ul>
+                                    <li>Arrays are reference types, so methods receive a reference to the original array</li>
+                                    <li>Changes to array elements inside a method affect the original array</li>
+                                    <li>However, assigning a new array to the parameter doesn't affect the original reference</li>
+                                    <li>Use the <code>params</code> keyword for methods that accept a variable number of arguments</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Using the params Keyword:</h4>
+                            <pre><code>
+// Method that accepts variable number of arguments
+int Sum(params int[] numbers)
+{
+    int total = 0;
+    foreach (int number in numbers)
+    {
+        total += number;
+    }
+    return total;
+}
+
+// Call with individual arguments
+int result1 = Sum(1, 2, 3);           // 6
+int result2 = Sum(10, 20, 30, 40);    // 100
+int result3 = Sum();                  // 0 (empty array)
+
+// Call with an array
+int[] values = { 5, 10, 15, 20 };
+int result4 = Sum(values);            // 50
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Array Limitations and Alternatives</h3>
+                        <p>While arrays are fundamental data structures, they have some limitations. C# provides several alternative collection types that offer more flexibility.</p>
+                        
+                        <div class="example-box">
+                            <h4>Arrays vs. List&lt;T&gt;:</h4>
+                            <pre><code>
+// Array - fixed size
+int[] numbersArray = { 1, 2, 3, 4, 5 };
+// Can't add elements to an array directly
+// numbersArray.Add(6);  // Error! Arrays don't have an Add method
+
+// List<T> - flexible size
+List<int> numbersList = new List<int> { 1, 2, 3, 4, 5 };
+numbersList.Add(6);           // Add a single element
+numbersList.AddRange(new[] { 7, 8, 9 });  // Add multiple elements
+numbersList.Remove(3);        // Remove a specific element
+numbersList.RemoveAt(0);      // Remove element at index 0
+
+// Converting between arrays and lists
+int[] arrayFromList = numbersList.ToArray();
+List<int> listFromArray = new List<int>(numbersArray);
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Other Collection Types:</h4>
+                            <pre><code>
+// Dictionary<TKey, TValue> - key/value pairs
+Dictionary<string, int> ages = new Dictionary<string, int>
+{
+    { "Alice", 25 },
+    { "Bob", 30 },
+    { "Charlie", 35 }
+};
+
+ages["David"] = 40;  // Add a new entry
+ages["Alice"] = 26;  // Update an existing entry
+
+if (ages.ContainsKey("Bob"))
+{
+    Console.WriteLine($"Bob's age: {ages["Bob"]}");
+}
+
+// HashSet<T> - unique elements, no specific order
+HashSet<string> uniqueNames = new HashSet<string>
+{
+    "Alice", "Bob", "Charlie"
+};
+
+uniqueNames.Add("Alice");  // No effect - "Alice" is already in the set
+uniqueNames.Add("David");  // Adds "David" to the set
+
+// Queue<T> - first in, first out (FIFO)
+Queue<string> queue = new Queue<string>();
+queue.Enqueue("First");
+queue.Enqueue("Second");
+queue.Enqueue("Third");
+
+string first = queue.Dequeue();  // Removes and returns "First"
+string peek = queue.Peek();      // Returns "Second" without removing it
+
+// Stack<T> - last in, first out (LIFO)
+Stack<string> stack = new Stack<string>();
+stack.Push("First");
+stack.Push("Second");
+stack.Push("Third");
+
+string top = stack.Pop();        // Removes and returns "Third"
+string peekTop = stack.Peek();   // Returns "Second" without removing it
+
+// LinkedList<T> - doubly-linked list
+LinkedList<string> linkedList = new LinkedList<string>();
+linkedList.AddLast("End");
+linkedList.AddFirst("Start");
+linkedList.AddAfter(linkedList.First, "Middle");
+
+foreach (string item in linkedList)
+{
+    Console.WriteLine(item);  // Start, Middle, End
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Collection selection guide:</p>
+                                <table>
+                                    <tr>
+                                        <th>Collection Type</th>
+                                        <th>Best Used When</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Array</td>
+                                        <td>Fixed size, frequent indexed access, performance critical</td>
+                                    </tr>
+                                    <tr>
+                                        <td>List&lt;T&gt;</td>
+                                        <td>Need to add/remove elements, unknown size upfront</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dictionary&lt;TKey, TValue&gt;</td>
+                                        <td>Key-based lookup, associative data</td>
+                                    </tr>
+                                    <tr>
+                                        <td>HashSet&lt;T&gt;</td>
+                                        <td>Need to maintain a set of unique values</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Queue&lt;T&gt;</td>
+                                        <td>First-in, first-out processing</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Stack&lt;T&gt;</td>
+                                        <td>Last-in, first-out processing</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LinkedList&lt;T&gt;</td>
+                                        <td>Frequent insertions/removals in the middle</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>LINQ with Arrays</h3>
+                        <p>Language Integrated Query (LINQ) provides a powerful way to query and transform arrays and other collections.</p>
+                        
+                        <div class="example-box">
+                            <h4>Common LINQ Operations with Arrays:</h4>
+                            <pre><code>
+// Sample array
+int[] numbers = { 5, 2, 9, 1, 7, 3, 8, 6, 4 };
+
+// Filtering with Where
+int[] evenNumbers = numbers.Where(n => n % 2 == 0).ToArray();
+Console.WriteLine("Even numbers: " + string.Join(", ", evenNumbers));  // 2, 8, 6, 4
+
+// Ordering with OrderBy/OrderByDescending
+int[] sortedNumbers = numbers.OrderBy(n => n).ToArray();
+Console.WriteLine("Sorted: " + string.Join(", ", sortedNumbers));  // 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+int[] descendingNumbers = numbers.OrderByDescending(n => n).ToArray();
+Console.WriteLine("Descending: " + string.Join(", ", descendingNumbers));  // 9, 8, 7, 6, 5, 4, 3, 2, 1
+
+// Transforming with Select
+int[] doubledNumbers = numbers.Select(n => n * 2).ToArray();
+Console.WriteLine("Doubled: " + string.Join(", ", doubledNumbers));
+
+// Finding elements
+int firstEven = numbers.First(n => n % 2 == 0);  // 2
+int lastEven = numbers.Last(n => n % 2 == 0);    // 4
+int firstOver10 = numbers.FirstOrDefault(n => n > 10);  // 0 (default for int) since none > 10
+
+// Aggregation
+int sum = numbers.Sum();                 // 45
+int min = numbers.Min();                 // 1
+int max = numbers.Max();                 // 9
+double average = numbers.Average();      // 5.0
+int product = numbers.Aggregate(1, (a, b) => a * b);  // Multiply all elements
+
+// Checking conditions
+bool allPositive = numbers.All(n => n > 0);     // true
+bool anyEven = numbers.Any(n => n % 2 == 0);    // true
+bool anyNegative = numbers.Any(n => n < 0);     // false
+
+// Grouping
+var groups = numbers.GroupBy(n => n % 3);  // Group by remainder when divided by 3
+foreach (var group in groups)
+{
+    Console.WriteLine($"Numbers with remainder {group.Key} when divided by 3: {string.Join(", ", group)}");
+}
+
+// Taking and skipping elements
+int[] firstThree = numbers.Take(3).ToArray();           // 5, 2, 9
+int[] skipFirstTwo = numbers.Skip(2).ToArray();         // 9, 1, 7, 3, 8, 6, 4
+int[] middle = numbers.Skip(3).Take(3).ToArray();       // 1, 7, 3
+
+// Complex query with method chaining
+var result = numbers
+    .Where(n => n > 3)           // Filter: > 3
+    .OrderBy(n => n)             // Sort ascending
+    .Select(n => n * n)          // Transform: square each number
+    .Take(3)                     // Take first 3 results
+    .ToArray();                  // Convert to array
+
+Console.WriteLine("Complex query result: " + string.Join(", ", result));  // 16, 25, 36
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Advantages of using LINQ with arrays:</p>
+                                <ul>
+                                    <li>Expressive, readable code for complex operations</li>
+                                    <li>Consistent API for working with different collection types</li>
+                                    <li>Deferred execution for many operations (better performance)</li>
+                                    <li>Composable queries for complex data transformations</li>
+                                    <li>Functional programming style with minimal state mutation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="loops.html" class="prev"><i class="fas fa-arrow-left"></i> Loops</a>
+                        <a href="methods-intro.html" class="next">Methods Overview <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

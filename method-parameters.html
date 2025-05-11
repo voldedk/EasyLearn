@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Method Parameters - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Method Parameters</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Method Parameters</h3>
+                        <p>Method parameters allow you to pass data to methods, making them more flexible and reusable. Parameters are variables declared in the method signature that receive values from the caller when the method is invoked.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Parameter Concepts:</h4>
+                            <ul>
+                                <li>Parameters enable methods to work with different data each time they're called</li>
+                                <li>C# supports several types of parameters: value, reference, output, and more</li>
+                                <li>Parameters are defined in the method signature between parentheses</li>
+                                <li>Each parameter requires a type and a name</li>
+                                <li>Multiple parameters are separated by commas</li>
+                                <li>Arguments are the actual values passed to the method when it's called</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Value Parameters (Passing by Value)</h3>
+                        <p>By default, C# passes parameters by value, meaning a copy of the argument is passed to the method. Changes made to the parameter inside the method do not affect the original argument.</p>
+                        
+                        <div class="example-box">
+                            <h4>Value Parameter Examples:</h4>
+                            <pre><code>
+// Basic value parameter example
+public void IncrementValue(int number)
+{
+    number = number + 1;  // Modifies the local copy only
+    Console.WriteLine($"Inside method: number = {number}");
+}
+
+public void TestValueParameter()
+{
+    int x = 5;
+    Console.WriteLine($"Before method call: x = {x}");  // x = 5
+    
+    IncrementValue(x);  // Pass x by value
+    
+    Console.WriteLine($"After method call: x = {x}");   // x = 5 (unchanged)
+}
+
+// Value parameters with reference types (like objects)
+public void ChangePersonName(Person person)
+{
+    // Even though Person is a reference type, we're still passing a copy of the reference
+    // Changes to the object's properties WILL affect the original object
+    person.Name = "Changed Name";
+    
+    // But replacing the object reference does NOT affect the original reference
+    person = new Person { Name = "New Person" };  // No effect outside method
+}
+
+public void TestReferenceTypeParameter()
+{
+    Person p = new Person { Name = "Original Name" };
+    
+    ChangePersonName(p);
+    
+    // The name property was changed, but the reference is the same
+    Console.WriteLine(p.Name);  // Outputs: "Changed Name"
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important points about value parameters:</p>
+                                <ul>
+                                    <li>A copy of the argument's value is passed to the method</li>
+                                    <li>Changes to the parameter inside the method don't affect the original variable</li>
+                                    <li>For reference types (objects), you're passing a copy of the reference</li>
+                                    <li>This means you can modify the object's properties (mutate the object)</li>
+                                    <li>But you cannot make the parameter reference a different object and have it affect the caller</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Reference Parameters (ref)</h3>
+                        <p>Reference parameters allow you to pass arguments by reference rather than by value. Changes to the parameter inside the method will affect the original argument.</p>
+                        
+                        <div class="example-box">
+                            <h4>Reference (ref) Parameter Examples:</h4>
+                            <pre><code>
+// Method with a reference parameter
+public void IncrementByReference(ref int number)
+{
+    number = number + 1;  // This changes the original variable
+    Console.WriteLine($"Inside method: number = {number}");
+}
+
+public void TestRefParameter()
+{
+    int x = 5;
+    Console.WriteLine($"Before method call: x = {x}");  // x = 5
+    
+    IncrementByReference(ref x);  // Pass x by reference (must use 'ref' keyword)
+    
+    Console.WriteLine($"After method call: x = {x}");   // x = 6 (changed)
+}
+
+// Swapping values using ref parameters
+public void Swap(ref int a, ref int b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+public void TestSwap()
+{
+    int first = 10;
+    int second = 20;
+    
+    Console.WriteLine($"Before swap: first = {first}, second = {second}");
+    
+    Swap(ref first, ref second);
+    
+    Console.WriteLine($"After swap: first = {first}, second = {second}");
+    // Outputs: "After swap: first = 20, second = 10"
+}
+
+// Using ref with reference types
+public void ReplaceObject(ref Person person)
+{
+    // With ref, this assignment WILL affect the original reference
+    person = new Person { Name = "New Person" };
+}
+
+public void TestReplaceObject()
+{
+    Person p = new Person { Name = "Original Person" };
+    
+    ReplaceObject(ref p);
+    
+    Console.WriteLine(p.Name);  // Outputs: "New Person"
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about reference parameters:</p>
+                                <ul>
+                                    <li>The <code>ref</code> keyword must be used both in the method declaration and at the call site</li>
+                                    <li>Variables passed as <code>ref</code> parameters must be initialized before being passed</li>
+                                    <li>Changes to the parameter inside the method affect the original variable</li>
+                                    <li>Useful for methods that need to modify multiple values (like <code>Swap</code>)</li>
+                                    <li>For reference types, allows you to change which object the reference points to</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Output Parameters (out)</h3>
+                        <p>Output parameters are similar to reference parameters but are specifically designed for returning multiple values from a method. They don't require the argument to be initialized before the method call.</p>
+                        
+                        <div class="example-box">
+                            <h4>Output (out) Parameter Examples:</h4>
+                            <pre><code>
+// Method with an output parameter
+public bool TryParse(string input, out int result)
+{
+    // Must assign a value to all out parameters before method exits
+    if (int.TryParse(input, out result))
+    {
+        return true;
+    }
+    
+    result = 0;  // Default value if parsing fails
+    return false;
+}
+
+public void TestOutParameter()
+{
+    // No need to initialize out parameters before passing
+    int parsedValue;  // Not initialized
+    
+    if (TryParse("123", out parsedValue))
+    {
+        Console.WriteLine($"Parsing succeeded: {parsedValue}");  // 123
+    }
+    else
+    {
+        Console.WriteLine("Parsing failed");
+    }
+    
+    // In C# 7.0+, you can declare out variables inline
+    if (TryParse("456", out int inlineValue))
+    {
+        Console.WriteLine($"Inline parsing succeeded: {inlineValue}");  // 456
+    }
+}
+
+// Method with multiple output parameters
+public void GetCircleProperties(double radius, out double area, out double circumference)
+{
+    area = Math.PI * radius * radius;
+    circumference = 2 * Math.PI * radius;
+}
+
+public void TestMultipleOutputs()
+{
+    double area, circumference;
+    GetCircleProperties(5.0, out area, out circumference);
+    
+    Console.WriteLine($"Circle with radius 5:");
+    Console.WriteLine($"Area: {area:F2}");
+    Console.WriteLine($"Circumference: {circumference:F2}");
+    
+    // C# 7.0+ inline declaration
+    GetCircleProperties(7.5, out double a, out double c);
+    Console.WriteLine($"For radius 7.5 - Area: {a:F2}, Circumference: {c:F2}");
+}
+
+// Discarding out parameters you don't need (C# 7.0+)
+public void TestDiscardingOutParameters()
+{
+    // Use _ to discard outputs you don't care about
+    GetCircleProperties(10.0, out double area, out _);  // Discard circumference
+    Console.WriteLine($"Area only: {area:F2}");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about output parameters:</p>
+                                <ul>
+                                    <li>The <code>out</code> keyword must be used both in the method declaration and at the call site</li>
+                                    <li>Variables passed as <code>out</code> parameters do not need to be initialized before the method call</li>
+                                    <li>The method must assign a value to all <code>out</code> parameters before it exits</li>
+                                    <li>Primarily used when a method needs to return multiple values</li>
+                                    <li>C# 7.0+ allows declaring out variables inline and discarding output values with <code>_</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Parameter Arrays (params)</h3>
+                        <p>The <code>params</code> keyword allows a method to accept a variable number of arguments of the same type, which are treated as an array inside the method.</p>
+                        
+                        <div class="example-box">
+                            <h4>Parameter Array (params) Examples:</h4>
+                            <pre><code>
+// Method with a params parameter
+public int Sum(params int[] numbers)
+{
+    int total = 0;
+    foreach (int num in numbers)
+    {
+        total += num;
+    }
+    return total;
+}
+
+public void TestParamsKeyword()
+{
+    // Call with individual arguments
+    int sum1 = Sum(1, 2, 3, 4, 5);
+    Console.WriteLine($"Sum of five numbers: {sum1}");  // 15
+    
+    // Call with just one argument
+    int sum2 = Sum(42);
+    Console.WriteLine($"Sum of one number: {sum2}");  // 42
+    
+    // Call with no arguments
+    int sum3 = Sum();
+    Console.WriteLine($"Sum of no numbers: {sum3}");  // 0
+    
+    // Call with an array
+    int[] values = { 10, 20, 30, 40 };
+    int sum4 = Sum(values);
+    Console.WriteLine($"Sum of array values: {sum4}");  // 100
+}
+
+// Params with other parameters
+public double CalculateAverage(string groupName, params double[] values)
+{
+    // The params parameter must be the last parameter
+    if (values.Length == 0)
+    {
+        return 0;
+    }
+    
+    double sum = 0;
+    foreach (double value in values)
+    {
+        sum += value;
+    }
+    
+    double average = sum / values.Length;
+    Console.WriteLine($"Average for {groupName}: {average:F2}");
+    return average;
+}
+
+public void TestParamsWithOtherParameters()
+{
+    CalculateAverage("Group A", 85.5, 90.0, 77.5, 82.0);
+    CalculateAverage("Group B", 92.5, 88.0, 95.5);
+}
+
+// Params with objects
+public void LogMessages(params object[] messages)
+{
+    foreach (var message in messages)
+    {
+        Console.WriteLine($"LOG: {message}");
+    }
+}
+
+public void TestParamsWithObjects()
+{
+    LogMessages("Starting application", 42, true, DateTime.Now);
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about params parameter arrays:</p>
+                                <ul>
+                                    <li>The <code>params</code> keyword allows a method to accept any number of arguments</li>
+                                    <li>All arguments must be of the same type (or implicitly convertible to the array type)</li>
+                                    <li>Inside the method, the parameters are accessed as an array</li>
+                                    <li>The <code>params</code> parameter must be the last parameter in the method signature</li>
+                                    <li>A method can have only one <code>params</code> parameter</li>
+                                    <li>You can pass zero arguments, individual values, or an array to a params parameter</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Optional Parameters and Default Values</h3>
+                        <p>Optional parameters allow method callers to omit arguments for certain parameters that have default values defined in the method signature.</p>
+                        
+                        <div class="example-box">
+                            <h4>Optional Parameter Examples:</h4>
+                            <pre><code>
+// Method with optional parameters
+public void DisplayGreeting(string name, string greeting = "Hello", bool includeTime = false)
+{
+    string message = $"{greeting}, {name}!";
+    
+    if (includeTime)
+    {
+        message += $" The current time is {DateTime.Now:t}.";
+    }
+    
+    Console.WriteLine(message);
+}
+
+public void TestOptionalParameters()
+{
+    // Call with all parameters
+    DisplayGreeting("Alice", "Welcome", true);
+    // "Welcome, Alice! The current time is 10:30 AM."
+    
+    // Call with some default parameters
+    DisplayGreeting("Bob", "Hi");
+    // "Hi, Bob!"
+    
+    // Call with only required parameters
+    DisplayGreeting("Charlie");
+    // "Hello, Charlie!"
+}
+
+// Optional parameters with various types
+public void ConfigureApplication(
+    string appName,
+    int timeout = 30,
+    bool enableLogging = true,
+    ConsoleColor textColor = ConsoleColor.Gray,
+    string[] startupModules = null)
+{
+    // Use the parameters to configure the application
+    Console.ForegroundColor = textColor;
+    Console.WriteLine($"Configuring {appName} with timeout {timeout}s");
+    Console.WriteLine($"Logging enabled: {enableLogging}");
+    
+    if (startupModules != null && startupModules.Length > 0)
+    {
+        Console.WriteLine("Loading modules: " + string.Join(", ", startupModules));
+    }
+    else
+    {
+        Console.WriteLine("No startup modules specified");
+    }
+}
+
+public void TestVariousOptionalParameters()
+{
+    // Using different combinations of optional parameters
+    ConfigureApplication("MyApp");
+    
+    ConfigureApplication("MyApp", 60);
+    
+    ConfigureApplication("MyApp", 60, false);
+    
+    ConfigureApplication("MyApp", 60, true, ConsoleColor.Green);
+    
+    ConfigureApplication("MyApp", 60, true, ConsoleColor.Yellow, 
+                        new[] { "Core", "Networking", "UI" });
+    
+    // Skip some middle parameters in C# 4.0+ using named arguments
+    ConfigureApplication("MyApp", textColor: ConsoleColor.Red);
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about optional parameters:</p>
+                                <ul>
+                                    <li>Optional parameters must have a default value defined in the method declaration</li>
+                                    <li>Optional parameters must come after all required parameters in the method signature</li>
+                                    <li>Default values must be constant expressions or a <code>new</code> expression of a value type</li>
+                                    <li>Makes method calls more flexible and concise</li>
+                                    <li>Better than creating multiple method overloads for many combinations of parameters</li>
+                                    <li>Can be combined with named arguments to skip optional parameters in the middle</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Named Arguments</h3>
+                        <p>Named arguments allow you to specify which parameter a value is being passed to based on the parameter name, rather than the position in the parameter list.</p>
+                        
+                        <div class="example-box">
+                            <h4>Named Argument Examples:</h4>
+                            <pre><code>
+// Method with several parameters
+public void SendEmail(string recipient, string subject, string body, 
+                     bool highPriority = false, string cc = null, string bcc = null)
+{
+    Console.WriteLine($"To: {recipient}");
+    
+    if (!string.IsNullOrEmpty(cc))
+    {
+        Console.WriteLine($"Cc: {cc}");
+    }
+    
+    if (!string.IsNullOrEmpty(bcc))
+    {
+        Console.WriteLine($"Bcc: {bcc}");
+    }
+    
+    Console.WriteLine($"Subject: {subject}");
+    Console.WriteLine($"Priority: {(highPriority ? "High" : "Normal")}");
+    Console.WriteLine($"Message: {body}");
+    Console.WriteLine("---");
+}
+
+public void TestNamedArguments()
+{
+    // Traditional positional arguments
+    SendEmail("john@example.com", "Hello", "This is a test", true, "manager@example.com");
+    
+    // Same call with named arguments - much clearer!
+    SendEmail(
+        recipient: "john@example.com",
+        subject: "Hello",
+        body: "This is a test",
+        highPriority: true,
+        cc: "manager@example.com"
+    );
+    
+    // Can mix positional and named arguments
+    // Positional arguments must come before any named arguments
+    SendEmail("jane@example.com", "Meeting", "Let's meet tomorrow", 
+            bcc: "records@example.com");
+    
+    // Named arguments let you specify parameters in any order
+    SendEmail(
+        body: "Please review the attached document",
+        subject: "Document Review",
+        recipient: "team@example.com",
+        cc: "boss@example.com"
+    );
+    
+    // Named arguments are especially useful for skipping optional parameters
+    SendEmail(
+        recipient: "support@example.com",
+        subject: "Urgent Issue",
+        body: "System is down",
+        highPriority: true
+        // cc and bcc are skipped
+    );
+}
+
+// Named arguments with constructors
+public void TestNamedConstructorArguments()
+{
+    // Create a DateTime using named arguments for better readability
+    var christmasDay = new DateTime(
+        year: 2023,
+        month: 12,
+        day: 25,
+        hour: 0,
+        minute: 0,
+        second: 0
+    );
+    
+    Console.WriteLine(christmasDay);  // 12/25/2023 12:00:00 AM
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Benefits of named arguments:</p>
+                                <ul>
+                                    <li>Improves code readability, especially for methods with many parameters</li>
+                                    <li>Clarifies the purpose of each argument at the call site</li>
+                                    <li>Allows specifying parameters in any order (except when mixing with positional arguments)</li>
+                                    <li>Enables skipping optional parameters in the middle of the parameter list</li>
+                                    <li>Reduces errors from passing arguments in the wrong order</li>
+                                    <li>Particularly useful with boolean parameters where the meaning isn't clear from just <code>true</code> or <code>false</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>in Parameters (C# 7.2+)</h3>
+                        <p>The <code>in</code> keyword creates a reference parameter that cannot be modified by the method, providing performance benefits for large value types without the risk of modification.</p>
+                        
+                        <div class="example-box">
+                            <h4>in Parameter Examples:</h4>
+                            <pre><code>
+// Method with an in parameter
+public double CalculateDistance(in Vector3D point1, in Vector3D point2)
+{
+    // point1 and point2 are passed by reference for efficiency
+    // But they cannot be modified inside this method
+    
+    // This would cause a compiler error:
+    // point1.X = 0;  // Error: Cannot modify an 'in' parameter
+    
+    double deltaX = point2.X - point1.X;
+    double deltaY = point2.Y - point1.Y;
+    double deltaZ = point2.Z - point1.Z;
+    
+    return Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+}
+
+// A large value type (struct) that would benefit from 'in'
+public struct Vector3D
+{
+    public double X { get; }
+    public double Y { get; }
+    public double Z { get; }
+    
+    public Vector3D(double x, double y, double z)
+    {
+        X = x;
+        Y = y;
+        Z = z;
+    }
+}
+
+public void TestInParameter()
+{
+    var point1 = new Vector3D(1.0, 2.0, 3.0);
+    var point2 = new Vector3D(4.0, 6.0, 8.0);
+    
+    // The 'in' keyword at the call site is optional
+    double distance = CalculateDistance(in point1, point2);
+    Console.WriteLine($"Distance: {distance}");  // 7.07...
+    
+    // This shows point1 hasn't changed
+    Console.WriteLine($"Point1: ({point1.X}, {point1.Y}, {point1.Z})");  // (1, 2, 3)
+}
+
+// Using 'in' with a readonly struct (C# 7.2+)
+public readonly struct ReadOnlyPoint
+{
+    public readonly double X;
+    public readonly double Y;
+    
+    public ReadOnlyPoint(double x, double y)
+    {
+        X = x;
+        Y = y;
+    }
+    
+    // All methods must be readonly to avoid defensive copies
+    public readonly double DistanceTo(in ReadOnlyPoint other)
+    {
+        double deltaX = other.X - X;
+        double deltaY = other.Y - Y;
+        return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about in parameters:</p>
+                                <ul>
+                                    <li>Passes the argument by reference, avoiding copying large value types</li>
+                                    <li>The parameter cannot be modified inside the method</li>
+                                    <li>The <code>in</code> keyword at the call site is optional</li>
+                                    <li>Most beneficial for large structures (structs) or when passing many value types</li>
+                                    <li>For small value types (like <code>int</code>), using <code>in</code> might be less efficient due to additional indirection</li>
+                                    <li>Pairs well with <code>readonly struct</code> to prevent defensive copies</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Parameter Best Practices</h3>
+                        <p>Following these guidelines will help you write methods with clear, maintainable, and efficient parameter usage.</p>
+                        
+                        <div class="example-box">
+                            <h4>Parameter Design Guidelines:</h4>
+                            <pre><code>
+// DO: Limit the number of parameters
+// Instead of:
+public void ConfigureUser(string name, string email, int age, 
+                         bool isAdmin, bool isActive, string department, 
+                         string location, DateTime hireDate)
+{
+    // Too many parameters
+}
+
+// DO: Use a parameter object for related parameters
+public void ConfigureUser(UserSettings settings)
+{
+    // Much cleaner with a settings object
+}
+
+public class UserSettings
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public int Age { get; set; }
+    public bool IsAdmin { get; set; }
+    public bool IsActive { get; set; }
+    public string Department { get; set; }
+    public string Location { get; set; }
+    public DateTime HireDate { get; set; }
+}
+
+// DO: Put parameters in a logical order
+// Most important/required parameters first, optional ones last
+public void RegisterUser(string username, string email, string password, 
+                        bool sendWelcomeEmail = true)
+{
+    // Logical parameter order
+}
+
+// DON'T: Use flag parameters that aren't self-documenting
+public void ProcessOrder(Order order, bool flag1, bool flag2)
+{
+    // What do these flags mean? Not clear!
+}
+
+// DO: Use descriptive names or enums instead
+public void ProcessOrder(Order order, bool sendConfirmationEmail, bool expediteShipping)
+{
+    // Better, but still not ideal
+}
+
+// Or even better, use an enum
+public void ProcessOrder(Order order, EmailOption emailOption, ShippingSpeed speed)
+{
+    // Much clearer!
+}
+
+public enum EmailOption { NoEmail, SendConfirmation, SendWithTracking }
+public enum ShippingSpeed { Standard, Expedited, Overnight }
+
+// DO: Validate parameters
+public void TransferFunds(Account source, Account destination, decimal amount)
+{
+    // Validate parameters
+    if (source == null)
+        throw new ArgumentNullException(nameof(source));
+        
+    if (destination == null)
+        throw new ArgumentNullException(nameof(destination));
+        
+    if (amount <= 0)
+        throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be positive");
+        
+    if (source.Balance < amount)
+        throw new ArgumentException("Insufficient funds", nameof(source));
+    
+    // Now safe to proceed
+    source.Withdraw(amount);
+    destination.Deposit(amount);
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Parameter design best practices:</p>
+                                <ul>
+                                    <li><strong>Minimize parameter count:</strong> Aim for 3-4 parameters maximum</li>
+                                    <li><strong>Use parameter objects:</strong> Group related parameters into a single class or struct</li>
+                                    <li><strong>Order parameters logically:</strong> Required before optional, common before rare</li>
+                                    <li><strong>Validate input:</strong> Check parameters for null, out-of-range values, or invalid data</li>
+                                    <li><strong>Avoid flag parameters:</strong> Use enums or descriptive names for better readability</li>
+                                    <li><strong>Use appropriate parameter types:</strong> Choose ref, out, in, or params as needed</li>
+                                    <li><strong>Prefer optional parameters over overloads:</strong> For simple default values</li>
+                                    <li><strong>Use named arguments:</strong> For methods with many parameters or boolean flags</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="methods-intro.html" class="prev"><i class="fas fa-arrow-left"></i> Methods Overview</a>
+                        <a href="method-overloading.html" class="next">Method Overloading <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

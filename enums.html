@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enums in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Enums in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Enums</h3>
+                        <p>An enum (short for enumeration) is a value type in C# that represents a set of named constants. Enums make code more readable, maintainable, and less error-prone by replacing magic numbers or strings with descriptive names.</p>
+                        
+                        <div class="example-box">
+                            <h4>Why Use Enums?</h4>
+                            <ul>
+                                <li>Create meaningful names for numeric values</li>
+                                <li>Group related constants together</li>
+                                <li>Make code more readable and self-documenting</li>
+                                <li>Provide type safety for a set of related values</li>
+                                <li>Enable IDE intellisense for available options</li>
+                                <li>Prevent invalid values through compile-time checking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Enum Syntax</h3>
+                        <p>Enums are defined using the <code>enum</code> keyword. By default, enum constants are assigned integer values starting from 0.</p>
+                        
+                        <div class="example-box">
+                            <h4>Declaring and Using Enums</h4>
+                            <pre><code>
+// Basic enum declaration
+public enum DayOfWeek
+{
+    Sunday,    // 0
+    Monday,    // 1
+    Tuesday,   // 2
+    Wednesday, // 3
+    Thursday,  // 4
+    Friday,    // 5
+    Saturday   // 6
+}
+
+// Enum with explicit values
+public enum HttpStatusCode
+{
+    OK = 200,
+    Created = 201,
+    Accepted = 202,
+    NoContent = 204,
+    BadRequest = 400,
+    Unauthorized = 401,
+    Forbidden = 403,
+    NotFound = 404,
+    InternalServerError = 500
+}
+
+// Using enums
+public class Program
+{
+    public static void Main()
+    {
+        // Declaring enum variables
+        DayOfWeek today = DayOfWeek.Wednesday;
+        HttpStatusCode response = HttpStatusCode.OK;
+        
+        // Using in conditions
+        if (today == DayOfWeek.Saturday || today == DayOfWeek.Sunday)
+        {
+            Console.WriteLine("It's the weekend!");
+        }
+        else
+        {
+            Console.WriteLine("It's a weekday.");
+        }
+        
+        // Using in switch statements
+        switch (response)
+        {
+            case HttpStatusCode.OK:
+                Console.WriteLine("Request succeeded");
+                break;
+            case HttpStatusCode.NotFound:
+                Console.WriteLine("Resource not found");
+                break;
+            case HttpStatusCode.InternalServerError:
+                Console.WriteLine("Server error occurred");
+                break;
+            default:
+                Console.WriteLine($"Status code: {response}");
+                break;
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about basic enum usage:</p>
+                                <ul>
+                                    <li>Enum members are accessed using dot notation (e.g., <code>DayOfWeek.Monday</code>)</li>
+                                    <li>By default, the first enum value is 0, and each subsequent value increases by 1</li>
+                                    <li>You can assign explicit values to enum members</li>
+                                    <li>Enum values don't need to be unique or sequential</li>
+                                    <li>Enums make code more readable than using raw numbers</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enum Underlying Types</h3>
+                        <p>By default, the underlying type of an enum is <code>int</code>, but you can specify a different integral type using a colon and the type name.</p>
+                        
+                        <div class="example-box">
+                            <h4>Specifying Underlying Types</h4>
+                            <pre><code>
+// Default (int) enum
+public enum Season
+{
+    Spring,
+    Summer,
+    Autumn,
+    Winter
+}
+
+// Byte enum (saves memory if you have many instances)
+public enum FilePermission : byte
+{
+    None = 0,
+    Read = 1,
+    Write = 2,
+    Execute = 4
+}
+
+// Long enum (for larger values)
+public enum LargeValue : long
+{
+    Max = 9223372036854775807  // Maximum value for long
+}
+
+// Short enum
+public enum SmallEnum : short
+{
+    A = 1,
+    B = 2,
+    C = 3
+}
+
+// Unsigned int enum
+public enum UnsignedEnum : uint
+{
+    Value1 = 1,
+    Value2 = 2,
+    LargeValue = 4294967295  // Maximum value for uint
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Supported underlying types for enums:</p>
+                                <ul>
+                                    <li><code>byte</code>: 8-bit unsigned integer (0 to 255)</li>
+                                    <li><code>sbyte</code>: 8-bit signed integer (-128 to 127)</li>
+                                    <li><code>short</code>: 16-bit signed integer (-32,768 to 32,767)</li>
+                                    <li><code>ushort</code>: 16-bit unsigned integer (0 to 65,535)</li>
+                                    <li><code>int</code>: 32-bit signed integer (default)</li>
+                                    <li><code>uint</code>: 32-bit unsigned integer</li>
+                                    <li><code>long</code>: 64-bit signed integer</li>
+                                    <li><code>ulong</code>: 64-bit unsigned integer</li>
+                                </ul>
+                                <p>Choose an underlying type based on:</p>
+                                <ul>
+                                    <li>The range of values needed</li>
+                                    <li>Memory efficiency considerations</li>
+                                    <li>Interoperability requirements</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Working with Enum Values</h3>
+                        <p>C# provides several ways to work with enum values, including conversions, parsing, and getting all possible values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Converting Between Enums and Numeric Types</h4>
+                            <pre><code>
+public enum Color
+{
+    Red = 1,
+    Green = 2,
+    Blue = 3
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Converting enum to integer
+        Color color = Color.Green;
+        int colorValue = (int)color;  // Explicit cast
+        Console.WriteLine($"{color} has value {colorValue}");  // "Green has value 2"
+        
+        // Converting integer to enum
+        int value = 3;
+        Color parsedColor = (Color)value;  // Explicit cast
+        Console.WriteLine($"Value {value} is color {parsedColor}");  // "Value 3 is color Blue"
+        
+        // Be careful with out of range values
+        int invalidValue = 99;
+        Color unknownColor = (Color)invalidValue;
+        Console.WriteLine($"Value {invalidValue} is color {unknownColor}");  // "Value 99 is color 99"
+        
+        // Checking if a value is defined in the enum
+        bool isValidColor = Enum.IsDefined(typeof(Color), unknownColor);
+        Console.WriteLine($"Is {unknownColor} a valid color? {isValidColor}");  // "Is 99 a valid color? False"
+        
+        // Parsing enum from string
+        string colorName = "Red";
+        if (Enum.TryParse<Color>(colorName, out Color redColor))
+        {
+            Console.WriteLine($"Parsed {colorName} to {redColor}");  // "Parsed Red to Red"
+        }
+        
+        // Case-insensitive parsing
+        string lowerColorName = "blue";
+        if (Enum.TryParse<Color>(lowerColorName, true, out Color blueColor))
+        {
+            Console.WriteLine($"Parsed {lowerColorName} to {blueColor}");  // "Parsed blue to Blue"
+        }
+        
+        // Getting all values of an enum
+        Console.WriteLine("All colors:");
+        foreach (Color c in Enum.GetValues(typeof(Color)))
+        {
+            Console.WriteLine($"- {c} ({(int)c})");
+        }
+        
+        // Getting all names of an enum
+        Console.WriteLine("All color names:");
+        foreach (string name in Enum.GetNames(typeof(Color)))
+        {
+            Console.WriteLine($"- {name}");
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Working with enum values:</p>
+                                <ul>
+                                    <li>Use explicit casting to convert between enums and their underlying types</li>
+                                    <li>Use <code>Enum.IsDefined()</code> to check if a value is defined in an enum</li>
+                                    <li>Use <code>Enum.TryParse()</code> to safely convert strings to enum values</li>
+                                    <li>Use <code>Enum.GetValues()</code> to get all values of an enum</li>
+                                    <li>Use <code>Enum.GetNames()</code> to get all names of an enum</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Flag Enums</h3>
+                        <p>Flag enums allow multiple enum values to be combined using bitwise operations. They're particularly useful for representing a set of options or flags.</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating and Using Flag Enums</h4>
+                            <pre><code>
+// Flag enum - use [Flags] attribute and powers of 2 for values
+[Flags]
+public enum FilePermission
+{
+    None = 0,           // 0000
+    Read = 1,           // 0001
+    Write = 2,          // 0010
+    Execute = 4,        // 0100
+    Delete = 8,         // 1000
+    ReadWrite = Read | Write,             // 0011 = 3
+    ReadExecute = Read | Execute,         // 0101 = 5
+    ReadWriteExecute = Read | Write | Execute,  // 0111 = 7
+    All = Read | Write | Execute | Delete  // 1111 = 15
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Creating a combination of flags
+        FilePermission permissions = FilePermission.Read | FilePermission.Write;
+        Console.WriteLine(permissions);  // "ReadWrite" or "Read, Write" depending on framework version
+        
+        // Alternative way to create the same combination
+        permissions = FilePermission.ReadWrite;
+        
+        // Checking if a specific flag is set
+        bool canRead = (permissions & FilePermission.Read) == FilePermission.Read;
+        bool canExecute = (permissions & FilePermission.Execute) == FilePermission.Execute;
+        
+        Console.WriteLine($"Can read: {canRead}");      // "Can read: True"
+        Console.WriteLine($"Can execute: {canExecute}");  // "Can execute: False"
+        
+        // Checking if any flag is set
+        bool hasAnyPermission = permissions != FilePermission.None;
+        
+        // Adding a flag
+        permissions |= FilePermission.Execute;
+        Console.WriteLine(permissions);  // "ReadWriteExecute" or "Read, Write, Execute"
+        
+        // Removing a flag
+        permissions &= ~FilePermission.Write;
+        Console.WriteLine(permissions);  // "ReadExecute" or "Read, Execute"
+        
+        // Toggling a flag
+        permissions ^= FilePermission.Execute;
+        Console.WriteLine(permissions);  // "Read"
+        
+        // Using HasFlag method (simpler but less performant)
+        FilePermission allPermissions = FilePermission.All;
+        bool hasReadPermission = allPermissions.HasFlag(FilePermission.Read);
+        Console.WriteLine($"Has read permission: {hasReadPermission}");  // "Has read permission: True"
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about flag enums:</p>
+                                <ul>
+                                    <li>Use the <code>[Flags]</code> attribute to indicate a flag enum</li>
+                                    <li>Use powers of 2 (1, 2, 4, 8, 16, etc.) for individual flags</li>
+                                    <li>Use bitwise OR (|) to combine flags</li>
+                                    <li>Use bitwise AND (&) to check if a flag is set</li>
+                                    <li>Use bitwise NOT (~) with AND (&) to remove a flag</li>
+                                    <li>Use bitwise XOR (^) to toggle a flag</li>
+                                    <li>The <code>[Flags]</code> attribute enables a better string representation when multiple flags are combined</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enum Extensions and Helpers</h3>
+                        <p>You can extend enums with extension methods to add functionality such as description attributes, validation, or conversion methods.</p>
+                        
+                        <div class="example-box">
+                            <h4>Adding Description Attributes</h4>
+                            <pre><code>
+using System.ComponentModel;
+using System.Reflection;
+
+// Enum with descriptions
+public enum PaymentMethod
+{
+    [Description("Credit Card Payment")]
+    CreditCard,
+    
+    [Description("PayPal Payment")]
+    PayPal,
+    
+    [Description("Bank Transfer")]
+    BankTransfer,
+    
+    [Description("Cash on Delivery")]
+    CashOnDelivery
+}
+
+// Extension method to get description
+public static class EnumExtensions
+{
+    public static string GetDescription(this Enum value)
+    {
+        Type type = value.GetType();
+        string name = Enum.GetName(type, value);
+        
+        if (name != null)
+        {
+            FieldInfo field = type.GetField(name);
+            if (field != null)
+            {
+                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+                {
+                    return attribute.Description;
+                }
+            }
+        }
+        
+        return value.ToString();
+    }
+    
+    // Extension method for flags enum to get individual flags
+    public static IEnumerable<T> GetFlags<T>(this T flags) where T : Enum
+    {
+        foreach (Enum value in Enum.GetValues(typeof(T)))
+        {
+            if (flags.HasFlag(value) && !value.Equals(default(T)))
+            {
+                yield return (T)value;
+            }
+        }
+    }
+}
+
+// Usage
+public class Program
+{
+    public static void Main()
+    {
+        // Using the description extension
+        PaymentMethod payment = PaymentMethod.CreditCard;
+        string description = payment.GetDescription();
+        Console.WriteLine(description);  // "Credit Card Payment"
+        
+        // Using flag enum extension
+        [Flags]
+        enum Permissions { None = 0, Read = 1, Write = 2, Delete = 4, All = Read | Write | Delete }
+        
+        Permissions userPermissions = Permissions.Read | Permissions.Write;
+        
+        Console.WriteLine("User has these permissions:");
+        foreach (var permission in userPermissions.GetFlags())
+        {
+            Console.WriteLine($"- {permission}");
+        }
+        // Outputs:
+        // User has these permissions:
+        // - Read
+        // - Write
+    }
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Enum Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Using Enums</h4>
+                            <ul>
+                                <li><strong>Use PascalCase for enum names and values</strong> - Follow C# naming conventions</li>
+                                <li><strong>Use singular names for enums</strong> - For example, <code>DayOfWeek</code> instead of <code>DaysOfWeek</code></li>
+                                <li><strong>Provide a "None" or "Default" value</strong> - Often with a value of 0</li>
+                                <li><strong>Avoid using enum values as bit flags unless appropriate</strong> - Only use [Flags] when you need combinations</li>
+                                <li><strong>Consider using explicit values</strong> - Especially when serializing or storing in a database</li>
+                                <li><strong>Don't change enum values once published</strong> - This can break serialization or stored data</li>
+                                <li><strong>Consider adding a description attribute</strong> - For UI display or documentation</li>
+                                <li><strong>Check for undefined values</strong> - Use <code>Enum.IsDefined</code> when working with user input</li>
+                                <li><strong>Use switch statements with a default case</strong> - To handle all enum values</li>
+                                <li><strong>Consider extension methods</strong> - For common operations on your enums</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Enum Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Using non-sequential values unnecessarily</strong> - Makes code harder to understand</li>
+                                <li><strong>Creating enums with too many values</strong> - Consider breaking into multiple enums</li>
+                                <li><strong>Changing enum values after deployment</strong> - Can break existing data</li>
+                                <li><strong>Using raw integers instead of named constants</strong> - Defeats the purpose of enums</li>
+                                <li><strong>Not handling undefined enum values</strong> - Can cause unexpected behavior</li>
+                                <li><strong>Misusing flag enums</strong> - Don't use [Flags] if you don't need combinations</li>
+                                <li><strong>Not documenting enum values</strong> - Makes it harder for other developers to understand</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Real-World Examples</h3>
+                        
+                        <div class="example-box">
+                            <h4>State Machine with Enums</h4>
+                            <pre><code>
+// Order status state machine
+public enum OrderStatus
+{
+    Created,
+    PaymentPending,
+    PaymentReceived,
+    Preparing,
+    Shipped,
+    Delivered,
+    Canceled,
+    Returned
+}
+
+public class Order
+{
+    public int OrderId { get; set; }
+    public OrderStatus Status { get; private set; }
+    public DateTime LastUpdated { get; private set; }
+    
+    public Order(int orderId)
+    {
+        OrderId = orderId;
+        Status = OrderStatus.Created;
+        LastUpdated = DateTime.Now;
+    }
+    
+    public bool UpdateStatus(OrderStatus newStatus)
+    {
+        // Validate the status transition
+        if (!IsValidStatusTransition(Status, newStatus))
+        {
+            return false;
+        }
+        
+        Status = newStatus;
+        LastUpdated = DateTime.Now;
+        
+        // Perform additional actions based on new status
+        switch (newStatus)
+        {
+            case OrderStatus.PaymentReceived:
+                SendPaymentConfirmation();
+                break;
+            case OrderStatus.Shipped:
+                SendShippingNotification();
+                break;
+            case OrderStatus.Canceled:
+                ProcessRefund();
+                break;
+        }
+        
+        return true;
+    }
+    
+    private bool IsValidStatusTransition(OrderStatus currentStatus, OrderStatus newStatus)
+    {
+        switch (currentStatus)
+        {
+            case OrderStatus.Created:
+                return newStatus == OrderStatus.PaymentPending || newStatus == OrderStatus.Canceled;
+                
+            case OrderStatus.PaymentPending:
+                return newStatus == OrderStatus.PaymentReceived || newStatus == OrderStatus.Canceled;
+                
+            case OrderStatus.PaymentReceived:
+                return newStatus == OrderStatus.Preparing || newStatus == OrderStatus.Canceled;
+                
+            case OrderStatus.Preparing:
+                return newStatus == OrderStatus.Shipped || newStatus == OrderStatus.Canceled;
+                
+            case OrderStatus.Shipped:
+                return newStatus == OrderStatus.Delivered || newStatus == OrderStatus.Canceled;
+                
+            case OrderStatus.Delivered:
+                return newStatus == OrderStatus.Returned;
+                
+            default:
+                return false;  // Canceled or Returned are final states
+        }
+    }
+    
+    private void SendPaymentConfirmation()
+    {
+        // Implementation
+    }
+    
+    private void SendShippingNotification()
+    {
+        // Implementation
+    }
+    
+    private void ProcessRefund()
+    {
+        // Implementation
+    }
+}
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Configuration Options with Flag Enums</h4>
+                            <pre><code>
+[Flags]
+public enum LoggingOptions
+{
+    None = 0,
+    LogToConsole = 1,
+    LogToFile = 2,
+    LogToDatabase = 4,
+    LogErrors = 8,
+    LogWarnings = 16,
+    LogInfo = 32,
+    LogDebug = 64,
+    
+    // Common combinations
+    LogAllLevels = LogErrors | LogWarnings | LogInfo | LogDebug,
+    LogErrorsAndWarnings = LogErrors | LogWarnings,
+    LogToAll = LogToConsole | LogToFile | LogToDatabase,
+    
+    // Default configuration
+    DefaultConfig = LogToConsole | LogToFile | LogErrors | LogWarnings | LogInfo
+}
+
+public class Logger
+{
+    private LoggingOptions _options;
+    
+    public Logger(LoggingOptions options = LoggingOptions.DefaultConfig)
+    {
+        _options = options;
+    }
+    
+    public void LogMessage(string message, LoggingOptions level)
+    {
+        // Check if this level should be logged
+        if ((_options & level) == 0)
+        {
+            return;  // This level is not enabled
+        }
+        
+        string formattedMessage = $"[{DateTime.Now}] [{level}] {message}";
+        
+        // Determine where to log the message
+        if (_options.HasFlag(LoggingOptions.LogToConsole))
+        {
+            Console.WriteLine(formattedMessage);
+        }
+        
+        if (_options.HasFlag(LoggingOptions.LogToFile))
+        {
+            // Implementation for file logging
+        }
+        
+        if (_options.HasFlag(LoggingOptions.LogToDatabase))
+        {
+            // Implementation for database logging
+        }
+    }
+    
+    public void Error(string message) => LogMessage(message, LoggingOptions.LogErrors);
+    public void Warning(string message) => LogMessage(message, LoggingOptions.LogWarnings);
+    public void Info(string message) => LogMessage(message, LoggingOptions.LogInfo);
+    public void Debug(string message) => LogMessage(message, LoggingOptions.LogDebug);
+}
+
+// Usage
+public class Program
+{
+    public static void Main()
+    {
+        // Default logger
+        Logger defaultLogger = new Logger();
+        
+        // Custom logger that only logs errors to the console
+        Logger errorLogger = new Logger(LoggingOptions.LogToConsole | LoggingOptions.LogErrors);
+        
+        // Verbose logger for debugging
+        Logger debugLogger = new Logger(LoggingOptions.LogToAll | LoggingOptions.LogAllLevels);
+        
+        // Example usage
+        defaultLogger.Error("This is an error");    // Will be logged
+        defaultLogger.Warning("This is a warning"); // Will be logged
+        defaultLogger.Info("This is info");         // Will be logged
+        defaultLogger.Debug("This is debug");       // Won't be logged (not in default config)
+        
+        errorLogger.Error("Critical error");   // Will be logged
+        errorLogger.Warning("Minor warning");  // Won't be logged
+    }
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="abstraction.html" class="prev"><i class="fas fa-arrow-left"></i> Abstraction</a>
+                        <a href="exceptions.html" class="next">Exceptions <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

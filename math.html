@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Math Functions - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Math Functions</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to C# Math Class</h3>
+                        <p>The <code>Math</code> class in C# provides a collection of methods for performing common mathematical operations. This class is part of the <code>System</code> namespace and contains methods for trigonometric functions, logarithmic functions, and other common mathematical calculations.</p>
+                        <p>The Math class is static, which means you can call its methods directly without creating an instance of the class:</p>
+                        <div class="example-box">
+                            <pre><code>
+// Using the Math class
+double result = Math.Sqrt(25);  // Square root of 25 = 5
+Console.WriteLine(result);      // Output: 5
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Math Constants</h3>
+                        <p>The Math class includes several mathematical constants that you can use in your calculations.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Constant</th>
+                                <th>Description</th>
+                                <th>Value</th>
+                            </tr>
+                            <tr>
+                                <td><code>Math.PI</code></td>
+                                <td>Represents the ratio of a circle's circumference to its diameter</td>
+                                <td>3.14159265358979323846...</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.E</code></td>
+                                <td>Represents the base of natural logarithms</td>
+                                <td>2.7182818284590452354...</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Using Math Constants:</h4>
+                            <pre><code>
+// Calculate the area of a circle with radius 5
+double radius = 5;
+double area = Math.PI * Math.Pow(radius, 2);
+Console.WriteLine($"Area of circle: {area}");  // Output: Area of circle: 78.53981633974483
+
+// Calculate compound interest
+double principal = 1000;
+double rate = 0.05;  // 5% interest
+int time = 3;        // 3 years
+double amount = principal * Math.Pow(Math.E, rate * time);
+Console.WriteLine($"Amount after {time} years: {amount:C}");  // Output depends on culture settings
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Mathematical Operations</h3>
+                        <p>The Math class provides methods for common mathematical operations:</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Abs()</code></td>
+                                <td>Returns the absolute value of a number</td>
+                                <td><code>Math.Abs(-5.3)</code></td>
+                                <td>5.3</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Ceiling()</code></td>
+                                <td>Rounds a value up to the nearest integer</td>
+                                <td><code>Math.Ceiling(5.3)</code></td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Floor()</code></td>
+                                <td>Rounds a value down to the nearest integer</td>
+                                <td><code>Math.Floor(5.7)</code></td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Round()</code></td>
+                                <td>Rounds a value to the nearest integer or specified decimal places</td>
+                                <td><code>Math.Round(5.7)</code></td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Max()</code></td>
+                                <td>Returns the larger of two numbers</td>
+                                <td><code>Math.Max(5, 10)</code></td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Min()</code></td>
+                                <td>Returns the smaller of two numbers</td>
+                                <td><code>Math.Min(5, 10)</code></td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Pow()</code></td>
+                                <td>Returns a number raised to a specified power</td>
+                                <td><code>Math.Pow(2, 3)</code></td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Sqrt()</code></td>
+                                <td>Returns the square root of a number</td>
+                                <td><code>Math.Sqrt(25)</code></td>
+                                <td>5</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Basic Math Functions Example:</h4>
+                            <pre><code>
+// Absolute value
+Console.WriteLine(Math.Abs(-10.5));  // Output: 10.5
+
+// Ceiling and Floor
+Console.WriteLine(Math.Ceiling(4.3));  // Output: 5
+Console.WriteLine(Math.Floor(4.7));    // Output: 4
+
+// Rounding
+Console.WriteLine(Math.Round(4.3));    // Output: 4
+Console.WriteLine(Math.Round(4.7));    // Output: 5
+Console.WriteLine(Math.Round(4.5));    // Output: 4 (banker's rounding)
+Console.WriteLine(Math.Round(5.5));    // Output: 6 (banker's rounding)
+Console.WriteLine(Math.Round(4.567, 2));  // Output: 4.57 (round to 2 decimal places)
+
+// Min and Max
+Console.WriteLine(Math.Max(15, 20));  // Output: 20
+Console.WriteLine(Math.Min(15, 20));  // Output: 15
+
+// Power and Square Root
+Console.WriteLine(Math.Pow(2, 4));    // Output: 16 (2^4)
+Console.WriteLine(Math.Sqrt(81));     // Output: 9
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Note: Math.Round() uses "banker's rounding" by default, which rounds to the nearest even number when the fraction is exactly 0.5. This is designed to reduce bias in rounding operations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Trigonometric Functions</h3>
+                        <p>The Math class includes a complete set of trigonometric functions. All angles are specified in radians, not degrees.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Sin()</code></td>
+                                <td>Returns the sine of an angle in radians</td>
+                                <td><code>Math.Sin(Math.PI / 2)</code> = 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Cos()</code></td>
+                                <td>Returns the cosine of an angle in radians</td>
+                                <td><code>Math.Cos(Math.PI)</code> = -1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Tan()</code></td>
+                                <td>Returns the tangent of an angle in radians</td>
+                                <td><code>Math.Tan(Math.PI / 4)</code> = 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Asin()</code></td>
+                                <td>Returns the arc sine of a number (in radians)</td>
+                                <td><code>Math.Asin(1)</code> = π/2</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Acos()</code></td>
+                                <td>Returns the arc cosine of a number (in radians)</td>
+                                <td><code>Math.Acos(0)</code> = π/2</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Atan()</code></td>
+                                <td>Returns the arc tangent of a number (in radians)</td>
+                                <td><code>Math.Atan(1)</code> = π/4</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Atan2()</code></td>
+                                <td>Returns the angle of the point (x, y) from the positive x-axis in radians</td>
+                                <td><code>Math.Atan2(1, 1)</code> = π/4</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Trigonometric Functions Examples:</h4>
+                            <pre><code>
+// Convert degrees to radians
+double DegreesToRadians(double degrees)
+{
+    return degrees * Math.PI / 180.0;
+}
+
+// Convert radians to degrees
+double RadiansToDegrees(double radians)
+{
+    return radians * 180.0 / Math.PI;
+}
+
+// Trigonometric functions with angles in degrees
+double angle = 90;
+double radians = DegreesToRadians(angle);
+
+Console.WriteLine($"Sine of {angle} degrees: {Math.Sin(radians)}");             // Output: 1
+Console.WriteLine($"Cosine of {angle} degrees: {Math.Cos(radians)}");           // Output: ~0
+Console.WriteLine($"Tangent of {angle} degrees: {Math.Tan(radians)}");          // Output: Very large (undefined)
+
+// Inverse trigonometric functions
+double value = 0.5;
+double arcSine = Math.Asin(value);
+double arcCosine = Math.Acos(value);
+double arcTangent = Math.Atan(value);
+
+Console.WriteLine($"Arc sine of {value}: {RadiansToDegrees(arcSine)} degrees");     // Output: ~30 degrees
+Console.WriteLine($"Arc cosine of {value}: {RadiansToDegrees(arcCosine)} degrees"); // Output: ~60 degrees
+Console.WriteLine($"Arc tangent of {value}: {RadiansToDegrees(arcTangent)} degrees"); // Output: ~26.57 degrees
+
+// Atan2 - determines the quadrant based on the signs of x and y
+double y = 1.0;
+double x = 1.0;
+double angle2 = Math.Atan2(y, x);
+Console.WriteLine($"Angle from x-axis to point ({x}, {y}): {RadiansToDegrees(angle2)} degrees"); // Output: 45 degrees
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Remember that trigonometric functions in C# work with radians, not degrees. To convert between degrees and radians, use these formulas:</p>
+                                <ul>
+                                    <li>Radians = Degrees × (π / 180)</li>
+                                    <li>Degrees = Radians × (180 / π)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Logarithmic and Exponential Functions</h3>
+                        <p>The Math class provides methods for logarithmic and exponential operations.</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Exp()</code></td>
+                                <td>Returns e raised to the specified power</td>
+                                <td><code>Math.Exp(1)</code></td>
+                                <td>2.718... (e)</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Log()</code></td>
+                                <td>Returns the natural logarithm (base e) of a number</td>
+                                <td><code>Math.Log(Math.E)</code></td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Log10()</code></td>
+                                <td>Returns the base 10 logarithm of a number</td>
+                                <td><code>Math.Log10(100)</code></td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Log2()</code></td>
+                                <td>Returns the base 2 logarithm of a number (C# 7.0+)</td>
+                                <td><code>Math.Log2(8)</code></td>
+                                <td>3</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Logarithmic Functions Examples:</h4>
+                            <pre><code>
+// Exponential function (e^x)
+Console.WriteLine(Math.Exp(1));      // Output: 2.718... (e)
+Console.WriteLine(Math.Exp(2));      // Output: 7.389... (e^2)
+
+// Natural logarithm (base e)
+Console.WriteLine(Math.Log(Math.E));  // Output: 1
+Console.WriteLine(Math.Log(7.389));   // Output: ~2 (because e^2 ≈ 7.389)
+
+// Base 10 logarithm
+Console.WriteLine(Math.Log10(10));    // Output: 1
+Console.WriteLine(Math.Log10(100));   // Output: 2
+Console.WriteLine(Math.Log10(1000));  // Output: 3
+
+// Base 2 logarithm
+Console.WriteLine(Math.Log2(2));      // Output: 1
+Console.WriteLine(Math.Log2(8));      // Output: 3 (because 2^3 = 8)
+Console.WriteLine(Math.Log2(1024));   // Output: 10 (because 2^10 = 1024)
+
+// Custom base logarithm using the change of base formula: log_b(x) = log_e(x) / log_e(b)
+double LogBase(double number, double base_value)
+{
+    return Math.Log(number) / Math.Log(base_value);
+}
+
+Console.WriteLine(LogBase(27, 3));  // Output: 3 (because 3^3 = 27)
+Console.WriteLine(LogBase(16, 4));  // Output: 2 (because 4^2 = 16)
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Random Number Generation</h3>
+                        <p>Although not part of the Math class, the <code>Random</code> class is commonly used for mathematical operations involving random numbers.</p>
+                        
+                        <div class="example-box">
+                            <h4>Random Number Generation Examples:</h4>
+                            <pre><code>
+// Create a Random object
+Random random = new Random();
+
+// Generate a random integer between 0 and 100 (exclusive of 100)
+int randomInt = random.Next(100);
+Console.WriteLine($"Random integer (0-99): {randomInt}");
+
+// Generate a random integer within a specific range (min inclusive, max exclusive)
+int randomRange = random.Next(10, 21);  // 10 to 20
+Console.WriteLine($"Random integer (10-20): {randomRange}");
+
+// Generate a random double between 0.0 and 1.0
+double randomDouble = random.NextDouble();
+Console.WriteLine($"Random double (0-1): {randomDouble}");
+
+// Generate a random double within a specific range
+double randomDoubleRange = random.NextDouble() * (20 - 10) + 10;  // 10.0 to 20.0
+Console.WriteLine($"Random double (10-20): {randomDoubleRange}");
+
+// Generate a sequence of random bytes
+byte[] buffer = new byte[5];
+random.NextBytes(buffer);
+Console.WriteLine("Random bytes: " + string.Join(", ", buffer));
+
+// Notes on Random class usage:
+// 1. Don't create a new Random object for each random number - reuse it
+// 2. For cryptographic purposes, use System.Security.Cryptography.RandomNumberGenerator instead
+// 3. In .NET 6+ you can use the static Random.Shared property for better performance in concurrent scenarios
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Important considerations for random number generation:</p>
+                                <ul>
+                                    <li>If you create multiple <code>Random</code> objects in quick succession, they might be seeded with the same value (based on system time) and produce the same sequence. Reuse a single instance instead.</li>
+                                    <li>The <code>Random</code> class generates pseudo-random numbers, which are deterministic and not suitable for security-sensitive applications.</li>
+                                    <li>For cryptographically secure random numbers, use the <code>System.Security.Cryptography.RandomNumberGenerator</code> class instead.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced Mathematical Functions</h3>
+                        <p>The Math class in C# also provides some advanced mathematical functions:</p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Sign()</code></td>
+                                <td>Returns the sign of a number (-1, 0, or 1)</td>
+                                <td><code>Math.Sign(-10)</code> = -1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Truncate()</code></td>
+                                <td>Returns the integer part of a number (removes the fractional part)</td>
+                                <td><code>Math.Truncate(5.7)</code> = 5</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.IEEERemainder()</code></td>
+                                <td>Returns the remainder from the division of two numbers according to IEEE 754 standard</td>
+                                <td><code>Math.IEEERemainder(9, 4)</code> = 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.Clamp()</code></td>
+                                <td>Restricts a value to be within a specified range (C# 7.2+)</td>
+                                <td><code>Math.Clamp(15, 0, 10)</code> = 10</td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.BitIncrement()</code></td>
+                                <td>Returns the next representable floating-point value (C# 8.0+)</td>
+                                <td><code>Math.BitIncrement(0.1)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>Math.BitDecrement()</code></td>
+                                <td>Returns the previous representable floating-point value (C# 8.0+)</td>
+                                <td><code>Math.BitDecrement(0.1)</code></td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <h4>Advanced Math Functions Examples:</h4>
+                            <pre><code>
+// Math.Sign - returns -1 for negative, 0 for zero, and 1 for positive values
+Console.WriteLine(Math.Sign(-10));  // Output: -1
+Console.WriteLine(Math.Sign(0));    // Output: 0
+Console.WriteLine(Math.Sign(10));   // Output: 1
+
+// Math.Truncate - removes the fractional part (different from Floor for negative numbers)
+Console.WriteLine(Math.Truncate(5.7));   // Output: 5
+Console.WriteLine(Math.Truncate(-5.7));  // Output: -5 (Floor would be -6)
+
+// Math.IEEERemainder - different from % operator
+// Formula: x - y * round(x / y)
+Console.WriteLine(Math.IEEERemainder(9, 4));   // Output: 1 (9 - 4 * 2)
+Console.WriteLine(9 % 4);                      // Output: 1 (regular remainder)
+Console.WriteLine(Math.IEEERemainder(5, 2));   // Output: 1 (5 - 2 * 2)
+Console.WriteLine(5 % 2);                      // Output: 1 (regular remainder)
+Console.WriteLine(Math.IEEERemainder(3, 2));   // Output: -1 (3 - 2 * 2)
+Console.WriteLine(3 % 2);                      // Output: 1 (regular remainder)
+
+// Math.Clamp - restricts a value to be within a specified range
+Console.WriteLine(Math.Clamp(5, 0, 10));    // Output: 5 (within range)
+Console.WriteLine(Math.Clamp(-5, 0, 10));   // Output: 0 (below min)
+Console.WriteLine(Math.Clamp(15, 0, 10));   // Output: 10 (above max)
+
+// Math.BitIncrement and Math.BitDecrement (C# 8.0+)
+// Get the next and previous IEEE 754 floating-point representation
+Console.WriteLine(Math.BitIncrement(0.0));  // Output: 5E-324 (smallest positive value)
+Console.WriteLine(Math.BitDecrement(0.0));  // Output: -5E-324 (smallest negative value)
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Custom Math Functions</h3>
+                        <p>You can create your own custom mathematical functions by combining the built-in functions from the Math class. Here are some examples:</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Math Functions Examples:</h4>
+                            <pre><code>
+// Calculate the hypotenuse of a right triangle using the Pythagorean theorem
+double Hypotenuse(double a, double b)
+{
+    return Math.Sqrt(a * a + b * b);
+}
+Console.WriteLine($"Hypotenuse of a 3-4-5 triangle: {Hypotenuse(3, 4)}");  // Output: 5
+
+// Convert degrees to radians
+double DegreesToRadians(double degrees)
+{
+    return degrees * Math.PI / 180.0;
+}
+Console.WriteLine($"45 degrees in radians: {DegreesToRadians(45)}");  // Output: ~0.785398
+
+// Convert radians to degrees
+double RadiansToDegrees(double radians)
+{
+    return radians * 180.0 / Math.PI;
+}
+Console.WriteLine($"π/4 radians in degrees: {RadiansToDegrees(Math.PI / 4)}");  // Output: 45
+
+// Calculate factorial (n!)
+long Factorial(int n)
+{
+    if (n < 0) throw new ArgumentException("Factorial is not defined for negative numbers.");
+    if (n > 20) throw new ArgumentException("Result would overflow a long.");
+    
+    long result = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        result *= i;
+    }
+    return result;
+}
+Console.WriteLine($"5! = {Factorial(5)}");  // Output: 120
+
+// Calculate the n-th Fibonacci number
+int Fibonacci(int n)
+{
+    if (n < 0) throw new ArgumentException("Index cannot be negative.");
+    if (n <= 1) return n;
+    
+    int a = 0, b = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        int temp = a;
+        a = b;
+        b = temp + b;
+    }
+    return b;
+}
+Console.WriteLine($"10th Fibonacci number: {Fibonacci(10)}");  // Output: 55
+
+// Check if a number is prime
+bool IsPrime(int number)
+{
+    if (number <= 1) return false;
+    if (number <= 3) return true;
+    if (number % 2 == 0 || number % 3 == 0) return false;
+    
+    for (int i = 5; i * i <= number; i += 6)
+    {
+        if (number % i == 0 || number % (i + 2) == 0)
+            return false;
+    }
+    return true;
+}
+Console.WriteLine($"Is 17 prime? {IsPrime(17)}");  // Output: True
+Console.WriteLine($"Is 20 prime? {IsPrime(20)}");  // Output: False
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Performance Considerations</h3>
+                        <p>When working with mathematical functions in C#, keep these performance considerations in mind:</p>
+                        <ul>
+                            <li><strong>Avoid redundant calculations</strong>: Store and reuse results rather than recalculating the same values multiple times.</li>
+                            <li><strong>Consider the precision requirements</strong>: Use the appropriate numeric type (float, double, decimal) based on your precision needs.</li>
+                            <li><strong>Beware of edge cases</strong>: Many math functions have edge cases (e.g., division by zero, logarithm of zero) that can cause exceptions or unexpected results.</li>
+                            <li><strong>Consider using SIMD operations</strong>: For performance-critical code that performs the same operation on multiple values, consider using System.Numerics for SIMD (Single Instruction, Multiple Data) operations.</li>
+                            <li><strong>Approximate calculations</strong>: For trigonometric and exponential functions, consider if you need the full precision or if approximations are acceptable for performance gains.</li>
+                        </ul>
+
+                        <div class="example-box">
+                            <h4>Performance Optimization Examples:</h4>
+                            <pre><code>
+// Avoid redundant calculations
+double radius = 5;
+// Inefficient - calculates the square twice
+double perimeter = 2 * Math.PI * radius;
+double area = Math.PI * Math.Pow(radius, 2);
+
+// More efficient - calculate the square once
+double radiusSquared = radius * radius;
+double area2 = Math.PI * radiusSquared;
+
+// For performance-critical trigonometric calculations on many values
+// consider precomputing commonly used values
+Dictionary<int, double> sinTable = new Dictionary<int, double>();
+for (int degree = 0; degree < 360; degree++)
+{
+    sinTable[degree] = Math.Sin(DegreesToRadians(degree));
+}
+
+// Later, use the lookup table instead of calculating each time
+double sinValue = sinTable[45];  // Much faster than Math.Sin(DegreesToRadians(45))
+
+// Use System.Numerics for SIMD operations (C# 8.0+)
+using System.Numerics;
+
+Vector<float> v1 = new Vector<float>(new[] { 1.0f, 2.0f, 3.0f, 4.0f });
+Vector<float> v2 = new Vector<float>(new[] { 5.0f, 6.0f, 7.0f, 8.0f });
+Vector<float> result = Vector.Multiply(v1, v2); // Performs parallel multiplication
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="operators.html" class="prev"><i class="fas fa-arrow-left"></i> Operators</a>
+                        <a href="strings.html" class="next">Strings <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

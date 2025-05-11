@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Method Overloading - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Method Overloading</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Method Overloading</h3>
+                        <p>Method overloading is a feature in C# that allows you to define multiple methods with the same name but different parameter lists. When you call an overloaded method, the compiler determines which version to call based on the arguments you provide.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Method Overloading Concepts:</h4>
+                            <ul>
+                                <li>Overloaded methods must have the same name but different parameter lists</li>
+                                <li>Methods can be overloaded based on the number, type, or order of parameters</li>
+                                <li>Return type alone is not sufficient to overload a method</li>
+                                <li>Overloading creates multiple implementations of a method with the same logical purpose</li>
+                                <li>The compiler selects the most appropriate overload based on the provided arguments</li>
+                                <li>Method overloading is a form of static (compile-time) polymorphism</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Method Overloading</h3>
+                        <p>Method overloading allows you to create multiple versions of a method to handle different input types or parameter combinations.</p>
+                        
+                        <div class="example-box">
+                            <h4>Method Overloading Based on Parameter Count:</h4>
+                            <pre><code>
+public class Calculator
+{
+    // Method with one parameter
+    public int Add(int number)
+    {
+        return number;
+    }
+    
+    // Method with two parameters
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+    
+    // Method with three parameters
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+}
+
+// Usage:
+public void TestAddOverloads()
+{
+    Calculator calc = new Calculator();
+    
+    int result1 = calc.Add(5);            // Calls first version, returns 5
+    int result2 = calc.Add(5, 10);        // Calls second version, returns 15
+    int result3 = calc.Add(5, 10, 15);    // Calls third version, returns 30
+    
+    Console.WriteLine($"Results: {result1}, {result2}, {result3}");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Method Overloading Based on Parameter Types:</h4>
+                            <pre><code>
+public class MathHelper
+{
+    // Method that takes integers
+    public int Multiply(int a, int b)
+    {
+        Console.WriteLine("Multiplying integers");
+        return a * b;
+    }
+    
+    // Method that takes doubles
+    public double Multiply(double a, double b)
+    {
+        Console.WriteLine("Multiplying doubles");
+        return a * b;
+    }
+    
+    // Method that takes a decimal and an integer
+    public decimal Multiply(decimal a, int factor)
+    {
+        Console.WriteLine("Multiplying decimal by integer factor");
+        return a * factor;
+    }
+}
+
+// Usage:
+public void TestMultiplyOverloads()
+{
+    MathHelper math = new MathHelper();
+    
+    int result1 = math.Multiply(5, 4);            // Calls int version
+    double result2 = math.Multiply(5.5, 2.0);     // Calls double version
+    decimal result3 = math.Multiply(10.5m, 3);    // Calls decimal+int version
+    
+    Console.WriteLine($"Results: {result1}, {result2}, {result3}");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about method overloading:</p>
+                                <ul>
+                                    <li>The compiler distinguishes overloaded methods by their signature (name + parameter types)</li>
+                                    <li>The return type is not part of the method signature for overloading purposes</li>
+                                    <li>Parameter names do not affect method overloading (only their types matter)</li>
+                                    <li>Overloaded methods should perform the same logical operation on different types</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Overloading Resolution</h3>
+                        <p>When you call an overloaded method, the C# compiler uses a set of rules to determine which method to invoke. This process is called "overload resolution."</p>
+                        
+                        <div class="example-box">
+                            <h4>Overload Resolution Example:</h4>
+                            <pre><code>
+public class OverloadResolution
+{
+    // Different overloads of the Print method
+    public void Print(int value)
+    {
+        Console.WriteLine($"Integer: {value}");
+    }
+    
+    public void Print(double value)
+    {
+        Console.WriteLine($"Double: {value}");
+    }
+    
+    public void Print(string value)
+    {
+        Console.WriteLine($"String: {value}");
+    }
+    
+    public void Print(int a, int b)
+    {
+        Console.WriteLine($"Two integers: {a}, {b}");
+    }
+    
+    public void Print(object value)
+    {
+        Console.WriteLine($"Object: {value}");
+    }
+}
+
+// Usage:
+public void TestOverloadResolution()
+{
+    OverloadResolution demo = new OverloadResolution();
+    
+    demo.Print(42);           // Calls Print(int)
+    demo.Print(42.5);         // Calls Print(double)
+    demo.Print("Hello");      // Calls Print(string)
+    demo.Print(10, 20);       // Calls Print(int, int)
+    
+    // The compiler chooses the most specific match:
+    char ch = 'A';
+    demo.Print(ch);           // Calls Print(int) because char can be implicitly converted to int
+    
+    // When no exact match exists, the compiler tries to find the best match:
+    decimal money = 125.50m;
+    demo.Print(money);        // Calls Print(double) via implicit conversion
+    
+    // When no better match exists, object version is used:
+    DateTime now = DateTime.Now;
+    demo.Print(now);          // Calls Print(object)
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Overload resolution rules (simplified):</p>
+                                <ol>
+                                    <li>Look for a method with an exact match of parameter types</li>
+                                    <li>If no exact match is found, look for a method that can be called with implicit conversions</li>
+                                    <li>Among multiple possible matches, choose the "most specific" method</li>
+                                    <li>If resolution is ambiguous, the compiler generates an error</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Ambiguous Method Call Example:</h4>
+                            <pre><code>
+public class AmbiguousExample
+{
+    // Two overloads that could both match in some cases
+    public void Process(int value, double option)
+    {
+        Console.WriteLine("First overload called");
+    }
+    
+    public void Process(double value, int option)
+    {
+        Console.WriteLine("Second overload called");
+    }
+}
+
+public void TestAmbiguousCall()
+{
+    AmbiguousExample demo = new AmbiguousExample();
+    
+    // This works fine - exact match for first overload
+    demo.Process(10, 1.5);      // Calls Process(int, double)
+    
+    // This works fine - exact match for second overload
+    demo.Process(10.5, 2);      // Calls Process(double, int)
+    
+    // This would cause a compiler error - ambiguous call
+    // demo.Process(10, 2);     // Error: Ambiguous call between Process(int, double) and Process(double, int)
+    
+    // To fix the ambiguity, we need to explicitly cast one argument
+    demo.Process(10, (double)2);  // Forces call to Process(int, double)
+    demo.Process((double)10, 2);  // Forces call to Process(double, int)
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Overloading Patterns</h3>
+                        <p>Several common patterns exist for method overloading that can make your APIs more accessible and flexible.</p>
+                        
+                        <div class="example-box">
+                            <h4>Increasing Parameter Specialization:</h4>
+                            <pre><code>
+public class ShoppingCart
+{
+    // Base overload with most parameters
+    public void AddItem(string productId, string name, decimal price, int quantity, bool isGift)
+    {
+        // Full implementation with all options
+        Console.WriteLine($"Adding {quantity} of {name} (ID: {productId}) at ${price} each. Gift: {isGift}");
+        // Add to cart logic...
+    }
+    
+    // Overload with fewer parameters (using defaults for isGift)
+    public void AddItem(string productId, string name, decimal price, int quantity)
+    {
+        // Call more specific version with default for isGift
+        AddItem(productId, name, price, quantity, false);
+    }
+    
+    // Overload with even fewer parameters (using default quantity of 1)
+    public void AddItem(string productId, string name, decimal price)
+    {
+        // Call more specific version with default quantity
+        AddItem(productId, name, price, 1);
+    }
+}
+
+// Usage:
+public void TestShoppingCart()
+{
+    ShoppingCart cart = new ShoppingCart();
+    
+    // Using different overloads
+    cart.AddItem("P123", "Headphones", 59.99m, 2, true);  // Full version with all details
+    cart.AddItem("P456", "Mouse", 29.99m, 1);             // Default not a gift
+    cart.AddItem("P789", "Mousepad", 9.99m);             // Default quantity 1, not a gift
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>This pattern:</p>
+                                <ul>
+                                    <li>Provides simpler entry points for common use cases</li>
+                                    <li>Calls more specialized methods, avoiding code duplication</li>
+                                    <li>Is an alternative to optional parameters in some cases</li>
+                                    <li>Creates a telescoping pattern where each overload adds more options</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Type Conversion Overloads:</h4>
+                            <pre><code>
+public class DataProcessor
+{
+    // Process different types of data with type-specific handling
+    
+    public void Process(int value)
+    {
+        Console.WriteLine($"Processing integer: {value}");
+        // Integer-specific logic
+    }
+    
+    public void Process(double value)
+    {
+        Console.WriteLine($"Processing double: {value}");
+        // Double-specific logic
+    }
+    
+    public void Process(string value)
+    {
+        Console.WriteLine($"Processing string: {value}");
+        // String-specific logic
+    }
+    
+    public void Process(DateTime value)
+    {
+        Console.WriteLine($"Processing date: {value.ToShortDateString()}");
+        // Date-specific logic
+    }
+    
+    // Process collections of each type
+    public void Process(int[] values)
+    {
+        Console.WriteLine($"Processing {values.Length} integers");
+        foreach (var value in values)
+        {
+            Process(value);  // Call the single-value overload
+        }
+    }
+    
+    public void Process(IEnumerable<string> values)
+    {
+        Console.WriteLine("Processing multiple strings");
+        foreach (var value in values)
+        {
+            Process(value);  // Call the single-value overload
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>This pattern:</p>
+                                <ul>
+                                    <li>Provides type-specific processing for different data types</li>
+                                    <li>Creates a consistent API regardless of the data type</li>
+                                    <li>Allows for specialized handling of collections of each type</li>
+                                    <li>Often results in better performance than using a generic object parameter</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Constructor Overloading:</h4>
+                            <pre><code>
+public class Person
+{
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public DateTime DateOfBirth { get; private set; }
+    public string Email { get; private set; }
+    
+    // Full constructor with all fields
+    public Person(string firstName, string lastName, DateTime dateOfBirth, string email)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        DateOfBirth = dateOfBirth;
+        Email = email;
+    }
+    
+    // Constructor without email
+    public Person(string firstName, string lastName, DateTime dateOfBirth)
+        : this(firstName, lastName, dateOfBirth, null)
+    {
+    }
+    
+    // Constructor with age instead of date of birth
+    public Person(string firstName, string lastName, int age)
+        : this(firstName, lastName, DateTime.Now.AddYears(-age))
+    {
+    }
+    
+    // Constructor with full name instead of separate first/last
+    public Person(string fullName, DateTime dateOfBirth)
+    {
+        string[] parts = fullName.Split(' ');
+        FirstName = parts[0];
+        LastName = parts.Length > 1 ? parts[1] : string.Empty;
+        DateOfBirth = dateOfBirth;
+    }
+}
+
+// Usage:
+public void TestPersonConstructors()
+{
+    // Different ways to create a Person
+    Person p1 = new Person("John", "Doe", new DateTime(1985, 5, 15), "john@example.com");
+    Person p2 = new Person("Jane", "Smith", new DateTime(1990, 8, 22));
+    Person p3 = new Person("Bob", "Johnson", 42);
+    Person p4 = new Person("Alice Cooper", new DateTime(1978, 3, 10));
+    
+    Console.WriteLine($"{p1.FirstName} {p1.LastName}, Email: {p1.Email}");
+    Console.WriteLine($"{p2.FirstName} {p2.LastName}, DOB: {p2.DateOfBirth.ToShortDateString()}");
+    Console.WriteLine($"{p3.FirstName} {p3.LastName}, Age calculated from: {p3.DateOfBirth.Year}");
+    Console.WriteLine($"{p4.FirstName} {p4.LastName}");
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Constructor overloading:</p>
+                                <ul>
+                                    <li>Provides multiple ways to create objects</li>
+                                    <li>Often uses <code>this()</code> to chain constructors together</li>
+                                    <li>Helps prevent duplicate initialization code</li>
+                                    <li>Allows creating objects with varying levels of information</li>
+                                    <li>An alternative to builder patterns for simpler scenarios</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Overloading vs. Optional Parameters</h3>
+                        <p>C# offers both method overloading and optional parameters as ways to create flexible method APIs. Each approach has its strengths and appropriate use cases.</p>
+                        
+                        <div class="example-box">
+                            <h4>Comparison of Approaches:</h4>
+                            <pre><code>
+// Using method overloading:
+public class OverloadExample
+{
+    public void Configure(string name)
+    {
+        Configure(name, 100);
+    }
+    
+    public void Configure(string name, int maxItems)
+    {
+        Configure(name, maxItems, false);
+    }
+    
+    public void Configure(string name, int maxItems, bool caseSensitive)
+    {
+        // Implementation with all parameters
+        Console.WriteLine($"Configuring {name} with max {maxItems} items, case sensitive: {caseSensitive}");
+    }
+}
+
+// Same functionality using optional parameters:
+public class OptionalParamExample
+{
+    public void Configure(string name, int maxItems = 100, bool caseSensitive = false)
+    {
+        // Implementation with all parameters
+        Console.WriteLine($"Configuring {name} with max {maxItems} items, case sensitive: {caseSensitive}");
+    }
+}
+
+// Usage:
+public void CompareApproaches()
+{
+    var overload = new OverloadExample();
+    var optional = new OptionalParamExample();
+    
+    // Both approaches allow the same call patterns:
+    overload.Configure("App1");
+    overload.Configure("App2", 200);
+    overload.Configure("App3", 300, true);
+    
+    optional.Configure("App1");
+    optional.Configure("App2", 200);
+    optional.Configure("App3", 300, true);
+    
+    // But optional parameters also allow skipping middle parameters:
+    optional.Configure("App4", caseSensitive: true);  // Using named argument
+    
+    // With overloading, we'd need another overload for this pattern:
+    // public void Configure(string name, bool caseSensitive) { ... }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Comparing method overloading and optional parameters:</p>
+                                <table>
+                                    <tr>
+                                        <th>Method Overloading</th>
+                                        <th>Optional Parameters</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Requires separate method for each variation</td>
+                                        <td>Single method definition with defaults</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Can have completely different parameter types</td>
+                                        <td>Always the same parameter types</td>
+                                    </tr>
+                                    <tr>
+                                        <td>More code, but more flexibility for complex cases</td>
+                                        <td>Less code duplication, simpler for basic cases</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Better for versions with fundamentally different behavior</td>
+                                        <td>Better for "skip some parameters" scenarios</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Default values are in code, visible to caller</td>
+                                        <td>Default values are in metadata, visible in IntelliSense</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Works in all versions of C#</td>
+                                        <td>Requires C# 4.0+ for full flexibility</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Operator Overloading</h3>
+                        <p>C# also allows you to overload operators, letting you define how operators such as +, -, *, / work with your custom types. This is a specialized form of method overloading.</p>
+                        
+                        <div class="example-box">
+                            <h4>Operator Overloading Example:</h4>
+                            <pre><code>
+public struct Money
+{
+    public decimal Amount { get; }
+    public string Currency { get; }
+    
+    public Money(decimal amount, string currency)
+    {
+        Amount = amount;
+        Currency = currency?.ToUpperInvariant() ?? "USD";
+    }
+    
+    // Overload the + operator
+    public static Money operator +(Money a, Money b)
+    {
+        if (a.Currency != b.Currency)
+        {
+            throw new InvalidOperationException("Cannot add different currencies");
+        }
+        
+        return new Money(a.Amount + b.Amount, a.Currency);
+    }
+    
+    // Overload the - operator
+    public static Money operator -(Money a, Money b)
+    {
+        if (a.Currency != b.Currency)
+        {
+            throw new InvalidOperationException("Cannot subtract different currencies");
+        }
+        
+        return new Money(a.Amount - b.Amount, a.Currency);
+    }
+    
+    // Overload the * operator (scalar multiplication)
+    public static Money operator *(Money a, decimal multiplier)
+    {
+        return new Money(a.Amount * multiplier, a.Currency);
+    }
+    
+    // Overload the / operator (scalar division)
+    public static Money operator /(Money a, decimal divisor)
+    {
+        if (divisor == 0)
+        {
+            throw new DivideByZeroException();
+        }
+        
+        return new Money(a.Amount / divisor, a.Currency);
+    }
+    
+    // Equality operators
+    public static bool operator ==(Money a, Money b)
+    {
+        return a.Currency == b.Currency && a.Amount == b.Amount;
+    }
+    
+    public static bool operator !=(Money a, Money b)
+    {
+        return !(a == b);
+    }
+    
+    // Override ToString for better display
+    public override string ToString()
+    {
+        return $"{Amount:C} {Currency}";
+    }
+    
+    // Required when overriding == and !=
+    public override bool Equals(object obj)
+    {
+        if (obj is Money other)
+        {
+            return this == other;
+        }
+        return false;
+    }
+    
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Amount, Currency);
+    }
+}
+
+// Usage:
+public void TestMoneyOperators()
+{
+    Money wallet1 = new Money(50.0m, "USD");
+    Money wallet2 = new Money(100.0m, "USD");
+    Money expense = new Money(25.0m, "USD");
+    
+    // Using overloaded operators
+    Money combined = wallet1 + wallet2;        // $150.00 USD
+    Money remaining = combined - expense;      // $125.00 USD
+    Money doubled = wallet1 * 2;              // $100.00 USD
+    Money shared = wallet2 / 4;               // $25.00 USD
+    
+    Console.WriteLine($"Combined: {combined}");
+    Console.WriteLine($"Remaining: {remaining}");
+    Console.WriteLine($"Doubled: {doubled}");
+    Console.WriteLine($"Shared: {shared}");
+    
+    // Using equality operators
+    bool isEqual = wallet1 == wallet2;        // false
+    bool isDifferent = wallet1 != wallet2;    // true
+    
+    Console.WriteLine($"wallet1 == wallet2: {isEqual}");
+    Console.WriteLine($"wallet1 != wallet2: {isDifferent}");
+    
+    // This would throw an exception (different currencies)
+    try
+    {
+        Money euro = new Money(50.0m, "EUR");
+        Money result = wallet1 + euro;
+    }
+    catch (InvalidOperationException ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key points about operator overloading:</p>
+                                <ul>
+                                    <li>Operator overloads must be declared static and public</li>
+                                    <li>Operators that can be overloaded include +, -, *, /, %, &, |, ^, &lt;&lt;, &gt;&gt;, ==, !=, &lt;, &gt;, &lt;=, &gt;=</li>
+                                    <li>When overloading == and !=, you should also override Equals() and GetHashCode()</li>
+                                    <li>Operator overloading makes code more readable and intuitive for mathematical or collection-like types</li>
+                                    <li>Use operator overloading judiciously; only where the operation has a clear, intuitive meaning</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Overloading Best Practices</h3>
+                        <p>Follow these guidelines to ensure your method overloads are clear, maintainable, and behave as expected.</p>
+                        
+                        <div class="example-box">
+                            <h4>Method Overloading Best Practices:</h4>
+                            <pre><code>
+// DO: Ensure overloads do the same logical operation
+public class GoodOverloads
+{
+    // All these overloads perform the same operation - calculating area
+    public double CalculateArea(double radius)
+    {
+        return Math.PI * radius * radius;  // Circle area
+    }
+    
+    public double CalculateArea(double length, double width)
+    {
+        return length * width;  // Rectangle area
+    }
+    
+    public double CalculateArea(double a, double b, double c)
+    {
+        // Triangle area using Heron's formula
+        double s = (a + b + c) / 2;
+        return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+}
+
+// DON'T: Create overloads that do completely different things
+public class BadOverloads
+{
+    public void Process(string input)
+    {
+        // Validates input
+    }
+    
+    public void Process(int id)
+    {
+        // Completely unrelated - deletes a record
+    }
+}
+
+// DO: Be consistent with parameter ordering across overloads
+public class ConsistentParameterOrder
+{
+    // Good - parameters in consistent order across overloads
+    public void SendMessage(string recipient, string subject, string body) { }
+    public void SendMessage(string recipient, string subject, string body, bool highPriority) { }
+    public void SendMessage(string recipient, string subject, string body, bool highPriority, DateTime scheduledTime) { }
+}
+
+// DON'T: Use inconsistent parameter ordering
+public class InconsistentParameterOrder
+{
+    // Bad - parameters in inconsistent order
+    public void SendMessage(string recipient, string subject, string body) { }
+    public void SendMessage(string subject, string body, string recipient, bool highPriority) { } // Reordered!
+    public void SendMessage(string recipient, bool highPriority, string subject, string body) { } // Reordered again!
+}
+
+// DO: Consider using optional parameters instead of many similar overloads
+public class TooManyOverloads
+{
+    // Too many overloads for simple parameter combinations
+    public void Log(string message) { }
+    public void Log(string message, LogLevel level) { }
+    public void Log(string message, LogLevel level, string source) { }
+    public void Log(string message, LogLevel level, string source, int eventId) { }
+    public void Log(string message, LogLevel level, string source, int eventId, Exception ex) { }
+}
+
+// Better approach with optional parameters
+public class BetterWithOptionalParams
+{
+    public void Log(
+        string message, 
+        LogLevel level = LogLevel.Info, 
+        string source = null, 
+        int eventId = 0, 
+        Exception ex = null)
+    {
+        // Implementation
+    }
+}
+
+// DO: Chain overloads to avoid code duplication
+public class ChainedOverloads
+{
+    // Good practice - chain overloads to the most complete version
+    public void Initialize(string name, int capacity, bool caseSensitive)
+    {
+        // Full implementation here
+    }
+    
+    public void Initialize(string name, int capacity)
+    {
+        Initialize(name, capacity, false);  // Chain to main implementation
+    }
+    
+    public void Initialize(string name)
+    {
+        Initialize(name, 100);  // Chain to previous overload
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Method overloading guidelines:</p>
+                                <ul>
+                                    <li><strong>Maintain conceptual unity:</strong> All overloads should perform the same logical operation</li>
+                                    <li><strong>Be consistent:</strong> Keep parameter order consistent across overloads</li>
+                                    <li><strong>Avoid ambiguity:</strong> Ensure overloaded methods are clearly distinguishable</li>
+                                    <li><strong>Minimize duplication:</strong> Chain overloads to the most complete implementation</li>
+                                    <li><strong>Consider alternatives:</strong> Use optional parameters for simpler cases with default values</li>
+                                    <li><strong>Document behavior:</strong> Make it clear what each overload does, especially if there are subtle differences</li>
+                                    <li><strong>Maintain the LSP:</strong> Any overload should be substitutable where the other could be used</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="method-parameters.html" class="prev"><i class="fas fa-arrow-left"></i> Method Parameters</a>
+                        <a href="classes-intro.html" class="next">Classes and Objects <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

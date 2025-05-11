@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Scripting in Unity - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Scripting in Unity</h2>
+                    
+                    <div class="topic">
+                        <h3>Understanding C# Scripts in Unity</h3>
+                        <p>C# scripting is the primary way to program game logic in Unity. Scripts define how GameObjects behave, respond to user input, and interact with each other. Understanding C# scripting is essential for creating dynamic, interactive games and applications in Unity.</p>
+                        
+                        <p>In this guide, you'll learn:</p>
+                        <ul>
+                            <li>The structure of C# scripts in Unity</li>
+                            <li>Important MonoBehaviour methods and when to use them</li>
+                            <li>How to create and attach scripts to GameObjects</li>
+                            <li>Unity's event functions and execution order</li>
+                            <li>Best practices for Unity C# scripting</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Your First C# Script in Unity</h3>
+                        <p>Let's start by creating a basic C# script and understanding its structure:</p>
+                        
+                        <h4>Step-by-Step Creation:</h4>
+                        <ol>
+                            <li><strong>Create a new script</strong>: In the Project window, right-click → Create → C# Script → Name it "MyFirstScript"</li>
+                            <li><strong>Open the script</strong>: Double-click the new script file to open it in your code editor</li>
+                            <li><strong>Observe the default template</strong>: Unity creates a basic MonoBehaviour script with Start and Update methods</li>
+                            <li><strong>Attach to a GameObject</strong>: Drag the script from the Project window onto a GameObject in the Hierarchy</li>
+                        </ol>
+                        
+                        <div class="example-box">
+                            <h4>Default C# Script Template:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class MyFirstScript : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        // This code runs once when the GameObject is enabled
+        Debug.Log("Script started!");  // Prints a message to the Console window
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // This code runs every frame
+        // Use for input handling, timer updates, and non-physics movement
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Let's break down the key components:</p>
+                                <ul>
+                                    <li><strong>using UnityEngine;</strong> - Imports Unity's core functionality and classes</li>
+                                    <li><strong>public class MyFirstScript : MonoBehaviour</strong> - Defines a class that inherits from MonoBehaviour</li>
+                                    <li><strong>MonoBehaviour</strong> - The base class for all Unity scripts that attach to GameObjects</li>
+                                    <li><strong>Start()</strong> - Initialization method that runs once when the script is enabled</li>
+                                    <li><strong>Update()</strong> - Method that runs every frame, used for regular updates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Understanding MonoBehaviour Lifecycle Methods</h3>
+                        <p>Unity scripts use special methods that run at specific times during a GameObject's lifecycle. Understanding when each method is called is crucial for organizing your code:</p>
+                        
+                        <div class="example-box">
+                            <h4>Key MonoBehaviour Methods:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class LifecycleDemo : MonoBehaviour
+{
+    // Called when the script instance is being loaded
+    void Awake()
+    {
+        // Use for initialization that must occur before Start
+        // Great for setting up references between scripts
+        Debug.Log("Awake: GameObject is initializing");
+    }
+
+    // Called before the first frame update, after Awake
+    void Start()
+    {
+        // Use for initialization that uses values potentially set by other scripts in their Awake functions
+        Debug.Log("Start: GameObject is starting");
+    }
+
+    // Called every frame
+    void Update()
+    {
+        // Use for:
+        // - Regular updates that don't involve physics
+        // - Input detection
+        // - Timer updates
+        // Debug.Log("Update: Running every frame");  // Uncomment to see (will spam the console)
+    }
+
+    // Called at fixed intervals (default: 0.02 seconds or 50 times per second)
+    void FixedUpdate()
+    {
+        // Use for physics updates
+        // All physics calculations happen right after FixedUpdate
+        // Debug.Log("FixedUpdate: Physics update");  // Uncomment to see
+    }
+
+    // Called after all Update functions have been called
+    void LateUpdate()
+    {
+        // Use for:
+        // - Camera follow scripts
+        // - Final position adjustments after other updates
+        // - Anything that needs to happen after all Updates
+        // Debug.Log("LateUpdate: After all updates");  // Uncomment to see
+    }
+
+    // Called when the GameObject is destroyed
+    void OnDestroy()
+    {
+        // Use for cleanup when an object is destroyed
+        Debug.Log("OnDestroy: GameObject is being destroyed");
+    }
+
+    // Called when the GameObject becomes disabled or inactive
+    void OnDisable()
+    {
+        // Called when the behaviour becomes disabled
+        Debug.Log("OnDisable: GameObject is now inactive");
+    }
+
+    // Called when the GameObject becomes enabled and active
+    void OnEnable()
+    {
+        // Called when the behaviour becomes enabled
+        Debug.Log("OnEnable: GameObject is now active");
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When to use each method:</p>
+                                <ul>
+                                    <li><strong>Awake()</strong>: For initial setup, runs before any Start methods</li>
+                                    <li><strong>Start()</strong>: For initialization that depends on other components</li>
+                                    <li><strong>Update()</strong>: For frame-dependent code, input handling</li>
+                                    <li><strong>FixedUpdate()</strong>: For physics calculations at fixed time steps</li>
+                                    <li><strong>LateUpdate()</strong>: For code that should run after all Updates</li>
+                                    <li><strong>OnEnable()/OnDisable()</strong>: When GameObject is activated/deactivated</li>
+                                    <li><strong>OnDestroy()</strong>: For cleanup when GameObject is destroyed</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>The Execution Order</h4>
+                            <p>Unity follows a specific execution order when running scripts:</p>
+                            <ol>
+                                <li>First Scene Load: Awake → OnEnable → Start</li>
+                                <li>Every Frame: Update → LateUpdate</li>
+                                <li>Fixed Timestep: FixedUpdate (runs at fixed intervals)</li>
+                                <li>When destroyed: OnDisable → OnDestroy</li>
+                            </ol>
+                            <p>You can customize script execution order in Project Settings → Script Execution Order.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Variables and Components in Unity Scripts</h3>
+                        <p>Unity C# scripts can expose variables to the Inspector window, allowing you to adjust values without changing code.</p>
+                        
+                        <div class="example-box">
+                            <h4>Public and Serialized Variables:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class VariablesDemo : MonoBehaviour
+{
+    // Public variables appear in the Inspector by default
+    public float speed = 5f;           // Movement speed with default value
+    public string playerName = "Hero"; // Player name with default value
+    
+    // [SerializeField] makes private variables appear in the Inspector
+    [SerializeField] 
+    private int health = 100;          // Health is private but still visible in Inspector
+    
+    // Private variables (not visible in Inspector by default)
+    private bool isJumping = false;    // Tracks if player is jumping
+    
+    // Reference to another component
+    public Rigidbody2D rb;             // Will be visible in Inspector
+    
+    // Using [Header] adds a header in the Inspector
+    [Header("Weapon Settings")]
+    public int damage = 10;            // Weapon damage
+    public float fireRate = 0.5f;      // Weapon fire rate
+    
+    // Using [Range] creates a slider in the Inspector
+    [Range(0, 100)]
+    public int accuracy = 75;          // Weapon accuracy with slider
+    
+    void Start()
+    {
+        // Auto-get component if not assigned in Inspector
+        if (rb == null)
+        {
+            // GetComponent searches the GameObject this script is attached to
+            rb = GetComponent<Rigidbody2D>();
+            
+            // Log a warning if component is still not found
+            if (rb == null)
+            {
+                Debug.LogWarning("No Rigidbody2D found on " + gameObject.name);
+            }
+        }
+        
+        // Using our variables
+        Debug.Log($"Player {playerName} created with {health} health!");
+    }
+    
+    void Update()
+    {
+        // Example of using the variables
+        if (Input.GetKey(KeyCode.Space) && !isJumping)
+        {
+            // Use the speed variable from Inspector
+            rb.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+            isJumping = true;
+        }
+    }
+    
+    // Reset jumping state when hitting the ground
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+        }
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key concepts:</p>
+                                <ul>
+                                    <li><strong>public</strong> variables appear in the Inspector</li>
+                                    <li><strong>[SerializeField]</strong> makes private variables appear in the Inspector</li>
+                                    <li><strong>GetComponent&lt;T&gt;()</strong> finds components on the same GameObject</li>
+                                    <li><strong>[Header]</strong> and <strong>[Range]</strong> improve Inspector organization</li>
+                                    <li><strong>References</strong> to components can be assigned via code or Inspector</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Input Handling in Unity Scripts</h3>
+                        <p>Getting user input is a fundamental part of game development. Unity provides several ways to handle input in your C# scripts:</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Input Handling:</h4>
+                            <pre><code>
+using UnityEngine;
+
+public class InputExample : MonoBehaviour
+{
+    public float moveSpeed = 5f;      // Character movement speed
+    private Rigidbody2D rb;           // Reference to Rigidbody component
+    
+    void Start()
+    {
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
+    }
+    
+    void Update()
+    {
+        // KEYBOARD INPUT EXAMPLES
+        
+        // Check if a specific key is currently being held down
+        if (Input.GetKey(KeyCode.W))
+        {
+            // W key is being held down
+            Debug.Log("Moving forward");
+        }
+        
+        // Check if a key was pressed down this frame
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // Space key was just pressed
+            Debug.Log("Jump initiated");
+        }
+        
+        // Check if a key was released this frame
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            // Space key was just released
+            Debug.Log("Jump released");
+        }
+        
+        // AXIS INPUT EXAMPLES (from Input Manager)
+        
+        // Get horizontal input (A/D or Left/Right arrows)
+        // Returns value between -1 (left) and 1 (right)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        
+        // Get vertical input (W/S or Up/Down arrows)
+        // Returns value between -1 (down) and 1 (up)
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        // Create a movement vector
+        Vector2 movement = new Vector2(horizontalInput, verticalInput);
+        
+        // MOUSE INPUT EXAMPLES
+        
+        // Get mouse position in screen coordinates
+        Vector3 mousePos = Input.mousePosition;
+        
+        // Convert mouse position to world coordinates
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+        worldPosition.z = 0; // Set z to 0 for 2D games
+        
+        // Check for mouse button clicks
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Left mouse button clicked
+            Debug.Log("Left click at: " + worldPosition);
+        }
+        
+        if (Input.GetMouseButtonDown(1))
+        {
+            // Right mouse button clicked
+            Debug.Log("Right click at: " + worldPosition);
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        // Get axis input again in FixedUpdate for physics movement
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        // Create a normalized movement vector (prevents diagonal movement from being faster)
+        Vector2 movement = new Vector2(horizontalInput, verticalInput).normalized;
+        
+        // Apply movement in FixedUpdate for consistent physics
+        rb.velocity = movement * moveSpeed;
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Input handling methods:</p>
+                                <ul>
+                                    <li><strong>Input.GetKey/GetKeyDown/GetKeyUp</strong> - For keyboard input</li>
+                                    <li><strong>Input.GetAxis</strong> - For smooth input from multiple sources</li>
+                                    <li><strong>Input.GetMouseButton/GetMouseButtonDown/GetMouseButtonUp</strong> - For mouse clicks</li>
+                                    <li><strong>Input.mousePosition</strong> - For cursor position</li>
+                                    <li><strong>Camera.main.ScreenToWorldPoint</strong> - Converts screen position to game world position</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <h4>Input System Package (New)</h4>
+                            <p>Unity now offers a new Input System package that provides more flexibility and features:</p>
+                            <ol>
+                                <li>Install via Window → Package Manager → Unity Registry → Input System</li>
+                                <li>Create an input action asset for configuring inputs visually</li>
+                                <li>Use the new system with PlayerInput component or directly through code</li>
+                            </ol>
+                            <p>The new system offers better support for different devices, rebinding, and action maps.</p>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Advanced C# Scripting Concepts</h3>
+                        <p>As you become more familiar with Unity scripting, you'll encounter these advanced topics:</p>
+                        
+                        <div class="example-box">
+                            <h4>Coroutines for Time-Based Operations:</h4>
+                            <pre><code>
+using System.Collections;
+using UnityEngine;
+
+public class CoroutineExample : MonoBehaviour
+{
+    // Coroutines allow you to spread operations over multiple frames
+    
+    void Start()
+    {
+        // Start a coroutine that fades an object
+        StartCoroutine(FadeOut());
+        
+        // Start a coroutine with parameters
+        StartCoroutine(DelayedAction("Hello from the future!", 3.0f));
+    }
+    
+    // A simple coroutine that fades out an object
+    IEnumerator FadeOut()
+    {
+        // Get the renderer component
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        Color startColor = renderer.color;  // Starting color
+        
+        // Fade over 2 seconds
+        float duration = 2.0f;
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < duration)
+        {
+            // Calculate how far along we are (0 to 1)
+            float t = elapsedTime / duration;
+            
+            // Set new alpha value by lerping from 1 to 0
+            Color newColor = startColor;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            renderer.color = newColor;
+            
+            // Wait until next frame
+            yield return null;
+            
+            // Add the time since last frame
+            elapsedTime += Time.deltaTime;
+        }
+        
+        // Ensure we end at fully transparent
+        Color finalColor = startColor;
+        finalColor.a = 0f;
+        renderer.color = finalColor;
+        
+        Debug.Log("Fade complete!");
+    }
+    
+    // Coroutine with parameters that waits for a specific time
+    IEnumerator DelayedAction(string message, float delay)
+    {
+        Debug.Log("Waiting for " + delay + " seconds...");
+        
+        // Wait for the specified number of seconds
+        yield return new WaitForSeconds(delay);
+        
+        // This code runs after the delay
+        Debug.Log(message);
+    }
+    
+    // Stop all coroutines when the object is disabled
+    void OnDisable()
+    {
+        // Stop all coroutines on this MonoBehaviour
+        StopAllCoroutines();
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Coroutines allow you to:</p>
+                                <ul>
+                                    <li><strong>Spread operations</strong> over multiple frames</li>
+                                    <li><strong>Create sequences</strong> of events with delays</li>
+                                    <li><strong>Perform time-based operations</strong> like animations or transitions</li>
+                                    <li><strong>Wait for conditions</strong> without blocking the main thread</li>
+                                </ul>
+                                <p>Common yield instructions:</p>
+                                <ul>
+                                    <li><strong>yield return null;</strong> - Wait until next frame</li>
+                                    <li><strong>yield return new WaitForSeconds(1.0f);</strong> - Wait for 1 second</li>
+                                    <li><strong>yield return new WaitForFixedUpdate();</strong> - Wait for next physics update</li>
+                                    <li><strong>yield return new WaitUntil(() => condition);</strong> - Wait until condition is true</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Unity C# Scripting</h3>
+                        <ol>
+                            <li><strong>Follow naming conventions</strong>: Use PascalCase for class names and public members, camelCase for private variables</li>
+                            <li><strong>Cache component references</strong>: Get components in Start() or Awake() rather than repeatedly in Update()</li>
+                            <li><strong>Use the right update method</strong>: Update() for general logic, FixedUpdate() for physics</li>
+                            <li><strong>Avoid empty methods</strong>: Delete unused Start() and Update() methods to improve performance</li>
+                            <li><strong>Modular design</strong>: Give each script a single responsibility</li>
+                            <li><strong>Optimize performance</strong>: Use object pooling for frequently created/destroyed objects</li>
+                            <li><strong>Check for null references</strong>: Always validate references before using them</li>
+                            <li><strong>Use SerializeField</strong>: Keep variables private but visible in the Inspector with [SerializeField]</li>
+                            <li><strong>Comment your code</strong>: Explain complex logic and class purposes</li>
+                            <li><strong>Use namespaces</strong>: Organize larger projects with namespaces</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="unity-setup.html" class="prev"><i class="fas fa-arrow-left"></i> Setting Up Unity</a>
+                        <a href="working-with-gameobjects.html" class="next">Working with GameObjects <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

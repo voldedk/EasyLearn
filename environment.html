@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Up C# Development Environment - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Setting Up C# Development Environment</h2>
+                    
+                    <div class="topic">
+                        <h3>Visual Studio</h3>
+                        <p>Visual Studio is Microsoft's primary IDE for C# development. It offers a complete development environment with advanced debugging, IntelliSense, and integrated tools.</p>
+                        
+                        <h4>Installation Steps:</h4>
+                        <ol>
+                            <li>Visit <a href="https://visualstudio.microsoft.com/" target="_blank">Visual Studio website</a></li>
+                            <li>Download Visual Studio Community (free) or other editions</li>
+                            <li>Run the installer and select ".NET desktop development" workload</li>
+                            <li>Follow the installation wizard to complete setup</li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Visual Studio Code</h3>
+                        <p>Visual Studio Code is a lightweight, cross-platform code editor that can be configured for C# development.</p>
+                        
+                        <h4>Setup for C# Development:</h4>
+                        <ol>
+                            <li>Download and install <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a></li>
+                            <li>Install the C# extension from the marketplace</li>
+                            <li>Install the <a href="https://dotnet.microsoft.com/download" target="_blank">.NET SDK</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating Your First Project</h3>
+                        <p>Once you have your development environment set up, you can create your first C# project:</p>
+                        
+                        <h4>Using Visual Studio:</h4>
+                        <ol>
+                            <li>Open Visual Studio</li>
+                            <li>Click "Create a new project"</li>
+                            <li>Select "Console App (.NET Core)" or "Console App (.NET Framework)"</li>
+                            <li>Name your project and click "Create"</li>
+                        </ol>
+                        
+                        <h4>Using Command Line:</h4>
+                        <pre><code>
+# Create a new console application
+dotnet new console -n MyFirstApp
+
+# Navigate to the project directory
+cd MyFirstApp
+
+# Run the application
+dotnet run
+                        </code></pre>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="intro.html" class="prev"><i class="fas fa-arrow-left"></i> Introduction to C#</a>
+                        <a href="syntax.html" class="next">C# Syntax <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

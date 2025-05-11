@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Booleans - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Booleans</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Booleans</h3>
+                        <p>A boolean (or bool) is a data type that can have one of two possible values: <code>true</code> or <code>false</code>. Booleans are fundamental to programming as they are used for making decisions, controlling program flow, and evaluating conditions.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Boolean Facts:</h4>
+                            <ul>
+                                <li>In C#, the keyword <code>bool</code> is used to declare boolean variables</li>
+                                <li>Boolean values are <code>true</code> or <code>false</code> (lowercase by convention)</li>
+                                <li>Booleans occupy 1 byte of memory in .NET</li>
+                                <li>The default value for a boolean is <code>false</code></li>
+                                <li>Boolean expressions are central to conditional logic (if statements, loops, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Declaring and Initializing Booleans</h3>
+                        <p>Here are some examples of declaring and initializing boolean variables:</p>
+                        
+                        <div class="example-box">
+                            <h4>Boolean Declaration and Initialization:</h4>
+                            <pre><code>
+// Declaration with initialization
+bool isActive = true;
+bool hasPermission = false;
+
+// Declaration without initialization (default value is false)
+bool isComplete;
+
+// Using expressions that evaluate to a boolean
+bool isGreaterThanTen = (5 + 10 > 10);  // true
+bool areEqual = (5 == 5);              // true
+bool hasLength = "Hello".Length > 0;    // true
+
+// Using nullable booleans (can be true, false, or null)
+bool? hasResponse = null;
+hasResponse = true;
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The <code>bool?</code> syntax is a nullable boolean, which can store <code>true</code>, <code>false</code>, or <code>null</code>. This is useful when you need to represent an unknown or undefined state.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Boolean Operators</h3>
+                        <p>C# provides several operators for working with boolean values:</p>
+                        
+                        <div class="example-box">
+                            <h4>Logical Operators:</h4>
+                            <pre><code>
+bool a = true;
+bool b = false;
+
+// Logical AND (&&) - returns true only if both operands are true
+bool andResult = a && b;  // false
+
+// Logical OR (||) - returns true if at least one operand is true
+bool orResult = a || b;   // true
+
+// Logical NOT (!) - negates the value
+bool notA = !a;           // false
+bool notB = !b;           // true
+
+// Logical XOR (^) - returns true if exactly one operand is true
+bool xorResult = a ^ b;   // true
+bool xorFalse = a ^ a;    // false (both are true)
+                            </code></pre>
+                            <table>
+                                <tr>
+                                    <th>Operation</th>
+                                    <th>Result</th>
+                                </tr>
+                                <tr>
+                                    <td>true && true</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>true && false</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>false && true</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>false && false</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>true || true</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>true || false</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>false || true</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>false || false</td>
+                                    <td>false</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Comparison Operators:</h4>
+                            <pre><code>
+int x = 10;
+int y = 20;
+
+// Equal to (==)
+bool isEqual = (x == y);        // false
+
+// Not equal to (!=)
+bool isNotEqual = (x != y);     // true
+
+// Greater than (>)
+bool isGreater = (x > y);       // false
+
+// Less than (<)
+bool isLess = (x < y);          // true
+
+// Greater than or equal to (>=)
+bool isGreaterOrEqual = (x >= 10);  // true
+
+// Less than or equal to (<=)
+bool isLessOrEqual = (y <= 20);    // true
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Short-Circuit Evaluation</h3>
+                        <p>C# uses short-circuit evaluation for logical AND (&&) and OR (||) operators, which can improve efficiency and prevent errors:</p>
+                        
+                        <div class="example-box">
+                            <h4>Short-Circuit Example:</h4>
+                            <pre><code>
+// The right-hand expression is not evaluated if the left-hand expression determines the result
+int divisor = 0;
+
+// Short-circuit AND 
+// The second part won't be evaluated because the first part is false
+bool andResult = (divisor != 0) && (10 / divisor > 0);  // false, no division by zero error
+
+// Short-circuit OR
+// The second part won't be evaluated because the first part is true
+bool orResult = (divisor == 0) || (10 / divisor > 0);   // true, no division by zero error
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Short-circuit evaluation means:</p>
+                                <ul>
+                                    <li>For <code>&&</code>, if the left operand is <code>false</code>, the right operand is not evaluated</li>
+                                    <li>For <code>||</code>, if the left operand is <code>true</code>, the right operand is not evaluated</li>
+                                </ul>
+                                <p>This is useful for preventing runtime errors like in the example above, and for performance optimization.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Conditional (Ternary) Operator</h3>
+                        <p>The conditional operator <code>?:</code> evaluates a boolean expression and returns one of two values depending on the result:</p>
+                        
+                        <div class="example-box">
+                            <h4>Ternary Operator:</h4>
+                            <pre><code>
+// condition ? valueIfTrue : valueIfFalse
+int age = 20;
+string message = (age >= 18) ? "Adult" : "Minor";  // "Adult"
+
+// Can be nested (but can become hard to read)
+int score = 85;
+string grade = (score >= 90) ? "A" : 
+               (score >= 80) ? "B" : 
+               (score >= 70) ? "C" : 
+               (score >= 60) ? "D" : "F";  // "B"
+
+// More complex evaluations
+bool hasDiscount = true;
+double price = 100;
+double finalPrice = hasDiscount ? (price * 0.9) : price;  // 90
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The ternary operator is a concise way to write simple if-else statements, especially for assignments based on conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Boolean Methods and Properties</h3>
+                        <p>Many C# methods and properties return boolean values to indicate success, existence, or some state:</p>
+                        
+                        <div class="example-box">
+                            <h4>Common Boolean Methods and Properties:</h4>
+                            <pre><code>
+// String methods
+string text = "Hello, World!";
+bool containsHello = text.Contains("Hello");  // true
+bool startsWithH = text.StartsWith("H");      // true
+
+// Collection methods
+List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+bool containsThree = numbers.Contains(3);     // true
+bool anyGreaterThanTen = numbers.Any(n => n > 10);  // false (LINQ)
+bool allPositive = numbers.All(n => n > 0);          // true (LINQ)
+
+// File operations
+bool fileExists = System.IO.File.Exists("myfile.txt");
+
+// Type checking
+object obj = "test";
+bool isString = obj is string;  // true
+
+// Numeric utilities
+bool isEven = (10 % 2 == 0);    // true
+
+// Dictionary operations
+Dictionary<string, int> ages = new Dictionary<string, int>();
+ages["John"] = 30;
+bool containsJohn = ages.ContainsKey("John");  // true
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Conditional Operators in Detail</h3>
+                        <p>Understanding the precedence and behavior of conditional operators is important when building complex conditions:</p>
+                        
+                        <div class="example-box">
+                            <h4>Operator Precedence:</h4>
+                            <pre><code>
+// Operators are evaluated in this order:
+// 1. ! (logical NOT)
+// 2. &&, & (logical AND)
+// 3. ||, | (logical OR)
+
+bool result = true || false && false;  // true (equivalent to: true || (false && false))
+
+// Use parentheses to control evaluation order
+bool result2 = (true || false) && false;  // false
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Bitwise vs. Logical Operators:</h4>
+                            <pre><code>
+bool a = true;
+bool b = false;
+bool c = false;
+
+// Bitwise operators (& and |) always evaluate both sides
+bool bitwiseAnd = a & GetValue();  // Will call GetValue() regardless of a's value
+bool bitwiseOr = b | GetValue();   // Will call GetValue() regardless of b's value
+
+// Logical operators (&& and ||) use short-circuit evaluation
+bool logicalAnd = a && GetValue(); // Will call GetValue() only if a is true
+bool logicalOr = b || GetValue();  // Will call GetValue() only if b is false
+
+bool GetValue()
+{
+    Console.WriteLine("GetValue called");
+    return true;
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Use <code>&&</code> and <code>||</code> for most cases because:</p>
+                                <ul>
+                                    <li>They improve performance by avoiding unnecessary evaluations</li>
+                                    <li>They prevent potential errors in the second operand if the result is already determined</li>
+                                </ul>
+                                <p>Use <code>&</code> and <code>|</code> only when both sides must be evaluated regardless of the outcome.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Boolean in Control Flow</h3>
+                        <p>Boolean expressions are essential in control flow statements such as if-else, loops, and switch expressions:</p>
+                        
+                        <div class="example-box">
+                            <h4>Boolean in Control Structures:</h4>
+                            <pre><code>
+bool isAuthenticated = true;
+bool hasAdminAccess = false;
+
+// If-else statements
+if (isAuthenticated)
+{
+    Console.WriteLine("Welcome back!");
+    
+    if (hasAdminAccess)
+    {
+        Console.WriteLine("Admin panel is available.");
+    }
+    else
+    {
+        Console.WriteLine("You have user access.");
+    }
+}
+else
+{
+    Console.WriteLine("Please log in to continue.");
+}
+
+// While loop with boolean condition
+int counter = 0;
+bool shouldContinue = true;
+
+while (shouldContinue)
+{
+    counter++;
+    Console.WriteLine($"Counter: {counter}");
+    
+    // Update condition based on counter value
+    shouldContinue = counter < 5;
+}
+
+// Do-while loop
+bool runOnce = false;
+do
+{
+    Console.WriteLine("This runs at least once.");
+} while (runOnce);
+
+// For loop with boolean condition
+for (int i = 0; i < 5; i++)
+{
+    if (i == 3)
+    {
+        continue;  // Skip the rest of the loop body for i=3
+    }
+    
+    Console.WriteLine($"Value: {i}");
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Converting To and From Boolean</h3>
+                        <p>There are several ways to convert values to and from booleans:</p>
+                        
+                        <div class="example-box">
+                            <h4>Boolean Conversions:</h4>
+                            <pre><code>
+// Explicit conversion
+bool success = true;
+string successString = success.ToString();  // "True"
+int successInt = Convert.ToInt32(success);  // 1
+
+// Converting back to boolean
+bool parsedBool = bool.Parse("True");        // true
+bool convertedBool = Convert.ToBoolean(1);   // true
+bool convertedString = Convert.ToBoolean("true");  // true
+
+// TryParse for safe conversion
+bool result;
+if (bool.TryParse("True", out result))
+{
+    Console.WriteLine("Parsed successfully: " + result);  // true
+}
+
+// Boolean conversion rules for Convert.ToBoolean()
+bool fromZero = Convert.ToBoolean(0);     // false
+bool fromOne = Convert.ToBoolean(1);      // true
+bool fromNegative = Convert.ToBoolean(-10); // true (any non-zero number is true)
+bool fromEmptyString = Convert.ToBoolean("");  // false
+                            </code></pre>
+                            <div class="explanation">
+                                <p>When converting to boolean:</p>
+                                <ul>
+                                    <li>Numeric values: 0 is false, any non-zero value is true</li>
+                                    <li>Strings: "True", "true", "TRUE" (case-insensitive) convert to true</li>
+                                    <li>Strings: "False", "false", "FALSE" (case-insensitive) convert to false</li>
+                                    <li>Invalid string values will throw a FormatException</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Boolean Best Practices</h3>
+                        <p>Follow these best practices when working with booleans:</p>
+                        
+                        <div class="example-box">
+                            <h4>Boolean Naming Conventions:</h4>
+                            <pre><code>
+// Use meaningful names that indicate the true/false state
+bool isActive;       // Better than: bool active
+bool hasPermission;  // Better than: bool permission
+bool canEdit;        // Better than: bool edit
+bool shouldProcess;  // Better than: bool process
+
+// Naming patterns:
+// - "is" (for states): isEnabled, isVisible, isValid
+// - "has" (for possessions): hasChildren, hasError, hasChanges
+// - "can" (for abilities): canEdit, canDelete, canAccess
+// - "should" (for recommendations): shouldSave, shouldDisplay
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Boolean Mistakes to Avoid:</h4>
+                            <pre><code>
+// Redundant comparisons
+bool isEnabled = true;
+
+// Redundant (avoid this)
+if (isEnabled == true) { }  
+
+// Better (more concise)
+if (isEnabled) { }
+
+// Redundant (avoid this)
+if (isEnabled == false) { }
+
+// Better (more concise)
+if (!isEnabled) { }
+
+// Avoid double negation (confusing)
+if (!(isEnabled != true)) { }  // Hard to read
+
+// Better
+if (isEnabled) { }
+
+// Boolean assignments in conditionals (potentially confusing)
+if (success = true) { }  // Assigns true to success, then evaluates to true
+// This is probably not what you meant. To check equality, use ==
+if (success == true) { }  // Or simply: if (success) { }
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="strings.html" class="prev"><i class="fas fa-arrow-left"></i> Strings</a>
+                        <a href="if-else.html" class="next">If...Else <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

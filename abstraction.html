@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstraction in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Abstraction in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Abstraction</h3>
+                        <p>Abstraction is one of the four fundamental principles of Object-Oriented Programming (OOP). It's the process of hiding complex implementation details and showing only the necessary features of an object.</p>
+                        
+                        <div class="example-box">
+                            <h4>Why Use Abstraction?</h4>
+                            <ul>
+                                <li>Simplifies complex systems by hiding unnecessary details</li>
+                                <li>Reduces complexity and increases code maintainability</li>
+                                <li>Allows focusing on what an object does rather than how it does it</li>
+                                <li>Creates a clear separation between interface and implementation</li>
+                                <li>Promotes code reusability and modular design</li>
+                                <li>Enables changes to implementation without affecting client code</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Abstraction vs. Encapsulation</h3>
+                        <p>Although abstraction and encapsulation are related concepts, they serve different purposes in OOP:</p>
+                        
+                        <div class="example-box">
+                            <h4>Differences Between Abstraction and Encapsulation</h4>
+                            <table>
+                                <tr>
+                                    <th>Abstraction</th>
+                                    <th>Encapsulation</th>
+                                </tr>
+                                <tr>
+                                    <td>Focuses on what an object does</td>
+                                    <td>Focuses on how the object achieves its functionality</td>
+                                </tr>
+                                <tr>
+                                    <td>Hides complexity by providing simple interfaces</td>
+                                    <td>Wraps data and methods into a single unit</td>
+                                </tr>
+                                <tr>
+                                    <td>About creating a conceptual boundary</td>
+                                    <td>About restricting access to internal details</td>
+                                </tr>
+                                <tr>
+                                    <td>Implemented using interfaces and abstract classes</td>
+                                    <td>Implemented using access modifiers (private, protected, etc.)</td>
+                                </tr>
+                                <tr>
+                                    <td>Design level concept</td>
+                                    <td>Implementation level concept</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Abstract Classes and Methods</h3>
+                        <p>C# provides the <code>abstract</code> keyword to implement abstraction. Abstract classes cannot be instantiated and may contain abstract methods that derived classes must implement.</p>
+                        
+                        <div class="example-box">
+                            <h4>Abstract Class Syntax</h4>
+                            <pre><code>
+// Abstract class
+public abstract class Shape
+{
+    // Regular property
+    public string Color { get; set; }
+    
+    // Regular constructor
+    public Shape(string color)
+    {
+        Color = color;
+    }
+    
+    // Regular method with implementation
+    public void SetColor(string color)
+    {
+        Color = color;
+        Console.WriteLine($"Shape color set to {color}");
+    }
+    
+    // Abstract method - no implementation
+    public abstract double CalculateArea();
+    
+    // Abstract method - no implementation
+    public abstract void Draw();
+    
+    // Virtual method with implementation that can be overridden
+    public virtual string GetDescription()
+    {
+        return $"A shape with color {Color}";
+    }
+}
+
+// Concrete class inheriting from abstract class
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius, string color) : base(color)
+    {
+        Radius = radius;
+    }
+    
+    // Implementation of abstract method
+    public override double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+    
+    // Implementation of abstract method
+    public override void Draw()
+    {
+        Console.WriteLine($"Drawing a circle with radius {Radius} and color {Color}");
+    }
+    
+    // Override of virtual method
+    public override string GetDescription()
+    {
+        return $"A circle with radius {Radius} and color {Color}";
+    }
+}
+
+// Usage
+// Shape shape = new Shape("Red");  // Error: Cannot create an instance of an abstract class
+
+Shape circle = new Circle(5, "Blue");
+circle.Draw();  // Outputs: "Drawing a circle with radius 5 and color Blue"
+Console.WriteLine($"Area: {circle.CalculateArea()}");  // Outputs: "Area: 78.54..."
+Console.WriteLine(circle.GetDescription());  // Outputs: "A circle with radius 5 and color Blue"
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about abstract classes and methods:</p>
+                                <ul>
+                                    <li>Abstract classes cannot be instantiated directly</li>
+                                    <li>Abstract classes can contain both abstract methods (without implementation) and concrete methods (with implementation)</li>
+                                    <li>Abstract methods are declared with the <code>abstract</code> keyword and have no body</li>
+                                    <li>Classes that inherit from an abstract class must implement all its abstract methods</li>
+                                    <li>Abstract classes can have constructors, fields, properties, and non-abstract methods</li>
+                                    <li>A class with at least one abstract method must be declared abstract</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Interfaces as Abstraction Tools</h3>
+                        <p>Interfaces represent another way to achieve abstraction in C#. An interface defines a contract but contains no implementation.</p>
+                        
+                        <div class="example-box">
+                            <h4>Interface Example</h4>
+                            <pre><code>
+// Interface definition
+public interface IDatabase
+{
+    void Connect(string connectionString);
+    void Disconnect();
+    List<T> ExecuteQuery<T>(string query);
+    int ExecuteCommand(string command);
+}
+
+// Concrete implementation for SQL Server
+public class SqlServerDatabase : IDatabase
+{
+    private SqlConnection _connection;
+    
+    public void Connect(string connectionString)
+    {
+        Console.WriteLine("Connecting to SQL Server...");
+        _connection = new SqlConnection(connectionString);
+        _connection.Open();
+    }
+    
+    public void Disconnect()
+    {
+        Console.WriteLine("Disconnecting from SQL Server...");
+        if (_connection != null && _connection.State == ConnectionState.Open)
+        {
+            _connection.Close();
+        }
+    }
+    
+    public List<T> ExecuteQuery<T>(string query)
+    {
+        Console.WriteLine($"Executing SQL query: {query}");
+        // Implementation specific to SQL Server
+        return new List<T>();
+    }
+    
+    public int ExecuteCommand(string command)
+    {
+        Console.WriteLine($"Executing SQL command: {command}");
+        // Implementation specific to SQL Server
+        return 0;
+    }
+}
+
+// Concrete implementation for MongoDB
+public class MongoDatabase : IDatabase
+{
+    private MongoClient _client;
+    private IMongoDatabase _database;
+    
+    public void Connect(string connectionString)
+    {
+        Console.WriteLine("Connecting to MongoDB...");
+        _client = new MongoClient(connectionString);
+        _database = _client.GetDatabase("mydb");
+    }
+    
+    public void Disconnect()
+    {
+        Console.WriteLine("Disconnecting from MongoDB...");
+        // MongoDB handles connection pooling automatically
+    }
+    
+    public List<T> ExecuteQuery<T>(string query)
+    {
+        Console.WriteLine($"Executing MongoDB query: {query}");
+        // Implementation specific to MongoDB
+        return new List<T>();
+    }
+    
+    public int ExecuteCommand(string command)
+    {
+        Console.WriteLine($"Executing MongoDB command: {command}");
+        // Implementation specific to MongoDB
+        return 0;
+    }
+}
+
+// Client code using abstraction
+public class DataRepository
+{
+    private IDatabase _database;
+    
+    public DataRepository(IDatabase database)
+    {
+        _database = database;
+    }
+    
+    public void Initialize(string connectionString)
+    {
+        _database.Connect(connectionString);
+    }
+    
+    public List<User> GetAllUsers()
+    {
+        return _database.ExecuteQuery<User>("SELECT * FROM Users");
+    }
+    
+    public User GetUserById(int id)
+    {
+        return _database.ExecuteQuery<User>($"SELECT * FROM Users WHERE Id = {id}").FirstOrDefault();
+    }
+    
+    public void Close()
+    {
+        _database.Disconnect();
+    }
+}
+
+// Usage
+public void Main()
+{
+    // Using SQL Server
+    IDatabase sqlDb = new SqlServerDatabase();
+    DataRepository sqlRepo = new DataRepository(sqlDb);
+    sqlRepo.Initialize("Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;");
+    
+    // Or using MongoDB
+    IDatabase mongoDb = new MongoDatabase();
+    DataRepository mongoRepo = new DataRepository(mongoDb);
+    mongoRepo.Initialize("mongodb://localhost:27017");
+    
+    // Client code works the same regardless of the database implementation
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about interfaces as abstraction tools:</p>
+                                <ul>
+                                    <li>Interfaces provide a blueprint for functionality without implementation details</li>
+                                    <li>They enable complete separation between what is done and how it is done</li>
+                                    <li>Client code can be written against interfaces rather than concrete types</li>
+                                    <li>Implementation details can change without affecting the client code</li>
+                                    <li>Multiple implementations can be swapped at runtime</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Real-World Abstraction</h3>
+                        <p>Abstraction is commonly used in frameworks, libraries, and application architecture to hide complexity and provide clean APIs.</p>
+                        
+                        <div class="example-box">
+                            <h4>Layered Architecture Example</h4>
+                            <pre><code>
+// Abstraction for the data access layer
+public interface IUserRepository
+{
+    User GetById(int id);
+    List<User> GetAll();
+    void Add(User user);
+    void Update(User user);
+    void Delete(int id);
+}
+
+// Abstraction for the business logic layer
+public interface IUserService
+{
+    User GetUser(int id);
+    List<User> GetAllUsers();
+    void CreateUser(UserDto userDto);
+    void UpdateUser(UserDto userDto);
+    void DeleteUser(int id);
+}
+
+// Concrete implementation of the repository
+public class SqlUserRepository : IUserRepository
+{
+    // Implementation using SQL database
+    public User GetById(int id) { /* Implementation */ }
+    public List<User> GetAll() { /* Implementation */ }
+    public void Add(User user) { /* Implementation */ }
+    public void Update(User user) { /* Implementation */ }
+    public void Delete(int id) { /* Implementation */ }
+}
+
+// Concrete implementation of the service
+public class UserService : IUserService
+{
+    private readonly IUserRepository _userRepository;
+    
+    public UserService(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+    
+    public User GetUser(int id)
+    {
+        return _userRepository.GetById(id);
+    }
+    
+    public List<User> GetAllUsers()
+    {
+        return _userRepository.GetAll();
+    }
+    
+    public void CreateUser(UserDto userDto)
+    {
+        // Validate the user data
+        if (string.IsNullOrEmpty(userDto.Username))
+        {
+            throw new ArgumentException("Username cannot be empty");
+        }
+        
+        // Convert DTO to entity
+        var user = new User
+        {
+            Username = userDto.Username,
+            Email = userDto.Email,
+            CreatedDate = DateTime.Now
+        };
+        
+        // Save to repository
+        _userRepository.Add(user);
+    }
+    
+    public void UpdateUser(UserDto userDto)
+    {
+        // Implementation with business rules
+    }
+    
+    public void DeleteUser(int id)
+    {
+        // Implementation with business rules
+    }
+}
+
+// Controller/API layer uses the service abstraction
+public class UserController
+{
+    private readonly IUserService _userService;
+    
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+    
+    public User GetUser(int id)
+    {
+        return _userService.GetUser(id);
+    }
+    
+    public List<User> GetAllUsers()
+    {
+        return _userService.GetAllUsers();
+    }
+    
+    // More controller methods
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>This example demonstrates how abstraction is used in a layered architecture:</p>
+                                <ul>
+                                    <li>Each layer defines an abstraction (interface) that hides implementation details</li>
+                                    <li>Higher layers depend on abstractions of lower layers, not concrete implementations</li>
+                                    <li>Changes to implementation within a layer don't affect other layers</li>
+                                    <li>Testing is simplified by being able to mock or stub the abstractions</li>
+                                    <li>Different implementations can be easily swapped (e.g., changing from SQL to NoSQL)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>When to Use Abstract Classes vs. Interfaces</h3>
+                        
+                        <div class="example-box">
+                            <h4>Choosing Between Abstract Classes and Interfaces</h4>
+                            <p><strong>Use Abstract Classes when:</strong></p>
+                            <ul>
+                                <li>You want to share code among related classes</li>
+                                <li>You need to provide a base implementation of some methods</li>
+                                <li>Your abstraction requires state (fields) or constructors</li>
+                                <li>You want to declare non-public members or methods</li>
+                                <li>You expect the abstraction to evolve with new methods that derived classes don't need to implement</li>
+                            </ul>
+                            
+                            <p><strong>Use Interfaces when:</strong></p>
+                            <ul>
+                                <li>You want to define a contract that unrelated classes can implement</li>
+                                <li>You need multiple inheritance (a class can implement multiple interfaces)</li>
+                                <li>You're defining capability that can be used across different class hierarchies</li>
+                                <li>You're designing for interchangeable components</li>
+                                <li>You want to ensure complete separation between specification and implementation</li>
+                            </ul>
+                            
+                            <pre><code>
+// Example showing when to use abstract class
+public abstract class Animal
+{
+    // State (fields)
+    protected string Name;
+    protected int Age;
+    
+    // Constructor
+    public Animal(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+    
+    // Shared implementation
+    public void Sleep()
+    {
+        Console.WriteLine($"{Name} is sleeping");
+    }
+    
+    // Abstract method that must be implemented
+    public abstract void MakeSound();
+}
+
+// Example showing when to use interface
+public interface IPayable
+{
+    decimal CalculatePayment();
+    void ProcessPayment();
+}
+
+// Unrelated classes can implement the same interface
+public class Employee : IPayable
+{
+    public decimal HourlyRate { get; set; }
+    public int HoursWorked { get; set; }
+    
+    public decimal CalculatePayment()
+    {
+        return HourlyRate * HoursWorked;
+    }
+    
+    public void ProcessPayment()
+    {
+        // Process employee payment
+    }
+}
+
+public class Invoice : IPayable
+{
+    public decimal Amount { get; set; }
+    
+    public decimal CalculatePayment()
+    {
+        return Amount;
+    }
+    
+    public void ProcessPayment()
+    {
+        // Process invoice payment
+    }
+}
+
+// A class using both abstract class and interface
+public class Dog : Animal, ITrainable
+{
+    public Dog(string name, int age) : base(name, age) { }
+    
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+    
+    public void Train()
+    {
+        Console.WriteLine($"{Name} is being trained");
+    }
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Abstraction Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Effective Abstraction</h4>
+                            <ul>
+                                <li><strong>Design for change</strong> - Create abstractions that can accommodate future changes</li>
+                                <li><strong>Program to abstractions</strong> - Depend on interfaces or abstract classes, not concrete implementations</li>
+                                <li><strong>Follow SOLID principles</strong> - Especially the Dependency Inversion Principle</li>
+                                <li><strong>Keep abstractions focused</strong> - Each abstraction should have a single, clear purpose</li>
+                                <li><strong>Balance abstraction and complexity</strong> - Too much abstraction can make code hard to understand</li>
+                                <li><strong>Consider the client perspective</strong> - Design abstractions from the client code's point of view</li>
+                                <li><strong>Hide implementation details</strong> - Don't leak implementation details through your abstractions</li>
+                                <li><strong>Be consistent</strong> - Use consistent patterns and naming across your abstractions</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Abstraction Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Premature abstraction</strong> - Creating abstractions before understanding the problem space</li>
+                                <li><strong>Over-abstracting</strong> - Adding abstraction layers that don't provide meaningful benefits</li>
+                                <li><strong>Leaky abstractions</strong> - Exposing implementation details that clients shouldn't need to know</li>
+                                <li><strong>Incorrect abstraction level</strong> - Abstracting at too low or too high a level</li>
+                                <li><strong>"One size fits all" abstractions</strong> - Creating abstractions that try to do too much</li>
+                                <li><strong>Breaking the Interface Segregation Principle</strong> - Creating "fat" interfaces with too many methods</li>
+                                <li><strong>Rigid abstractions</strong> - Designing abstractions that are difficult to adapt as requirements change</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="interfaces.html" class="prev"><i class="fas fa-arrow-left"></i> Interfaces</a>
+                        <a href="enums.html" class="next">Enums <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

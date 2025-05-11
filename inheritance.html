@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inheritance in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Inheritance in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Inheritance</h3>
+                        <p>Inheritance is a fundamental concept in Object-Oriented Programming that allows a class to inherit properties and behaviors from another class. It promotes code reuse and establishes an "is-a" relationship between classes.</p>
+                        
+                        <div class="example-box">
+                            <h4>Why Use Inheritance?</h4>
+                            <ul>
+                                <li>Reuse code from existing classes</li>
+                                <li>Create specialized versions of classes</li>
+                                <li>Build hierarchical class relationships</li>
+                                <li>Implement common behavior in a base class</li>
+                                <li>Extend functionality without modifying existing code</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Inheritance Syntax</h3>
+                        <p>In C#, inheritance is implemented using the colon (:) syntax. A class that inherits from another is called a derived class (or subclass), while the class being inherited from is called a base class (or superclass).</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating a Base and Derived Class</h4>
+                            <pre><code>
+// Base class
+public class Animal
+{
+    // Fields
+    public string Name { get; set; }
+    public int Age { get; set; }
+    
+    // Constructor
+    public Animal(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+    
+    // Methods
+    public void Eat()
+    {
+        Console.WriteLine($"{Name} is eating.");
+    }
+    
+    public void Sleep()
+    {
+        Console.WriteLine($"{Name} is sleeping.");
+    }
+    
+    public virtual void MakeSound()
+    {
+        Console.WriteLine($"{Name} makes a sound.");
+    }
+}
+
+// Derived class inheriting from Animal
+public class Dog : Animal
+{
+    // Additional property specific to Dog
+    public string Breed { get; set; }
+    
+    // Constructor that calls the base class constructor
+    public Dog(string name, int age, string breed) : base(name, age)
+    {
+        Breed = breed;
+    }
+    
+    // Override the MakeSound method from the base class
+    public override void MakeSound()
+    {
+        Console.WriteLine($"{Name} barks loudly!");
+    }
+    
+    // Additional method specific to Dog
+    public void Fetch()
+    {
+        Console.WriteLine($"{Name} fetches the ball.");
+    }
+}
+
+// Usage
+Dog dog = new Dog("Rex", 3, "German Shepherd");
+dog.Eat();        // Inherited from Animal
+dog.Sleep();      // Inherited from Animal
+dog.MakeSound();  // Overridden in Dog
+dog.Fetch();      // Defined in Dog
+Console.WriteLine($"{dog.Name} is a {dog.Breed}.");  // Accessing properties
+</code></pre>
+                            <div class="explanation">
+                                <p>Key concepts in this example:</p>
+                                <ul>
+                                    <li>Dog inherits all public and protected members from Animal</li>
+                                    <li>The derived class constructor calls the base class constructor using the <code>base</code> keyword</li>
+                                    <li>The <code>virtual</code> keyword allows methods to be overridden in derived classes</li>
+                                    <li>The <code>override</code> keyword indicates a method that replaces a virtual method from the base class</li>
+                                    <li>The derived class can define additional members specific to it</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Inheritance Types</h3>
+                        <p>C# supports single inheritance for classes (one direct base class) but can implement multiple interfaces. This approach prevents the "diamond problem" found in languages with multiple inheritance.</p>
+                        
+                        <div class="example-box">
+                            <h4>Single Inheritance</h4>
+                            <pre><code>
+public class A { /* ... */ }
+public class B : A { /* ... */ }     // B inherits from A
+public class C : B { /* ... */ }     // C inherits from B (and indirectly from A)
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Multilevel Inheritance</h4>
+                            <pre><code>
+public class Vehicle
+{
+    public void Start() { Console.WriteLine("Vehicle started"); }
+}
+
+public class Car : Vehicle
+{
+    public void Drive() { Console.WriteLine("Car is driving"); }
+}
+
+public class SportsCar : Car
+{
+    public void Accelerate() { Console.WriteLine("SportsCar accelerating quickly"); }
+}
+
+// Usage
+SportsCar ferrari = new SportsCar();
+ferrari.Start();      // From Vehicle
+ferrari.Drive();      // From Car
+ferrari.Accelerate(); // From SportsCar
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Hierarchical Inheritance</h4>
+                            <pre><code>
+public class Animal
+{
+    public void Breathe() { Console.WriteLine("Breathing"); }
+}
+
+public class Mammal : Animal
+{
+    public void FeedMilk() { Console.WriteLine("Feeding milk"); }
+}
+
+public class Bird : Animal
+{
+    public void Fly() { Console.WriteLine("Flying"); }
+}
+
+public class Fish : Animal
+{
+    public void Swim() { Console.WriteLine("Swimming"); }
+}
+
+// All three classes inherit from Animal
+Mammal dog = new Mammal();
+Bird eagle = new Bird();
+Fish shark = new Fish();
+
+dog.Breathe();   // From Animal
+eagle.Breathe(); // From Animal
+shark.Breathe(); // From Animal
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Method Overriding and the Virtual Keyword</h3>
+                        <p>Method overriding allows a derived class to provide a specific implementation of a method that is already defined in the base class. The base class method must be marked as <code>virtual</code>, and the derived class method must use the <code>override</code> keyword.</p>
+                        
+                        <div class="example-box">
+                            <h4>Virtual and Override Methods</h4>
+                            <pre><code>
+public class Shape
+{
+    public string Name { get; set; }
+    
+    // Virtual method that can be overridden
+    public virtual void Draw()
+    {
+        Console.WriteLine($"Drawing a {Name}");
+    }
+    
+    // Virtual method that calculates area
+    public virtual double CalculateArea()
+    {
+        return 0;
+    }
+}
+
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius)
+    {
+        Name = "Circle";
+        Radius = radius;
+    }
+    
+    // Override the Draw method
+    public override void Draw()
+    {
+        // Call the base implementation first
+        base.Draw();
+        Console.WriteLine($"with radius {Radius}");
+    }
+    
+    // Override the CalculateArea method
+    public override double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+}
+
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height)
+    {
+        Name = "Rectangle";
+        Width = width;
+        Height = height;
+    }
+    
+    // Override the Draw method
+    public override void Draw()
+    {
+        // Completely replace the base implementation
+        Console.WriteLine($"Drawing a {Name} with width {Width} and height {Height}");
+    }
+    
+    // Override the CalculateArea method
+    public override double CalculateArea()
+    {
+        return Width * Height;
+    }
+}
+
+// Usage
+Shape[] shapes = { new Circle(5), new Rectangle(4, 6) };
+
+foreach (var shape in shapes)
+{
+    shape.Draw();
+    Console.WriteLine($"Area: {shape.CalculateArea()}");
+    Console.WriteLine();
+}
+
+/* Output:
+Drawing a Circle
+with radius 5
+Area: 78.53981633974483
+
+Drawing a Rectangle with width 4 and height 6
+Area: 24
+*/
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about virtual and override methods:</p>
+                                <ul>
+                                    <li>The <code>virtual</code> keyword indicates that a method can be overridden in derived classes</li>
+                                    <li>The <code>override</code> keyword indicates that a method is replacing a virtual method from the base class</li>
+                                    <li>The <code>base</code> keyword can be used to call the base class implementation from the overriding method</li>
+                                    <li>Overridden methods can completely replace or extend the base functionality</li>
+                                    <li>Method overriding enables polymorphic behavior (different implementations of the same method)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Access Modifiers and Inheritance</h3>
+                        <p>Access modifiers control which members of a base class are accessible to derived classes.</p>
+                        
+                        <div class="example-box">
+                            <h4>Member Accessibility in Inheritance</h4>
+                            <table>
+                                <tr>
+                                    <th>Access Modifier</th>
+                                    <th>Accessible from Derived Class?</th>
+                                </tr>
+                                <tr>
+                                    <td><code>public</code></td>
+                                    <td>Yes - accessible from anywhere</td>
+                                </tr>
+                                <tr>
+                                    <td><code>protected</code></td>
+                                    <td>Yes - accessible only in the derived class, not from outside</td>
+                                </tr>
+                                <tr>
+                                    <td><code>internal</code></td>
+                                    <td>Yes - if in the same assembly</td>
+                                </tr>
+                                <tr>
+                                    <td><code>protected internal</code></td>
+                                    <td>Yes - from derived classes or within the same assembly</td>
+                                </tr>
+                                <tr>
+                                    <td><code>private</code></td>
+                                    <td>No - only accessible in the declaring class</td>
+                                </tr>
+                                <tr>
+                                    <td><code>private protected</code></td>
+                                    <td>Yes - but only if the derived class is in the same assembly</td>
+                                </tr>
+                            </table>
+                            
+                            <pre><code>
+public class Base
+{
+    public int PublicField = 1;        // Accessible from anywhere
+    protected int ProtectedField = 2;  // Accessible from derived classes
+    private int PrivateField = 3;      // Not accessible from derived classes
+    internal int InternalField = 4;    // Accessible within the same assembly
+    
+    protected internal int ProtectedInternalField = 5;  // Accessible from derived classes or within the same assembly
+    private protected int PrivateProtectedField = 6;    // Accessible from derived classes within the same assembly
+}
+
+public class Derived : Base
+{
+    public void AccessBaseMembers()
+    {
+        Console.WriteLine(PublicField);             // OK
+        Console.WriteLine(ProtectedField);          // OK
+        // Console.WriteLine(PrivateField);         // Error - not accessible
+        Console.WriteLine(InternalField);           // OK if in the same assembly
+        Console.WriteLine(ProtectedInternalField);  // OK
+        Console.WriteLine(PrivateProtectedField);   // OK if in the same assembly
+    }
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>The base Keyword</h3>
+                        <p>The <code>base</code> keyword is used to access members of the base class from within a derived class.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using the base Keyword</h4>
+                            <pre><code>
+public class Person
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    
+    public Person(string firstName, string lastName)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+    }
+    
+    public virtual void Introduce()
+    {
+        Console.WriteLine($"Hi, I'm {FirstName} {LastName}.");
+    }
+}
+
+public class Student : Person
+{
+    public int StudentId { get; set; }
+    
+    // Calling the base class constructor
+    public Student(string firstName, string lastName, int studentId) 
+        : base(firstName, lastName)
+    {
+        StudentId = studentId;
+    }
+    
+    // Extending the base class method
+    public override void Introduce()
+    {
+        // Call the base class implementation first
+        base.Introduce();
+        
+        // Add additional behavior
+        Console.WriteLine($"My student ID is {StudentId}.");
+    }
+    
+    // Method to show full details
+    public void ShowDetails()
+    {
+        Console.WriteLine($"Name: {base.FirstName} {base.LastName}");
+        Console.WriteLine($"ID: {StudentId}");
+    }
+}
+
+// Usage
+Student student = new Student("John", "Doe", 12345);
+student.Introduce();
+/* Output:
+Hi, I'm John Doe.
+My student ID is 12345.
+*/
+</code></pre>
+                            <div class="explanation">
+                                <p>Uses of the <code>base</code> keyword:</p>
+                                <ul>
+                                    <li>Call the base class constructor using <code>base(parameters)</code> in the derived class constructor</li>
+                                    <li>Call a base class method from an overriding method using <code>base.MethodName()</code></li>
+                                    <li>Access base class members using <code>base.MemberName</code></li>
+                                    <li>Clarify which implementation to use when names are the same in base and derived classes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Preventing Inheritance and Overriding</h3>
+                        <p>C# provides keywords to prevent inheritance and method overriding when needed.</p>
+                        
+                        <div class="example-box">
+                            <h4>The sealed Keyword</h4>
+                            <pre><code>
+// Sealed class - cannot be inherited from
+public sealed class FinalClass
+{
+    public void DoSomething()
+    {
+        Console.WriteLine("This method is in a sealed class");
+    }
+}
+
+// Error: Cannot derive from sealed type 'FinalClass'
+// public class AttemptedDerivedClass : FinalClass
+// {
+// }
+
+// Regular class with a sealed method
+public class BaseWithSealedMethod
+{
+    public virtual void RegularMethod()
+    {
+        Console.WriteLine("This method can be overridden");
+    }
+    
+    public virtual void AnotherMethod()
+    {
+        Console.WriteLine("This method can be overridden");
+    }
+}
+
+public class DerivedWithSealedMethod : BaseWithSealedMethod
+{
+    // Regular override
+    public override void RegularMethod()
+    {
+        Console.WriteLine("This method overrides the base method");
+    }
+    
+    // Sealed override - cannot be further overridden in derived classes
+    public sealed override void AnotherMethod()
+    {
+        Console.WriteLine("This method overrides the base method and is sealed");
+    }
+}
+
+public class FurtherDerived : DerivedWithSealedMethod
+{
+    // This is allowed
+    public override void RegularMethod()
+    {
+        Console.WriteLine("This method overrides again");
+    }
+    
+    // Error: Cannot override sealed method
+    // public override void AnotherMethod()
+    // {
+    // }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Ways to restrict inheritance:</p>
+                                <ul>
+                                    <li>Use <code>sealed</code> on a class to prevent any classes from inheriting from it</li>
+                                    <li>Use <code>sealed override</code> on a method to allow overriding in the current class but prevent further overriding in derived classes</li>
+                                    <li>Make a class <code>static</code> to prevent instantiation and inheritance</li>
+                                    <li>Use <code>private</code> constructors to prevent external inheritance (but allow nested classes to inherit)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Abstract Classes and Methods</h3>
+                        <p>Abstract classes cannot be instantiated and may contain abstract methods that derived classes must implement.</p>
+                        
+                        <div class="example-box">
+                            <h4>Abstract Class Example</h4>
+                            <pre><code>
+// Abstract class - cannot be instantiated directly
+public abstract class Shape
+{
+    public string Color { get; set; }
+    
+    // Constructor in an abstract class
+    public Shape(string color)
+    {
+        Color = color;
+    }
+    
+    // Regular method - implementation provided
+    public void SetColor(string color)
+    {
+        Color = color;
+        Console.WriteLine($"Shape color set to {color}");
+    }
+    
+    // Abstract method - no implementation, must be overridden
+    public abstract double CalculateArea();
+    
+    // Abstract method - no implementation, must be overridden
+    public abstract void Draw();
+    
+    // Virtual method - has implementation but can be overridden
+    public virtual void DisplayInfo()
+    {
+        Console.WriteLine($"This is a {GetType().Name} with color {Color}");
+    }
+}
+
+// Concrete class implementing the abstract class
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius, string color) : base(color)
+    {
+        Radius = radius;
+    }
+    
+    // Implementation of abstract method
+    public override double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+    
+    // Implementation of abstract method
+    public override void Draw()
+    {
+        Console.WriteLine($"Drawing a {Color} circle with radius {Radius}");
+    }
+}
+
+// Another concrete class implementing the abstract class
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height, string color) : base(color)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    // Implementation of abstract method
+    public override double CalculateArea()
+    {
+        return Width * Height;
+    }
+    
+    // Implementation of abstract method
+    public override void Draw()
+    {
+        Console.WriteLine($"Drawing a {Color} rectangle with width {Width} and height {Height}");
+    }
+    
+    // Override virtual method
+    public override void DisplayInfo()
+    {
+        base.DisplayInfo();
+        Console.WriteLine($"Width: {Width}, Height: {Height}");
+    }
+}
+
+// Usage
+// Shape shape = new Shape("Red");  // Error: Cannot create an instance of an abstract class
+
+Shape circle = new Circle(5, "Red");
+Shape rectangle = new Rectangle(4, 6, "Blue");
+
+circle.Draw();
+rectangle.Draw();
+
+Console.WriteLine($"Circle area: {circle.CalculateArea()}");
+Console.WriteLine($"Rectangle area: {rectangle.CalculateArea()}");
+
+circle.DisplayInfo();
+rectangle.DisplayInfo();
+
+/* Output:
+Drawing a Red circle with radius 5
+Drawing a Blue rectangle with width 4 and height 6
+Circle area: 78.53981633974483
+Rectangle area: 24
+This is a Circle with color Red
+This is a Rectangle with color Blue
+Width: 4, Height: 6
+*/
+</code></pre>
+                            <div class="explanation">
+                                <p>Key characteristics of abstract classes:</p>
+                                <ul>
+                                    <li>Cannot be instantiated directly</li>
+                                    <li>Can contain both abstract methods (no implementation) and concrete methods (with implementation)</li>
+                                    <li>Can have constructors, fields, properties, and non-abstract methods</li>
+                                    <li>Must be inherited by a derived class to be used</li>
+                                    <li>Derived classes must implement all abstract methods</li>
+                                    <li>Useful for defining a common base with some implementation and some required behaviors</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Inheritance Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Effective Inheritance</h4>
+                            <ul>
+                                <li><strong>Use inheritance for "is-a" relationships</strong> - A Car "is-a" Vehicle, not a Car "has-a" Vehicle</li>
+                                <li><strong>Keep inheritance hierarchies shallow</strong> - Deep hierarchies can be confusing and hard to maintain</li>
+                                <li><strong>Follow the Liskov Substitution Principle</strong> - Derived classes should be substitutable for their base class</li>
+                                <li><strong>Design for inheritance or prohibit it</strong> - Either make a class properly inheritable or seal it</li>
+                                <li><strong>Prefer composition over inheritance</strong> when appropriate - "has-a" relationships are better modeled with composition</li>
+                                <li><strong>Document for inheritors</strong> - Document the intended way to extend your class</li>
+                                <li><strong>Consider interfaces</strong> - Sometimes interfaces provide a more flexible solution than inheritance</li>
+                                <li><strong>Use abstract base classes</strong> for common implementation with required behaviors</li>
+                                <li><strong>Ensure that base class invariants are preserved</strong> in derived classes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Inheritance Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Breaking encapsulation</strong> - Exposing private implementation details to derived classes</li>
+                                <li><strong>Using inheritance for code reuse only</strong> without a proper "is-a" relationship</li>
+                                <li><strong>Creating fragile base classes</strong> - Changes in base classes can break derived classes</li>
+                                <li><strong>Not considering the implications of overrides</strong> on the base class behavior</li>
+                                <li><strong>Creating overly deep inheritance hierarchies</strong> - More than 2-3 levels can become unwieldy</li>
+                                <li><strong>Using "protected" too freely</strong> - Exposing internal state through protected members</li>
+                                <li><strong>Not validating inputs in overridden methods</strong> - Always ensure method contracts are maintained</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="properties.html" class="prev"><i class="fas fa-arrow-left"></i> Properties</a>
+                        <a href="polymorphism.html" class="next">Polymorphism <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

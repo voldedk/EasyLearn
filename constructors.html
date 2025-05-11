@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructors in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Constructors in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Constructors</h3>
+                        <p>Constructors are special methods that are automatically called when an object is created. They initialize the object's data and prepare it for use. Constructors are essential for setting the initial state of an object.</p>
+                        
+                        <div class="example-box">
+                            <h4>Characteristics of Constructors</h4>
+                            <ul>
+                                <li>Have the same name as the class</li>
+                                <li>Do not have a return type (not even void)</li>
+                                <li>Are called automatically when an object is created</li>
+                                <li>Can be overloaded (multiple constructors with different parameters)</li>
+                                <li>Can call other constructors using <code>this</code> or <code>base</code> keywords</li>
+                                <li>Can have access modifiers (public, private, protected, internal)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Default Constructor</h3>
+                        <p>A default constructor is a constructor that takes no parameters. If you don't define any constructors in your class, C# automatically provides a default constructor that initializes all fields to their default values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Implicit Default Constructor</h4>
+                            <pre><code>
+public class Person
+{
+    // Fields
+    public string Name;
+    public int Age;
+    
+    // No constructor defined - C# provides a default constructor
+}
+
+// Usage
+Person person = new Person();  // Default constructor is called
+// At this point, Name is null and Age is 0
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Explicit Default Constructor</h4>
+                            <pre><code>
+public class Person
+{
+    // Fields
+    public string Name;
+    public int Age;
+    
+    // Explicit default constructor
+    public Person()
+    {
+        Name = "Unknown";
+        Age = 0;
+        Console.WriteLine("Default constructor called");
+    }
+}
+
+// Usage
+Person person = new Person();  // Prints: "Default constructor called"
+// At this point, Name is "Unknown" and Age is 0
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Important notes about default constructors:</p>
+                                <ul>
+                                    <li>If you define any constructor (with parameters), C# will no longer provide an implicit default constructor</li>
+                                    <li>If you still need a no-parameter constructor, you must define it explicitly</li>
+                                    <li>Default constructors are useful for setting initial values for fields</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Parameterized Constructors</h3>
+                        <p>Parameterized constructors accept one or more parameters, allowing you to initialize an object with specific values when it's created.</p>
+                        
+                        <div class="example-box">
+                            <h4>Single Parameterized Constructor</h4>
+                            <pre><code>
+public class Person
+{
+    // Fields
+    public string Name;
+    public int Age;
+    
+    // Parameterized constructor
+    public Person(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+}
+
+// Usage
+Person person = new Person("John Doe", 30);
+// At this point, Name is "John Doe" and Age is 30
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Constructor Overloading</h4>
+                            <p>You can define multiple constructors with different parameter lists, a technique known as constructor overloading.</p>
+                            
+                            <pre><code>
+public class Person
+{
+    // Fields
+    public string FirstName;
+    public string LastName;
+    public int Age;
+    
+    // Default constructor
+    public Person()
+    {
+        FirstName = "Unknown";
+        LastName = "Unknown";
+        Age = 0;
+    }
+    
+    // Constructor with full name
+    public Person(string firstName, string lastName)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = 0;
+    }
+    
+    // Constructor with full name and age
+    public Person(string firstName, string lastName, int age)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+    }
+}
+
+// Usage
+Person person1 = new Person();                      // Unknown Unknown, 0
+Person person2 = new Person("John", "Doe");         // John Doe, 0
+Person person3 = new Person("Jane", "Smith", 25);   // Jane Smith, 25
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Benefits of constructor overloading:</p>
+                                <ul>
+                                    <li>Provides flexibility in object creation</li>
+                                    <li>Allows users to create objects with only the information they have</li>
+                                    <li>Can set default values for optional parameters</li>
+                                    <li>Makes the class more versatile</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Constructor Chaining</h3>
+                        <p>Constructor chaining allows one constructor to call another constructor in the same class. This helps avoid code duplication and maintains a single point of initialization.</p>
+                        
+                        <div class="example-box">
+                            <h4>Using the this Keyword for Constructor Chaining</h4>
+                            <pre><code>
+public class Person
+{
+    public string FirstName;
+    public string LastName;
+    public int Age;
+    public string Email;
+    
+    // Primary constructor that initializes all fields
+    public Person(string firstName, string lastName, int age, string email)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+        Email = email;
+        
+        ValidateData();  // Common validation logic
+    }
+    
+    // Calls the primary constructor with default email
+    public Person(string firstName, string lastName, int age)
+        : this(firstName, lastName, age, "unknown@example.com")
+    {
+        // No additional code needed here
+    }
+    
+    // Calls the previous constructor with default age
+    public Person(string firstName, string lastName)
+        : this(firstName, lastName, 0)
+    {
+        // No additional code needed here
+    }
+    
+    // Calls the previous constructor with default last name
+    public Person(string firstName)
+        : this(firstName, "Unknown")
+    {
+        // No additional code needed here
+    }
+    
+    // Default constructor calls the primary constructor with all defaults
+    public Person()
+        : this("Unknown", "Unknown", 0, "unknown@example.com")
+    {
+        // No additional code needed here
+    }
+    
+    private void ValidateData()
+    {
+        // Common validation logic used by all constructors
+        if (Age < 0)
+        {
+            Age = 0;
+        }
+        
+        if (string.IsNullOrEmpty(Email))
+        {
+            Email = "unknown@example.com";
+        }
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Advantages of constructor chaining:</p>
+                                <ul>
+                                    <li>Avoids code duplication by centralizing initialization logic</li>
+                                    <li>Ensures consistent object initialization</li>
+                                    <li>Makes the code more maintainable (changes only need to be made in one place)</li>
+                                    <li>Simplifies constructor overloading</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Static Constructors</h3>
+                        <p>A static constructor initializes static data or performs actions that need to be executed only once when the class is first loaded. It's called automatically before any static members are accessed or any instance of the class is created.</p>
+                        
+                        <div class="example-box">
+                            <h4>Static Constructor Example</h4>
+                            <pre><code>
+public class Database
+{
+    // Static fields
+    public static string ConnectionString;
+    public static bool IsInitialized;
+    
+    // Static constructor - called once when the class is loaded
+    static Database()
+    {
+        Console.WriteLine("Static constructor called");
+        ConnectionString = "Data Source=myserver;Initial Catalog=mydb;";
+        IsInitialized = true;
+        
+        // Could also load configuration from a file
+        // LoadConfiguration();
+    }
+    
+    // Instance constructor
+    public Database()
+    {
+        Console.WriteLine("Instance constructor called");
+        // Instance initialization code
+    }
+    
+    // Static method
+    public static void Connect()
+    {
+        Console.WriteLine($"Connecting using: {ConnectionString}");
+    }
+}
+
+// Usage
+class Program
+{
+    static void Main()
+    {
+        // Static constructor is called before accessing any static member
+        Console.WriteLine($"Is DB initialized: {Database.IsInitialized}");
+        
+        // Static constructor is not called again
+        Database.Connect();
+        
+        // Static constructor is not called again, but instance constructor is
+        Database db1 = new Database();
+        Database db2 = new Database();
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Characteristics of static constructors:</p>
+                                <ul>
+                                    <li>Cannot have access modifiers (always implicitly private)</li>
+                                    <li>Cannot take parameters</li>
+                                    <li>Cannot be called directly (called automatically by the runtime)</li>
+                                    <li>Executed only once, before any static members are accessed or instances created</li>
+                                    <li>Useful for initializing static fields or performing one-time setup</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Private Constructors</h3>
+                        <p>A private constructor prevents the class from being instantiated outside of the class itself. This is useful for utility classes with only static members or for implementing the Singleton pattern.</p>
+                        
+                        <div class="example-box">
+                            <h4>Utility Class with Private Constructor</h4>
+                            <pre><code>
+// Utility class with only static methods
+public class MathUtility
+{
+    // Private constructor prevents instantiation
+    private MathUtility()
+    {
+        // Cannot be called from outside the class
+    }
+    
+    // Static methods
+    public static double Add(double a, double b) => a + b;
+    public static double Subtract(double a, double b) => a - b;
+    public static double Multiply(double a, double b) => a * b;
+    public static double Divide(double a, double b) => b != 0 ? a / b : throw new DivideByZeroException();
+}
+
+// Usage
+class Program
+{
+    static void Main()
+    {
+        // Using static methods
+        double result = MathUtility.Add(5, 3);
+        
+        // Cannot create an instance
+        // MathUtility math = new MathUtility();  // Compilation error
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Singleton Pattern Using Private Constructor</h4>
+                            <pre><code>
+// Singleton class - only one instance can exist
+public class Logger
+{
+    // Static instance field
+    private static Logger instance;
+    
+    // Private constructor prevents external instantiation
+    private Logger()
+    {
+        // Initialization code
+        Console.WriteLine("Logger initialized");
+    }
+    
+    // Public method to access the single instance
+    public static Logger GetInstance()
+    {
+        // Create the instance if it doesn't exist yet
+        if (instance == null)
+        {
+            instance = new Logger();
+        }
+        
+        return instance;
+    }
+    
+    // Instance methods
+    public void Log(string message)
+    {
+        Console.WriteLine($"[{DateTime.Now}] {message}");
+    }
+}
+
+// Usage
+class Program
+{
+    static void Main()
+    {
+        // Get the singleton instance
+        Logger logger1 = Logger.GetInstance();
+        Logger logger2 = Logger.GetInstance();
+        
+        // Both variables reference the same instance
+        logger1.Log("Test message");
+        
+        // Cannot create new instances directly
+        // Logger logger3 = new Logger();  // Compilation error
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Uses for private constructors:</p>
+                                <ul>
+                                    <li>Preventing instantiation of utility classes with only static members</li>
+                                    <li>Implementing the Singleton pattern (ensuring only one instance exists)</li>
+                                    <li>Controlling object creation through factory methods</li>
+                                    <li>Preventing inheritance (a class with only private constructors cannot be inherited)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Object and Collection Initializers</h3>
+                        <p>C# provides a concise syntax for initializing objects and collections, making it easier to create and set up objects with initial values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Object Initializers</h4>
+                            <pre><code>
+public class Person
+{
+    // Properties
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int Age { get; set; }
+    public List<string> Skills { get; set; }
+    
+    // Default constructor
+    public Person()
+    {
+        Skills = new List<string>();
+    }
+    
+    // Parameterized constructor
+    public Person(string firstName, string lastName)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Skills = new List<string>();
+    }
+}
+
+// Usage
+void Main()
+{
+    // Traditional way
+    Person person1 = new Person();
+    person1.FirstName = "John";
+    person1.LastName = "Doe";
+    person1.Age = 30;
+    
+    // Using object initializer
+    Person person2 = new Person 
+    {
+        FirstName = "Jane",
+        LastName = "Smith",
+        Age = 25
+    };
+    
+    // With parameterized constructor and object initializer
+    Person person3 = new Person("Bob", "Johnson") 
+    {
+        Age = 35
+    };
+    
+    // Nested object initializers
+    Person person4 = new Person 
+    {
+        FirstName = "Alice",
+        LastName = "Brown",
+        Age = 28,
+        Skills = new List<string> { "C#", "SQL", "HTML", "CSS" }
+    };
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Collection Initializers</h4>
+                            <pre><code>
+// Creating and initializing collections
+void Main()
+{
+    // List initializer
+    List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+    
+    // Dictionary initializer
+    Dictionary<string, int> ages = new Dictionary<string, int>
+    {
+        { "John", 30 },
+        { "Jane", 25 },
+        { "Bob", 35 }
+    };
+    
+    // Alternative dictionary initializer syntax
+    Dictionary<string, int> scores = new Dictionary<string, int>
+    {
+        ["Alice"] = 95,
+        ["Bob"] = 87,
+        ["Charlie"] = 92
+    };
+    
+    // List of objects with initializers
+    List<Person> people = new List<Person>
+    {
+        new Person { FirstName = "John", LastName = "Doe", Age = 30 },
+        new Person { FirstName = "Jane", LastName = "Smith", Age = 25 },
+        new Person { FirstName = "Bob", LastName = "Johnson", Age = 35 }
+    };
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Benefits of object and collection initializers:</p>
+                                <ul>
+                                    <li>More concise syntax for creating and initializing objects</li>
+                                    <li>Reduces the amount of code required</li>
+                                    <li>Makes the code more readable</li>
+                                    <li>Can be used with any class that has a constructor and accessible properties/fields</li>
+                                    <li>Can be nested for complex object structures</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Constructor Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Effective Constructor Design</h4>
+                            <ul>
+                                <li><strong>Keep Constructors Simple</strong> - Focus on initializing the object's state, not performing complex operations</li>
+                                <li><strong>Validate Parameters</strong> - Check for null or invalid values in constructors</li>
+                                <li><strong>Use Constructor Chaining</strong> - To avoid code duplication and centralize initialization</li>
+                                <li><strong>Provide Sensible Defaults</strong> - For optional parameters or in default constructors</li>
+                                <li><strong>Don't Call Virtual Methods</strong> - Avoid calling virtual methods in constructors as derived classes may not be fully initialized</li>
+                                <li><strong>Initialize All Fields</strong> - Ensure all fields have appropriate initial values</li>
+                                <li><strong>Avoid Throwing Exceptions</strong> - Except when parameters are invalid or initialization fails critically</li>
+                                <li><strong>Consider Object Initializers</strong> - For properties that don't need validation during initialization</li>
+                                <li><strong>Make Dependencies Explicit</strong> - Required dependencies should be constructor parameters</li>
+                                <li><strong>Use Appropriate Access Modifiers</strong> - Restrict constructor visibility when needed</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Constructor Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Too Many Parameters</strong> - Indicates a class might have too many responsibilities</li>
+                                <li><strong>Complex Logic</strong> - Constructors should be simple; move complex logic to methods</li>
+                                <li><strong>Side Effects</strong> - Avoid operations that affect external state (e.g., writing to files)</li>
+                                <li><strong>Database Connections</strong> - Don't establish database connections in constructors</li>
+                                <li><strong>Expensive Operations</strong> - Avoid computationally expensive operations when possible</li>
+                                <li><strong>Circular Dependencies</strong> - Objects creating instances of classes that depend on them</li>
+                                <li><strong>Not Handling Errors</strong> - Properly handle exceptions during initialization</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="classes-objects.html" class="prev"><i class="fas fa-arrow-left"></i> Classes & Objects</a>
+                        <a href="inheritance.html" class="next">Inheritance <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

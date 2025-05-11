@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes and Objects in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Classes and Objects in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Classes and Objects</h3>
+                        <p>Classes and objects are the foundational building blocks of Object-Oriented Programming in C#. A class is a blueprint or template that defines the structure and behavior of objects, while an object is an instance of a class.</p>
+                        
+                        <div class="example-box">
+                            <h4>Class vs Object</h4>
+                            <table>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Object</th>
+                                </tr>
+                                <tr>
+                                    <td>A template or blueprint</td>
+                                    <td>An instance of a class</td>
+                                </tr>
+                                <tr>
+                                    <td>Defines properties and behaviors</td>
+                                    <td>Contains actual data and can perform actions</td>
+                                </tr>
+                                <tr>
+                                    <td>Created once</td>
+                                    <td>Can create multiple instances</td>
+                                </tr>
+                                <tr>
+                                    <td>Exists at compile time</td>
+                                    <td>Exists at runtime</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Defining a Class in C#</h3>
+                        <p>A class in C# is defined using the <code>class</code> keyword. Classes can contain:</p>
+                        <ul>
+                            <li>Fields (variables)</li>
+                            <li>Properties</li>
+                            <li>Methods (functions)</li>
+                            <li>Constructors</li>
+                            <li>Events</li>
+                            <li>Nested classes</li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>Basic Class Structure</h4>
+                            <pre><code>
+// Basic class definition
+public class Person
+{
+    // Fields - variables that store data
+    private string firstName;
+    private string lastName;
+    private int age;
+    
+    // Properties - provide access to fields with additional logic
+    public string FirstName
+    {
+        get { return firstName; }
+        set { firstName = value; }
+    }
+    
+    public string LastName
+    {
+        get { return lastName; }
+        set { lastName = value; }
+    }
+    
+    // Auto-implemented property - compiler creates backing field
+    public string FullName => $"{FirstName} {LastName}";
+    
+    // Method - provides behavior
+    public void Introduce()
+    {
+        Console.WriteLine($"Hello, my name is {FullName} and I am {age} years old.");
+    }
+    
+    // Method with parameters and return value
+    public bool IsAdult()
+    {
+        return age >= 18;
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Key components of a class:</p>
+                                <ul>
+                                    <li><strong>Access modifiers</strong> (public, private, protected, internal) control visibility</li>
+                                    <li><strong>Fields</strong> store the data (typically private)</li>
+                                    <li><strong>Properties</strong> provide controlled access to fields</li>
+                                    <li><strong>Methods</strong> define the behavior of the class</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Creating and Using Objects</h3>
+                        <p>Objects are instances of classes created at runtime. To create an object in C#, you use the <code>new</code> keyword.</p>
+                        
+                        <div class="example-box">
+                            <h4>Object Instantiation and Usage</h4>
+                            <pre><code>
+// Creating an object from the Person class
+Person person1 = new Person();
+
+// Setting property values
+person1.FirstName = "John";
+person1.LastName = "Doe";
+
+// Using methods
+person1.Introduce();  // Output: Hello, my name is John Doe and I am 0 years old.
+
+// Another way to create and initialize an object
+Person person2 = new Person
+{
+    FirstName = "Jane",
+    LastName = "Smith"
+};
+
+// Access a property
+Console.WriteLine(person2.FullName);  // Output: Jane Smith
+
+// Create multiple objects from the same class
+Person employee = new Person();
+Person customer = new Person();
+Person manager = new Person();
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Working with objects:</p>
+                                <ul>
+                                    <li><strong>Instantiation</strong> - Creating an instance of a class using the <code>new</code> keyword</li>
+                                    <li><strong>Object initializers</strong> - Setting property values while creating the object</li>
+                                    <li><strong>Accessing members</strong> - Using dot notation to access properties and methods</li>
+                                    <li><strong>Multiple instances</strong> - Creating many objects from the same class template</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h3>Fields vs Properties</h3>
+                        <p>Fields and properties both store data in a class, but properties provide additional control over access and manipulation of that data.</p>
+                        
+                        <div class="example-box">
+                            <h4>Fields</h4>
+                            <pre><code>
+public class Customer
+{
+    // Fields
+    private string name;  // Private field - not accessible outside the class
+    public int customerID;  // Public field - accessible anywhere
+    internal DateTime registrationDate;  // Internal field - accessible within the same assembly
+    protected bool isActive;  // Protected field - accessible in this class and derived classes
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Properties</h4>
+                            <pre><code>
+public class Customer
+{
+    // Private backing field
+    private string _name;
+    
+    // Full property with get and set accessors
+    public string Name
+    {
+        get
+        {
+            return _name ?? "No Name";  // Null coalescing - return "No Name" if _name is null
+        }
+        set
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                _name = value;
+            }
+        }
+    }
+    
+    // Auto-implemented property (compiler creates backing field)
+    public int CustomerID { get; set; }
+    
+    // Read-only property (can only be set in constructor or initializer)
+    public DateTime RegistrationDate { get; }
+    
+    // Read-only calculated property
+    public bool IsLongTermCustomer => (DateTime.Now - RegistrationDate).TotalDays > 365;
+    
+    // Property with different access levels for get and set
+    public bool IsActive { get; private set; }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Property types:</p>
+                                <ul>
+                                    <li><strong>Full property</strong> - Custom get and set accessors with a backing field</li>
+                                    <li><strong>Auto-implemented property</strong> - Simplified syntax where compiler creates the backing field</li>
+                                    <li><strong>Read-only property</strong> - Has only a get accessor</li>
+                                    <li><strong>Calculated property</strong> - Computes its value from other data</li>
+                                    <li><strong>Mixed access levels</strong> - Different visibility for get and set accessors</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Class Members and Access Modifiers</h3>
+                        <p>Access modifiers control the visibility and accessibility of class members.</p>
+                        
+                        <div class="example-box">
+                            <h4>Access Modifiers in C#</h4>
+                            <table>
+                                <tr>
+                                    <th>Modifier</th>
+                                    <th>Description</th>
+                                </tr>
+                                <tr>
+                                    <td><code>public</code></td>
+                                    <td>Accessible from anywhere</td>
+                                </tr>
+                                <tr>
+                                    <td><code>private</code></td>
+                                    <td>Accessible only within the same class</td>
+                                </tr>
+                                <tr>
+                                    <td><code>protected</code></td>
+                                    <td>Accessible within the same class and derived classes</td>
+                                </tr>
+                                <tr>
+                                    <td><code>internal</code></td>
+                                    <td>Accessible within the same assembly (project)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>protected internal</code></td>
+                                    <td>Accessible within the same assembly or derived classes</td>
+                                </tr>
+                                <tr>
+                                    <td><code>private protected</code></td>
+                                    <td>Accessible within the same class or derived classes in the same assembly</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Example of Access Modifiers</h4>
+                            <pre><code>
+public class BankAccount
+{
+    // Private field - only accessible in this class
+    private decimal balance;
+    
+    // Public property - accessible from anywhere
+    public string AccountNumber { get; set; }
+    
+    // Protected method - accessible in this class and derived classes
+    protected void UpdateLastAccessed()
+    {
+        LastAccessed = DateTime.Now;
+    }
+    
+    // Internal property - accessible only in the same assembly
+    internal DateTime LastAccessed { get; private set; }
+    
+    // Public method - accessible from anywhere
+    public decimal GetBalance()
+    {
+        UpdateLastAccessed();
+        return balance;
+    }
+}
+
+// Derived class
+public class SavingsAccount : BankAccount
+{
+    public void ApplyInterest()
+    {
+        // Can access protected members from the base class
+        UpdateLastAccessed();
+        
+        // Can also access internal members since it's in the same assembly
+        DateTime lastAccess = LastAccessed;
+        
+        // Cannot access private members of the base class
+        // balance = 100; // This would cause a compilation error
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Static and Instance Members</h3>
+                        <p>C# classes can have both static members (shared across all instances) and instance members (unique to each object).</p>
+                        
+                        <div class="example-box">
+                            <h4>Static vs Instance Members</h4>
+                            <pre><code>
+public class Calculator
+{
+    // Static field - shared across all Calculator objects
+    public static double Pi = 3.14159;
+    
+    // Static property - shared across all Calculator objects
+    public static int CalculationsPerformed { get; private set; }
+    
+    // Instance field - unique to each Calculator object
+    public string Model;
+    
+    // Instance property - unique to each Calculator object
+    public bool IsScientific { get; set; }
+    
+    // Static method - accessed through the class, not an instance
+    public static double CalculateCircleArea(double radius)
+    {
+        CalculationsPerformed++;
+        return Pi * radius * radius;
+    }
+    
+    // Instance method - requires an instance to be called
+    public double Add(double a, double b)
+    {
+        CalculationsPerformed++;
+        return a + b;
+    }
+}
+
+// Usage
+class Program
+{
+    static void Main()
+    {
+        // Using static members (through the class)
+        double area = Calculator.CalculateCircleArea(5);
+        Console.WriteLine($"Circle area: {area}");
+        Console.WriteLine($"Pi value: {Calculator.Pi}");
+        
+        // Using instance members (through objects)
+        Calculator calc1 = new Calculator { Model = "Basic", IsScientific = false };
+        Calculator calc2 = new Calculator { Model = "Advanced", IsScientific = true };
+        
+        double sum1 = calc1.Add(5, 10);
+        double sum2 = calc2.Add(20, 30);
+        
+        Console.WriteLine($"Total calculations: {Calculator.CalculationsPerformed}");
+    }
+}
+                            </code></pre>
+                            
+                            <div class="explanation">
+                                <p>Key differences:</p>
+                                <ul>
+                                    <li><strong>Static members</strong>:
+                                        <ul>
+                                            <li>Belong to the class itself, not to objects</li>
+                                            <li>Accessed using the class name (e.g., <code>Calculator.Pi</code>)</li>
+                                            <li>Shared among all instances of the class</li>
+                                            <li>Exist even if no objects are created</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Instance members</strong>:
+                                        <ul>
+                                            <li>Belong to specific objects</li>
+                                            <li>Accessed using an object reference (e.g., <code>calc1.Add()</code>)</li>
+                                            <li>Unique to each instance of the class</li>
+                                            <li>Require an object instance to be created</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Classes and Objects</h3>
+                        
+                        <div class="example-box">
+                            <h4>Guidelines for Effective Class Design</h4>
+                            <ul>
+                                <li><strong>Encapsulation</strong> - Make fields private and provide access through properties</li>
+                                <li><strong>Single Responsibility</strong> - A class should have only one reason to change</li>
+                                <li><strong>Meaningful Names</strong> - Use clear, descriptive names for classes and members</li>
+                                <li><strong>Keep Classes Focused</strong> - Avoid creating "god classes" that do too much</li>
+                                <li><strong>Limit Class Size</strong> - If a class is too large, it might be better to split it</li>
+                                <li><strong>Use Properties</strong> - Prefer properties over public fields</li>
+                                <li><strong>Validate Input</strong> - Check input values in property setters and methods</li>
+                                <li><strong>Immutability</strong> - Consider making classes immutable when appropriate</li>
+                                <li><strong>Method Size</strong> - Keep methods short and focused on a single task</li>
+                                <li><strong>Consistent Abstraction</strong> - Keep a consistent level of abstraction within a class</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Public Fields</strong> - Avoid public fields; use properties instead</li>
+                                <li><strong>Too Many Dependencies</strong> - A class that depends on too many other classes is hard to maintain</li>
+                                <li><strong>Tight Coupling</strong> - Avoid tight coupling between classes</li>
+                                <li><strong>Excessive Comments</strong> - If you need excessive comments, the code might be too complex</li>
+                                <li><strong>Breaking Encapsulation</strong> - Avoid exposing internal implementation details</li>
+                                <li><strong>Unused Members</strong> - Remove unused fields, properties, and methods</li>
+                                <li><strong>Too Many Static Members</strong> - Overuse of static members can lead to global state problems</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="oop-concepts.html" class="prev"><i class="fas fa-arrow-left"></i> OOP Concepts</a>
+                        <a href="constructors.html" class="next">Constructors <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

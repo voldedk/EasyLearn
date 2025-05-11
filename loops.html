@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Loops - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>C# Loops</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Loops</h3>
+                        <p>Loops are control structures that allow you to execute a block of code repeatedly. They are essential for automating repetitive tasks, processing collections of data, and implementing iterative algorithms. C# provides several types of loops to suit different programming needs.</p>
+                        
+                        <div class="note-box">
+                            <h4>Key Loop Concepts:</h4>
+                            <ul>
+                                <li>Loops execute a code block multiple times</li>
+                                <li>Iteration variables track the progress of the loop</li>
+                                <li>Loop conditions determine when to stop</li>
+                                <li>Break and continue statements provide additional control</li>
+                                <li>The right loop type depends on your specific use case</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>For Loop</h3>
+                        <p>The <code>for</code> loop is ideal when you know exactly how many times you want to repeat a block of code. It combines initialization, condition, and iteration into a single statement.</p>
+                        
+                        <div class="example-box">
+                            <h4>For Loop Syntax:</h4>
+                            <pre><code>
+for (initialization; condition; iteration)
+{
+    // Code to execute in each iteration
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>The three parts of a for loop:</p>
+                                <ul>
+                                    <li><strong>Initialization:</strong> Executes once before the loop starts (usually to declare and initialize a counter variable)</li>
+                                    <li><strong>Condition:</strong> Evaluated before each iteration; the loop continues as long as it's true</li>
+                                    <li><strong>Iteration:</strong> Executes after each iteration (usually to update the counter variable)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>For Loop Examples:</h4>
+                            <pre><code>
+// Basic for loop counting from 0 to 4
+for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine($"Iteration {i}");
+}
+// Output:
+// Iteration 0
+// Iteration 1
+// Iteration 2
+// Iteration 3
+// Iteration 4
+
+// Counting down
+for (int i = 10; i > 0; i--)
+{
+    Console.WriteLine($"Countdown: {i}");
+}
+
+// Custom iteration steps
+for (int i = 0; i <= 20; i += 2)
+{
+    Console.WriteLine($"Even number: {i}");
+}
+
+// Multiple loop variables
+for (int i = 1, j = 10; i <= 10 && j >= 1; i++, j--)
+{
+    Console.WriteLine($"i = {i}, j = {j}");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>For Loop Applications:</h4>
+                            <pre><code>
+// Summing numbers
+int sum = 0;
+for (int i = 1; i <= 100; i++)
+{
+    sum += i;
+}
+Console.WriteLine($"Sum of 1 to 100: {sum}");  // 5050
+
+// Processing array elements
+int[] numbers = { 10, 20, 30, 40, 50 };
+for (int i = 0; i < numbers.Length; i++)
+{
+    Console.WriteLine($"Element at index {i}: {numbers[i]}");
+}
+
+// Building a string pattern
+string pattern = "";
+for (int i = 1; i <= 5; i++)
+{
+    // Append i asterisks to the pattern
+    for (int j = 0; j < i; j++)
+    {
+        pattern += "*";
+    }
+    pattern += "\n";  // Add a new line
+}
+Console.WriteLine(pattern);
+// Output:
+// *
+// **
+// ***
+// ****
+// *****
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>While Loop</h3>
+                        <p>The <code>while</code> loop continues executing a block of code as long as a specified condition remains true. It's ideal when you don't know in advance how many iterations will be needed.</p>
+                        
+                        <div class="example-box">
+                            <h4>While Loop Syntax:</h4>
+                            <pre><code>
+while (condition)
+{
+    // Code to execute as long as condition is true
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key characteristics of while loops:</p>
+                                <ul>
+                                    <li>The condition is evaluated <em>before</em> each iteration</li>
+                                    <li>If the condition is initially false, the loop body never executes</li>
+                                    <li>The loop continues until the condition becomes false</li>
+                                    <li>Variables used in the condition must be initialized before the loop</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>While Loop Examples:</h4>
+                            <pre><code>
+// Basic while loop
+int count = 0;
+while (count < 5)
+{
+    Console.WriteLine($"Count: {count}");
+    count++;
+}
+
+// Processing input until a condition is met
+Console.WriteLine("Enter numbers to sum (enter 0 to finish):");
+int number;
+int sum = 0;
+
+// Read the first number
+number = Convert.ToInt32(Console.ReadLine());
+
+while (number != 0)
+{
+    sum += number;
+    // Read the next number
+    number = Convert.ToInt32(Console.ReadLine());
+}
+
+Console.WriteLine($"Sum: {sum}");
+
+// Random number guessing game
+Random random = new Random();
+int targetNumber = random.Next(1, 101);  // Random number between 1 and 100
+int guess = 0;
+int attempts = 0;
+
+Console.WriteLine("Guess a number between 1 and 100:");
+
+while (guess != targetNumber)
+{
+    guess = Convert.ToInt32(Console.ReadLine());
+    attempts++;
+    
+    if (guess < targetNumber)
+    {
+        Console.WriteLine("Too low! Try again.");
+    }
+    else if (guess > targetNumber)
+    {
+        Console.WriteLine("Too high! Try again.");
+    }
+}
+
+Console.WriteLine($"Correct! You guessed it in {attempts} attempts.");
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Do-While Loop</h3>
+                        <p>The <code>do-while</code> loop is similar to the while loop, but it checks the condition <em>after</em> executing the loop body. This ensures that the loop body executes at least once, regardless of the condition.</p>
+                        
+                        <div class="example-box">
+                            <h4>Do-While Loop Syntax:</h4>
+                            <pre><code>
+do
+{
+    // Code to execute at least once and then as long as condition is true
+} while (condition);
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key differences from while loop:</p>
+                                <ul>
+                                    <li>The condition is evaluated <em>after</em> each iteration</li>
+                                    <li>The loop body executes at least once, even if the condition is initially false</li>
+                                    <li>Useful when you want to ensure at least one execution of the loop body</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Do-While Loop Examples:</h4>
+                            <pre><code>
+// Basic do-while loop
+int count = 0;
+do
+{
+    Console.WriteLine($"Count: {count}");
+    count++;
+} while (count < 5);
+
+// Menu-driven program
+int choice;
+do
+{
+    Console.WriteLine("\nMenu Options:");
+    Console.WriteLine("1. Display greeting");
+    Console.WriteLine("2. Display date and time");
+    Console.WriteLine("3. Exit");
+    Console.Write("Enter your choice (1-3): ");
+    
+    choice = Convert.ToInt32(Console.ReadLine());
+    
+    switch (choice)
+    {
+        case 1:
+            Console.WriteLine("Hello, world!");
+            break;
+        case 2:
+            Console.WriteLine($"Current date and time: {DateTime.Now}");
+            break;
+        case 3:
+            Console.WriteLine("Exiting program...");
+            break;
+        default:
+            Console.WriteLine("Invalid choice. Please try again.");
+            break;
+    }
+} while (choice != 3);
+
+// Input validation
+string password;
+do
+{
+    Console.Write("Enter a password (at least 8 characters): ");
+    password = Console.ReadLine();
+    
+    if (password.Length < 8)
+    {
+        Console.WriteLine("Password is too short!");
+    }
+} while (password.Length < 8);
+
+Console.WriteLine("Password accepted.");
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Foreach Loop</h3>
+                        <p>The <code>foreach</code> loop is designed specifically for iterating through collections like arrays, lists, and other enumerable types. It's simpler and safer than using a for loop when you want to process each element.</p>
+                        
+                        <div class="example-box">
+                            <h4>Foreach Loop Syntax:</h4>
+                            <pre><code>
+foreach (type variable in collection)
+{
+    // Code to process each element
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Key characteristics of foreach loops:</p>
+                                <ul>
+                                    <li>Automatically iterates through all elements in a collection</li>
+                                    <li>Provides a read-only variable for each element during iteration</li>
+                                    <li>Handles the iteration details for you (no need to track indices)</li>
+                                    <li>Works with any collection that implements the <code>IEnumerable</code> interface</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Foreach Loop Examples:</h4>
+                            <pre><code>
+// Iterating through an array
+int[] numbers = { 1, 2, 3, 4, 5 };
+foreach (int number in numbers)
+{
+    Console.WriteLine($"Number: {number}");
+}
+
+// Iterating through a string (character by character)
+string message = "Hello";
+foreach (char c in message)
+{
+    Console.WriteLine(c);
+}
+
+// Iterating through a List<T>
+List<string> fruits = new List<string> { "Apple", "Banana", "Cherry", "Date" };
+foreach (string fruit in fruits)
+{
+    Console.WriteLine($"Fruit: {fruit}");
+}
+
+// Iterating through a Dictionary<TKey, TValue>
+Dictionary<string, int> ages = new Dictionary<string, int>
+{
+    { "Alice", 25 },
+    { "Bob", 30 },
+    { "Charlie", 35 }
+};
+
+foreach (KeyValuePair<string, int> pair in ages)
+{
+    Console.WriteLine($"{pair.Key} is {pair.Value} years old");
+}
+
+// Or, more concisely with C# 7.0+ deconstruction:
+foreach (var (name, age) in ages)
+{
+    Console.WriteLine($"{name} is {age} years old");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Foreach Loop Limitations:</h4>
+                            <pre><code>
+// You can't modify the collection while iterating with foreach
+List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+
+// This will throw an exception:
+foreach (int number in numbers)
+{
+    // The following line would cause an error:
+    // numbers.Remove(number);  // Invalid operation!
+}
+
+// You can't modify the iteration variable
+string[] names = { "Alice", "Bob", "Charlie" };
+foreach (string name in names)
+{
+    // The following line would cause an error:
+    // name = name.ToUpper();  // Invalid operation!
+    
+    // Instead, you can only read the value:
+    Console.WriteLine(name.ToUpper());
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>To modify elements during iteration, use a for loop with an index instead:</p>
+                                <pre><code>
+// Using for loop when you need to modify elements
+string[] words = { "apple", "banana", "cherry" };
+for (int i = 0; i < words.Length; i++)
+{
+    words[i] = words[i].ToUpper();
+}
+
+// Now all elements are uppercase
+foreach (string word in words)
+{
+    Console.WriteLine(word);  // APPLE, BANANA, CHERRY
+}
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Nested Loops</h3>
+                        <p>A nested loop is a loop within another loop. This structure is useful for working with multi-dimensional data or generating complex patterns.</p>
+                        
+                        <div class="example-box">
+                            <h4>Nested Loop Examples:</h4>
+                            <pre><code>
+// Multiplication table
+for (int i = 1; i <= 10; i++)
+{
+    for (int j = 1; j <= 10; j++)
+    {
+        Console.Write($"{i * j,4}");  // The ,4 adds padding for alignment
+    }
+    Console.WriteLine();  // New line after each row
+}
+
+// Pattern printing
+for (int i = 1; i <= 5; i++)
+{
+    // Print spaces
+    for (int j = 5; j > i; j--)
+    {
+        Console.Write(" ");
+    }
+    // Print stars
+    for (int k = 1; k <= (2 * i - 1); k++)
+    {
+        Console.Write("*");
+    }
+    Console.WriteLine();
+}
+// Output:
+//     *
+//    ***
+//   *****
+//  *******
+// *********
+
+// Working with a 2D array
+int[,] matrix = {
+    { 1, 2, 3 },
+    { 4, 5, 6 },
+    { 7, 8, 9 }
+};
+
+// Print all elements of the 2D array
+for (int row = 0; row < 3; row++)
+{
+    for (int col = 0; col < 3; col++)
+    {
+        Console.Write($"{matrix[row, col]} ");
+    }
+    Console.WriteLine();
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Performance considerations for nested loops:</p>
+                                <ul>
+                                    <li>Each level of nesting multiplies the number of iterations</li>
+                                    <li>Avoid deep nesting when possible (more than 3 levels can be hard to follow)</li>
+                                    <li>For better performance, put the larger loop on the outside when possible</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Loop Control Statements</h3>
+                        <p>C# provides special statements to control the flow of loops: <code>break</code>, <code>continue</code>, and <code>goto</code>.</p>
+                        
+                        <div class="example-box">
+                            <h4>Break Statement:</h4>
+                            <pre><code>
+// Break terminates the innermost loop
+for (int i = 1; i <= 10; i++)
+{
+    if (i == 5)
+    {
+        break;  // Exit the loop when i equals 5
+    }
+    Console.WriteLine(i);
+}
+// Output: 1, 2, 3, 4
+
+// Break in a nested loop (exits only the innermost loop)
+for (int i = 1; i <= 3; i++)
+{
+    Console.WriteLine($"Outer loop: {i}");
+    
+    for (int j = 1; j <= 3; j++)
+    {
+        if (i == 2 && j == 2)
+        {
+            break;  // Exit the inner loop when i=2 and j=2
+        }
+        Console.WriteLine($"  Inner loop: {j}");
+    }
+}
+
+// Finding an element in an array
+int[] numbers = { 10, 20, 30, 40, 50 };
+int searchValue = 30;
+bool found = false;
+
+for (int i = 0; i < numbers.Length; i++)
+{
+    if (numbers[i] == searchValue)
+    {
+        Console.WriteLine($"Found {searchValue} at index {i}");
+        found = true;
+        break;  // No need to continue searching
+    }
+}
+
+if (!found)
+{
+    Console.WriteLine($"{searchValue} not found in the array");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Continue Statement:</h4>
+                            <pre><code>
+// Continue skips the rest of the current iteration
+for (int i = 1; i <= 10; i++)
+{
+    if (i % 2 == 0)
+    {
+        continue;  // Skip even numbers
+    }
+    Console.WriteLine(i);  // Only prints odd numbers: 1, 3, 5, 7, 9
+}
+
+// Skipping specific values
+string[] words = { "apple", null, "banana", "", "cherry", null };
+foreach (string word in words)
+{
+    if (string.IsNullOrEmpty(word))
+    {
+        continue;  // Skip null or empty strings
+    }
+    Console.WriteLine($"Word: {word}");
+}
+
+// Processing only valid records
+List<int> data = new List<int> { 10, -5, 0, 25, -3, 12 };
+int sum = 0;
+
+foreach (int value in data)
+{
+    if (value <= 0)
+    {
+        continue;  // Skip non-positive values
+    }
+    sum += value;
+}
+
+Console.WriteLine($"Sum of positive values: {sum}");  // 47
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Labeled Statements and Goto:</h4>
+                            <pre><code>
+// Using goto with a label to exit nested loops
+for (int i = 0; i < 3; i++)
+{
+    for (int j = 0; j < 3; j++)
+    {
+        if (i == 1 && j == 1)
+        {
+            goto LoopExit;  // Exit both loops
+        }
+        Console.WriteLine($"i = {i}, j = {j}");
+    }
+}
+LoopExit:
+Console.WriteLine("Exited both loops");
+
+// Note: While goto exists in C#, it's generally recommended to avoid using it 
+// in favor of more structured approaches like methods and return statements.
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Alternative to goto for exiting nested loops:</p>
+                                <pre><code>
+// Better approach - use a flag variable
+bool shouldExit = false;
+for (int i = 0; i < 3 && !shouldExit; i++)
+{
+    for (int j = 0; j < 3 && !shouldExit; j++)
+    {
+        if (i == 1 && j == 1)
+        {
+            shouldExit = true;  // Signal to exit both loops
+            break;
+        }
+        Console.WriteLine($"i = {i}, j = {j}");
+    }
+}
+Console.WriteLine("Exited both loops");
+
+// Even better - extract the nested loops into a method and use return
+void ProcessMatrix()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (i == 1 && j == 1)
+            {
+                return;  // Exit the method and both loops
+            }
+            Console.WriteLine($"i = {i}, j = {j}");
+        }
+    }
+}
+
+ProcessMatrix();
+Console.WriteLine("Exited both loops");
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Infinite Loops</h3>
+                        <p>An infinite loop is a loop that continues indefinitely because its termination condition is never satisfied. While usually undesirable, infinite loops can sometimes be useful when combined with a break statement or in certain types of programs like servers and game loops.</p>
+                        
+                        <div class="example-box">
+                            <h4>Creating and Controlling Infinite Loops:</h4>
+                            <pre><code>
+// Intentional infinite loop with for
+for (;;)
+{
+    Console.WriteLine("This will run forever unless broken");
+    // Some code that eventually breaks the loop
+    if (DateTime.Now.Second % 10 == 0)
+    {
+        break;
+    }
+}
+
+// Infinite loop with while
+while (true)
+{
+    Console.WriteLine("Press 'q' to quit");
+    string input = Console.ReadLine();
+    if (input.ToLower() == "q")
+    {
+        break;
+    }
+}
+
+// Game loop example
+bool isGameRunning = true;
+while (isGameRunning)
+{
+    // Process input
+    ProcessInput();
+    
+    // Update game state
+    UpdateGame();
+    
+    // Render graphics
+    RenderGame();
+    
+    // Check if game should end
+    if (GameOver())
+    {
+        isGameRunning = false;
+    }
+}
+
+// Event processing loop
+while (true)
+{
+    // Wait for the next event
+    Event nextEvent = WaitForEvent();
+    
+    // Process the event
+    ProcessEvent(nextEvent);
+    
+    // Check for exit condition
+    if (nextEvent.Type == EventType.Shutdown)
+    {
+        break;
+    }
+}
+                            </code></pre>
+                            <div class="explanation">
+                                <p>Avoiding accidental infinite loops:</p>
+                                <ul>
+                                    <li>Ensure loop conditions will eventually become false</li>
+                                    <li>Double-check counter updates in for/while loops</li>
+                                    <li>Be careful with floating-point comparisons in loop conditions</li>
+                                    <li>Always include a way to exit intentional infinite loops</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Loop Efficiency and Best Practices</h3>
+                        <p>Writing efficient and maintainable loops is important, especially when dealing with large data sets or performance-critical code.</p>
+                        
+                        <div class="example-box">
+                            <h4>Loop Optimization Tips:</h4>
+                            <pre><code>
+// DO: Cache the collection length/count outside the loop
+int[] numbers = new int[10000];
+int length = numbers.Length;  // Cache the length
+for (int i = 0; i < length; i++)
+{
+    // Process numbers[i]
+}
+
+// DON'T: Recalculate length on each iteration
+for (int i = 0; i < numbers.Length; i++)  // Less efficient
+{
+    // Process numbers[i]
+}
+
+// DO: Avoid unnecessary method calls in the loop
+string[] names = { "Alice", "Bob", "Charlie" };
+string searchName = "Bob";
+bool found = false;
+
+// Convert to lowercase once, outside the loop
+searchName = searchName.ToLower();
+foreach (string name in names)
+{
+    if (name.ToLower() == searchName)
+    {
+        found = true;
+        break;
+    }
+}
+
+// DO: Consider using LINQ for cleaner, more readable code
+// (though sometimes with a slight performance trade-off)
+bool foundWithLinq = names.Any(name => name.ToLower() == searchName);
+
+// DO: Prefer foreach over for when you don't need the index
+List<string> items = new List<string> { "One", "Two", "Three" };
+
+// Preferred when you don't need the index
+foreach (string item in items)
+{
+    Console.WriteLine(item);
+}
+
+// Use for when you need the index
+for (int i = 0; i < items.Count; i++)
+{
+    Console.WriteLine($"Item {i + 1}: {items[i]}");
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Loop Selection Guide:</h4>
+                            <table>
+                                <tr>
+                                    <th>Loop Type</th>
+                                    <th>Best Used When</th>
+                                </tr>
+                                <tr>
+                                    <td>for</td>
+                                    <td>You know exactly how many iterations you need</td>
+                                </tr>
+                                <tr>
+                                    <td>while</td>
+                                    <td>You need to continue until a condition becomes false</td>
+                                </tr>
+                                <tr>
+                                    <td>do-while</td>
+                                    <td>You need to execute the loop at least once regardless of the condition</td>
+                                </tr>
+                                <tr>
+                                    <td>foreach</td>
+                                    <td>You want to iterate through all elements in a collection</td>
+                                </tr>
+                            </table>
+                            <div class="explanation">
+                                <p>Additional best practices:</p>
+                                <ul>
+                                    <li>Keep loops simple and focused on a single task</li>
+                                    <li>Consider extracting complex loop bodies into separate methods</li>
+                                    <li>Be mindful of performance when working with large datasets</li>
+                                    <li>Use appropriate loop constructs for the task at hand</li>
+                                    <li>Always provide a way to exit the loop (avoid infinite loops)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="switch.html" class="prev"><i class="fas fa-arrow-left"></i> Switch Statements</a>
+                        <a href="arrays.html" class="next">Arrays <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

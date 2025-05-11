@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Properties in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Properties</h3>
+                        <p>Properties in C# provide a flexible mechanism to read, write, or compute the values of private fields. They expose fields to the outside world while protecting them from direct access or invalid data.</p>
+                        
+                        <div class="example-box">
+                            <h4>Why Use Properties?</h4>
+                            <ul>
+                                <li>Properties enable controlled access to class fields</li>
+                                <li>They allow validation of data before assignment</li>
+                                <li>They can compute values on-the-fly</li>
+                                <li>They maintain encapsulation while providing a public interface</li>
+                                <li>They provide a way to change internal implementation without affecting external code</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Basic Property Syntax</h3>
+                        <p>Properties consist of a private backing field and public getters and setters that control access to that field.</p>
+                        
+                        <div class="example-box">
+                            <h4>Full Property Syntax</h4>
+                            <pre><code>
+public class Person
+{
+    // Private backing field
+    private string _name;
+    
+    // Public property with get and set accessors
+    public string Name
+    {
+        get 
+        { 
+            return _name; 
+        }
+        set 
+        { 
+            _name = value; 
+        }
+    }
+}
+
+// Usage
+Person person = new Person();
+person.Name = "John";  // Calls the set accessor
+string name = person.Name;  // Calls the get accessor
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Auto-Implemented Properties</h4>
+                            <p>C# provides a simplified syntax for properties that don't require additional logic in their accessors.</p>
+                            <pre><code>
+public class Person
+{
+    // Auto-implemented property (compiler generates the backing field)
+    public string Name { get; set; }
+    
+    // Auto-implemented property with default value
+    public int Age { get; set; } = 25;
+}
+
+// Usage
+Person person = new Person();
+person.Name = "John";  // The compiler-generated set accessor is called
+Console.WriteLine(person.Age);  // Outputs: 25
+</code></pre>
+                            <div class="explanation">
+                                <p>With auto-implemented properties:</p>
+                                <ul>
+                                    <li>The compiler automatically creates a private, anonymous backing field</li>
+                                    <li>The accessors are implemented without additional logic</li>
+                                    <li>They provide a concise syntax for simple property definitions</li>
+                                    <li>You can set default values (C# 6.0 and later)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Property Accessors</h3>
+                        <p>Property accessors control how property values are read and written. You can customize them to include validation, notify about changes, or compute values.</p>
+                        
+                        <div class="example-box">
+                            <h4>Custom Getter and Setter</h4>
+                            <pre><code>
+public class BankAccount
+{
+    private decimal _balance;
+    
+    public decimal Balance
+    {
+        get
+        {
+            // You could log access or perform calculations here
+            Console.WriteLine("Balance was accessed");
+            return _balance;
+        }
+        set
+        {
+            // Validate the new value before setting it
+            if (value < 0)
+            {
+                throw new ArgumentException("Balance cannot be negative");
+            }
+            
+            _balance = value;
+            Console.WriteLine($"Balance updated to {value}");
+        }
+    }
+}
+
+// Usage
+BankAccount account = new BankAccount();
+account.Balance = 1000;  // Outputs: "Balance updated to 1000"
+decimal balance = account.Balance;  // Outputs: "Balance was accessed"
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Read-Only and Write-Only Properties</h4>
+                            <pre><code>
+public class User
+{
+    private string _password;
+    
+    // Read-only property (only has a getter)
+    public string Username { get; }
+    
+    // Write-only property (only has a setter)
+    public string Password
+    {
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentException("Password cannot be empty");
+            }
+            
+            // In a real application, you would hash the password here
+            _password = value;
+        }
+    }
+    
+    // Constructor sets the read-only property
+    public User(string username)
+    {
+        Username = username;
+    }
+    
+    // Method to verify password without exposing it
+    public bool VerifyPassword(string passwordAttempt)
+    {
+        return _password == passwordAttempt;
+    }
+}
+
+// Usage
+User user = new User("johndoe");
+user.Password = "secret123";  // Sets the password
+// user.Username = "newname";  // Error: property is read-only
+// string password = user.Password;  // Error: property is write-only
+</code></pre>
+                            <div class="explanation">
+                                <p>Property access modifiers:</p>
+                                <ul>
+                                    <li><strong>Read-only property</strong> - Only has a getter, can only be set in the constructor or as an initializer</li>
+                                    <li><strong>Write-only property</strong> - Only has a setter, cannot be read directly</li>
+                                    <li><strong>Computed property</strong> - No backing field, calculates value dynamically</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Computed Properties</h3>
+                        <p>Properties can calculate values on-the-fly rather than storing them in a backing field.</p>
+                        
+                        <div class="example-box">
+                            <h4>Computed Property Examples</h4>
+                            <pre><code>
+public class Rectangle
+{
+    // Properties with backing fields
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    // Computed property - no backing field
+    public double Area
+    {
+        get { return Width * Height; }
+    }
+    
+    // Expression-bodied property (C# 6.0+)
+    public double Perimeter => 2 * (Width + Height);
+    
+    // Computed property that depends on other properties
+    public bool IsSquare => Width == Height;
+}
+
+// Usage
+Rectangle rect = new Rectangle
+{
+    Width = 5,
+    Height = 10
+};
+
+Console.WriteLine($"Area: {rect.Area}");       // Outputs: "Area: 50"
+Console.WriteLine($"Perimeter: {rect.Perimeter}");  // Outputs: "Perimeter: 30"
+Console.WriteLine($"Is Square: {rect.IsSquare}");   // Outputs: "Is Square: False"
+
+rect.Width = 10;
+Console.WriteLine($"Is Square: {rect.IsSquare}");   // Outputs: "Is Square: True"
+</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of computed properties:</p>
+                                <ul>
+                                    <li>Avoid storing values that can be calculated from other properties</li>
+                                    <li>Always return up-to-date values even when dependent properties change</li>
+                                    <li>Can simplify code by centralizing calculation logic</li>
+                                    <li>Can be implemented using expression-bodied syntax (=>) for concise one-line properties</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Property Access Modifiers</h3>
+                        <p>You can control the accessibility of properties and their individual accessors using access modifiers.</p>
+                        
+                        <div class="example-box">
+                            <h4>Different Access Levels for Get and Set</h4>
+                            <pre><code>
+public class Employee
+{
+    // Property with public get but private set
+    public string Name { get; private set; }
+    
+    // Property with private get but public set
+    public decimal Salary { private get; set; }
+    
+    // Property with protected set
+    public int EmployeeId { get; protected set; }
+    
+    // Constructor sets the properties
+    public Employee(string name, int id)
+    {
+        Name = name;
+        EmployeeId = id;
+    }
+    
+    // Method to access private getter
+    public void PrintSalary()
+    {
+        Console.WriteLine($"Salary: {Salary}");
+    }
+}
+
+// Derived class
+public class Manager : Employee
+{
+    public Manager(string name, int id) : base(name, id)
+    {
+        // Can access protected setter
+        EmployeeId = 1000 + id;
+    }
+}
+
+// Usage
+Employee employee = new Employee("John", 101);
+// employee.Name = "Jane";  // Error: set accessor is private
+employee.Salary = 50000;    // Public setter
+// decimal salary = employee.Salary;  // Error: get accessor is private
+employee.PrintSalary();     // Outputs: "Salary: 50000"
+</code></pre>
+                            <div class="explanation">
+                                <p>Access modifier combinations:</p>
+                                <ul>
+                                    <li><strong>public get; private set;</strong> - Everyone can read, only the containing class can write</li>
+                                    <li><strong>public get; protected set;</strong> - Everyone can read, only the class and derived classes can write</li>
+                                    <li><strong>private get; public set;</strong> - Only the class can read, everyone can write (rare)</li>
+                                    <li><strong>protected get; protected set;</strong> - Only the class and derived classes can read and write</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Property Patterns and Best Practices</h3>
+                        
+                        <div class="example-box">
+                            <h4>Property Change Notification</h4>
+                            <pre><code>
+public class ViewModel : INotifyPropertyChanged
+{
+    private string _title;
+    
+    public event PropertyChangedEventHandler PropertyChanged;
+    
+    public string Title
+    {
+        get { return _title; }
+        set
+        {
+            if (_title != value)
+            {
+                _title = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
+    }
+    
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>This pattern is commonly used in MVVM (Model-View-ViewModel) applications to notify the UI when a property's value changes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Lazy Loading</h4>
+                            <pre><code>
+public class Document
+{
+    private string _content;
+    private bool _isLoaded;
+    private readonly string _filePath;
+    
+    public Document(string filePath)
+    {
+        _filePath = filePath;
+    }
+    
+    public string Content
+    {
+        get
+        {
+            if (!_isLoaded)
+            {
+                // Load the content only when first accessed
+                _content = File.ReadAllText(_filePath);
+                _isLoaded = true;
+            }
+            
+            return _content;
+        }
+    }
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>This pattern delays loading expensive resources until they're actually needed.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Property Design Guidelines</h3>
+                        
+                        <div class="example-box">
+                            <h4>Best Practices for Properties</h4>
+                            <ul>
+                                <li><strong>Use properties instead of public fields</strong> to maintain encapsulation</li>
+                                <li><strong>Keep property logic simple</strong> - avoid complex operations in getters</li>
+                                <li><strong>Validate data in setters</strong> to maintain object invariants</li>
+                                <li><strong>Consider immutability</strong> - use read-only properties where appropriate</li>
+                                <li><strong>Use consistent naming conventions</strong> - properties should be PascalCase</li>
+                                <li><strong>Make properties thread-safe</strong> if they might be accessed concurrently</li>
+                                <li><strong>Document property behavior</strong>, especially side effects or exceptions</li>
+                                <li><strong>Avoid returning references to mutable objects</strong> to prevent unexpected modifications</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Property Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>Heavy computations in getters</strong> without caching</li>
+                                <li><strong>Side effects in getters</strong> (except for lazy initialization)</li>
+                                <li><strong>Not validating inputs</strong> in setters</li>
+                                <li><strong>Inconsistent access modifiers</strong> across related properties</li>
+                                <li><strong>Exposing collection properties without read-only wrappers</strong></li>
+                                <li><strong>Breaking change notification patterns</strong> in UI-bound properties</li>
+                                <li><strong>Circular dependencies</strong> between properties</li>
+                                <li><strong>Mixing property and field naming conventions</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="constructors.html" class="prev"><i class="fas fa-arrow-left"></i> Constructors</a>
+                        <a href="inheritance.html" class="next">Inheritance <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 

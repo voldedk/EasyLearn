@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaces in C# - Easy Learn C#</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo" id="csharp-logo">
+                    <div class="logo-inner">C#</div>
+                </div>
+            </div>
+            <h1>Easy Learn C#</h1>
+        </a>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for C# topics...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation - Content will be loaded dynamically -->
+        <aside class="sidebar">
+            <!-- Sidebar content will be loaded by JavaScript -->
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <main>
+                <section class="category-section active-section">
+                    <h2>Interfaces in C#</h2>
+                    
+                    <div class="topic">
+                        <h3>Introduction to Interfaces</h3>
+                        <p>An interface in C# is a contract that defines a set of methods and properties that a class must implement. Interfaces provide a way to achieve abstraction, multiple inheritance, and loose coupling in your applications.</p>
+                        
+                        <div class="example-box">
+                            <h4>Why Use Interfaces?</h4>
+                            <ul>
+                                <li>Define common behavior across unrelated classes</li>
+                                <li>Implement multiple inheritance (which is not possible with classes in C#)</li>
+                                <li>Create loosely coupled systems</li>
+                                <li>Facilitate testing through dependency injection</li>
+                                <li>Enable polymorphic behavior across different class hierarchies</li>
+                                <li>Separate what needs to be done (interface) from how it's done (implementation)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Defining and Implementing Interfaces</h3>
+                        <p>An interface is defined using the <code>interface</code> keyword. By convention, interface names in C# start with the letter "I".</p>
+                        
+                        <div class="example-box">
+                            <h4>Basic Interface Syntax</h4>
+                            <pre><code>
+// Interface definition
+public interface ILogger
+{
+    // Method declaration (no implementation)
+    void Log(string message);
+    
+    // Property declaration (no implementation)
+    bool IsEnabled { get; set; }
+    
+    // Default interface method (C# 8.0+)
+    void LogError(string message)
+    {
+        Log($"ERROR: {message}");
+    }
+}
+
+// Class implementing the interface
+public class ConsoleLogger : ILogger
+{
+    // Implementing the property
+    public bool IsEnabled { get; set; } = true;
+    
+    // Implementing the method
+    public void Log(string message)
+    {
+        if (IsEnabled)
+        {
+            Console.WriteLine($"[LOG]: {message}");
+        }
+    }
+    
+    // No need to implement LogError as it has a default implementation
+}
+
+// Usage
+public void Main()
+{
+    ILogger logger = new ConsoleLogger();
+    logger.IsEnabled = true;
+    logger.Log("This is a regular log message");
+    logger.LogError("Something went wrong");
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about interfaces:</p>
+                                <ul>
+                                    <li>Interface members do not have access modifiers - they are implicitly public</li>
+                                    <li>Interfaces cannot contain fields</li>
+                                    <li>Interfaces can contain methods, properties, events, and indexers</li>
+                                    <li>Starting with C# 8.0, interfaces can include default method implementations</li>
+                                    <li>A class that implements an interface must provide implementations for all interface members (unless they have default implementations)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Implementing Multiple Interfaces</h3>
+                        <p>One of the key advantages of interfaces is that a class can implement multiple interfaces, which is not possible with class inheritance in C#.</p>
+                        
+                        <div class="example-box">
+                            <h4>Multiple Interface Implementation</h4>
+                            <pre><code>
+// First interface
+public interface IReadable
+{
+    string Read();
+    int Position { get; set; }
+}
+
+// Second interface
+public interface IWritable
+{
+    void Write(string text);
+    bool CanWrite { get; }
+}
+
+// Third interface
+public interface IClosable
+{
+    void Close();
+    bool IsClosed { get; }
+}
+
+// Class implementing multiple interfaces
+public class TextFile : IReadable, IWritable, IClosable
+{
+    private string content;
+    private bool isClosed;
+    
+    public TextFile(string initialContent = "")
+    {
+        content = initialContent;
+        Position = 0;
+        isClosed = false;
+    }
+    
+    // IReadable implementation
+    public string Read()
+    {
+        if (IsClosed)
+            throw new InvalidOperationException("Cannot read from a closed file");
+        
+        return content;
+    }
+    
+    public int Position { get; set; }
+    
+    // IWritable implementation
+    public void Write(string text)
+    {
+        if (IsClosed)
+            throw new InvalidOperationException("Cannot write to a closed file");
+            
+        content += text;
+    }
+    
+    public bool CanWrite => !isClosed;
+    
+    // IClosable implementation
+    public void Close()
+    {
+        isClosed = true;
+    }
+    
+    public bool IsClosed => isClosed;
+}
+
+// Usage
+public void Main()
+{
+    TextFile file = new TextFile("Initial content. ");
+    
+    // Using as IReadable
+    IReadable readable = file;
+    Console.WriteLine(readable.Read());  // Outputs: "Initial content. "
+    
+    // Using as IWritable
+    IWritable writable = file;
+    writable.Write("Additional text.");
+    
+    // Using as the original class
+    Console.WriteLine(file.Read());  // Outputs: "Initial content. Additional text."
+    
+    // Using as IClosable
+    IClosable closable = file;
+    closable.Close();
+    
+    // Now the file is closed
+    Console.WriteLine($"Can write: {file.CanWrite}");  // Outputs: "Can write: False"
+    
+    // This would throw an exception
+    // file.Write("More text.");
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of implementing multiple interfaces:</p>
+                                <ul>
+                                    <li>A class can fulfill multiple roles or responsibilities</li>
+                                    <li>Different aspects of a class's behavior can be separated into distinct interfaces</li>
+                                    <li>The same class can be treated as different types in different contexts</li>
+                                    <li>Multiple interfaces provide a way to achieve a form of multiple inheritance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Interface Inheritance</h3>
+                        <p>Interfaces can inherit from other interfaces, extending their contract. A class that implements a derived interface must implement all members from both the base and derived interfaces.</p>
+                        
+                        <div class="example-box">
+                            <h4>Interface Inheritance Example</h4>
+                            <pre><code>
+// Base interface
+public interface IEntity
+{
+    int Id { get; set; }
+    DateTime CreatedDate { get; set; }
+}
+
+// Interface inheriting from IEntity
+public interface IProduct : IEntity
+{
+    string Name { get; set; }
+    decimal Price { get; set; }
+    string Category { get; set; }
+}
+
+// Interface inheriting from IEntity
+public interface ICustomer : IEntity
+{
+    string FirstName { get; set; }
+    string LastName { get; set; }
+    string Email { get; set; }
+}
+
+// Class implementing IProduct must implement all members from both IProduct and IEntity
+public class Product : IProduct
+{
+    // IEntity members
+    public int Id { get; set; }
+    public DateTime CreatedDate { get; set; }
+    
+    // IProduct members
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Category { get; set; }
+}
+
+// Class implementing ICustomer must implement all members from both ICustomer and IEntity
+public class Customer : ICustomer
+{
+    // IEntity members
+    public int Id { get; set; }
+    public DateTime CreatedDate { get; set; }
+    
+    // ICustomer members
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    
+    // Additional non-interface members
+    public string FullName => $"{FirstName} {LastName}";
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about interface inheritance:</p>
+                                <ul>
+                                    <li>An interface can inherit from multiple interfaces</li>
+                                    <li>A class implementing a derived interface must implement all members from all base interfaces</li>
+                                    <li>Interface inheritance creates a type hierarchy</li>
+                                    <li>Interface inheritance is useful for creating specialized or extended versions of an interface</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Explicit Interface Implementation</h3>
+                        <p>Sometimes a class may need to implement two interfaces that have members with the same name. In such cases, C# allows explicit interface implementation to resolve the ambiguity.</p>
+                        
+                        <div class="example-box">
+                            <h4>Explicit Implementation Example</h4>
+                            <pre><code>
+// First interface
+public interface IControl
+{
+    void Paint();
+    void Resize(int width, int height);
+}
+
+// Second interface with a method that has the same name
+public interface IPrintable
+{
+    void Paint();  // Same name as in IControl
+    void Print();
+}
+
+// Class implementing both interfaces
+public class Button : IControl, IPrintable
+{
+    // Implicit implementation (shared)
+    public void Resize(int width, int height)
+    {
+        Console.WriteLine($"Resizing to {width}x{height}");
+    }
+    
+    // Explicit implementation for IControl
+    void IControl.Paint()
+    {
+        Console.WriteLine("Painting control");
+    }
+    
+    // Explicit implementation for IPrintable
+    void IPrintable.Paint()
+    {
+        Console.WriteLine("Preparing for printing");
+    }
+    
+    // Explicit implementation for IPrintable
+    void IPrintable.Print()
+    {
+        Console.WriteLine("Printing");
+    }
+    
+    // A public method that delegates to the interface methods
+    public void PaintForDisplay()
+    {
+        ((IControl)this).Paint();
+    }
+    
+    public void PaintForPrinting()
+    {
+        ((IPrintable)this).Paint();
+    }
+}
+
+// Usage
+public void Main()
+{
+    Button button = new Button();
+    
+    // Accessing the implicitly implemented method
+    button.Resize(100, 50);  // Outputs: "Resizing to 100x50"
+    
+    // Accessing the explicitly implemented methods through casting
+    ((IControl)button).Paint();    // Outputs: "Painting control"
+    ((IPrintable)button).Paint();  // Outputs: "Preparing for printing"
+    ((IPrintable)button).Print();  // Outputs: "Printing"
+    
+    // Using the public methods that delegate to interface methods
+    button.PaintForDisplay();   // Outputs: "Painting control"
+    button.PaintForPrinting();  // Outputs: "Preparing for printing"
+    
+    // Using through interface references
+    IControl control = button;
+    control.Paint();  // Outputs: "Painting control"
+    
+    IPrintable printable = button;
+    printable.Paint();  // Outputs: "Preparing for printing"
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Key points about explicit interface implementation:</p>
+                                <ul>
+                                    <li>Explicit implementation allows a class to provide different implementations for methods with the same name from different interfaces</li>
+                                    <li>Explicitly implemented members cannot be accessed directly through the class instance - you need to cast to the interface type</li>
+                                    <li>Explicit implementation can be used to hide interface members from the public interface of the class</li>
+                                    <li>This technique is useful when implementing interfaces with conflicting or overlapping members</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Default Interface Methods (C# 8.0+)</h3>
+                        <p>Starting with C# 8.0, interfaces can include default implementations for methods. This allows you to add new methods to interfaces without breaking existing implementations.</p>
+                        
+                        <div class="example-box">
+                            <h4>Default Interface Methods Example</h4>
+                            <pre><code>
+// Interface with default method implementations
+public interface ILogger
+{
+    // Regular interface method (no implementation)
+    void Log(string message);
+    
+    // Default implementation for LogWarning
+    void LogWarning(string message)
+    {
+        Log($"WARNING: {message}");
+    }
+    
+    // Default implementation for LogError
+    void LogError(string message)
+    {
+        Log($"ERROR: {message}");
+    }
+    
+    // Default implementation using other methods
+    void LogInformation(string message)
+    {
+        Log($"INFO: {message}");
+    }
+}
+
+// Minimal implementation only needs to implement the Log method
+public class SimpleLogger : ILogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine($"[{DateTime.Now}] {message}");
+    }
+}
+
+// Class that overrides a default implementation
+public class VerboseLogger : ILogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine($"[{DateTime.Now}] {message}");
+    }
+    
+    // Override the default implementation
+    public void LogWarning(string message)
+    {
+        Console.WriteLine($"[{DateTime.Now}] ⚠️ WARNING ⚠️: {message}");
+    }
+}
+
+// Usage
+public void Main()
+{
+    SimpleLogger simpleLogger = new SimpleLogger();
+    simpleLogger.Log("Regular message");           // Uses the implemented method
+    
+    // These use the default implementations
+    ((ILogger)simpleLogger).LogWarning("Something might be wrong");
+    ((ILogger)simpleLogger).LogError("Something went wrong");
+    ((ILogger)simpleLogger).LogInformation("Just FYI");
+    
+    VerboseLogger verboseLogger = new VerboseLogger();
+    verboseLogger.Log("Regular message");          // Uses the implemented method
+    
+    // This uses the overridden implementation
+    ((ILogger)verboseLogger).LogWarning("Something might be wrong");
+    
+    // These use the default implementations
+    ((ILogger)verboseLogger).LogError("Something went wrong");
+    ((ILogger)verboseLogger).LogInformation("Just FYI");
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of default interface methods:</p>
+                                <ul>
+                                    <li>Enables interface evolution without breaking existing implementations</li>
+                                    <li>Provides a form of multiple inheritance of behavior in C#</li>
+                                    <li>Allows utility methods to be added to interfaces</li>
+                                    <li>Facilitates API design with reasonable defaults</li>
+                                    <li>Supports optional interface methods without forcing implementers to provide empty implementations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Interface-based Programming</h3>
+                        <p>Interface-based programming is a design approach that focuses on using interfaces as the primary means of interaction between components. This promotes loose coupling and increases the flexibility and testability of your code.</p>
+                        
+                        <div class="example-box">
+                            <h4>Dependency Injection with Interfaces</h4>
+                            <pre><code>
+// Interfaces
+public interface IUserRepository
+{
+    User GetById(int id);
+    List<User> GetAll();
+    void Save(User user);
+}
+
+public interface IEmailService
+{
+    void SendEmail(string to, string subject, string body);
+}
+
+public interface ILogger
+{
+    void Log(string message);
+}
+
+// Service that depends on interfaces rather than concrete implementations
+public class UserService
+{
+    private readonly IUserRepository _userRepository;
+    private readonly IEmailService _emailService;
+    private readonly ILogger _logger;
+    
+    // Dependencies are injected through the constructor
+    public UserService(
+        IUserRepository userRepository, 
+        IEmailService emailService, 
+        ILogger logger)
+    {
+        _userRepository = userRepository;
+        _emailService = emailService;
+        _logger = logger;
+    }
+    
+    public void RegisterUser(string username, string email)
+    {
+        try
+        {
+            // Check if user exists
+            var existingUsers = _userRepository.GetAll();
+            if (existingUsers.Any(u => u.Email == email))
+            {
+                throw new Exception("Email already registered");
+            }
+            
+            // Create and save new user
+            var user = new User { Username = username, Email = email };
+            _userRepository.Save(user);
+            
+            // Send welcome email
+            _emailService.SendEmail(
+                email, 
+                "Welcome to our service", 
+                $"Hello {username}, thank you for registering!"
+            );
+            
+            _logger.Log($"User {username} registered successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.Log($"Error registering user: {ex.Message}");
+            throw;
+        }
+    }
+}
+
+// Concrete implementations
+public class SqlUserRepository : IUserRepository
+{
+    // Implementation using SQL database
+    public User GetById(int id) { /* Implementation */ }
+    public List<User> GetAll() { /* Implementation */ }
+    public void Save(User user) { /* Implementation */ }
+}
+
+public class SmtpEmailService : IEmailService
+{
+    // Implementation using SMTP
+    public void SendEmail(string to, string subject, string body) { /* Implementation */ }
+}
+
+public class FileLogger : ILogger
+{
+    // Implementation using file system
+    public void Log(string message) { /* Implementation */ }
+}
+
+// Usage
+public void Main()
+{
+    // Create concrete implementations
+    IUserRepository userRepository = new SqlUserRepository();
+    IEmailService emailService = new SmtpEmailService();
+    ILogger logger = new FileLogger();
+    
+    // Inject dependencies
+    UserService userService = new UserService(userRepository, emailService, logger);
+    
+    // Use the service
+    userService.RegisterUser("johndoe", "john@example.com");
+    
+    // For testing, we could use mock implementations instead:
+    // IUserRepository mockRepository = new MockUserRepository();
+    // IEmailService mockEmailService = new MockEmailService();
+    // ILogger mockLogger = new MockLogger();
+    // UserService testService = new UserService(mockRepository, mockEmailService, mockLogger);
+}
+</code></pre>
+                            <div class="explanation">
+                                <p>Benefits of interface-based programming:</p>
+                                <ul>
+                                    <li><strong>Loose coupling</strong> - Components depend on abstractions rather than concrete implementations</li>
+                                    <li><strong>Testability</strong> - Dependencies can be mocked or stubbed for unit testing</li>
+                                    <li><strong>Flexibility</strong> - Implementations can be replaced without changing client code</li>
+                                    <li><strong>Separation of concerns</strong> - Interfaces define what needs to be done, classes define how it's done</li>
+                                    <li><strong>Dependency injection</strong> - Interfaces enable clean dependency injection patterns</li>
+                                    <li><strong>Extensibility</strong> - New implementations can be added without modifying existing code</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Common Interface Patterns</h3>
+                        
+                        <div class="example-box">
+                            <h4>Repository Pattern</h4>
+                            <pre><code>
+// Repository interface for data access
+public interface IRepository<T> where T : class
+{
+    T GetById(int id);
+    IEnumerable<T> GetAll();
+    void Add(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+    void SaveChanges();
+}
+
+// Entity class
+public class Customer
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+// Repository implementation using Entity Framework
+public class CustomerRepository : IRepository<Customer>
+{
+    private readonly DbContext _context;
+    
+    public CustomerRepository(DbContext context)
+    {
+        _context = context;
+    }
+    
+    public Customer GetById(int id)
+    {
+        return _context.Set<Customer>().Find(id);
+    }
+    
+    public IEnumerable<Customer> GetAll()
+    {
+        return _context.Set<Customer>().ToList();
+    }
+    
+    public void Add(Customer entity)
+    {
+        _context.Set<Customer>().Add(entity);
+    }
+    
+    public void Update(Customer entity)
+    {
+        _context.Entry(entity).State = EntityState.Modified;
+    }
+    
+    public void Delete(Customer entity)
+    {
+        _context.Set<Customer>().Remove(entity);
+    }
+    
+    public void SaveChanges()
+    {
+        _context.SaveChanges();
+    }
+}
+</code></pre>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Observer Pattern</h4>
+                            <pre><code>
+// Observer interface
+public interface IObserver<T>
+{
+    void Update(T data);
+}
+
+// Subject interface
+public interface ISubject<T>
+{
+    void Attach(IObserver<T> observer);
+    void Detach(IObserver<T> observer);
+    void Notify();
+}
+
+// Concrete subject
+public class WeatherStation : ISubject<WeatherData>
+{
+    private List<IObserver<WeatherData>> _observers = new List<IObserver<WeatherData>>();
+    private WeatherData _weatherData;
+    
+    public void Attach(IObserver<WeatherData> observer)
+    {
+        _observers.Add(observer);
+    }
+    
+    public void Detach(IObserver<WeatherData> observer)
+    {
+        _observers.Remove(observer);
+    }
+    
+    public void Notify()
+    {
+        foreach (var observer in _observers)
+        {
+            observer.Update(_weatherData);
+        }
+    }
+    
+    // Method to set new weather data and notify observers
+    public void SetMeasurements(float temperature, float humidity, float pressure)
+    {
+        _weatherData = new WeatherData
+        {
+            Temperature = temperature,
+            Humidity = humidity,
+            Pressure = pressure,
+            Timestamp = DateTime.Now
+        };
+        
+        Notify();
+    }
+}
+
+// Data class
+public class WeatherData
+{
+    public float Temperature { get; set; }
+    public float Humidity { get; set; }
+    public float Pressure { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+// Concrete observers
+public class DisplayDevice : IObserver<WeatherData>
+{
+    public string DeviceName { get; set; }
+    
+    public DisplayDevice(string name)
+    {
+        DeviceName = name;
+    }
+    
+    public void Update(WeatherData data)
+    {
+        Console.WriteLine($"{DeviceName} displaying: Temp: {data.Temperature}°C, Humidity: {data.Humidity}%, Pressure: {data.Pressure}hPa");
+    }
+}
+
+public class WeatherLogger : IObserver<WeatherData>
+{
+    public void Update(WeatherData data)
+    {
+        Console.WriteLine($"[LOG] {data.Timestamp}: Temp: {data.Temperature}°C, Humidity: {data.Humidity}%, Pressure: {data.Pressure}hPa");
+    }
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="topic">
+                        <h3>Best Practices for Interfaces</h3>
+                        
+                        <div class="example-box">
+                            <h4>Interface Design Guidelines</h4>
+                            <ul>
+                                <li><strong>Interface Segregation Principle</strong> - Keep interfaces small, focused, and cohesive</li>
+                                <li><strong>Name interfaces clearly</strong> - Use the "I" prefix and descriptive names that reflect their purpose</li>
+                                <li><strong>Design for consumers</strong> - Focus on the needs of the code that will use the interface</li>
+                                <li><strong>Be consistent</strong> - Use consistent naming and parameter patterns across related interfaces</li>
+                                <li><strong>Prefer composition</strong> - Compose larger interfaces from smaller ones rather than creating monolithic interfaces</li>
+                                <li><strong>Consider versioning</strong> - Design interfaces with future evolution in mind</li>
+                                <li><strong>Document behaviors</strong> - Clearly document expected behavior, exceptions, and constraints</li>
+                                <li><strong>Favor immutability</strong> - When appropriate, design interfaces that promote immutable implementations</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-box">
+                            <h4>Common Interface Mistakes to Avoid</h4>
+                            <ul>
+                                <li><strong>"Fat" interfaces</strong> - Interfaces with too many methods or unrelated methods</li>
+                                <li><strong>Breaking interface contracts</strong> - Changing existing interfaces in a way that breaks implementations</li>
+                                <li><strong>Implementation details in interfaces</strong> - Including details that leak implementation concerns</li>
+                                <li><strong>Not using interfaces for abstraction</strong> - Creating interfaces that mirror concrete classes without adding abstraction</li>
+                                <li><strong>Over-abstraction</strong> - Creating interfaces for every class without a clear need</li>
+                                <li><strong>Ignoring inheritance hierarchies</strong> - Not considering how interfaces fit into the broader type system</li>
+                                <li><strong>Excessive casting</strong> - Designing systems that require frequent casting between interfaces</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="topic-nav">
+                        <a href="polymorphism.html" class="prev"><i class="fas fa-arrow-left"></i> Polymorphism</a>
+                        <a href="abstraction.html" class="next">Abstraction <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Easy Learn C#. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar-fix.js"></script>
+    <script src="js/load-sidebar.js"></script>
+</body>
+</html> 
